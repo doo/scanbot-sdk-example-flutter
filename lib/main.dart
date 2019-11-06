@@ -1,13 +1,35 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/document_scan_data.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_models.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 void main() => runApp(MyApp());
+
+void _initScanbotSdk() async {
+  try {
+    await ScanbotSdk.initScanbotSdk(ScanbotSdkConfig(
+        loggingEnabled: true,
+        // licenseKey: ''
+    ));
+  } catch (e) {
+    print(e);
+  }
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    _initScanbotSdk();
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Scanbot SDK Flutter Example',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,7 +42,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Scanbot SDK Flutter Example'),
     );
   }
 }
@@ -55,6 +77,19 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _startDocumentScanner() async {
+    var config = DocumentScannerConfiguration(
+        multiPageEnabled: true,
+        pageCounterButtonTitle: "%d Page(s)",
+        bottomBarBackgroundColor: Colors.blueAccent
+    );
+    var result = await ScanbotSdkUi.startDocumentScanner(config);
+
+    if (result.operationResult == OperationResult.SUCCESS) {
+      print('Doc Scanner Result:\n' + jsonEncode(result));
+    }
   }
 
   @override
@@ -97,6 +132,10 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,
+            ),
+            CupertinoButton(
+              child: Text("Start Document Scanner"),
+              onPressed: _startDocumentScanner,
             ),
           ],
         ),
