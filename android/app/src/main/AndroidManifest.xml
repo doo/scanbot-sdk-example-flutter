@@ -8,7 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="scanbot_sdk_example_flutter"
+        android:label="Scanbot SDK Example Flutter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
