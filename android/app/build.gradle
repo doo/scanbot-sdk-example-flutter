@@ -37,13 +37,28 @@ android {
     }
 
     defaultConfig {
-        // Application ID https://developer.android.com/studio/build/application-id.html
+        // Application ID - see https://developer.android.com/studio/build/application-id.html
         applicationId "io.scanbot.example.sdk.flutter"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+            // Please add "x86" and "x86_64" if you would like to test on an emulator
+            // or if you need to support some rare devices with the Intel Atom architecture.
+        }
+    }
+
+    packagingOptions {
+        pickFirst 'META-INF/atomicfu.kotlin_module'
+        pickFirst 'META-INF/proguard/coroutines.pro'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
     }
 
     buildTypes {
@@ -61,6 +76,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
