@@ -1,16 +1,61 @@
-# scanbot_sdk_example_flutter
+# Scanbot SDK Example Flutter
 
-A new Flutter project.
+This example app shows how to integrate the [Scanbot SDK Flutter Plugin](https://pub.dev/packages/scanbot_sdk) on Android and iOS.
 
-## Getting Started
+For more details about the Plugin please see this [documentation](https://scanbotsdk.github.io/documentation/flutter/).
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## What is Scanbot SDK?
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The Scanbot SDK brings scanning and document creation capabilities to your mobile apps. 
+It contains modules which are individually licensable as license packages. 
+For more details visit our website https://scanbot.io/sdk
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## How to run this app
+
+Install [Flutter](https://flutter.dev) and all required dev tools.
+ 
+Fetch this repository and navigate to the project directory.
+
+```
+cd scanbot-sdk-example-flutter/
+```
+
+Fetch and install the dependencies of this example project via Flutter CLI:
+
+```
+flutter pub get
+```
+
+Connect a mobile device via USB and run the app.
+
+**Android:**
+
+```
+flutter run -d <DEVICE_ID>
+```
+
+You can get the IDs of all connected devices via `flutter devices`.
+
+**iOS:**
+
+Install Pods dependencies:
+
+```
+cd ios/
+pod install
+```
+
+Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. 
+Then build and run the app in Xcode.
+
+
+## Please note
+
+The Scanbot SDK will run without a license for one minute per session!
+
+After the trial period is over all Scanbot SDK functions as well as the UI components (like Document Scanner UI) will 
+stop working or may be terminated. You have to restart the app to get another trial period.
+
+To get an unrestricted "no-strings-attached" 30 day trial license, please submit the [Trial License Form](https://scanbot.io/sdk/trial.html) on our website.
