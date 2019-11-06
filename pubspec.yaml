@@ -1,5 +1,5 @@
 name: scanbot_sdk_example_flutter
-description: A new Flutter project.
+description: An example app to show the integration of the Scanbot SDK Flutter Plugin.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -24,7 +24,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
 
-  scanbot_sdk: ^0.9.0-beta.6
+  scanbot_sdk: ^0.9.0-beta.7
+
+  path_provider: ^1.3.0
 
 dev_dependencies:
   flutter_test:
