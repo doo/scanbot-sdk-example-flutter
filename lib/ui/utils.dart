@@ -2,20 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-class Utils {
-  static const MethodChannel _channel = const MethodChannel('utils');
-
-  static Future<Uri> pickImage() async {
-    try {
-      var arguments = {};
-      String uriString = await _channel.invokeMethod("pickImage", arguments);
-      return Uri.parse(uriString);
-    } catch (e) {
-      return null;
-    }
-  }
-}
-
 Future<void> showAlertDialog(BuildContext context, String textToShow, {String title}) async {
   Widget text = SimpleDialogOption(
     child: Padding(
