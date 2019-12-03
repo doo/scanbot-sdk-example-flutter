@@ -1,3 +1,4 @@
+import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 import 'package:flutter/material.dart';
@@ -343,11 +344,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   importImage() async {
     try {
-      // TODO replace by a 3rd party "image picker" plugin
-      var uri = await Utils.pickImage();
-      if (uri != null && uri.path.isNotEmpty) {
-        createPage(uri);
-      }
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      createPage(image.uri);
     } catch (e) {}
   }
 
