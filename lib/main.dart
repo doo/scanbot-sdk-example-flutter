@@ -18,6 +18,8 @@ import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
 
+import 'package:image_picker/image_picker.dart';
+
 void main() => runApp(MyApp());
 
 
@@ -207,12 +209,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   importImage() async {
     try {
-      // TODO replace by a 3rd party "image picker" plugin
-      var uri = await Utils.pickImage();
-      if (uri != null && uri.path.isNotEmpty) {
-        await createPage(uri);
-        gotoImagesView();
-      }
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      await createPage(image.uri);
+      gotoImagesView();
     } catch (e) {
       print(e);
     }
