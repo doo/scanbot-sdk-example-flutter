@@ -375,7 +375,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     dialog.style(message: "Creating TIFF ...");
     dialog.show();
     try {
-      var options = TiffCreationOptions(binarized);
+      var options = TiffCreationOptions(binarized: binarized, dpi: 200, compression: (binarized ? TiffCompression.CCITT_T6 : TiffCompression.ADOBE_DEFLATE));
       final Uri tiffFileUri = await ScanbotSdk.createTiff(this._pageRepository.pages, options);
       dialog.hide();
       showAlertDialog(context, tiffFileUri.toString(), title: "TIFF file URI");
