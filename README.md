@@ -44,7 +44,7 @@ Install Pods dependencies:
 
 ```
 cd ios/
-pod install
+pod install --repo-update
 ```
 
 Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. 
