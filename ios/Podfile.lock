@@ -10,7 +10,7 @@ PODS:
   - ScanbotSDK/MRZ (1.9.6)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - scanbot_sdk (from `.symlinks/plugins/scanbot_sdk/ios`)
@@ -21,7 +21,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   path_provider:
@@ -36,6 +36,6 @@ SPEC CHECKSUMS:
   scanbot_sdk: ea4c3f87c6db334929a5ab37654c74c00de5b0ba
   ScanbotSDK: 1cc1899636d612bfc11490da20ed67e7265222c0
 
-PODFILE CHECKSUM: 2ef0a40072d836b2e62fb7fcb125a5e514afe953
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.0
