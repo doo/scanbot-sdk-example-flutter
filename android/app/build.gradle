@@ -74,6 +74,19 @@ flutter {
     source '../..'
 }
 
+configurations.all {
+    resolutionStrategy {
+        force 'androidx.loader:loader:1.0.0'
+        force 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+        force 'androidx.documentfile:documentfile:1.0.0'
+        force 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+        force 'androidx.print:print:1.0.0'
+        force 'androidx.slidingpanelayout:slidingpanelayout:1.0.0'
+        force 'androidx.fragment:fragment:1.0.0'
+        force 'androidx.core:core:1.0.0'
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
