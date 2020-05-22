@@ -2,7 +2,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/common_data.dart' as c;
 import 'package:scanbot_sdk/create_tiff_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ocr_data.dart';
@@ -47,7 +47,7 @@ class PagesPreviewWidget extends StatefulWidget {
 }
 
 class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
-  List<Page> pages;
+  List<c.Page > pages;
   final PageRepository _pageRepository;
   int currentSelectedPage = 0;
 
@@ -137,7 +137,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  showOperationsPage(Page page) async {
+  showOperationsPage(c.Page  page) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => PageOperations(page, _pageRepository)),
@@ -251,8 +251,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     DocumentScanningResult result;
     try {
       var config = DocumentScannerConfiguration(
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
-        cameraPreviewMode: CameraPreviewMode.FIT_IN,
+        orientationLockMode: c.CameraOrientationMode.PORTRAIT,
+        cameraPreviewMode: c.CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
         multiPageButtonHidden: true,
@@ -261,7 +261,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     } catch (e) {
       print(e);
     }
-    if (result?.operationResult != OperationResult.ERROR) {
+    if (result?.operationResult != c.OperationResult.ERROR) {
       _pageRepository.addPages(result.pages);
       _updatePagesList();
     }
@@ -385,7 +385,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  detectPage(Page page) async {
+  detectPage(c.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);

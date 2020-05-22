@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/common_data.dart' as c;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class PageFiltering extends StatelessWidget {
-  Page _page;
+  c.Page _page;
 
   PageFiltering(this._page);
 
@@ -43,7 +43,7 @@ class PageFiltering extends StatelessWidget {
 }
 
 class FilterPreviewWidget extends StatefulWidget {
-  Page page;
+  c.Page page;
   FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
@@ -61,13 +61,13 @@ class FilterPreviewWidget extends StatefulWidget {
 }
 
 class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
-  Page page;
+  c.Page page;
   Uri filteredImageUri;
-  ImageFilterType selectedFilter;
+  c.ImageFilterType selectedFilter;
 
   FilterPreviewWidgetState(this.page) {
     filteredImageUri = page.documentImageFileUri;
-    selectedFilter = page.filter ?? ImageFilterType.NONE;
+    selectedFilter = page.filter ?? c.ImageFilterType.NONE;
   }
 
   @override
@@ -87,7 +87,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
                 inherit: true,
                 color: Colors.black,
                 fontStyle: FontStyle.normal)),
-        for (var filter in ImageFilterType.values)
+        for (var filter in c.ImageFilterType.values)
           RadioListTile(
             title: titleFromFilterType(filter),
             value: filter,
@@ -112,7 +112,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
         )));
   }
 
-  Text titleFromFilterType(ImageFilterType filterType) {
+  Text titleFromFilterType(c.ImageFilterType filterType) {
     return Text(filterType.toString().replaceAll("ImageFilterType.", ""),
         style: TextStyle(
             inherit: true, color: Colors.black, fontStyle: FontStyle.normal));
@@ -135,7 +135,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     }
   }
 
-  previewFilter(Page page, ImageFilterType filterType) async {
+  previewFilter(c.Page page, c.ImageFilterType filterType) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     try {

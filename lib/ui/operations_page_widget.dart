@@ -1,6 +1,6 @@
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/common_data.dart' as c;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
@@ -11,7 +11,7 @@ import 'filter_page_widget.dart';
 import 'pages_widget.dart';
 
 class PageOperations extends StatelessWidget {
-  Page _page;
+  c.Page _page;
   final PageRepository _pageRepository;
 
   PageOperations(this._page, this._pageRepository);
@@ -33,7 +33,7 @@ class PageOperations extends StatelessWidget {
 }
 
 class PagesPreviewWidget extends StatefulWidget {
-  Page page;
+  c.Page page;
   final PageRepository _pageRepository;
 
   PagesPreviewWidget(this.page, this._pageRepository);
@@ -45,12 +45,12 @@ class PagesPreviewWidget extends StatefulWidget {
 }
 
 class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
-  Page page;
+  c.Page page;
   final PageRepository _pageRepository;
 
   PagesPreviewWidgetState(this.page, this._pageRepository);
 
-  void _updatePage(Page page) {
+  void _updatePage(c.Page page) {
     imageCache.clear();
     _pageRepository.updatePage(page);
     setState(() {
@@ -119,7 +119,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  deletePage(Page page) async {
+  deletePage(c.Page page) async {
     try {
       await ScanbotSdk.deletePage(page);
       this._pageRepository.removePage(page);
@@ -129,7 +129,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  rotatePage(Page page) async {
+  rotatePage(c.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     try {
@@ -149,7 +149,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  showFilterPage(Page page) async {
+  showFilterPage(c.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     var resultPage = await Navigator.of(context).push(
@@ -160,7 +160,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  startCroppingScreen(Page page) async {
+  startCroppingScreen(c.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     try {
