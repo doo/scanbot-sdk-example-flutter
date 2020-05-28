@@ -261,7 +261,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       print(e);
     }
 
-    print("isOperationSuccessful(result)" + isOperationSuccessful(result).toString());
     if (isOperationSuccessful(result)) {
       _pageRepository.addPages(result.pages);
       gotoImagesView();
