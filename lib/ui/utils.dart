@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> showAlertDialog(BuildContext context, String textToShow, {String title}) async {
@@ -41,4 +42,8 @@ Future<bool> checkLicenseStatus(BuildContext context) async {
   }
   await showAlertDialog(context, 'Scanbot SDK (trial) period or license has expired.', title: 'Info');
   return false;
+}
+
+bool isOperationSuccessful(Result result) {
+  return result.operationResult == OperationResult.SUCCESS;
 }

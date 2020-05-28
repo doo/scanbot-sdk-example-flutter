@@ -260,7 +260,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       print(e);
     }
-    if (result?.operationResult != OperationResult.ERROR) {
+
+    if (isOperationSuccessful(result)) {
       _pageRepository.addPages(result.pages);
       gotoImagesView();
     }
@@ -299,7 +300,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   _showBarcodeScanningResult(final BarcodeScanningResult result) {
-    if (result?.operationResult != OperationResult.ERROR) {
+    if (isOperationSuccessful(result)) {
       showAlertDialog(context,
           "Format: " + result.barcodeFormat.toString() + "\nValue: " + result.text,
           title: "Barcode Result:"
@@ -322,7 +323,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       print(e);
     }
 
-    if (result?.fields != null) {
+    if (isOperationSuccessful(result) && result?.fields != null) {
       var concatenate = StringBuffer();
       result.fields
           .map((field) =>
@@ -348,7 +349,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       print(e);
     }
 
-    if (result?.operationResult != OperationResult.ERROR) {
+    if (isOperationSuccessful(result)) {
       var concatenate = StringBuffer();
       result.fields
           .map((field) =>
