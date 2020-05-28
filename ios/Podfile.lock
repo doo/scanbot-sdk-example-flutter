@@ -30,7 +30,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/scanbot_sdk/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 446b87ace8a3747a167979213b4aef59a0b5e5fa
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   scanbot_sdk: ea4c3f87c6db334929a5ab37654c74c00de5b0ba
@@ -38,4 +38,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e45c292f618eeca3034958d33b444b6e1249b55f
 
-COCOAPODS: 1.9.0
+COCOAPODS: 1.8.4
