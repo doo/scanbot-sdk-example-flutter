@@ -173,7 +173,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         // ...
       );
       var result = await ScanbotSdkUi.startCroppingScreen(page, config);
-      if (result.page != null) {
+      if (isOperationSuccessful(result) && result.page != null) {
         setState(() {
           _updatePage(result.page);
         });

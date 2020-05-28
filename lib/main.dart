@@ -323,7 +323,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       print(e);
     }
 
-    if (result?.fields != null) {
+    if (isOperationSuccessful(result) && result?.fields != null) {
       var concatenate = StringBuffer();
       result.fields
           .map((field) =>
