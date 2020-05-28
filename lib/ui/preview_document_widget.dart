@@ -261,7 +261,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     } catch (e) {
       print(e);
     }
-    if (result?.operationResult != c.OperationResult.ERROR) {
+    if (isOperationSuccessful(result)) {
       _pageRepository.addPages(result.pages);
       _updatePagesList();
     }
