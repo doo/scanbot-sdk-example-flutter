@@ -150,7 +150,7 @@ packages:
       name: scanbot_sdk
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.2-beta1"
+    version: "1.1.2"
   sky_engine:
     dependency: transitive
     description: flutter
