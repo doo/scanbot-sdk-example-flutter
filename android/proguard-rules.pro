@@ -2,7 +2,7 @@
 -keep class io.flutter.**  { *; }
 -keep class io.flutter.plugins.**  { *; }
 -dontwarn io.flutter.embedding.**
--ignorewarnings
+-dontoptimize
 
 -keep public class net.doo.snap.ui.** { *; }
 -keeppackagenames net.doo.snap.ui.**
