@@ -13,10 +13,19 @@
 -keep public class io.scanbot.sap.SapManager { *; }
 -keeppackagenames net.doo.snap.lib.detector.**
 -keep public class net.doo.snap.lib.detector.**{ *; }
+
+-keeppackagenames net.doo.snap.process.**
+-keep public class net.doo.snap.process.**{ *; }
+
 -keeppackagenames com.googlecode.tesseract.android.**
 -keep public class com.googlecode.tesseract.android.**{ *; }
--keeppackagenames io.scanbot.payformscanner.**
--keep public class io.scanbot.payformscanner.**{ *; }
+
+-keeppackagenames io.scanbot.sdk.ocr.**
+-keep public class io.scanbot.sdk.ocr.**{ *; }
+
+-keeppackagenames io.scanbot.sdk.persistence.**
+-keep public class io.scanbot.sdk.persistence.**{ *; }
+
 -keeppackagenames io.scanbot.mrzscanner.**
 -keep public class io.scanbot.mrzscanner.**{ *; }
 -keeppackagenames io.scanbot.dcscanner.**
