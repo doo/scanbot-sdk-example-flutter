@@ -170,7 +170,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         // polygonLineWidth: 10,
         cancelButtonTitle: "Cancel",
         doneButtonTitle: "Save",
-        // ...
+        // See further configs ...
       );
       var result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
