@@ -6,8 +6,8 @@ PODS:
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 1.9.6)
-  - ScanbotSDK/MRZ (1.9.6)
+    - ScanbotSDK/MRZ (= 1.11.6)
+  - ScanbotSDK/MRZ (1.11.6)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -33,9 +33,9 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   image_picker: e3eacd46b94694dde7cf2705955cece853aa1a8f
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
-  scanbot_sdk: ea4c3f87c6db334929a5ab37654c74c00de5b0ba
-  ScanbotSDK: 1cc1899636d612bfc11490da20ed67e7265222c0
+  scanbot_sdk: c46c5e63a1b65bf8d973c155b0f755df0539d2d8
+  ScanbotSDK: de24460a4ae78b9b598d8daa5019917eca40de79
 
-PODFILE CHECKSUM: e45c292f618eeca3034958d33b444b6e1249b55f
+PODFILE CHECKSUM: 48d28befa5177672e57087e82e48caa1df133253
 
-COCOAPODS: 1.9.2
+COCOAPODS: 1.10.0
