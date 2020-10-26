@@ -301,10 +301,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   _showBarcodeScanningResult(final BarcodeScanningResult result) {
     if (isOperationSuccessful(result)) {
-      showAlertDialog(context,
-          "Format: " + result.barcodeFormat.toString() + "\nValue: " + result.text,
-          title: "Barcode Result:"
-      );
+      var mapped = result.barcodeItems.map((e) => (e.barcodeFormat.toString() + ": " + e.text + "\n")).toString();
+      showAlertDialog(context, mapped, title: "Barcode Result:");
     }
   }
 
