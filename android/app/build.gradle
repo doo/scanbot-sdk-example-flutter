@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -41,15 +41,13 @@ android {
         // Application ID - see https://developer.android.com/studio/build/application-id.html
         applicationId "io.scanbot.example.sdk.flutter"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
             abiFilters "armeabi-v7a", "arm64-v8a"
-            // Please add "x86" and "x86_64" if you would like to test on an emulator
-            // or if you need to support some rare devices with the Intel Atom architecture.
         }
     }
 
@@ -76,19 +74,6 @@ android {
 
 flutter {
     source '../..'
-}
-
-configurations.all {
-    resolutionStrategy {
-        force 'androidx.loader:loader:1.0.0'
-        force 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-        force 'androidx.documentfile:documentfile:1.0.0'
-        force 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
-        force 'androidx.print:print:1.0.0'
-        force 'androidx.slidingpanelayout:slidingpanelayout:1.0.0'
-        force 'androidx.fragment:fragment:1.0.0'
-        force 'androidx.core:core:1.0.0'
-    }
 }
 
 dependencies {
