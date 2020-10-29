@@ -41,6 +41,7 @@ initScanbotSdk() async {
     imageFormat: ImageFormat.JPG,
     imageQuality: 80,
     storageBaseDirectory: customStorageBaseDirectory,
+    documentDetectorMode: DocumentDetectorMode.ML_BASED
   );
 
   try {
