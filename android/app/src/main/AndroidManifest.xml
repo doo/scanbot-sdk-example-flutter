@@ -2,6 +2,8 @@
     package="com.example.scanbot_sdk_example_flutter">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -10,6 +12,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:label="Scanbot SDK Example Flutter"
         android:icon="@mipmap/ic_launcher">
         <activity
