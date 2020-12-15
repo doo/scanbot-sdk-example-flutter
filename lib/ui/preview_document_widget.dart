@@ -262,7 +262,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       print(e);
     }
     if (isOperationSuccessful(result)) {
-      _pageRepository.addPages(result.pages);
+      await _pageRepository.addPages(result.pages);
       _updatePagesList();
     }
   }
@@ -317,7 +317,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   cleanupStorage() async {
     try {
       await ScanbotSdk.cleanupStorage();
-      _pageRepository.clearPages();
+      await _pageRepository.clearPages();
       _updatePagesList();
     } catch (e) {
       print(e);
@@ -359,7 +359,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       var page = await ScanbotSdk.createPage(uri, false);
       page = await ScanbotSdk.detectDocument(page);
       dialog.hide();
-      this._pageRepository.addPage(page);
+      await this._pageRepository.addPage(page);
       _updatePagesList();
     } catch (e) {
       print(e);
@@ -394,8 +394,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     try {
       var updatedPage = await ScanbotSdk.detectDocument(page);
       dialog.hide();
-      setState(() {
-        this._pageRepository.updatePage(updatedPage);
+      setState(() async {
+        await this._pageRepository.updatePage(updatedPage);
         _updatePagesList();
       });
     } catch (e) {

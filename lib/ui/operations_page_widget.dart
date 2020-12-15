@@ -50,9 +50,9 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   PagesPreviewWidgetState(this.page, this._pageRepository);
 
-  void _updatePage(c.Page page) {
+  _updatePage(c.Page page) async {
     imageCache.clear();
-    _pageRepository.updatePage(page);
+    await _pageRepository.updatePage(page);
     setState(() {
       this.page = page;
     });
@@ -122,7 +122,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   deletePage(c.Page page) async {
     try {
       await ScanbotSdk.deletePage(page);
-      this._pageRepository.removePage(page);
+      await this._pageRepository.removePage(page);
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
@@ -140,8 +140,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       var updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
       dialog.hide();
       if (updatedPage != null) {
-        setState(() {
-          _updatePage(updatedPage);
+        setState(() async {
+          await _updatePage(updatedPage);
         });
       }
     } catch (e) {
@@ -156,7 +156,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       MaterialPageRoute(builder: (context) => PageFiltering(page)),
     );
     if (resultPage != null) {
-      _updatePage(resultPage);
+      await _updatePage(resultPage);
     }
   }
 
@@ -174,8 +174,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       );
       var result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
-        setState(() {
-          _updatePage(result.page);
+        setState(() async {
+          await _updatePage(result.page);
         });
       }
     } catch (e) {
