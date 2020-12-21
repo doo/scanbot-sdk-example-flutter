@@ -5,14 +5,12 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PageRepository {
+  static final PageRepository _instance = PageRepository._internal();
+  factory PageRepository() => _instance;
 
-  static final PageRepository _singleton = PageRepository._internal();
-
-  factory PageRepository() {
-    return _singleton;
+  PageRepository._internal() {
+    // init some stuff here
   }
-
-  PageRepository._internal();
 
   List<Page> _pages = List<Page>();
 

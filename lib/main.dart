@@ -46,7 +46,7 @@ initScanbotSdk() async {
 
   try {
     await ScanbotSdk.initScanbotSdk(config);
-    await new PageRepository().loadPages();
+    await PageRepository().loadPages();
   } catch (e) {
     print(e);
   }
@@ -370,7 +370,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   gotoImagesView() async {
     imageCache.clear();
     return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => DocumentPreview(_pageRepository)),
+      MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
   }
 
