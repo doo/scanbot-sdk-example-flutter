@@ -1,6 +1,6 @@
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart' as c;
+import 'package:scanbot_sdk/common_data.dart' as sdk;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
@@ -11,10 +11,9 @@ import 'filter_page_widget.dart';
 import 'pages_widget.dart';
 
 class PageOperations extends StatelessWidget {
-  c.Page _page;
-  final PageRepository _pageRepository;
+  final sdk.Page _page;
 
-  PageOperations(this._page, this._pageRepository);
+  PageOperations(this._page);
 
   @override
   Widget build(BuildContext context) {
@@ -28,33 +27,32 @@ class PageOperations extends StatelessWidget {
           title: const Text('Image Preview',
               style: TextStyle(inherit: true, color: Colors.black)),
         ),
-        body: PagesPreviewWidget(_page, _pageRepository));
+        body: PagesPreviewWidget(_page));
   }
 }
 
 class PagesPreviewWidget extends StatefulWidget {
-  c.Page page;
-  final PageRepository _pageRepository;
+  final sdk.Page _page;
 
-  PagesPreviewWidget(this.page, this._pageRepository);
+  PagesPreviewWidget(this._page);
 
   @override
   State<PagesPreviewWidget> createState() {
-    return new PagesPreviewWidgetState(page, this._pageRepository);
+    return new PagesPreviewWidgetState(_page);
   }
 }
 
 class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
-  c.Page page;
-  final PageRepository _pageRepository;
+  final PageRepository _pageRepository = PageRepository();
+  sdk.Page _page;
 
-  PagesPreviewWidgetState(this.page, this._pageRepository);
+  PagesPreviewWidgetState(this._page);
 
-  void _updatePage(c.Page page) {
+  _updatePage(sdk.Page page) async {
     imageCache.clear();
-    _pageRepository.updatePage(page);
+    await _pageRepository.updatePage(page);
     setState(() {
-      this.page = page;
+      this._page = page;
     });
   }
 
@@ -65,7 +63,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         Expanded(
             child: Container(
                 padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Center(child: PageWidget(page.documentImageFileUri)))),
+                child: Center(child: PageWidget(_page.documentImageFileUri)))),
         BottomAppBar(
           child: new Row(
             mainAxisSize: MainAxisSize.max,
@@ -81,8 +79,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   ],
                 ),
                 onPressed: () {
-                  startCroppingScreen(page);
-                  // _settingModalBottomSheet(context, page);
+                  startCroppingScreen(_page);
                 },
               ),
               FlatButton(
@@ -95,8 +92,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   ],
                 ),
                 onPressed: () {
-                  showFilterPage(page);
-                  // _settingModalBottomSheet(context, page);
+                  showFilterPage(_page);
                 },
               ),
               FlatButton(
@@ -109,7 +105,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   ],
                 ),
                 onPressed: () {
-                  deletePage(page);
+                  deletePage(_page);
                 },
               ),
             ],
@@ -119,17 +115,17 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  deletePage(c.Page page) async {
+  deletePage(sdk.Page page) async {
     try {
       await ScanbotSdk.deletePage(page);
-      this._pageRepository.removePage(page);
+      await this._pageRepository.removePage(page);
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
   }
 
-  rotatePage(c.Page page) async {
+  rotatePage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     try {
@@ -140,27 +136,25 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       var updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
       dialog.hide();
       if (updatedPage != null) {
-        setState(() {
-          _updatePage(updatedPage);
-        });
+        await _updatePage(updatedPage);
       }
     } catch (e) {
       print(e);
     }
   }
 
-  showFilterPage(c.Page page) async {
+  showFilterPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     var resultPage = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PageFiltering(page)),
     );
     if (resultPage != null) {
-      _updatePage(resultPage);
+      await _updatePage(resultPage);
     }
   }
 
-  startCroppingScreen(c.Page page) async {
+  startCroppingScreen(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     try {
@@ -174,9 +168,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       );
       var result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
-        setState(() {
-          _updatePage(result.page);
-        });
+        await _updatePage(result.page);
       }
     } catch (e) {
       print(e);

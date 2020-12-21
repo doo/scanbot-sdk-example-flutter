@@ -2,7 +2,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart' as c;
+import 'package:scanbot_sdk/common_data.dart' as sdk;
 import 'package:scanbot_sdk/create_tiff_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ocr_data.dart';
@@ -16,9 +16,7 @@ import 'operations_page_widget.dart';
 import 'pages_widget.dart';
 
 class DocumentPreview extends StatelessWidget {
-  final PageRepository _pageRepository;
-
-  DocumentPreview(this._pageRepository);
+  DocumentPreview();
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +29,25 @@ class DocumentPreview extends StatelessWidget {
           title: const Text('Image results',
               style: TextStyle(inherit: true, color: Colors.black)),
         ),
-        body: PagesPreviewWidget(this._pageRepository));
+        body: PagesPreviewWidget());
   }
 }
 
 class PagesPreviewWidget extends StatefulWidget {
-  final PageRepository _pageRepository;
-
-  PagesPreviewWidget(this._pageRepository);
+  PagesPreviewWidget();
 
   @override
   State<PagesPreviewWidget> createState() {
-    return new PagesPreviewWidgetState(this._pageRepository);
+    return new PagesPreviewWidgetState();
   }
 }
 
 class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
-  List<c.Page > pages;
-  final PageRepository _pageRepository;
+  final PageRepository _pageRepository = PageRepository();
+  List<sdk.Page> pages;
   int currentSelectedPage = 0;
 
-  PagesPreviewWidgetState(this._pageRepository) {
+  PagesPreviewWidgetState() {
     this.pages = _pageRepository.pages;
   }
 
@@ -137,10 +133,10 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  showOperationsPage(c.Page  page) async {
+  showOperationsPage(sdk.Page  page) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => PageOperations(page, _pageRepository)),
+          builder: (context) => PageOperations(page)),
     );
     _updatePagesList();
   }
@@ -251,8 +247,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     DocumentScanningResult result;
     try {
       var config = DocumentScannerConfiguration(
-        orientationLockMode: c.CameraOrientationMode.PORTRAIT,
-        cameraPreviewMode: c.CameraPreviewMode.FIT_IN,
+        orientationLockMode: sdk.CameraOrientationMode.PORTRAIT,
+        cameraPreviewMode: sdk.CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
         multiPageButtonHidden: true,
@@ -262,7 +258,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       print(e);
     }
     if (isOperationSuccessful(result)) {
-      _pageRepository.addPages(result.pages);
+      await _pageRepository.addPages(result.pages);
       _updatePagesList();
     }
   }
@@ -317,7 +313,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   cleanupStorage() async {
     try {
       await ScanbotSdk.cleanupStorage();
-      _pageRepository.clearPages();
+      await _pageRepository.clearPages();
       _updatePagesList();
     } catch (e) {
       print(e);
@@ -359,7 +355,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       var page = await ScanbotSdk.createPage(uri, false);
       page = await ScanbotSdk.detectDocument(page);
       dialog.hide();
-      this._pageRepository.addPage(page);
+      await this._pageRepository.addPage(page);
       _updatePagesList();
     } catch (e) {
       print(e);
@@ -385,7 +381,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  detectPage(c.Page page) async {
+  detectPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) { return; }
 
     var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
@@ -394,8 +390,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     try {
       var updatedPage = await ScanbotSdk.detectDocument(page);
       dialog.hide();
+      await this._pageRepository.updatePage(updatedPage);
       setState(() {
-        this._pageRepository.updatePage(updatedPage);
         _updatePagesList();
       });
     } catch (e) {

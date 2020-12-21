@@ -8,12 +8,15 @@ PODS:
     - Flutter
     - ScanbotSDK/MRZ (= 1.11.6)
   - ScanbotSDK/MRZ (1.11.6)
+  - shared_preferences (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - scanbot_sdk (from `.symlinks/plugins/scanbot_sdk/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 SPEC REPOS:
   trunk:
@@ -28,6 +31,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   scanbot_sdk:
     :path: ".symlinks/plugins/scanbot_sdk/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
@@ -35,6 +40,7 @@ SPEC CHECKSUMS:
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   scanbot_sdk: c46c5e63a1b65bf8d973c155b0f755df0539d2d8
   ScanbotSDK: de24460a4ae78b9b598d8daa5019917eca40de79
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

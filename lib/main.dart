@@ -46,6 +46,7 @@ initScanbotSdk() async {
 
   try {
     await ScanbotSdk.initScanbotSdk(config);
+    await PageRepository().loadPages();
   } catch (e) {
     print(e);
   }
@@ -112,6 +113,12 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   PageRepository _pageRepository = PageRepository();
+
+  @override
+  void initState() {
+    super.initState();
+    // add some custom init code here
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +235,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var page = await ScanbotSdk.createPage(uri, false);
       page = await ScanbotSdk.detectDocument(page);
-      this._pageRepository.addPage(page);
+      await _pageRepository.addPage(page);
     } catch (e) {
       print(e);
     } finally {
@@ -263,7 +270,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     if (isOperationSuccessful(result)) {
-      _pageRepository.addPages(result.pages);
+      await _pageRepository.addPages(result.pages);
       gotoImagesView();
     }
   }
@@ -363,7 +370,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   gotoImagesView() async {
     imageCache.clear();
     return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => DocumentPreview(_pageRepository)),
+      MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
   }
 
