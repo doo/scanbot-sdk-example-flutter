@@ -1,10 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
-import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
@@ -13,15 +14,15 @@ import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
 
-import 'package:image_picker/image_picker.dart';
-
 void main() => runApp(MyApp());
-
 
 // TODO add the Scanbot SDK license key here.
 // Please note: The Scanbot SDK will run without a license key for one minute per session!
@@ -36,13 +37,13 @@ initScanbotSdk() async {
   var customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
   var config = ScanbotSdkConfig(
-    loggingEnabled: true, // Consider switching logging OFF in production builds for security and performance reasons.
-    licenseKey: SCANBOT_SDK_LICENSE_KEY,
-    imageFormat: ImageFormat.JPG,
-    imageQuality: 80,
-    storageBaseDirectory: customStorageBaseDirectory,
-    documentDetectorMode: DocumentDetectorMode.ML_BASED
-  );
+      loggingEnabled: true,
+      // Consider switching logging OFF in production builds for security and performance reasons.
+      licenseKey: SCANBOT_SDK_LICENSE_KEY,
+      imageFormat: ImageFormat.JPG,
+      imageQuality: 80,
+      storageBaseDirectory: customStorageBaseDirectory,
+      documentDetectorMode: DocumentDetectorMode.ML_BASED);
 
   try {
     await ScanbotSdk.initScanbotSdk(config);
@@ -75,12 +76,10 @@ Future<String> getDemoStorageBaseDirectory() async {
   Directory storageDirectory;
   if (Platform.isAndroid) {
     storageDirectory = await getExternalStorageDirectory();
-  }
-  else if (Platform.isIOS) {
+  } else if (Platform.isIOS) {
     storageDirectory = await getApplicationDocumentsDirectory();
-  }
-  else {
-    throw("Unsupported platform");
+  } else {
+    throw ("Unsupported platform");
   }
 
   return "${storageDirectory.path}/my-custom-storage";
@@ -164,6 +163,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            "Scan Multiple Barcodes ",
+            onTap: () {
+              startBatchBarcodeScanner();
+            },
+          ),
+          MenuItemWidget(
+            "Detect Barcode image",
+            onTap: () {
+              detectBarcodeOnImage();
+            },
+          ),
+          MenuItemWidget(
             "Scan MRZ (Machine Readable Zone)",
             onTap: () {
               startMRZScanner();
@@ -226,7 +237,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   createPage(Uri uri) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
@@ -244,7 +257,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   startDocumentScanning() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     DocumentScanningResult result;
     try {
@@ -276,12 +291,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   startBarcodeScanner() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     try {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
-        finderTextHint: "Please align any supported barcode in the frame to scan it.",
+        finderTextHint:
+            "Please align any supported barcode in the frame to scan it.",
         // ...
       );
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
@@ -291,8 +309,88 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  startBatchBarcodeScanner() async {
+    try {
+      //var config = BarcodeScannerConfiguration(); // testing default configs
+      var config = BatchBarcodeScannerConfiguration(
+          barcodeFormatter: (item) async {
+            Random random = new Random();
+            int randomNumber = random.nextInt(4) + 2;
+            await new Future.delayed(Duration(seconds: randomNumber));
+            return BarcodeFormattedData(
+                title: item.barcodeFormat.toString(),
+                subtitle: item.text + "custom string");
+          },
+          topBarBackgroundColor: Colors.blueAccent,
+          topBarButtonsColor: Colors.white70,
+          cameraOverlayColor: Colors.black26,
+          finderLineColor: Colors.red,
+          finderTextHintColor: Colors.cyanAccent,
+          cancelButtonTitle: "Cancel",
+          enableCameraButtonTitle: "camera enable",
+          enableCameraExplanationText: "explanation text",
+          finderTextHint:
+              "Please align any supported barcode in the frame to scan it.",
+          // clearButtonTitle: "CCCClear",
+          // submitButtonTitle: "Submitt",
+          barcodesCountText: "%d codes",
+          fetchingStateText: "might be not needed",
+          noBarcodesTitle: "nothing to see here",
+          barcodesCountTextColor: Colors.purple,
+          finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
+          topBarButtonsInactiveColor: Colors.orange,
+          detailsActionColor: Colors.yellow,
+          detailsBackgroundColor: Colors.amber,
+          detailsPrimaryColor: Colors.yellowAccent,
+          finderLineWidth: 7,
+          successBeepEnabled: true,
+          // flashEnabled: true,
+          orientationLockMode: CameraOrientationMode.PORTRAIT,
+          barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+          cancelButtonHidden: false);
+
+      var result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => BarcodesResultPreviewWidget(result)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  detectBarcodeOnImage() async {
+    try {
+      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+
+      ///before processing image sdk need storage read permission
+
+      Map<Permission, PermissionStatus> permissions =
+          await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] ==
+              PermissionStatus.granted || //android
+          permissions[Permission.photos] == PermissionStatus.granted) {
+        //ios
+        var result = await ScanbotSdk.detectBarcodeFromImageFile(
+            image.uri, PredefinedBarcodes.allBarcodeTypes(), true);
+        if (result.operationResult == OperationResult.SUCCESS) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => BarcodesResultPreviewWidget(result)),
+          );
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   startQRScanner() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     try {
       var config = BarcodeScannerConfiguration(
@@ -308,14 +406,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   _showBarcodeScanningResult(final BarcodeScanningResult result) {
-    if (isOperationSuccessful(result)) {
-      var mapped = result.barcodeItems.map((e) => (e.barcodeFormat.toString() + ": " + e.text + "\n")).toString();
-      showAlertDialog(context, mapped, title: "Barcode Result:");
+    if (result.operationResult == OperationResult.SUCCESS) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
     }
   }
 
   startEhicScanner() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     HealthInsuranceCardRecognitionResult result;
     try {
@@ -342,7 +444,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   startMRZScanner() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     MrzScanningResult result;
     try {
@@ -373,5 +477,4 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
   }
-
 }

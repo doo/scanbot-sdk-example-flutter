@@ -6,7 +6,7 @@
 -dontoptimize
 
 -ignorewarnings
-
+-keepclassmembers enum io.scanbot.sdk.** { *; }
 -keeppackagenames io.scanbot.sdk.persistence.**
 -keep public class io.scanbot.sdk.persistence.**{ *; }
 
@@ -50,10 +50,8 @@
 -keeppackagenames io.scanbot.sdk.textorientation.**
 -keep public class io.scanbot.sdk.textorientation.**{ *; }
 
--keeppackagenames io.scanbot.barcodescanner.**
--keep public class io.scanbot.barcodescanner.**{ *; }
--keeppackagenames io.scanbot.sdk.barcodescanner.**
--keep public class io.scanbot.sdk.barcodescanner.**{ *; }
+-keeppackagenames io.scanbot.sdk.barcode.**
+-keep public class io.scanbot.sdk.barcode.**{ *; }
 
 -keeppackagenames io.scanbot.hicscanner.**
 -keep public class io.scanbot.hicscanner.**{ *; }

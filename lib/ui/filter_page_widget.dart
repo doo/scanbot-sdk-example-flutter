@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart' as c;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class PageFiltering extends StatelessWidget {
-  c.Page _page;
+  final c.Page _page;
 
   PageFiltering(this._page);
 
@@ -42,8 +42,9 @@ class PageFiltering extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class FilterPreviewWidget extends StatefulWidget {
-  c.Page page;
+  final c.Page page;
   FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
@@ -119,7 +120,9 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   }
 
   applyFilter() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
@@ -136,10 +139,13 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   }
 
   previewFilter(c.Page page, c.ImageFilterType filterType) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     try {
-      var uri = await ScanbotSdk.getFilteredDocumentPreviewUri(page, filterType);
+      var uri =
+          await ScanbotSdk.getFilteredDocumentPreviewUri(page, filterType);
       setState(() {
         selectedFilter = filterType;
         filteredImageUri = uri;
