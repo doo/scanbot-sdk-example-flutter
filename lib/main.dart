@@ -37,8 +37,7 @@ initScanbotSdk() async {
   var customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
   var config = ScanbotSdkConfig(
-      loggingEnabled: true,
-      // Consider switching logging OFF in production builds for security and performance reasons.
+      loggingEnabled: true, // Consider switching logging OFF in production builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
       imageFormat: ImageFormat.JPG,
       imageQuality: 80,
