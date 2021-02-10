@@ -289,7 +289,7 @@ limitations under the License.
 
 
 google-gson
-Version 2.8.5
+Version 2.8.6
 (https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE)
 
 Copyright 2008 Google Inc.
