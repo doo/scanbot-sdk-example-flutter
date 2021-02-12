@@ -6,7 +6,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class MultiPageFiltering extends StatelessWidget {
-  PageRepository _pageRepository;
+  final PageRepository _pageRepository;
 
   MultiPageFiltering(this._pageRepository);
 
@@ -41,9 +41,10 @@ class MultiPageFiltering extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class MultiFilterPreviewWidget extends StatefulWidget {
   MultiFilterPreviewWidgetState filterPreviewWidgetState;
-  PageRepository _pageRepository;
+ final PageRepository _pageRepository;
 
   MultiFilterPreviewWidget(this._pageRepository) {
     filterPreviewWidgetState = MultiFilterPreviewWidgetState(_pageRepository);
