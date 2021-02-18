@@ -6,6 +6,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
+import '../main.dart';
 import '../pages_repository.dart';
 import 'filter_page_widget.dart';
 import 'pages_widget.dart';
@@ -58,12 +59,18 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Widget pageView;
+    if (shouldInitWithEncryption) {
+      pageView = EncryptedPageWidget(_page.documentImageFileUri);
+    } else {
+      pageView = PageWidget(_page.documentImageFileUri);
+    }
     return Column(
       children: <Widget>[
         Expanded(
             child: Container(
                 padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Center(child: PageWidget(_page.documentImageFileUri)))),
+                child: Center(child: pageView))),
         BottomAppBar(
           child: new Row(
             mainAxisSize: MainAxisSize.max,

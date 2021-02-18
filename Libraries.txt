@@ -1,5 +1,5 @@
 
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.2.2:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.3.0:
 
 json_serializable version 3.2.0 and json_annotation version 3.0.0
 (https://github.com/dart-lang/json_serializable/blob/master/LICENSE)
