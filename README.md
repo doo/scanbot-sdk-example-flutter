@@ -7,15 +7,15 @@ For more details about the Plugin please see this [documentation](https://scanbo
 
 ## What is Scanbot SDK?
 
-The Scanbot SDK brings scanning and document creation capabilities to your mobile apps. 
-It contains modules which are individually licensable as license packages. 
+The Scanbot SDK brings scanning and document creation capabilities to your mobile apps.
+It contains modules which are individually licensable as license packages.
 For more details visit our website https://scanbot.io
 
 
 ## How to run this app
 
 Install [Flutter](https://flutter.dev) and all required dev tools.
- 
+
 Fetch this repository and navigate to the project directory.
 
 ```
@@ -47,7 +47,7 @@ cd ios/
 pod install --repo-update
 ```
 
-Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. 
+Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings.
 Then build and run the app in Xcode.
 
 
@@ -55,7 +55,7 @@ Then build and run the app in Xcode.
 
 The Scanbot SDK will run without a license for one minute per session!
 
-After the trial period is over all Scanbot SDK functions as well as the UI components (like Document Scanner UI) will 
+After the trial period has expired all Scanbot SDK functions as well as the UI components (like Document Scanner UI) will
 stop working or may be terminated. You have to restart the app to get another trial period.
 
-To get an unrestricted "no-strings-attached" 30 day trial license, please submit the [Trial License Form](https://scanbot.io/en/sdk/demo/trial) on our website.
+To get an unrestricted, "no-strings-attached" 30 day trial license, please submit the [Trial License Form](https://scanbot.io/en/sdk/demo/trial) on our website.
