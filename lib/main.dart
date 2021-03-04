@@ -451,8 +451,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var config = MrzScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
-        // ...
       );
+      if (Platform.isIOS) {
+        config.finderAspectRatio = FinderAspectRatio(width: 3, height: 1);
+      }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {
       print(e);
