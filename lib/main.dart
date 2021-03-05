@@ -419,7 +419,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   void showResultTextDialog(result) {
     Widget okButton = FlatButton(
       child: Text("OK"),
-      onPressed: () {},
+      onPressed: () => Navigator.pop(context),
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
