@@ -317,6 +317,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   startBatchBarcodeScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     try {
       //var config = BarcodeScannerConfiguration(); // testing default configs
       var config = BatchBarcodeScannerConfiguration(
@@ -369,6 +372,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   detectBarcodeOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     try {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
@@ -395,6 +401,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   estimateBlurriness() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     try {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
