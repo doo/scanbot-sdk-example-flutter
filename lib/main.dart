@@ -235,8 +235,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   importImage() async {
     try {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      await createPage(image.uri);
+      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      await createPage(Uri.parse(image.path));
       gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
