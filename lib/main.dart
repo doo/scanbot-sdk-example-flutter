@@ -31,9 +31,9 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.sdk.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY = "";
+const SCANBOT_SDK_LICENSE_KEY = '';
 
-initScanbotSdk() async {
+Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
   var customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
@@ -80,16 +80,16 @@ Future<String> getDemoStorageBaseDirectory() async {
   } else if (Platform.isIOS) {
     storageDirectory = await getApplicationDocumentsDirectory();
   } else {
-    throw ("Unsupported platform");
+    throw ('Unsupported platform');
   }
 
-  return "${storageDirectory.path}/my-custom-storage";
+  return '${storageDirectory.path}/my-custom-storage';
 }
 
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() {
-    initScanbotSdk();
+    _initScanbotSdk();
     return _MyAppState();
   }
 }
@@ -112,7 +112,7 @@ class MainPageWidget extends StatefulWidget {
 }
 
 class _MainPageWidgetState extends State<MainPageWidget> {
-  PageRepository _pageRepository = PageRepository();
+  final PageRepository _pageRepository = PageRepository();
 
   @override
   void initState() {
@@ -130,82 +130,82 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       ),
       body: ListView(
         children: <Widget>[
-          TitleItemWidget("Document Scanner"),
+          TitleItemWidget('Document Scanner'),
           MenuItemWidget(
-            "Scan Document",
+            'Scan Document',
             onTap: () {
-              startDocumentScanning();
+              _startDocumentScanning();
             },
           ),
           MenuItemWidget(
-            "Import Image",
+            'Import Image',
             onTap: () {
-              importImage();
+              _importImage();
             },
           ),
           MenuItemWidget(
-            "View Image Results",
+            'View Image Results',
             endIcon: Icons.keyboard_arrow_right,
             onTap: () {
-              gotoImagesView();
+              _gotoImagesView();
             },
           ),
-          TitleItemWidget("Data Detectors"),
+          TitleItemWidget('Data Detectors'),
           MenuItemWidget(
-            "Scan Barcode (all formats: 1D + 2D)",
+            'Scan Barcode (all formats: 1D + 2D)',
             onTap: () {
-              startBarcodeScanner();
+              _startBarcodeScanner();
             },
           ),
           MenuItemWidget(
-            "Scan QR code (QR format only)",
+            'Scan QR code (QR format only)',
             onTap: () {
-              startQRScanner();
+              _startQRScanner();
             },
           ),
           MenuItemWidget(
-            "Scan Multiple Barcodes ",
+            'Scan Multiple Barcodes ',
             onTap: () {
-              startBatchBarcodeScanner();
+              _startBatchBarcodeScanner();
             },
           ),
           MenuItemWidget(
-            "Detect Barcode image",
+            'Detect Barcode image',
             onTap: () {
-              detectBarcodeOnImage();
+              _detectBarcodeOnImage();
             },
           ),
           MenuItemWidget(
-            "Scan MRZ (Machine Readable Zone)",
+            'Scan MRZ (Machine Readable Zone)',
             onTap: () {
-              startMRZScanner();
+              _startMRZScanner();
             },
           ),
           MenuItemWidget(
-            "Scan EHIC (European Health Insurance Card)",
+            'Scan EHIC (European Health Insurance Card)',
             onTap: () {
-              startEhicScanner();
+              _startEhicScanner();
             },
           ),
           MenuItemWidget(
-            "Estimate image blurriness",
+            'Estimate image blurriness',
             onTap: () {
-              estimateBlurriness();
+              _estimateBlurriness();
             },
           ),
-          TitleItemWidget("Test other SDK API methods"),
+          TitleItemWidget('Test other SDK API methods'),
           MenuItemWidget(
-            "getLicenseStatus()",
+            'getLicenseStatus()',
             startIcon: Icons.phonelink_lock,
             onTap: () {
-              getLicenseStatus();
+              _getLicenseStatus();
             },
           ),
           MenuItemWidget(
-            "getOcrConfigs()",
+            'getOcrConfigs()',
             startIcon: Icons.settings,
             onTap: () {
-              getOcrConfigs();
+              _getOcrConfigs();
             },
           ),
         ],
@@ -213,44 +213,45 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     );
   }
 
-  getOcrConfigs() async {
+  Future<void> _getOcrConfigs() async {
     try {
-      var result = await ScanbotSdk.getOcrConfigs();
-      showAlertDialog(context, jsonEncode(result), title: "OCR Configs");
+      final result = await ScanbotSdk.getOcrConfigs();
+      await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
     } catch (e) {
       Logger.root.severe(e);
-      showAlertDialog(context, "Error getting license status");
+      await showAlertDialog(context, 'Error getting license status');
     }
   }
 
-  getLicenseStatus() async {
+  Future<void> _getLicenseStatus() async {
     try {
-      var result = await ScanbotSdk.getLicenseStatus();
-      showAlertDialog(context, jsonEncode(result), title: "License Status");
+      final result = await ScanbotSdk.getLicenseStatus();
+      await showAlertDialog(context, jsonEncode(result),
+          title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);
-      showAlertDialog(context, "Error getting OCR configs");
+      await showAlertDialog(context, 'Error getting OCR configs');
     }
   }
 
-  importImage() async {
+  Future<void> _importImage() async {
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await createPage(Uri.parse(image.path));
-      gotoImagesView();
+      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      await _createPage(Uri.parse(image.path));
+      await _gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 
-  createPage(Uri uri) async {
+  Future<void> _createPage(Uri uri) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
-    var dialog = ProgressDialog(context,
+    final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Processing");
+    dialog.style(message: 'Processing');
     dialog.show();
     try {
       var page = await ScanbotSdk.createPage(uri, false);
@@ -259,11 +260,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     } finally {
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  startDocumentScanning() async {
+  Future<void> _startDocumentScanning() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -280,8 +281,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
         orientationLockMode: CameraOrientationMode.PORTRAIT,
         //documentImageSizeLimit: Size(2000, 3000),
-        cancelButtonTitle: "Cancel",
-        pageCounterButtonTitle: "%d Page(s)",
+        cancelButtonTitle: 'Cancel',
+        pageCounterButtonTitle: '%d Page(s)',
         textHintOK: "Perfect, don't move...",
         //textHintNothingDetected: "Nothing",
         // ...
@@ -293,11 +294,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     if (isOperationSuccessful(result)) {
       await _pageRepository.addPages(result.pages);
-      gotoImagesView();
+      await _gotoImagesView();
     }
   }
 
-  startBarcodeScanner() async {
+  Future<void> _startBarcodeScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -306,17 +307,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
         finderTextHint:
-            "Please align any supported barcode in the frame to scan it.",
+            'Please align any supported barcode in the frame to scan it.',
         // ...
       );
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
-      _showBarcodeScanningResult(result);
+      await _showBarcodeScanningResult(result);
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 
-  startBatchBarcodeScanner() async {
+  Future<void> _startBatchBarcodeScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -324,28 +325,28 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       //var config = BarcodeScannerConfiguration(); // testing default configs
       var config = BatchBarcodeScannerConfiguration(
           barcodeFormatter: (item) async {
-            Random random = new Random();
-            int randomNumber = random.nextInt(4) + 2;
-            await new Future.delayed(Duration(seconds: randomNumber));
+            final random = Random();
+            final randomNumber = random.nextInt(4) + 2;
+            await Future.delayed(Duration(seconds: randomNumber));
             return BarcodeFormattedData(
                 title: item.barcodeFormat.toString(),
-                subtitle: item.text + "custom string");
+                subtitle: item.text + 'custom string');
           },
           topBarBackgroundColor: Colors.blueAccent,
           topBarButtonsColor: Colors.white70,
           cameraOverlayColor: Colors.black26,
           finderLineColor: Colors.red,
           finderTextHintColor: Colors.cyanAccent,
-          cancelButtonTitle: "Cancel",
-          enableCameraButtonTitle: "camera enable",
-          enableCameraExplanationText: "explanation text",
+          cancelButtonTitle: 'Cancel',
+          enableCameraButtonTitle: 'camera enable',
+          enableCameraExplanationText: 'explanation text',
           finderTextHint:
-              "Please align any supported barcode in the frame to scan it.",
+              'Please align any supported barcode in the frame to scan it.',
           // clearButtonTitle: "CCCClear",
           // submitButtonTitle: "Submitt",
-          barcodesCountText: "%d codes",
-          fetchingStateText: "might be not needed",
-          noBarcodesTitle: "nothing to see here",
+          barcodesCountText: '%d codes',
+          fetchingStateText: 'might be not needed',
+          noBarcodesTitle: 'nothing to see here',
           barcodesCountTextColor: Colors.purple,
           finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
           topBarButtonsInactiveColor: Colors.orange,
@@ -359,9 +360,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
           cancelButtonHidden: false);
 
-      var result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
+      final result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
       if (result.operationResult == OperationResult.SUCCESS) {
-        Navigator.of(context).push(
+        await Navigator.of(context).push(
           MaterialPageRoute(
               builder: (context) => BarcodesResultPreviewWidget(result)),
         );
@@ -371,7 +372,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  detectBarcodeOnImage() async {
+  Future<void> _detectBarcodeOnImage() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -380,7 +381,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       ///before processing image sdk need storage read permission
 
-      Map<Permission, PermissionStatus> permissions =
+      final permissions =
           await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
@@ -389,7 +390,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
             Uri.parse(image.path), PredefinedBarcodes.allBarcodeTypes(), true);
         if (result.operationResult == OperationResult.SUCCESS) {
-          Navigator.of(context).push(
+          await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => BarcodesResultPreviewWidget(result)),
           );
@@ -400,7 +401,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  estimateBlurriness() async {
+  Future<void> _estimateBlurriness() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -409,7 +410,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       ///before processing an image the SDK need storage read permission
 
-      Map<Permission, PermissionStatus> permissions =
+      final permissions =
           await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
@@ -418,21 +419,21 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         var page = await ScanbotSdk.createPage(Uri.file(image.path), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
-        showResultTextDialog("Blur value is :${result.toStringAsFixed(2)} ");
+        _showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
       }
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 
-  void showResultTextDialog(result) {
-    Widget okButton = FlatButton(
-      child: Text("OK"),
+  void _showResultTextDialog(result) {
+    Widget okButton = TextButton(
       onPressed: () => Navigator.pop(context),
+      child: Text('OK'),
     );
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Result"),
+    final alert = AlertDialog(
+      title: Text('Result'),
       content: Text(result),
       actions: [
         okButton,
@@ -448,41 +449,42 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     );
   }
 
-  startQRScanner() async {
+  Future<void> _startQRScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     try {
-      var config = BarcodeScannerConfiguration(
+      final config = BarcodeScannerConfiguration(
         barcodeFormats: [BarcodeFormat.QR_CODE],
-        finderTextHint: "Please align a QR code in the frame to scan it.",
+        finderTextHint: 'Please align a QR code in the frame to scan it.',
         // ...
       );
-      var result = await ScanbotSdkUi.startBarcodeScanner(config);
-      _showBarcodeScanningResult(result);
+      final result = await ScanbotSdkUi.startBarcodeScanner(config);
+      await _showBarcodeScanningResult(result);
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 
-  _showBarcodeScanningResult(final BarcodeScanningResult result) {
+  Future<void> _showBarcodeScanningResult(
+      final BarcodeScanningResult result) async {
     if (result.operationResult == OperationResult.SUCCESS) {
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => BarcodesResultPreviewWidget(result)),
       );
     }
   }
 
-  startEhicScanner() async {
+  Future<void> _startEhicScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     HealthInsuranceCardRecognitionResult result;
     try {
-      var config = HealthInsuranceScannerConfiguration(
+      final config = HealthInsuranceScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
         topBarButtonsColor: Colors.white70,
         // ...
@@ -493,25 +495,25 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     if (isOperationSuccessful(result) && result?.fields != null) {
-      var concatenate = StringBuffer();
+      final concatenate = StringBuffer();
       result.fields
           .map((field) =>
               "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n")
           .forEach((s) {
         concatenate.write(s);
       });
-      showAlertDialog(context, concatenate.toString());
+      await showAlertDialog(context, concatenate.toString());
     }
   }
 
-  startMRZScanner() async {
+  Future<void> _startMRZScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     MrzScanningResult result;
     try {
-      var config = MrzScannerConfiguration(
+      final config = MrzScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
       );
       if (Platform.isIOS) {
@@ -523,18 +525,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     if (isOperationSuccessful(result)) {
-      var concatenate = StringBuffer();
+      final concatenate = StringBuffer();
       result.fields
           .map((field) =>
               "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
           .forEach((s) {
         concatenate.write(s);
       });
-      showAlertDialog(context, concatenate.toString());
+      await showAlertDialog(context, concatenate.toString());
     }
   }
 
-  gotoImagesView() async {
+  Future<void> _gotoImagesView() async {
     imageCache.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),

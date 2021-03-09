@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: 2.3.0-beta2
+  scanbot_sdk: 2.3.0-beta3
   cupertino_icons: ^0.1.2
   permission_handler: ^5.0.1+1
   image_picker: ^0.6.7+21
@@ -31,6 +31,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  pedantic: ^1.11.0
 
 
 # For information on the generic Dart part of this file, see the

@@ -10,15 +10,15 @@ class PageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // workaround - see https://github.com/flutter/flutter/issues/17419
-    var file = File.fromUri(path);
-    var bytes = file.readAsBytesSync();
+    final file = File.fromUri(path);
+    final bytes = file.readAsBytesSync();
     //
     // var image = Image.file(
     //    file,
     //   height: double.infinity,
     //    width: double.infinity,
     // );
-    Image image = Image.memory(bytes);
+    final image = Image.memory(bytes);
     return Container(
       height: double.infinity,
       width: double.infinity,

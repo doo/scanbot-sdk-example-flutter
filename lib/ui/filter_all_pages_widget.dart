@@ -1,8 +1,8 @@
-import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class MultiPageFiltering extends StatelessWidget {
@@ -24,8 +24,13 @@ class MultiPageFiltering extends StatelessWidget {
               child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: const Text('APPLY',
-                      style: TextStyle(inherit: true, color: Colors.black)),
+                  child: const Text(
+                    'APPLY',
+                    style: TextStyle(
+                      inherit: true,
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -34,8 +39,13 @@ class MultiPageFiltering extends StatelessWidget {
             color: Colors.black, //change your color here
           ),
           backgroundColor: Colors.white,
-          title: const Text('Filtering',
-              style: TextStyle(inherit: true, color: Colors.black)),
+          title: const Text(
+            'Filtering',
+            style: TextStyle(
+              inherit: true,
+              color: Colors.black,
+            ),
+          ),
         ),
         body: filterPreviewWidget);
   }
@@ -44,13 +54,13 @@ class MultiPageFiltering extends StatelessWidget {
 // ignore: must_be_immutable
 class MultiFilterPreviewWidget extends StatefulWidget {
   MultiFilterPreviewWidgetState filterPreviewWidgetState;
- final PageRepository _pageRepository;
+  final PageRepository _pageRepository;
 
   MultiFilterPreviewWidget(this._pageRepository) {
     filterPreviewWidgetState = MultiFilterPreviewWidgetState(_pageRepository);
   }
 
-  applyFilter() {
+  void applyFilter() {
     filterPreviewWidgetState.applyFilter();
   }
 
@@ -62,7 +72,7 @@ class MultiFilterPreviewWidget extends StatefulWidget {
 
 class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
   ImageFilterType selectedFilter;
-  PageRepository _pageRepository;
+  final PageRepository _pageRepository;
 
   MultiFilterPreviewWidgetState(this._pageRepository) {
     selectedFilter = ImageFilterType.NONE;
@@ -95,9 +105,14 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
   }
 
   Text titleFromFilterType(ImageFilterType filterType) {
-    return Text(filterType.toString().replaceAll("ImageFilterType.", ""),
-        style: TextStyle(
-            inherit: true, color: Colors.black, fontStyle: FontStyle.normal));
+    return Text(
+      filterType.toString().replaceAll('ImageFilterType.', ''),
+      style: TextStyle(
+        inherit: true,
+        color: Colors.black,
+        fontStyle: FontStyle.normal,
+      ),
+    );
   }
 
   void changeSelectedFilter(ImageFilterType value) {
@@ -106,29 +121,31 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
     });
   }
 
-  applyFilter() {
+  void applyFilter() {
     filterPages(selectedFilter);
   }
 
-  filterPages(ImageFilterType filterType) async {
-    if (!await checkLicenseStatus(context)) { return; }
+  Future<void> filterPages(ImageFilterType filterType) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context,
+    final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Processing ...");
+    dialog.style(message: 'Processing ...');
     dialog.show();
-    var futures = _pageRepository.pages
+    final futures = _pageRepository.pages
         .map((page) => ScanbotSdk.applyImageFilter(page, filterType));
 
     try {
-      var pages = await Future.wait(futures);
+      final pages = await Future.wait(futures);
       pages.forEach((page) {
         _pageRepository.updatePage(page);
       });
     } catch (e) {
       print(e);
     }
-    dialog.hide();
+    await dialog.hide();
     Navigator.of(context).pop();
   }
 }
