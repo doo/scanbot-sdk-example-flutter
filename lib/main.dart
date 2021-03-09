@@ -407,7 +407,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
-      ///before processing image sdk need storage read permission
+      ///before processing an image the SDK need storage read permission
 
       Map<Permission, PermissionStatus> permissions =
           await [Permission.storage, Permission.photos].request();
