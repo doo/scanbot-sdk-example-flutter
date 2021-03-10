@@ -10,6 +10,7 @@ import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
+import '../main.dart';
 import '../pages_repository.dart';
 import 'filter_all_pages_widget.dart';
 import 'operations_page_widget.dart';
@@ -56,14 +57,20 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200),
                   itemBuilder: (context, position) {
+                    Widget pageView;
+                    if (shouldInitWithEncryption) {
+                      pageView = EncryptedPageWidget(
+                          _pages[position].documentPreviewImageFileUri);
+                    } else {
+                      pageView = PageWidget(
+                          _pages[position].documentPreviewImageFileUri);
+                    }
                     return GridTile(
                       child: GestureDetector(
-                        onTap: () {
-                          _showOperationsPage(_pages[position]);
-                        },
-                        child: PageWidget(
-                            _pages[position].documentPreviewImageFileUri),
-                      ),
+                          onTap: () {
+                            _showOperationsPage(_pages[position]);
+                          },
+                          child: pageView),
                     );
                   },
                   itemCount: _pages?.length ?? 0),

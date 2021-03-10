@@ -23,6 +23,9 @@ import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
 
+/// true - if you need to enable encryption for example app
+bool shouldInitWithEncryption = true;
+
 void main() => runApp(MyApp());
 
 // TODO add the Scanbot SDK license key here.
@@ -37,21 +40,34 @@ Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
   final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
-  final config = ScanbotSdkConfig(
+  final encryptionParams = _getEncryptionParams();
+
+  var config = ScanbotSdkConfig(
       loggingEnabled: true,
       // Consider switching logging OFF in production builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
       imageFormat: ImageFormat.JPG,
       imageQuality: 80,
       storageBaseDirectory: customStorageBaseDirectory,
-      documentDetectorMode: DocumentDetectorMode.ML_BASED);
-
+      documentDetectorMode: DocumentDetectorMode.ML_BASED,
+      encryptionParameters: encryptionParams);
   try {
     await ScanbotSdk.initScanbotSdk(config);
     await PageRepository().loadPages();
   } catch (e) {
     Logger.root.severe(e);
   }
+}
+
+EncryptionParameters _getEncryptionParams() {
+  EncryptionParameters encryptionParams;
+  if (shouldInitWithEncryption) {
+    encryptionParams = EncryptionParameters(
+      password: 'password',
+      mode: FileEncryptionMode.AES256,
+    );
+  }
+  return encryptionParams;
 }
 
 Future<String> getDemoStorageBaseDirectory() async {
