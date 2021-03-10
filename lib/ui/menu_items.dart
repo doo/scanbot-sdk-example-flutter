@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -15,20 +14,20 @@ class MenuItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var listTile = ListTile(
-      leading: startIcon!=null?Icon(startIcon):null,
-      trailing: endIcon!=null?Icon(endIcon):null,
+      leading: startIcon != null ? Icon(startIcon) : null,
+      trailing: endIcon != null ? Icon(endIcon) : null,
       title: Text(
         title,
         style: TextStyle(inherit: true, fontSize: 16.0, color: Colors.black87),
       ),
-      onTap: this.onTap,
+      onTap: onTap,
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         listTile,
-         Divider(
+        Divider(
           color: Colors.black26,
           height: 0,
           endIndent: 16,
