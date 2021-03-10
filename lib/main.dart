@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
@@ -54,7 +55,7 @@ initScanbotSdk() async {
     await ScanbotSdk.initScanbotSdk(config);
     await PageRepository().loadPages();
   } catch (e) {
-    print(e);
+    Logger.root.severe(e);
   }
 }
 
@@ -201,6 +202,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               startEhicScanner();
             },
           ),
+          MenuItemWidget(
+            "Estimate image blurriness",
+            onTap: () {
+              estimateBlurriness();
+            },
+          ),
           TitleItemWidget("Test other SDK API methods"),
           MenuItemWidget(
             "getLicenseStatus()",
@@ -226,7 +233,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var result = await ScanbotSdk.getOcrConfigs();
       showAlertDialog(context, jsonEncode(result), title: "OCR Configs");
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
       showAlertDialog(context, "Error getting license status");
     }
   }
@@ -236,18 +243,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var result = await ScanbotSdk.getLicenseStatus();
       showAlertDialog(context, jsonEncode(result), title: "License Status");
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
       showAlertDialog(context, "Error getting OCR configs");
     }
   }
 
   importImage() async {
     try {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      await createPage(image.uri);
+      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      await createPage(Uri.parse(image.path));
       gotoImagesView();
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
   }
 
@@ -265,7 +272,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       page = await ScanbotSdk.detectDocument(page);
       await _pageRepository.addPage(page);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     } finally {
       dialog.hide();
     }
@@ -296,7 +303,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       );
       result = await ScanbotSdkUi.startDocumentScanner(config);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
 
     if (isOperationSuccessful(result)) {
@@ -320,11 +327,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
       _showBarcodeScanningResult(result);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
   }
 
   startBatchBarcodeScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     try {
       //var config = BarcodeScannerConfiguration(); // testing default configs
       var config = BatchBarcodeScannerConfiguration(
@@ -372,13 +382,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         );
       }
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
   }
 
   detectBarcodeOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     try {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
       ///before processing image sdk need storage read permission
 
@@ -389,7 +402,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
-            image.uri, PredefinedBarcodes.allBarcodeTypes(), true);
+            Uri.parse(image.path), PredefinedBarcodes.allBarcodeTypes(), true);
         if (result.operationResult == OperationResult.SUCCESS) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -398,8 +411,56 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         }
       }
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
+  }
+
+  estimateBlurriness() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+
+      ///before processing an image the SDK need storage read permission
+
+      Map<Permission, PermissionStatus> permissions =
+          await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] ==
+              PermissionStatus.granted || //android
+          permissions[Permission.photos] == PermissionStatus.granted) {
+        //ios
+        var page = await ScanbotSdk.createPage(Uri.file(image.path), true);
+        var result = await ScanbotSdk.estimateBlurOnPage(page);
+        // set up the button
+        showResultTextDialog("Blur value is :${result.toStringAsFixed(2)} ");
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  void showResultTextDialog(result) {
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () => Navigator.pop(context),
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Result"),
+      content: Text(result),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   startQRScanner() async {
@@ -416,7 +477,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
       _showBarcodeScanningResult(result);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
   }
 
@@ -443,7 +504,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       );
       result = await ScanbotSdkUi.startEhicScanner(config);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
 
     if (isOperationSuccessful(result) && result?.fields != null) {
@@ -473,7 +534,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {
-      print(e);
+      Logger.root.severe(e);
     }
 
     if (isOperationSuccessful(result)) {
