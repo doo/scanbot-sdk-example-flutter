@@ -63,7 +63,7 @@ EncryptionParameters _getEncryptionParams() {
   EncryptionParameters encryptionParams;
   if (shouldInitWithEncryption) {
     encryptionParams = EncryptionParameters(
-      password: 'password',
+      password: 'SomeSecretPa\$\$w0rdForFileEncryption',
       mode: FileEncryptionMode.AES256,
     );
   }
