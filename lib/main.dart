@@ -218,6 +218,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               _getOcrConfigs();
             },
           ),
+          MenuItemWidget(
+            'Licenses info',
+            startIcon: Icons.developer_mode,
+            onTap: () {
+              showLicensePage(
+                context: context,
+                applicationName: 'Scanbot SDK example',
+              );
+            },
+          ),
         ],
       ),
     );
