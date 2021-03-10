@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart' as c;
+import 'package:scanbot_sdk/scanbot_encryption_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
@@ -74,11 +76,18 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     var file = File.fromUri(filteredImageUri);
-    var image = Image.file(
-      file,
-      height: double.infinity,
-      width: double.infinity,
-    );
+    var imageData =
+    ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri);
+    var image = FutureBuilder(
+        future: imageData,
+        builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+          if (snapshot.data != null) {
+            var image = Image.memory(snapshot.data);
+            return Center(child: image);
+          } else {
+            return Container();
+          }
+        });
     return ListView(
       shrinkWrap: true,
       children: <Widget>[
