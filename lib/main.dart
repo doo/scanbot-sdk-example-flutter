@@ -35,9 +35,9 @@ const SCANBOT_SDK_LICENSE_KEY = '';
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
-  var customStorageBaseDirectory = await getDemoStorageBaseDirectory();
+  final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
-  var config = ScanbotSdkConfig(
+  final config = ScanbotSdkConfig(
       loggingEnabled: true,
       // Consider switching logging OFF in production builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
@@ -185,12 +185,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
-            },
-          ),
-          MenuItemWidget(
-            'Estimate image blurriness',
-            onTap: () {
-              _estimateBlurriness();
             },
           ),
           TitleItemWidget('Test other SDK API methods'),
@@ -399,54 +393,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-  }
-
-  Future<void> _estimateBlurriness() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-    try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
-
-      ///before processing an image the SDK need storage read permission
-
-      final permissions =
-          await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
-          permissions[Permission.photos] == PermissionStatus.granted) {
-        //ios
-        var page = await ScanbotSdk.createPage(Uri.file(image.path), true);
-        var result = await ScanbotSdk.estimateBlurOnPage(page);
-        // set up the button
-        _showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  void _showResultTextDialog(result) {
-    Widget okButton = TextButton(
-      onPressed: () => Navigator.pop(context),
-      child: Text('OK'),
-    );
-    // set up the AlertDialog
-    final alert = AlertDialog(
-      title: Text('Result'),
-      content: Text(result),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 
   Future<void> _startQRScanner() async {

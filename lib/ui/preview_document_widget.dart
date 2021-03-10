@@ -33,109 +33,110 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Image results',
-            style: TextStyle(
-              inherit: true,
-              color: Colors.black,
-            ),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
+        ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Image results',
+          style: TextStyle(
+            inherit: true,
+            color: Colors.black,
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                child: GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200),
-                    itemBuilder: (context, position) {
-                      return GridTile(
-                        child: GestureDetector(
-                          onTap: () {
-                            _showOperationsPage(_pages[position]);
-                          },
-                          child: PageWidget(
-                              _pages[position].documentPreviewImageFileUri),
-                        ),
-                      );
-                    },
-                    itemCount: _pages?.length ?? 0),
-              ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+              child: GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200),
+                  itemBuilder: (context, position) {
+                    return GridTile(
+                      child: GestureDetector(
+                        onTap: () {
+                          _showOperationsPage(_pages[position]);
+                        },
+                        child: PageWidget(
+                            _pages[position].documentPreviewImageFileUri),
+                      ),
+                    );
+                  },
+                  itemCount: _pages?.length ?? 0),
             ),
-            BottomAppBar(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      _addPageModalBottomSheet(context);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.add_circle),
-                        Container(width: 4),
-                        Text(
-                          'Add',
-                          style: TextStyle(
-                            inherit: true,
-                            color: Colors.black,
-                          ),
+          ),
+          BottomAppBar(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    _addPageModalBottomSheet(context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.add_circle),
+                      Container(width: 4),
+                      Text(
+                        'Add',
+                        style: TextStyle(
+                          inherit: true,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      _settingModalBottomSheet(context);
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(Icons.more_vert),
-                        Container(width: 4),
-                        Text(
-                          'More',
-                          style: TextStyle(
-                            inherit: true,
-                            color: Colors.black,
-                          ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _settingModalBottomSheet(context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.more_vert),
+                      Container(width: 4),
+                      Text(
+                        'More',
+                        style: TextStyle(
+                          inherit: true,
+                          color: Colors.black,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    onPressed: () {
-                      _showCleanupStorageDialog();
-                    },
-                    child: Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.delete,
+                ),
+                TextButton(
+                  onPressed: () {
+                    _showCleanupStorageDialog();
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      Container(width: 4),
+                      Text(
+                        'Delete All',
+                        style: TextStyle(
+                          inherit: true,
                           color: Colors.red,
                         ),
-                        Container(width: 4),
-                        Text(
-                          'Delete All',
-                          style: TextStyle(
-                            inherit: true,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showOperationsPage(sdk.Page page) async {
