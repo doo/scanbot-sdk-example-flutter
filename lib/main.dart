@@ -24,7 +24,7 @@ import 'ui/menu_items.dart';
 import 'ui/utils.dart';
 
 /// true - if you need to enable encryption for example app
-bool shouldInitWithEncryption = true;
+bool shouldInitWithEncryption = false;
 
 void main() => runApp(MyApp());
 
