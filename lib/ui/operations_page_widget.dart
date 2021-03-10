@@ -18,7 +18,7 @@ class PageOperations extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
+    imageCache?.clear();
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -50,7 +50,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   PagesPreviewWidgetState(this._page);
 
   _updatePage(sdk.Page page) async {
-    imageCache.clear();
+    imageCache?.clear();
     await _pageRepository.updatePage(page);
     setState(() {
       this._page = page;
@@ -61,9 +61,9 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   Widget build(BuildContext context) {
     Widget pageView;
     if (shouldInitWithEncryption) {
-      pageView = EncryptedPageWidget(_page.documentImageFileUri);
+      pageView = EncryptedPageWidget(_page.documentImageFileUri!);
     } else {
-      pageView = PageWidget(_page.documentImageFileUri);
+      pageView = PageWidget(_page.documentImageFileUri!);
     }
     return Column(
       children: <Widget>[
@@ -76,7 +76,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.crop),
@@ -89,7 +89,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   startCroppingScreen(_page);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.filter),
@@ -102,7 +102,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   showFilterPage(_page);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.delete, color: Colors.red),
@@ -124,7 +124,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   deletePage(sdk.Page page) async {
     try {
-      await ScanbotSdk.deletePage(page);
+      ScanbotSdk.deletePage(page);
       await this._pageRepository.removePage(page);
       Navigator.of(context).pop();
     } catch (e) {
@@ -142,9 +142,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       dialog.show();
       var updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
       dialog.hide();
-      if (updatedPage != null) {
-        await _updatePage(updatedPage);
-      }
+      await _updatePage(updatedPage);
     } catch (e) {
       print(e);
     }
@@ -175,7 +173,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       );
       var result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
-        await _updatePage(result.page);
+        await _updatePage(result.page!);
       }
     } catch (e) {
       print(e);

@@ -13,7 +13,7 @@ class PageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
+    imageCache?.clear();
     var filterPreviewWidget = FilterPreviewWidget(_page);
     return Scaffold(
         appBar: AppBar(
@@ -45,7 +45,7 @@ class PageFiltering extends StatelessWidget {
 // ignore: must_be_immutable
 class FilterPreviewWidget extends StatefulWidget {
   final c.Page page;
-  FilterPreviewWidgetState filterPreviewWidgetState;
+  late FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
     filterPreviewWidgetState = new FilterPreviewWidgetState(page);
@@ -63,8 +63,8 @@ class FilterPreviewWidget extends StatefulWidget {
 
 class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   c.Page page;
-  Uri filteredImageUri;
-  c.ImageFilterType selectedFilter;
+  Uri? filteredImageUri;
+  late c.ImageFilterType selectedFilter;
 
   FilterPreviewWidgetState(this.page) {
     filteredImageUri = page.documentImageFileUri;
@@ -73,7 +73,10 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var file = File.fromUri(filteredImageUri);
+    if (filteredImageUri == null) {
+      return Container();
+    }
+    var file = File.fromUri(filteredImageUri!);
     var image = Image.file(
       file,
       height: double.infinity,
@@ -94,7 +97,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
-              previewFilter(page, value);
+              previewFilter(page,
+                  (value as c.ImageFilterType?) ?? c.ImageFilterType.NONE);
             },
           ),
       ],

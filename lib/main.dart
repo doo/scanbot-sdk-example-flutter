@@ -40,7 +40,7 @@ initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
   var customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
-  EncryptionParameters encryptionParams = getEncryptionParams();
+  EncryptionParameters? encryptionParams = getEncryptionParams();
 
   var config = ScanbotSdkConfig(
       loggingEnabled: true,
@@ -59,12 +59,11 @@ initScanbotSdk() async {
   }
 }
 
-EncryptionParameters getEncryptionParams() {
-  EncryptionParameters encryptionParams;
+EncryptionParameters? getEncryptionParams() {
+  EncryptionParameters? encryptionParams;
   if (shouldInitWithEncryption) {
     encryptionParams = EncryptionParameters(
-        password: "password",
-        mode: FileEncryptionMode.AES256);
+        password: "password", mode: FileEncryptionMode.AES256);
   }
   return encryptionParams;
 }
@@ -91,7 +90,7 @@ Future<String> getDemoStorageBaseDirectory() async {
 
   Directory storageDirectory;
   if (Platform.isAndroid) {
-    storageDirectory = await getExternalStorageDirectory();
+    storageDirectory = (await getExternalStorageDirectory())!;
   } else if (Platform.isIOS) {
     storageDirectory = await getApplicationDocumentsDirectory();
   } else {
@@ -251,7 +250,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   importImage() async {
     try {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await createPage(Uri.parse(image.path));
+      await createPage(Uri.parse(image?.path ?? ""));
       gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
@@ -283,7 +282,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    DocumentScanningResult result;
+    DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
         bottomBarBackgroundColor: Colors.blue,
@@ -305,10 +304,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-
-    if (isOperationSuccessful(result)) {
-      await _pageRepository.addPages(result.pages);
-      gotoImagesView();
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        await _pageRepository.addPages(result.pages);
+        gotoImagesView();
+      }
     }
   }
 
@@ -344,7 +344,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             await new Future.delayed(Duration(seconds: randomNumber));
             return BarcodeFormattedData(
                 title: item.barcodeFormat.toString(),
-                subtitle: item.text + "custom string");
+                subtitle: (item.text ?? "") + "custom string");
           },
           topBarBackgroundColor: Colors.blueAccent,
           topBarButtonsColor: Colors.white70,
@@ -402,7 +402,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
-            Uri.parse(image.path), PredefinedBarcodes.allBarcodeTypes(), true);
+            Uri.parse(image?.path ?? ""),
+            PredefinedBarcodes.allBarcodeTypes(),
+            true);
         if (result.operationResult == OperationResult.SUCCESS) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -430,7 +432,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var page = await ScanbotSdk.createPage(Uri.file(image.path), true);
+        var page =
+            await ScanbotSdk.createPage(Uri.file(image?.path ?? ""), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog("Blur value is :${result.toStringAsFixed(2)} ");
@@ -441,7 +444,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   void showResultTextDialog(result) {
-    Widget okButton = FlatButton(
+    Widget okButton = TextButton(
       child: Text("OK"),
       onPressed: () => Navigator.pop(context),
     );
@@ -495,7 +498,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    HealthInsuranceCardRecognitionResult result;
+    HealthInsuranceCardRecognitionResult? result;
     try {
       var config = HealthInsuranceScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
@@ -506,16 +509,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-
-    if (isOperationSuccessful(result) && result?.fields != null) {
-      var concatenate = StringBuffer();
-      result.fields
-          .map((field) =>
-              "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n")
-          .forEach((s) {
-        concatenate.write(s);
-      });
-      showAlertDialog(context, concatenate.toString());
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        var concatenate = StringBuffer();
+        result.fields
+            .map((field) =>
+                "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n")
+            .forEach((s) {
+          concatenate.write(s);
+        });
+        showAlertDialog(context, concatenate.toString());
+      }
     }
   }
 
@@ -524,7 +528,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    MrzScanningResult result;
+    MrzScanningResult? result;
     try {
       var config = MrzScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
@@ -536,21 +540,22 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-
-    if (isOperationSuccessful(result)) {
-      var concatenate = StringBuffer();
-      result.fields
-          .map((field) =>
-              "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
-          .forEach((s) {
-        concatenate.write(s);
-      });
-      showAlertDialog(context, concatenate.toString());
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        var concatenate = StringBuffer();
+        result.fields
+            .map((field) =>
+                "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
+            .forEach((s) {
+          concatenate.write(s);
+        });
+        showAlertDialog(context, concatenate.toString());
+      }
     }
   }
 
   gotoImagesView() async {
-    imageCache.clear();
+    imageCache?.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );

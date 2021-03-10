@@ -1,8 +1,8 @@
-import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class MultiPageFiltering extends StatelessWidget {
@@ -12,7 +12,7 @@ class MultiPageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
+    imageCache?.clear();
     var filterPreviewWidget = MultiFilterPreviewWidget(_pageRepository);
     return Scaffold(
         appBar: AppBar(
@@ -43,8 +43,8 @@ class MultiPageFiltering extends StatelessWidget {
 
 // ignore: must_be_immutable
 class MultiFilterPreviewWidget extends StatefulWidget {
-  MultiFilterPreviewWidgetState filterPreviewWidgetState;
- final PageRepository _pageRepository;
+  late MultiFilterPreviewWidgetState filterPreviewWidgetState;
+  final PageRepository _pageRepository;
 
   MultiFilterPreviewWidget(this._pageRepository) {
     filterPreviewWidgetState = MultiFilterPreviewWidgetState(_pageRepository);
@@ -61,8 +61,8 @@ class MultiFilterPreviewWidget extends StatefulWidget {
 }
 
 class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
-  ImageFilterType selectedFilter;
-  PageRepository _pageRepository;
+  late ImageFilterType selectedFilter;
+  final PageRepository _pageRepository;
 
   MultiFilterPreviewWidgetState(this._pageRepository) {
     selectedFilter = ImageFilterType.NONE;
@@ -87,7 +87,8 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
-              changeSelectedFilter(value);
+              changeSelectedFilter(
+                  (value as ImageFilterType?) ?? ImageFilterType.NONE);
             },
           ),
       ],
@@ -111,7 +112,9 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
   }
 
   filterPages(ImageFilterType filterType) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);

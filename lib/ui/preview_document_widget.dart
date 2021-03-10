@@ -45,7 +45,7 @@ class PagesPreviewWidget extends StatefulWidget {
 
 class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   final PageRepository _pageRepository = PageRepository();
-  List<sdk.Page> pages;
+  late List<sdk.Page> pages;
   int currentSelectedPage = 0;
 
   PagesPreviewWidgetState() {
@@ -53,7 +53,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   void _updatePagesList() {
-    imageCache.clear();
+    imageCache?.clear();
     Future.delayed(Duration(microseconds: 500)).then((val) {
       setState(() {
         this.pages = _pageRepository.pages;
@@ -76,10 +76,10 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                       Widget pageView;
                       if (shouldInitWithEncryption) {
                         pageView = EncryptedPageWidget(
-                            pages[position].documentPreviewImageFileUri);
+                            pages[position].documentPreviewImageFileUri!);
                       } else {
                         pageView = PageWidget(
-                            pages[position].documentPreviewImageFileUri);
+                            pages[position].documentPreviewImageFileUri!);
                       }
                       return GridTile(
                         child: GestureDetector(
@@ -89,13 +89,13 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                             child: pageView),
                       );
                     },
-                    itemCount: pages?.length ?? 0))),
+                    itemCount: pages.length))),
         BottomAppBar(
           child: new Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.add_circle),
@@ -108,7 +108,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   _addPageModalBottomSheet(context);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.more_vert),
@@ -121,7 +121,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                   _settingModalBottomSheet(context);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Row(
                   children: <Widget>[
                     Icon(Icons.delete, color: Colors.red),
@@ -141,10 +141,9 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  showOperationsPage(sdk.Page  page) async {
+  showOperationsPage(sdk.Page page) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => PageOperations(page)),
+      MaterialPageRoute(builder: (context) => PageOperations(page)),
     );
     _updatePagesList();
   }
@@ -250,9 +249,11 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   startDocumentScanning() async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    DocumentScanningResult result;
+    DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
         orientationLockMode: sdk.CameraOrientationMode.PORTRAIT,
@@ -265,16 +266,17 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     } catch (e) {
       print(e);
     }
-    if (isOperationSuccessful(result)) {
-      await _pageRepository.addPages(result.pages);
-      _updatePagesList();
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        await _pageRepository.addPages(result.pages);
+        _updatePagesList();
+      }
     }
   }
 
   showCleanupStorageDialog() {
     Widget text = SimpleDialogOption(
-      child:
-          Text("Delete all images and generated files (PDF, TIFF, etc)?"),
+      child: Text("Delete all images and generated files (PDF, TIFF, etc)?"),
     );
 
     // set up the SimpleDialog
@@ -283,14 +285,14 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
       content: text,
       contentPadding: EdgeInsets.all(0),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             cleanupStorage();
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text('CANCEL'),
           onPressed: () {
             Navigator.of(context).pop();
@@ -309,8 +311,12 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   filterAllPages() async {
-    if (!await checkHasPages(context)) { return; }
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -320,7 +326,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   cleanupStorage() async {
     try {
-      await ScanbotSdk.cleanupStorage();
+      ScanbotSdk.cleanupStorage();
       await _pageRepository.clearPages();
       _updatePagesList();
     } catch (e) {
@@ -329,15 +335,21 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   createPdf() async {
-    if (!await checkHasPages(context)) { return; }
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Creating PDF ...");
     try {
       dialog.show();
       var options = PdfRenderingOptions(PdfRenderSize.A4);
-      final Uri pdfFileUri = await ScanbotSdk.createPdf(this._pageRepository.pages, options);
+      final Uri pdfFileUri =
+          await ScanbotSdk.createPdf(this._pageRepository.pages, options);
       dialog.hide();
       showAlertDialog(context, pdfFileUri.toString(), title: "PDF file URI");
     } catch (e) {
@@ -348,15 +360,18 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
   importImage() async {
     try {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      createPage(image.uri);
+      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      createPage(Uri.parse(image?.path ?? ""));
     } catch (e) {}
   }
 
   createPage(Uri uri) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Processing ...");
     dialog.show();
     try {
@@ -372,15 +387,26 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   createTiff(bool binarized) async {
-    if (!await checkHasPages(context)) { return; }
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Creating TIFF ...");
     dialog.show();
     try {
-      var options = TiffCreationOptions(binarized: binarized, dpi: 200, compression: (binarized ? TiffCompression.CCITT_T6 : TiffCompression.ADOBE_DEFLATE));
-      final Uri tiffFileUri = await ScanbotSdk.createTiff(this._pageRepository.pages, options);
+      var options = TiffCreationOptions(
+          binarized: binarized,
+          dpi: 200,
+          compression: (binarized
+              ? TiffCompression.CCITT_T6
+              : TiffCompression.ADOBE_DEFLATE));
+      final Uri tiffFileUri =
+          await ScanbotSdk.createTiff(this._pageRepository.pages, options);
       dialog.hide();
       showAlertDialog(context, tiffFileUri.toString(), title: "TIFF file URI");
     } catch (e) {
@@ -390,9 +416,12 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   detectPage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Processing ...");
     dialog.show();
     try {
@@ -409,17 +438,22 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   performOcr() async {
-    if (!await checkHasPages(context)) { return; }
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Performing OCR ...");
     dialog.show();
     try {
       var result = await ScanbotSdk.performOcr(
           pages, OcrOptions(languages: ["en", "de"], shouldGeneratePdf: false));
       dialog.hide();
-      showAlertDialog(context, "Plain text:\n" + result.plainText);
+      showAlertDialog(context, "Plain text:\n" + (result.plainText ?? ""));
     } catch (e) {
       print(e);
       dialog.hide();
@@ -427,18 +461,27 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
   }
 
   createOcrPdf() async {
-    if (!await checkHasPages(context)) { return; }
-    if (!await checkLicenseStatus(context)) { return; }
+    if (!await checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: "Performing OCR with PDF ...");
     dialog.show();
     try {
       var result = await ScanbotSdk.performOcr(
           pages, OcrOptions(languages: ["en", "de"], shouldGeneratePdf: true));
       dialog.hide();
-      showAlertDialog(context, "PDF File URI:\n" + result.pdfFileUri +
-          "\n\nPlain text:\n" + result.plainText);
+      showAlertDialog(
+          context,
+          "PDF File URI:\n" +
+              (result.pdfFileUri ?? "") +
+              "\n\nPlain text:\n" +
+              (result.plainText ?? ""));
     } catch (e) {
       print(e);
       dialog.hide();
@@ -449,8 +492,9 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     if (pages.isNotEmpty) {
       return true;
     }
-    await showAlertDialog(context, 'Please scan or import some documents to perform this function.', title: 'Info');
+    await showAlertDialog(context,
+        'Please scan or import some documents to perform this function.',
+        title: 'Info');
     return false;
   }
-
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 
 class BarcodesResultPreviewWidget extends StatelessWidget {
-  BarcodeScanningResult preview;
+  final BarcodeScanningResult preview;
 
   BarcodesResultPreviewWidget(this.preview);
 
@@ -41,28 +41,27 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
         ));
   }
 
-  Widget getImageContainer(Uri imageUri) {
+  Widget getImageContainer(Uri? imageUri) {
     if (preview.barcodeImageURI == null) {
       return Container();
     }
-    var file = File.fromUri(imageUri);
-    if (file?.existsSync() == true) {
+    var file = File.fromUri(imageUri!);
+    if (file.existsSync() == true) {
       return Container(
           child: Center(
-            child: Image.file(
-              file,
-              height: 200,
-              width: double.infinity,
-            ),
-          ));
+        child: Image.file(
+          file,
+          height: 200,
+          width: double.infinity,
+        ),
+      ));
     }
     return Container();
   }
 }
 
-
 class BarcodeItemWidget extends StatelessWidget {
-  BarcodeItem item;
+  final BarcodeItem item;
 
   BarcodeItemWidget(this.item);
 
@@ -75,13 +74,14 @@ class BarcodeItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              barcodeFormatEnumMap[item.barcodeFormat],
+              barcodeFormatEnumMap[item.barcodeFormat] ?? "UNKNOWN",
               style: TextStyle(inherit: true, color: Colors.black),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(item.text, style: TextStyle(inherit: true, color: Colors.black)),
+            child: Text(item.text ?? "",
+                style: TextStyle(inherit: true, color: Colors.black)),
           ),
         ],
       ),
@@ -107,4 +107,3 @@ const barcodeFormatEnumMap = {
   BarcodeFormat.UPC_E: 'UPC_E',
   BarcodeFormat.UNKNOWN: 'UNKNOWN',
 };
-

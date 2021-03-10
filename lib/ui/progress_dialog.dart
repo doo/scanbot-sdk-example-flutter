@@ -7,8 +7,8 @@ String _dialogMessage = "Loading...";
 double _progress = 0.0, _maxProgress = 100.0;
 
 bool _isShowing = false;
-BuildContext _context, _dismissingContext;
-ProgressDialogType _progressDialogType;
+BuildContext? _context, _dismissingContext;
+ProgressDialogType? _progressDialogType;
 bool _barrierDismissible = true, _showLogs = false;
 
 TextStyle _progressTextStyle = TextStyle(
@@ -23,10 +23,10 @@ Curve _insetAnimCurve = Curves.easeInOut;
 Widget _progressWidget = Container();
 
 class ProgressDialog {
-  _Body _dialog;
+ late  _Body _dialog;
 
   ProgressDialog(BuildContext context,
-      {ProgressDialogType type, bool isDismissible, bool showLogs}) {
+      {ProgressDialogType? type, bool? isDismissible, bool? showLogs}) {
     _context = context;
     _progressDialogType = type ?? ProgressDialogType.Normal;
     _barrierDismissible = isDismissible ?? true;
@@ -34,16 +34,16 @@ class ProgressDialog {
   }
 
   void style(
-      {double progress,
-      double maxProgress,
-      String message,
-      Widget progressWidget,
-      Color backgroundColor,
-      TextStyle progressTextStyle,
-      TextStyle messageTextStyle,
-      double elevation,
-      double borderRadius,
-      Curve insetAnimCurve}) {
+      {double? progress,
+      double? maxProgress,
+      String? message,
+      Widget? progressWidget,
+      Color? backgroundColor,
+      TextStyle? progressTextStyle,
+      TextStyle? messageTextStyle,
+      double? elevation,
+      double? borderRadius,
+      Curve? insetAnimCurve}) {
     if (_isShowing) return;
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
@@ -61,12 +61,12 @@ class ProgressDialog {
   }
 
   void update(
-      {double progress,
-      double maxProgress,
-      String message,
-      Widget progressWidget,
-      TextStyle progressTextStyle,
-      TextStyle messageTextStyle}) {
+      {double? progress,
+      double? maxProgress,
+      String? message,
+      Widget? progressWidget,
+      TextStyle? progressTextStyle,
+      TextStyle? messageTextStyle}) {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
     }
@@ -88,8 +88,8 @@ class ProgressDialog {
     if (_isShowing) {
       try {
         _isShowing = false;
-        if (Navigator.of(_dismissingContext).canPop()) {
-          Navigator.of(_dismissingContext).pop();
+        if (Navigator.of(_dismissingContext!).canPop()) {
+          Navigator.of(_dismissingContext!).pop();
           if (_showLogs) debugPrint('ProgressDialog dismissed');
         } else {
           if (_showLogs) debugPrint('Cant pop ProgressDialog');
@@ -104,7 +104,7 @@ class ProgressDialog {
     if (_isShowing) {
       try {
         _isShowing = false;
-        Navigator.of(_dismissingContext).pop(true);
+        Navigator.of(_dismissingContext!).pop(true);
         if (_showLogs) debugPrint('ProgressDialog dismissed');
         return Future.value(true);
       } catch (_) {
@@ -124,7 +124,7 @@ class ProgressDialog {
       if (_showLogs) debugPrint('ProgressDialog shown');
 
       showDialog<dynamic>(
-        context: _context,
+        context: _context!,
         barrierDismissible: false,
         builder: (BuildContext context) {
           _dismissingContext = context;

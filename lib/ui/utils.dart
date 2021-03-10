@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-Future<void> showAlertDialog(BuildContext context, String textToShow, {String title}) async {
+Future<void> showAlertDialog(BuildContext context, String textToShow, {String? title}) async {
   Widget text = SimpleDialogOption(
     child: Padding(
       padding: const EdgeInsets.all(16.0),
@@ -16,7 +16,7 @@ Future<void> showAlertDialog(BuildContext context, String textToShow, {String ti
     content: text,
     contentPadding: EdgeInsets.all(0),
     actions: <Widget>[
-      FlatButton(
+      TextButton(
         child: Text('OK'),
         onPressed: () {
           Navigator.of(context).pop();
