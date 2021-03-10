@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 enum ProgressDialogType { Normal, Download }
 
-String _dialogMessage = "Loading...";
+String _dialogMessage = 'Loading...';
 double _progress = 0.0, _maxProgress = 100.0;
 
 bool _isShowing = false;
@@ -118,7 +118,7 @@ class ProgressDialog {
 
   void show() {
     if (!_isShowing) {
-      _dialog = new _Body();
+      _dialog = _Body();
       _isShowing = true;
 
       if (_showLogs) debugPrint('ProgressDialog shown');
@@ -138,23 +138,25 @@ class ProgressDialog {
                 insetAnimationDuration: Duration(milliseconds: 100),
                 elevation: _dialogElevation,
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.all(Radius.circular(_borderRadius))),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(_borderRadius),
+                  ),
+                ),
                 child: _dialog),
           );
         },
       );
     } else {
-      if (_showLogs) debugPrint("ProgressDialog already shown/showing");
+      if (_showLogs) debugPrint('ProgressDialog already shown/showing');
     }
   }
 }
 
 // ignore: must_be_immutable
 class _Body extends StatefulWidget {
-  _BodyState _dialog = _BodyState();
+  final _BodyState _dialog = _BodyState();
 
-  update() {
+  void update() {
     _dialog.update();
   }
 
@@ -165,7 +167,7 @@ class _Body extends StatefulWidget {
 }
 
 class _BodyState extends State<_Body> {
-  update() {
+  void update() {
     setState(() {});
   }
 
@@ -195,14 +197,14 @@ class _BodyState extends State<_Body> {
               : Stack(
                   children: <Widget>[
                     Positioned(
-                      child: Text(_dialogMessage, style: _messageStyle),
                       top: 30.0,
+                      child: Text(_dialogMessage, style: _messageStyle),
                     ),
                     Positioned(
-                      child: Text("$_progress/$_maxProgress",
-                          style: _progressTextStyle),
                       bottom: 10.0,
                       right: 10.0,
+                      child: Text('$_progress/$_maxProgress',
+                          style: _progressTextStyle),
                     ),
                   ],
                 ),

@@ -4,41 +4,47 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 
 class BarcodesResultPreviewWidget extends StatelessWidget {
-  BarcodeScanningResult preview;
+  final BarcodeScanningResult preview;
 
   BarcodesResultPreviewWidget(this.preview);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(),
-          leading: GestureDetector(
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-            },
+      appBar: AppBar(
+        iconTheme: IconThemeData(),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
-          backgroundColor: Colors.white,
-          title: const Text('Scanned barcodes',
-              style: TextStyle(inherit: true, color: Colors.black)),
         ),
-        body: Column(
-          children: <Widget>[
-            getImageContainer(preview.barcodeImageURI),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, position) {
-                  return BarcodeItemWidget(preview.barcodeItems[position]);
-                },
-                itemCount: preview.barcodeItems.length,
-              ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Scanned barcodes',
+          style: TextStyle(
+            inherit: true,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          getImageContainer(preview.barcodeImageURI),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, position) {
+                return BarcodeItemWidget(preview.barcodeItems[position]);
+              },
+              itemCount: preview.barcodeItems.length,
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget getImageContainer(Uri imageUri) {
@@ -48,21 +54,21 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
     var file = File.fromUri(imageUri);
     if (file?.existsSync() == true) {
       return Container(
-          child: Center(
-            child: Image.file(
-              file,
-              height: 200,
-              width: double.infinity,
-            ),
-          ));
+        child: Center(
+          child: Image.file(
+            file,
+            height: 200,
+            width: double.infinity,
+          ),
+        ),
+      );
     }
     return Container();
   }
 }
 
-
 class BarcodeItemWidget extends StatelessWidget {
-  BarcodeItem item;
+  final BarcodeItem item;
 
   BarcodeItemWidget(this.item);
 
@@ -76,12 +82,21 @@ class BarcodeItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               barcodeFormatEnumMap[item.barcodeFormat],
-              style: TextStyle(inherit: true, color: Colors.black),
+              style: TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(item.text, style: TextStyle(inherit: true, color: Colors.black)),
+            child: Text(
+              item.text,
+              style: TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
+            ),
           ),
         ],
       ),
@@ -107,4 +122,3 @@ const barcodeFormatEnumMap = {
   BarcodeFormat.UPC_E: 'UPC_E',
   BarcodeFormat.UNKNOWN: 'UNKNOWN',
 };
-

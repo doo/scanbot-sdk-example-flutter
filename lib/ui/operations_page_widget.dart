@@ -1,140 +1,166 @@
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/common_data.dart' as sdk;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
+import '../main.dart';
 import '../pages_repository.dart';
 import 'filter_page_widget.dart';
 import 'pages_widget.dart';
 
-class PageOperations extends StatelessWidget {
+class PageOperations extends StatefulWidget {
   final sdk.Page _page;
 
   PageOperations(this._page);
 
   @override
-  Widget build(BuildContext context) {
-    imageCache.clear();
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          backgroundColor: Colors.white,
-          title: const Text('Image Preview',
-              style: TextStyle(inherit: true, color: Colors.black)),
-        ),
-        body: PagesPreviewWidget(_page));
-  }
+  _PageOperationsState createState() => _PageOperationsState();
 }
 
-class PagesPreviewWidget extends StatefulWidget {
-  final sdk.Page _page;
-
-  PagesPreviewWidget(this._page);
-
-  @override
-  State<PagesPreviewWidget> createState() {
-    return new PagesPreviewWidgetState(_page);
-  }
-}
-
-class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
+class _PageOperationsState extends State<PageOperations> {
   final PageRepository _pageRepository = PageRepository();
   sdk.Page _page;
 
-  PagesPreviewWidgetState(this._page);
+  @override
+  void initState() {
+    _page = widget._page;
+    super.initState();
+  }
 
-  _updatePage(sdk.Page page) async {
+  Future<void> _updatePage(sdk.Page page) async {
     imageCache.clear();
     await _pageRepository.updatePage(page);
     setState(() {
-      this._page = page;
+      _page = page;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-            child: Container(
-                padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                child: Center(child: PageWidget(_page.documentImageFileUri)))),
-        BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              FlatButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.crop),
-                    Container(width: 4),
-                    Text('Crop & Rotate',
-                        style: TextStyle(inherit: true, color: Colors.black)),
-                  ],
-                ),
-                onPressed: () {
-                  startCroppingScreen(_page);
-                },
-              ),
-              FlatButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.filter),
-                    Container(width: 4),
-                    Text('Filter',
-                        style: TextStyle(inherit: true, color: Colors.black)),
-                  ],
-                ),
-                onPressed: () {
-                  showFilterPage(_page);
-                },
-              ),
-              FlatButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.delete, color: Colors.red),
-                    Container(width: 4),
-                    Text('Delete',
-                        style: TextStyle(inherit: true, color: Colors.red)),
-                  ],
-                ),
-                onPressed: () {
-                  deletePage(_page);
-                },
-              ),
-            ],
-          ),
+    Widget pageView;
+    if (shouldInitWithEncryption) {
+      pageView = EncryptedPageWidget(_page.documentImageFileUri);
+    } else {
+      pageView = PageWidget(_page.documentImageFileUri);
+    }
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
         ),
-      ],
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Image Preview',
+          style: TextStyle(inherit: true, color: Colors.black),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                _estimateBlurriness(_page);
+              },
+              child: Icon(
+                Icons.image_search,
+                size: 26.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+              child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  child: Center(child: pageView))),
+          BottomAppBar(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    _startCroppingScreen(_page);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.crop),
+                      Container(width: 4),
+                      Text(
+                        'Crop & Rotate',
+                        style: TextStyle(inherit: true, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _showFilterPage(_page);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.filter),
+                      Container(width: 4),
+                      Text(
+                        'Filter',
+                        style: TextStyle(inherit: true, color: Colors.black),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _deletePage(_page);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.delete, color: Colors.red),
+                      Container(width: 4),
+                      Text(
+                        'Delete',
+                        style: TextStyle(inherit: true, color: Colors.red),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  deletePage(sdk.Page page) async {
+  Future<void> _deletePage(sdk.Page page) async {
     try {
       await ScanbotSdk.deletePage(page);
-      await this._pageRepository.removePage(page);
+      await _pageRepository.removePage(page);
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
   }
 
-  rotatePage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) { return; }
+  Future<void> _rotatePage(sdk.Page page) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     try {
-      var dialog = ProgressDialog(context,
-          type: ProgressDialogType.Normal, isDismissible: false);
-      dialog.style(message: "Processing ...");
+      final dialog = ProgressDialog(
+        context,
+        type: ProgressDialogType.Normal,
+        isDismissible: false,
+      );
+      dialog.style(message: 'Processing ...');
       dialog.show();
-      var updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
-      dialog.hide();
+      final updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
+      await dialog.hide();
       if (updatedPage != null) {
         await _updatePage(updatedPage);
       }
@@ -143,10 +169,12 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  showFilterPage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) { return; }
+  Future<void> _showFilterPage(sdk.Page page) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-    var resultPage = await Navigator.of(context).push(
+    final resultPage = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PageFiltering(page)),
     );
     if (resultPage != null) {
@@ -154,24 +182,43 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  startCroppingScreen(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) { return; }
+  Future<void> _startCroppingScreen(sdk.Page page) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
     try {
-      var config = CroppingScreenConfiguration(
+      final config = CroppingScreenConfiguration(
         bottomBarBackgroundColor: Colors.blue,
         // polygonColor: Colors.yellow,
         // polygonLineWidth: 10,
-        cancelButtonTitle: "Cancel",
-        doneButtonTitle: "Save",
+        cancelButtonTitle: 'Cancel',
+        doneButtonTitle: 'Save',
         // See further configs ...
       );
-      var result = await ScanbotSdkUi.startCroppingScreen(page, config);
+      final result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
         await _updatePage(result.page);
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> _estimateBlurriness(sdk.Page page) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      final result = await ScanbotSdk.estimateBlurOnPage(page);
+
+      await showAlertDialog(
+        context,
+        'Blur value is :${result.toStringAsFixed(2)} ',
+        title: 'Result',
+      );
+    } catch (e) {
+      Logger.root.severe(e);
     }
   }
 }

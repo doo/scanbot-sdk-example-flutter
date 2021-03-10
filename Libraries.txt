@@ -1,7 +1,9 @@
 
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.2.2:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.3.0:
+//-------------------------------------------------------------
+json_serializable
 
-json_serializable version 3.2.0 and json_annotation version 3.0.0
+version 3.2.0
 (https://github.com/dart-lang/json_serializable/blob/master/LICENSE)
 Copyright 2017, the Dart project authors. All rights reserved.
 Redistribution and use in source and binary forms, with or without
@@ -31,7 +33,75 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-google-gson version 2.8.5
+//-------------------------------------------------------------
+json_annotation
+
+version 3.0.0
+(https://github.com/dart-lang/json_serializable/blob/master/LICENSE)
+Copyright 2017, the Dart project authors. All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+//-------------------------------------------------------------
+logging
+
+version 0.11.4
+
+Copyright 2013, the Dart project authors. All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+//-------------------------------------------------------------
+google-gson
+
+version 2.8.5
 (https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE)
 Copyright 2008 Google Inc.
 
@@ -48,7 +118,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-kotlin and kotlin-stdlib-jdk7 version 1.4.20
+//-------------------------------------------------------------
+kotlin-stdlib-jdk7
+
+version 1.4.20
 (https://github.com/JetBrains/kotlin/blob/master/license/LICENSE.txt)
 /*
  * Copyright 2010-2018 JetBrains s.r.o.
@@ -67,7 +140,10 @@ kotlin and kotlin-stdlib-jdk7 version 1.4.20
  */
 
 
-kotlinx.coroutines version 1.4.0
+//-------------------------------------------------------------
+kotlinx.coroutines
+
+version 1.4.1
 (https://github.com/Kotlin/kotlinx.coroutines/blob/1.3.2/LICENSE.txt)
 Copyright 2016-2019 JetBrains s.r.o.
 
@@ -84,16 +160,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
+Open Source libraries used in the Scanbot SDK for Android version 1.80.0:
 
 
-
-------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-Open Source libraries used in the Scanbot SDK for Android version 1.74.0:
-
+//-------------------------------------------------------------
 Apache Commons Codec
 
 Version 1.9
@@ -114,10 +184,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 CWAC-Camera
 
-Version 0.6.33
+Version 0.6.40
 (https://github.com/doo/cwac-camera)
 (https://github.com/commonsguy/cwac-camera/)
 
@@ -137,6 +207,7 @@ limitations under the License.
 
 
 
+//-------------------------------------------------------------
 Android PDF Writer
 
 Version 1.0.8
@@ -179,7 +250,7 @@ either express or implied. See the License for the specific language governing
 permissions and limitations under the License.
 
 
-
+//-------------------------------------------------------------
 Apache Commons IO
 
 Version 2.4
@@ -203,7 +274,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 Apache Commons Lang
 
 Version 2.6
@@ -230,7 +301,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 JetBrains Java Annotations (Annotations for JVM-based languages)
 
 Version 13.0
@@ -252,9 +323,10 @@ limitations under the License.
 
 
 
+//-------------------------------------------------------------
 Kotlin Standard Library
 
-Version 1.4
+Version 1.4.20
 (https://github.com/JetBrains/kotlin)
 
 Copyright 2010-2018 JetBrains s.r.o.
@@ -273,8 +345,9 @@ limitations under the License.
 
 
 
+//-------------------------------------------------------------
 Kotlin Standard Library JDK
-
+Version 1.4.20
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -288,8 +361,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
+//-------------------------------------------------------------
 google-gson
-Version 2.8.6
+
+Version 2.8.5
 (https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE)
 
 Copyright 2008 Google Inc.
@@ -307,9 +382,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
+//-------------------------------------------------------------
 Dagger
 
-Version 2.16
+Version 2.25.2
 (https://github.com/google/dagger)
 
 Copyright 2012 The Dagger Authors
@@ -327,7 +403,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 Dagger Compiler
 
 Copyright 2012 The Dagger Authors
@@ -345,7 +421,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 RxJava
 
 Version 2.1.5
@@ -366,7 +442,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 RxAndroid
 
 Version 2.0.1
@@ -387,7 +463,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 Nameof C++
 
 Version 0.8.3
@@ -417,7 +493,7 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-
+//-------------------------------------------------------------
 ZXing-C++, C++ port of ZXing
 
 (https://github.com/nu-book/zxing-cpp)
@@ -438,7 +514,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 TensorFlow 2.0.0
 Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 
@@ -455,7 +531,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 BOOST C++ Libraries
 
 Version 1.68
@@ -486,7 +562,7 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-
+//-------------------------------------------------------------
 BoringSSL
 
 https://github.com/google/boringssl
@@ -599,6 +675,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
+//-------------------------------------------------------------
 Filesystem.hpp
 
 (https://github.com/bin-build/filesystem)
@@ -616,6 +693,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 
 
+//-------------------------------------------------------------
 JSON for Modern C++
 
 Version 3.1.0
@@ -632,6 +710,7 @@ THE SOFTWARE  IS PROVIDED "AS  IS", WITHOUT WARRANTY  OF ANY KIND,  EXPRESS OR I
 
 
 
+//-------------------------------------------------------------
 Leptonica
 
 Version 1.71
@@ -667,6 +746,7 @@ is distributed under a Creative Commons Attribution 3.0 United States License (h
 
 
 
+//-------------------------------------------------------------
 LibTIFF - TIFF Library and Utilities
 
 Version 4.0.10
@@ -689,6 +769,7 @@ OF THIS SOFTWARE.
 
 
 
+//-------------------------------------------------------------
 OpenCV
 
 Version 4.4.0
@@ -737,6 +818,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 
 
+//-------------------------------------------------------------
 Tess-two
 
 Copyright 2011 Robert Theis
@@ -754,7 +836,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 Tesseract-ocr
 
 Version 4.1
@@ -779,7 +861,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
+//-------------------------------------------------------------
 OpenJPEG
 
 Version 2.3.1
@@ -831,10 +913,12 @@ POSSIBILITY OF SUCH DAMAGE.
 
 
 
-Open Source libraries used in the Scanbot SDK for iOS version 1.11.6:
+Open Source libraries used in the Scanbot SDK for iOS version 1.14.0:
 
 
-BOOST C++ Libraries version 1.68
+//-------------------------------------------------------------
+BOOST C++ Libraries
+version 1.68
 This library is distributed under the terms of the following license: https://www.boost.org/LICENSE_1_0.txt
 
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -847,6 +931,7 @@ works are solely in the form of machine-executable object code generated by a so
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR ANYONE DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
+//-------------------------------------------------------------
 Filesystem.hpp
 Copyright (c) 2015-2017, Wenzel Jakob
 Copyright (c) 2017, Josh Junon
@@ -861,7 +946,9 @@ Redistributions in binary form must reproduce the above copyright notice, this l
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-JSON for Modern C++ version 3.1.0
+//-------------------------------------------------------------
+JSON for Modern C++ version
+version 3.1.0
 Copyright (c) 2013-2018 Niels Lohmann <http://nlohmann.me>.
 This library is distributed under the terms of a MIT License (https://github.com/nlohmann/json/blob/develop/LICENSE.MIT)
 
@@ -872,12 +959,16 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE  IS PROVIDED "AS  IS", WITHOUT WARRANTY  OF ANY KIND,  EXPRESS OR IMPLIED,  INCLUDING BUT  NOT  LIMITED TO  THE  WARRANTIES OF MERCHANTABILITY, FITNESS FOR  A PARTICULAR PURPOSE AND  NONINFRINGEMENT. IN NO EVENT  SHALL THE AUTHORS  OR COPYRIGHT  HOLDERS  BE  LIABLE FOR  ANY  CLAIM,  DAMAGES OR  OTHER LIABILITY, WHETHER IN AN ACTION OF  CONTRACT, TORT OR OTHERWISE, ARISING FROM,OUT OF OR IN CONNECTION WITH THE SOFTWARE  OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-Leptonica 1.71
+//-------------------------------------------------------------
+Leptonica
+version 1.71
 Copyright @ 2001-2015, Leptonica, (http://leptonica.org),
 is distributed under a Creative Commons Attribution 3.0 United States License ( http://creativecommons.org/licenses/by/3.0/us/).
 
 
-LibTIFF - TIFF Library and Utilities v4.0.10
+//-------------------------------------------------------------
+LibTIFF - TIFF Library and Utilities
+Version v4.0.10
 Copyright (c) 1988-1997 Sam Leffler
 Copyright (c) 1991-1997 Silicon Graphics, Inc.
 This license is distributed under the terms of the following license: http://libtiff.maptools.org/misc.html.
@@ -895,6 +986,7 @@ WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABIL
 OF THIS SOFTWARE.
 
 
+//-------------------------------------------------------------
 G8Tesseract
 Copyright @ 2014 Daniele Galiotto. https://github.com/gali8/Tesseract-OCR-iOS
 This library is distributed under the terms of a MIT License (https://github.com/gali8/Tesseract-OCR-iOS/blob/master/LICENSE.md).
@@ -906,7 +998,9 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-OpenCV 4.4.0
+//-------------------------------------------------------------
+OpenCV
+version 4.4.0
 This library is distributed under the terms of a 3-clause BSD license: http://opencv.org/license.html.
 
 Copyright (C) 2000-2019, Intel Corporation, all rights reserved.
@@ -927,6 +1021,7 @@ Neither the names of the copyright holders nor the names of the contributors may
 This software is provided by the copyright holders and contributors “as is” and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall copyright holders or contributors be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
 
 
+//-------------------------------------------------------------
 OpenSSL 1.1.1g
 Copyright @ 1998-2011 The OpenSSL Project. All rights reserved. (https://www.openssl.org)
 This library is distributed under the terms of the following license: https://github.com/openssl/openssl/blob/master/LICENSE
@@ -953,14 +1048,18 @@ THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND ANY EXPRESS OR IMPLIED WAR
 The licence and distribution terms for any publically available version or derivative of this code cannot be changed. i.e. this code cannot simply be copied and put under another distribution licence [including the GNU Public Licence.]
 
 
-Tesseract 4.1.0
+//-------------------------------------------------------------
+Tesseract
+version 4.1.0
 Tesseract, maintained by Google (http://code.google.com/p/tesseract-ocr/),
 is distributed under the Apache 2.0 license (http://www.apache.org/licenses/LICENSE-2.0).
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
 
-Nameof C++ 0.8.3
+//-------------------------------------------------------------
+Nameof C++
+version 0.8.3
 Copyright (c) 2016, 2018 - 2019 Daniil Goncharov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -982,6 +1081,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
+//-------------------------------------------------------------
 ZXing-C++
 C++ port of ZXing (https://github.com/nu-book/zxing-cpp)
 Copyright 2016 Nu-book Inc.
@@ -1000,7 +1100,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-TensorFlow 2.2.0
+//-------------------------------------------------------------
+TensorFlow
+version 2.2.0
 Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
