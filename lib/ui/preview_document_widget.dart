@@ -1,7 +1,5 @@
-import 'package:image_picker/image_picker.dart';
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk/common_data.dart' as sdk;
 import 'package:scanbot_sdk/create_tiff_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
@@ -9,7 +7,10 @@ import 'package:scanbot_sdk/ocr_data.dart';
 import 'package:scanbot_sdk/render_pdf_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
+import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
+import '../main.dart';
 import '../pages_repository.dart';
 import 'filter_all_pages_widget.dart';
 import 'operations_page_widget.dart';
@@ -72,13 +73,20 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
                     gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                         maxCrossAxisExtent: 200),
                     itemBuilder: (context, position) {
+                      Widget pageView;
+                      if (shouldInitWithEncryption) {
+                        pageView = EncryptedPageWidget(
+                            pages[position].documentPreviewImageFileUri);
+                      } else {
+                        pageView = PageWidget(
+                            pages[position].documentPreviewImageFileUri);
+                      }
                       return GridTile(
                         child: GestureDetector(
                             onTap: () {
                               showOperationsPage(pages[position]);
                             },
-                            child: PageWidget(
-                                pages[position].documentPreviewImageFileUri)),
+                            child: pageView),
                       );
                     },
                     itemCount: pages?.length ?? 0))),
