@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -75,10 +74,9 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var file = File.fromUri(filteredImageUri);
-    var imageData =
-    ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri);
-    var image = FutureBuilder(
+    final imageData =
+        ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri);
+    final image = FutureBuilder(
         future: imageData,
         builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
           if (snapshot.data != null) {
