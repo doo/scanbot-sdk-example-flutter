@@ -256,9 +256,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      await _createPage(image.uri);
-      await _gotoImagesView();
+      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      await _createPage(Uri.file(image.path));
+          await _gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
     }
@@ -327,7 +327,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
         finderTextHint:
-            'Please align any supported barcode in the frame to scan it.',
+        'Please align any supported barcode in the frame to scan it.',
         // ...
       );
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
@@ -361,7 +361,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           enableCameraButtonTitle: 'camera enable',
           enableCameraExplanationText: 'explanation text',
           finderTextHint:
-              'Please align any supported barcode in the frame to scan it.',
+          'Please align any supported barcode in the frame to scan it.',
           // clearButtonTitle: "CCCClear",
           // submitButtonTitle: "Submitt",
           barcodesCountText: '%d codes',
@@ -402,13 +402,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       ///before processing image sdk need storage read permission
 
       final permissions =
-          await [Permission.storage, Permission.photos].request();
+      await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
+          PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
-            Uri.parse(image.path), PredefinedBarcodes.allBarcodeTypes(), true);
+            Uri.file(image.path), PredefinedBarcodes.allBarcodeTypes(), true);
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -470,7 +470,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final concatenate = StringBuffer();
       result.fields
           .map((field) =>
-              "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n")
+      "${field.type.toString().replaceAll(
+          "HealthInsuranceCardFieldType.", "")}:${field.value}\n")
           .forEach((s) {
         concatenate.write(s);
       });
@@ -500,7 +501,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final concatenate = StringBuffer();
       result.fields
           .map((field) =>
-              "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
+      "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field
+          .value}\n")
           .forEach((s) {
         concatenate.write(s);
       });
