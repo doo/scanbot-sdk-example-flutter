@@ -364,8 +364,10 @@ class _DocumentPreviewState extends State<DocumentPreview> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      await _createPage(image.uri);
+      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      if (image != null) {
+        await _createPage(Uri.file(image.path));
+      }
     } catch (e) {
       print(e);
     }
