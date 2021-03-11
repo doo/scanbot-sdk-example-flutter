@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: 2.3.0-beta4
+  scanbot_sdk: 2.3.0-beta5
   cupertino_icons: ^0.1.2
   permission_handler: ^5.0.1+1
   image_picker: ^0.6.7+21
