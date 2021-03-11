@@ -73,7 +73,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                           child: pageView),
                     );
                   },
-                  itemCount: _pages?.length ?? 0),
+                  itemCount: _pages.length),
             ),
           ),
           BottomAppBar(
@@ -424,26 +424,6 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _detectPage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: 'Processing ...');
-    dialog.show();
-    try {
-      var updatedPage = await ScanbotSdk.detectDocument(page);
-      await dialog.hide();
-      await _pageRepository.updatePage(updatedPage);
-      _updatePagesList();
-    } catch (e) {
-      print(e);
-      await dialog.hide();
-    }
-  }
-
   Future<void> _performOcr() async {
     if (!await _checkHasPages(context)) {
       return;
@@ -487,9 +467,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       await showAlertDialog(
           context,
           'PDF File URI:\n' +
-              (result.pdfFileUri ?? "") +
+              (result.pdfFileUri ?? '') +
               '\n\nPlain text:\n' +
-              (result.plainText ?? ""));
+              (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();

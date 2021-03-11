@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';

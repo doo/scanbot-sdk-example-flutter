@@ -140,7 +140,7 @@ class _PageOperationsState extends State<PageOperations> {
 
   Future<void> _deletePage(sdk.Page page) async {
     try {
-      ScanbotSdk.deletePage(page);
+      await ScanbotSdk.deletePage(page);
       await _pageRepository.removePage(page);
       Navigator.of(context).pop();
     } catch (e) {
@@ -148,26 +148,6 @@ class _PageOperationsState extends State<PageOperations> {
     }
   }
 
-  Future<void> _rotatePage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    try {
-      final dialog = ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-      );
-      dialog.style(message: 'Processing ...');
-      dialog.show();
-      var updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
-      await dialog.hide();
-      await _updatePage(updatedPage);
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future<void> _showFilterPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {

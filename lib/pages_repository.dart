@@ -51,9 +51,8 @@ class PageRepository {
     }
     List<dynamic> pagesJson = jsonDecode(pagesJsonString);
     final loadedPages = pagesJson
-            ?.map((p) => Page.fromJson(p as Map<String, dynamic>))
-            ?.toList() ??
-        <Page>[];
+            .map((p) => Page.fromJson(p as Map<String, dynamic>))
+            .toList();
     _pages.clear();
     if (loadedPages.isNotEmpty) {
       var refreshPages = await ScanbotSdk.refreshImageUris(loadedPages);
