@@ -350,7 +350,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Creating PDF ...');
     try {
       dialog.show();
-      var options = PdfRenderingOptions(PdfRenderSize.A4);
+      var options = PdfRenderingOptions(PdfRenderSize.FIXED_A4);
       final pdfFileUri =
           await ScanbotSdk.createPdf(_pageRepository.pages, options);
       await dialog.hide();
