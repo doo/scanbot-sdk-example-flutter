@@ -16,132 +16,137 @@ import 'filter_all_pages_widget.dart';
 import 'operations_page_widget.dart';
 import 'pages_widget.dart';
 
-class DocumentPreview extends StatelessWidget {
-  DocumentPreview();
+class DocumentPreview extends StatefulWidget {
+  @override
+  _DocumentPreviewState createState() => _DocumentPreviewState();
+}
+
+class _DocumentPreviewState extends State<DocumentPreview> {
+  final PageRepository _pageRepository = PageRepository();
+  late List<sdk.Page> _pages;
+
+  @override
+  void initState() {
+    _pages = _pageRepository.pages;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.black, //change your color here
-          ),
-          backgroundColor: Colors.white,
-          title: const Text('Image results',
-              style: TextStyle(inherit: true, color: Colors.black)),
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.black, //change your color here
         ),
-        body: PagesPreviewWidget());
-  }
-}
-
-class PagesPreviewWidget extends StatefulWidget {
-  PagesPreviewWidget();
-
-  @override
-  State<PagesPreviewWidget> createState() {
-    return new PagesPreviewWidgetState();
-  }
-}
-
-class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
-  final PageRepository _pageRepository = PageRepository();
-  late List<sdk.Page> pages;
-  int currentSelectedPage = 0;
-
-  PagesPreviewWidgetState() {
-    this.pages = _pageRepository.pages;
-  }
-
-  void _updatePagesList() {
-    imageCache?.clear();
-    Future.delayed(Duration(microseconds: 500)).then((val) {
-      setState(() {
-        this.pages = _pageRepository.pages;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Image results',
+          style: TextStyle(
+            inherit: true,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
             child: Container(
-                padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
-                child: GridView.builder(
-                    scrollDirection: Axis.vertical,
-                    gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200),
-                    itemBuilder: (context, position) {
-                      Widget pageView;
-                      if (shouldInitWithEncryption) {
-                        pageView = EncryptedPageWidget(
-                            pages[position].documentPreviewImageFileUri!);
-                      } else {
-                        pageView = PageWidget(
-                            pages[position].documentPreviewImageFileUri!);
-                      }
-                      return GridTile(
-                        child: GestureDetector(
-                            onTap: () {
-                              showOperationsPage(pages[position]);
-                            },
-                            child: pageView),
-                      );
-                    },
-                    itemCount: pages.length))),
-        BottomAppBar(
-          child: new Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              TextButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.add_circle),
-                    Container(width: 4),
-                    Text('Add',
-                        style: TextStyle(inherit: true, color: Colors.black)),
-                  ],
-                ),
-                onPressed: () {
-                  _addPageModalBottomSheet(context);
-                },
-              ),
-              TextButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.more_vert),
-                    Container(width: 4),
-                    Text('More',
-                        style: TextStyle(inherit: true, color: Colors.black)),
-                  ],
-                ),
-                onPressed: () {
-                  _settingModalBottomSheet(context);
-                },
-              ),
-              TextButton(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.delete, color: Colors.red),
-                    Container(width: 4),
-                    Text('Delete All',
-                        style: TextStyle(inherit: true, color: Colors.red)),
-                  ],
-                ),
-                onPressed: () {
-                  showCleanupStorageDialog();
-                },
-              ),
-            ],
+              padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+              child: GridView.builder(
+                  scrollDirection: Axis.vertical,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 200),
+                  itemBuilder: (context, position) {
+                    Widget pageView;
+                    if (shouldInitWithEncryption) {
+                      pageView = EncryptedPageWidget(
+                          _pages[position].documentPreviewImageFileUri!);
+                    } else {
+                      pageView = PageWidget(
+                          _pages[position].documentPreviewImageFileUri!);
+                    }
+                    return GridTile(
+                      child: GestureDetector(
+                          onTap: () {
+                            _showOperationsPage(_pages[position]);
+                          },
+                          child: pageView),
+                    );
+                  },
+                  itemCount: _pages?.length ?? 0),
+            ),
           ),
-        ),
-      ],
+          BottomAppBar(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    _addPageModalBottomSheet(context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.add_circle),
+                      Container(width: 4),
+                      Text(
+                        'Add',
+                        style: TextStyle(
+                          inherit: true,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _settingModalBottomSheet(context);
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.more_vert),
+                      Container(width: 4),
+                      Text(
+                        'More',
+                        style: TextStyle(
+                          inherit: true,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _showCleanupStorageDialog();
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                      Container(width: 4),
+                      Text(
+                        'Delete All',
+                        style: TextStyle(
+                          inherit: true,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  showOperationsPage(sdk.Page page) async {
+  Future<void> _showOperationsPage(sdk.Page page) async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => PageOperations(page)),
     );
@@ -153,59 +158,59 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
-            child: new Wrap(
+            child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: new Icon(Icons.text_fields),
-                  title: new Text('Perform OCR'),
+                  leading: Icon(Icons.text_fields),
+                  title: Text('Perform OCR'),
                   onTap: () {
                     Navigator.pop(context);
-                    performOcr();
+                    _performOcr();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.picture_as_pdf),
-                  title: new Text('Save as PDF'),
+                  leading: Icon(Icons.picture_as_pdf),
+                  title: Text('Save as PDF'),
                   onTap: () {
                     Navigator.pop(context);
-                    createPdf();
+                    _createPdf();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.picture_as_pdf),
-                  title: new Text('Save as PDF with OCR'),
+                  leading: Icon(Icons.picture_as_pdf),
+                  title: Text('Save as PDF with OCR'),
                   onTap: () {
                     Navigator.pop(context);
-                    createOcrPdf();
+                    _createOcrPdf();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.image),
-                  title: new Text('Safe as TIFF'),
+                  leading: Icon(Icons.image),
+                  title: Text('Safe as TIFF'),
                   onTap: () {
                     Navigator.pop(context);
-                    createTiff(false);
+                    _createTiff(false);
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.image),
-                  title: new Text('Save as TIFF 1-bit encoded'),
+                  leading: Icon(Icons.image),
+                  title: Text('Save as TIFF 1-bit encoded'),
                   onTap: () {
                     Navigator.pop(context);
-                    createTiff(true);
+                    _createTiff(true);
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.image),
-                  title: new Text('Apply Image Filter on ALL pages'),
+                  leading: Icon(Icons.image),
+                  title: Text('Apply Image Filter on ALL pages'),
                   onTap: () {
                     Navigator.pop(context);
-                    filterAllPages();
+                    _filterAllPages();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.close),
-                  title: new Text('Cancel'),
+                  leading: Icon(Icons.close),
+                  title: Text('Cancel'),
                   onTap: () => Navigator.pop(context),
                 ),
               ],
@@ -219,27 +224,27 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         context: context,
         builder: (BuildContext bc) {
           return Container(
-            child: new Wrap(
+            child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: new Icon(Icons.scanner),
-                  title: new Text('Scan Page'),
+                  leading: Icon(Icons.scanner),
+                  title: Text('Scan Page'),
                   onTap: () {
                     Navigator.pop(context);
-                    startDocumentScanning();
+                    _startDocumentScanning();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.photo_size_select_actual),
-                  title: new Text('Import Page'),
+                  leading: Icon(Icons.photo_size_select_actual),
+                  title: Text('Import Page'),
                   onTap: () {
                     Navigator.pop(context);
-                    importImage();
+                    _importImage();
                   },
                 ),
                 ListTile(
-                  leading: new Icon(Icons.close),
-                  title: new Text('Cancel'),
+                  leading: Icon(Icons.close),
+                  title: Text('Cancel'),
                   onTap: () => Navigator.pop(context),
                 ),
               ],
@@ -248,7 +253,7 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
         });
   }
 
-  startDocumentScanning() async {
+  Future<void> _startDocumentScanning() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -274,29 +279,29 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  showCleanupStorageDialog() {
+  void _showCleanupStorageDialog() {
     Widget text = SimpleDialogOption(
-      child: Text("Delete all images and generated files (PDF, TIFF, etc)?"),
+      child: Text('Delete all images and generated files (PDF, TIFF, etc)?'),
     );
 
     // set up the SimpleDialog
-    AlertDialog dialog = AlertDialog(
+    final dialog = AlertDialog(
       title: const Text('Delete all'),
       content: text,
       contentPadding: EdgeInsets.all(0),
       actions: <Widget>[
         TextButton(
-          child: Text('OK'),
           onPressed: () {
-            cleanupStorage();
+            _cleanupStorage();
             Navigator.of(context).pop();
           },
+          child: Text('OK'),
         ),
         TextButton(
-          child: Text('CANCEL'),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: Text('CANCEL'),
         ),
       ],
     );
@@ -310,8 +315,8 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  filterAllPages() async {
-    if (!await checkHasPages(context)) {
+  Future<void> _filterAllPages() async {
+    if (!await _checkHasPages(context)) {
       return;
     }
     if (!await checkLicenseStatus(context)) {
@@ -324,9 +329,9 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     );
   }
 
-  cleanupStorage() async {
+  Future<void> _cleanupStorage() async {
     try {
-      ScanbotSdk.cleanupStorage();
+      await ScanbotSdk.cleanupStorage();
       await _pageRepository.clearPages();
       _updatePagesList();
     } catch (e) {
@@ -334,69 +339,72 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
     }
   }
 
-  createPdf() async {
-    if (!await checkHasPages(context)) {
+  Future<void> _createPdf() async {
+    if (!await _checkHasPages(context)) {
       return;
     }
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
-    var dialog = ProgressDialog(context,
+    final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Creating PDF ...");
+    dialog.style(message: 'Creating PDF ...');
     try {
       dialog.show();
-      var options = PdfRenderingOptions(PdfRenderSize.A4);
-      final Uri pdfFileUri =
-          await ScanbotSdk.createPdf(this._pageRepository.pages, options);
-      dialog.hide();
-      showAlertDialog(context, pdfFileUri.toString(), title: "PDF file URI");
+      var options = PdfRenderingOptions(PdfRenderSize.FIXED_A4);
+      final pdfFileUri =
+          await ScanbotSdk.createPdf(_pageRepository.pages, options);
+      await dialog.hide();
+      await showAlertDialog(context, pdfFileUri.toString(),
+          title: 'PDF file URI');
     } catch (e) {
       print(e);
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  importImage() async {
+  Future<void> _importImage() async {
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
-      createPage(Uri.parse(image?.path ?? ""));
-    } catch (e) {}
+      final image = await ImagePicker.getImage(source: ImageSource.gallery);
+      await _createPage(image?.path ?? "");
+    } catch (e) {
+      print(e);
+    }
   }
 
-  createPage(Uri uri) async {
+  Future<void> _createPage(Uri uri) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Processing ...");
+    dialog.style(message: 'Processing ...');
     dialog.show();
     try {
       var page = await ScanbotSdk.createPage(uri, false);
       page = await ScanbotSdk.detectDocument(page);
-      dialog.hide();
-      await this._pageRepository.addPage(page);
+      await dialog.hide();
+      await _pageRepository.addPage(page);
       _updatePagesList();
     } catch (e) {
       print(e);
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  createTiff(bool binarized) async {
-    if (!await checkHasPages(context)) {
+  Future<void> _createTiff(bool binarized) async {
+    if (!await _checkHasPages(context)) {
       return;
     }
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
-    var dialog = ProgressDialog(context,
+    final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Creating TIFF ...");
+    dialog.style(message: 'Creating TIFF ...');
     dialog.show();
     try {
       var options = TiffCreationOptions(
@@ -405,40 +413,62 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
           compression: (binarized
               ? TiffCompression.CCITT_T6
               : TiffCompression.ADOBE_DEFLATE));
-      final Uri tiffFileUri =
-          await ScanbotSdk.createTiff(this._pageRepository.pages, options);
-      dialog.hide();
-      showAlertDialog(context, tiffFileUri.toString(), title: "TIFF file URI");
+      final tiffFileUri =
+          await ScanbotSdk.createTiff(_pageRepository.pages, options);
+      await dialog.hide();
+      await showAlertDialog(context, tiffFileUri.toString(),
+          title: 'TIFF file URI');
     } catch (e) {
       print(e);
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  detectPage(sdk.Page page) async {
+  Future<void> _detectPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Processing ...");
+    dialog.style(message: 'Processing ...');
     dialog.show();
     try {
       var updatedPage = await ScanbotSdk.detectDocument(page);
-      dialog.hide();
-      await this._pageRepository.updatePage(updatedPage);
-      setState(() {
-        _updatePagesList();
-      });
+      await dialog.hide();
+      await _pageRepository.updatePage(updatedPage);
+      _updatePagesList();
     } catch (e) {
       print(e);
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  performOcr() async {
-    if (!await checkHasPages(context)) {
+  Future<void> _performOcr() async {
+    if (!await _checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    final dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    dialog.style(message: 'Performing OCR ...');
+    dialog.show();
+    try {
+      final result = await ScanbotSdk.performOcr(_pages,
+          OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
+      await dialog.hide();
+      await showAlertDialog(context, 'Plain text:\n' + (result.plainText ?? ''));
+    } catch (e) {
+      print(e);
+      await dialog.hide();
+    }
+  }
+
+  Future<void> _createOcrPdf() async {
+    if (!await _checkHasPages(context)) {
       return;
     }
     if (!await checkLicenseStatus(context)) {
@@ -447,54 +477,38 @@ class PagesPreviewWidgetState extends State<PagesPreviewWidget> {
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Performing OCR ...");
+    dialog.style(message: 'Performing OCR with PDF ...');
     dialog.show();
     try {
       var result = await ScanbotSdk.performOcr(
-          pages, OcrOptions(languages: ["en", "de"], shouldGeneratePdf: false));
-      dialog.hide();
-      showAlertDialog(context, "Plain text:\n" + (result.plainText ?? ""));
-    } catch (e) {
-      print(e);
-      dialog.hide();
-    }
-  }
-
-  createOcrPdf() async {
-    if (!await checkHasPages(context)) {
-      return;
-    }
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Performing OCR with PDF ...");
-    dialog.show();
-    try {
-      var result = await ScanbotSdk.performOcr(
-          pages, OcrOptions(languages: ["en", "de"], shouldGeneratePdf: true));
-      dialog.hide();
-      showAlertDialog(
+          _pages, OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: true));
+      await dialog.hide();
+      await showAlertDialog(
           context,
-          "PDF File URI:\n" +
+          'PDF File URI:\n' +
               (result.pdfFileUri ?? "") +
-              "\n\nPlain text:\n" +
+              '\n\nPlain text:\n' +
               (result.plainText ?? ""));
     } catch (e) {
       print(e);
-      dialog.hide();
+      await dialog.hide();
     }
   }
 
-  Future<bool> checkHasPages(BuildContext context) async {
-    if (pages.isNotEmpty) {
+  Future<bool> _checkHasPages(BuildContext context) async {
+    if (_pages.isNotEmpty) {
       return true;
     }
     await showAlertDialog(context,
         'Please scan or import some documents to perform this function.',
         title: 'Info');
     return false;
+  }
+
+  void _updatePagesList() {
+    imageCache.clear();
+    setState(() {
+      _pages = _pageRepository.pages;
+    });
   }
 }

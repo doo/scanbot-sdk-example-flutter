@@ -199,7 +199,7 @@ packages:
     source: hosted
     version: "2.0.0"
   pedantic:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: pedantic
       url: "https://pub.dartlang.org"
@@ -246,7 +246,7 @@ packages:
       path: "../scanbot-sdk-flutter"
       relative: true
     source: path
-    version: "2.3.0-beta3"
+    version: "2.4.0-beta1"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -13,44 +13,46 @@ class PageRepository {
     // init some stuff here
   }
 
-  List<Page> _pages = <Page>[];
+  final List<Page> _pages = <Page>[];
 
   List<Page> get pages => _pages.toList();
 
-  removePage(Page pageToRemove) async {
+  Future<void> removePage(Page pageToRemove) async {
     _pages.remove(pageToRemove);
     await _storePages();
   }
 
-  addPages(List<Page> newPages) async {
+  Future<void> addPages(List<Page> newPages) async {
     _pages.addAll(newPages);
     await _storePages();
   }
 
-  clearPages() async {
+  Future<void> clearPages() async {
     _pages.clear();
     await _storePages();
   }
 
-  updatePage(Page page) async {
+  Future<void> updatePage(Page page) async {
     _pages.removeWhere((e) => page.pageId == e.pageId);
     _pages.add(page);
     await _storePages();
   }
 
-  addPage(Page page) async {
+  Future<void> addPage(Page page) async {
     _pages.add(page);
     await _storePages();
   }
 
-  loadPages() async {
+  Future<void> loadPages() async {
     final db = await _getDbInstance();
-    var pagesJsonString = db.getString("pages");
+    var pagesJsonString = db.getString('pages');
     if (pagesJsonString == null) {
       return;
     }
     List<dynamic> pagesJson = jsonDecode(pagesJsonString);
-    List<Page> loadedPages = pagesJson.map((p) => Page.fromJson(p as Map<String, dynamic>)).toList();
+    final loadedPages = pagesJson
+        ?.map((p) => Page.fromJson(p as Map<String, dynamic>))
+        ?.toList();
     _pages.clear();
     if (loadedPages.isNotEmpty) {
       var refreshPages = await ScanbotSdk.refreshImageUris(loadedPages);
@@ -58,12 +60,12 @@ class PageRepository {
     }
   }
 
-  _storePages() async {
+  Future<void> _storePages() async {
     final db = await _getDbInstance();
-    await db.setString("pages", jsonEncode(_pages));
+    await db.setString('pages', jsonEncode(_pages));
   }
 
-  _getDbInstance() {
+  Future<SharedPreferences> _getDbInstance() async {
     // TODO use a SQLite DB based storage instead of SharedPreferences
     return SharedPreferences.getInstance();
   }

@@ -11,34 +11,40 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(),
-          leading: GestureDetector(
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-            },
+      appBar: AppBar(
+        iconTheme: IconThemeData(),
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
-          backgroundColor: Colors.white,
-          title: const Text('Scanned barcodes',
-              style: TextStyle(inherit: true, color: Colors.black)),
         ),
-        body: Column(
-          children: <Widget>[
-            getImageContainer(preview.barcodeImageURI),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (context, position) {
-                  return BarcodeItemWidget(preview.barcodeItems[position]);
-                },
-                itemCount: preview.barcodeItems.length,
-              ),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Scanned barcodes',
+          style: TextStyle(
+            inherit: true,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          getImageContainer(preview.barcodeImageURI),
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, position) {
+                return BarcodeItemWidget(preview.barcodeItems[position]);
+              },
+              itemCount: preview.barcodeItems.length,
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget getImageContainer(Uri? imageUri) {
@@ -74,14 +80,22 @@ class BarcodeItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              barcodeFormatEnumMap[item.barcodeFormat] ?? "UNKNOWN",
-              style: TextStyle(inherit: true, color: Colors.black),
+              barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN',
+              style: TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(item.text ?? "",
-                style: TextStyle(inherit: true, color: Colors.black)),
+            child: Text(
+              item.text ?? '',
+              style: TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
+            ),
           ),
         ],
       ),
