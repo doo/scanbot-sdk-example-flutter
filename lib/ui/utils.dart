@@ -3,7 +3,7 @@ import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> showAlertDialog(BuildContext context, String textToShow,
-    {String title}) async {
+    {String? title}) async {
   Widget text = SimpleDialogOption(
     child: Padding(
       padding: const EdgeInsets.all(16.0),

@@ -366,8 +366,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker.getImage(source: ImageSource.gallery);
-      await _createPage(image?.path ?? "");
+      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      await _createPage(Uri.file(image?.path ?? ''));
     } catch (e) {
       print(e);
     }
@@ -460,7 +460,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       final result = await ScanbotSdk.performOcr(_pages,
           OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
       await dialog.hide();
-      await showAlertDialog(context, 'Plain text:\n' + (result.plainText ?? ''));
+      await showAlertDialog(
+          context, 'Plain text:\n' + (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();
@@ -506,7 +507,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   }
 
   void _updatePagesList() {
-    imageCache.clear();
+    imageCache?.clear();
     setState(() {
       _pages = _pageRepository.pages;
     });

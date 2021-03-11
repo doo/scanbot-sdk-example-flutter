@@ -23,7 +23,7 @@ Curve _insetAnimCurve = Curves.easeInOut;
 Widget _progressWidget = Container();
 
 class ProgressDialog {
- late  _Body _dialog;
+  late _Body _dialog;
 
   ProgressDialog(BuildContext context,
       {ProgressDialogType? type, bool? isDismissible, bool? showLogs}) {

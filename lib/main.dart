@@ -60,7 +60,7 @@ Future<void> _initScanbotSdk() async {
 }
 
 EncryptionParameters? _getEncryptionParams() {
-  EncryptionParameters encryptionParams;
+  EncryptionParameters? encryptionParams;
   if (shouldInitWithEncryption) {
     encryptionParams = EncryptionParameters(
       password: 'SomeSecretPa\$\$w0rdForFileEncryption',
@@ -257,7 +257,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _importImage() async {
     try {
       final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await _createPage(Uri.file(image?.path ?? ""));
+      await _createPage(Uri.file(image?.path ?? ''));
       await _gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
@@ -314,7 +314,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     if (result != null) {
       if (isOperationSuccessful(result)) {
         await _pageRepository.addPages(result.pages);
-        _gotoImagesView();
+        await _gotoImagesView();
       }
     }
   }
@@ -424,7 +424,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  estimateBlurriness() async {
+  Future<void> estimateBlurriness() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -433,17 +433,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       ///before processing an image the SDK need storage read permission
 
-      Map<Permission, PermissionStatus> permissions =
-          await [Permission.storage, Permission.photos].request();
+      var permissions = await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page =
-            await ScanbotSdk.createPage(Uri.file(image?.path ?? ""), true);
+            await ScanbotSdk.createPage(Uri.file(image?.path ?? ''), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
-        showResultTextDialog("Blur value is :${result.toStringAsFixed(2)} ");
+        showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -452,12 +451,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   void showResultTextDialog(result) {
     Widget okButton = TextButton(
-      child: Text("OK"),
       onPressed: () => Navigator.pop(context),
+      child: Text('OK'),
     );
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Result"),
+    var alert = AlertDialog(
+      title: Text('Result'),
       content: Text(result),
       actions: [
         okButton,
@@ -473,7 +472,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     );
   }
 
-  startQRScanner() async {
+  Future<void> _startQRScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
@@ -548,21 +547,20 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-    if (result != null) {
-      if (isOperationSuccessful(result)) {
-        var concatenate = StringBuffer();
-        result.fields
-            .map((field) =>
-                "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
-            .forEach((s) {
-          concatenate.write(s);
-        });
-        showAlertDialog(context, concatenate.toString());
-      }
+
+    if (result != null && isOperationSuccessful(result)) {
+      final concatenate = StringBuffer();
+      result.fields
+          .map((field) =>
+              "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
+          .forEach((s) {
+        concatenate.write(s);
+      });
+      await showAlertDialog(context, concatenate.toString());
     }
   }
 
-  Future<void> _gotoImagesView() async {
+  Future<dynamic> _gotoImagesView() async {
     imageCache?.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
