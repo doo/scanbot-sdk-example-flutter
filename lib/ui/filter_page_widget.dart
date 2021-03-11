@@ -1,7 +1,8 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart' as c;
+import 'package:scanbot_sdk/scanbot_encryption_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
@@ -48,10 +49,10 @@ class FilterPreviewWidget extends StatefulWidget {
   FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
-    filterPreviewWidgetState = new FilterPreviewWidgetState(page);
+    filterPreviewWidgetState = FilterPreviewWidgetState(page);
   }
 
-  applyFilter() {
+  void applyFilter() {
     filterPreviewWidgetState.applyFilter();
   }
 
@@ -73,12 +74,18 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var file = File.fromUri(filteredImageUri);
-    var image = Image.file(
-      file,
-      height: double.infinity,
-      width: double.infinity,
-    );
+    final imageData =
+        ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri);
+    final image = FutureBuilder(
+        future: imageData,
+        builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+          if (snapshot.data != null) {
+            var image = Image.memory(snapshot.data);
+            return Center(child: image);
+          } else {
+            return Container();
+          }
+        });
     return ListView(
       shrinkWrap: true,
       children: <Widget>[
@@ -103,48 +110,56 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
 
   Container buildContainer(Widget image) {
     return Container(
-        height: 400,
-        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-        child: Center(
-            child: Container(
+      height: 400,
+      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+      child: Center(
+        child: Container(
           height: double.infinity,
           width: double.infinity,
           child: Center(child: image),
-        )));
+        ),
+      ),
+    );
   }
 
   Text titleFromFilterType(c.ImageFilterType filterType) {
-    return Text(filterType.toString().replaceAll("ImageFilterType.", ""),
-        style: TextStyle(
-            inherit: true, color: Colors.black, fontStyle: FontStyle.normal));
+    return Text(
+      filterType.toString().replaceAll('ImageFilterType.', ''),
+      style: TextStyle(
+        inherit: true,
+        color: Colors.black,
+        fontStyle: FontStyle.normal,
+      ),
+    );
   }
 
-  applyFilter() async {
+  Future<void> applyFilter() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
-    var dialog = ProgressDialog(context,
+    final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: "Processing");
+    dialog.style(message: 'Processing');
     dialog.show();
     try {
-      var updatedPage = await ScanbotSdk.applyImageFilter(page, selectedFilter);
-      dialog.hide();
+      final updatedPage =
+          await ScanbotSdk.applyImageFilter(page, selectedFilter);
+      await dialog.hide();
       Navigator.of(context).pop(updatedPage);
     } catch (e) {
-      dialog.hide();
+      await dialog.hide();
       print(e);
     }
   }
 
-  previewFilter(c.Page page, c.ImageFilterType filterType) async {
+  Future<void> previewFilter(c.Page page, c.ImageFilterType filterType) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     try {
-      var uri =
+      final uri =
           await ScanbotSdk.getFilteredDocumentPreviewUri(page, filterType);
       setState(() {
         selectedFilter = filterType;
