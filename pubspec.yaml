@@ -15,15 +15,15 @@ version: 1.0.0+1
 
 environment:
   sdk: '>=2.12.0-0 <3.0.0'
-  flutter: ^2.0.1
+  flutter: '>=2.0.1'
 
 
 dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: 2.3.0
-  cupertino_icons: ^0.1.2
+  scanbot_sdk: 2.4.0-beta1
+  cupertino_icons: ^1.0.2
 
   permission_handler: ^6.0.1
   image_picker: ^0.7.2
