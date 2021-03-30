@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
@@ -12,7 +14,7 @@ class MultiPageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
+    imageCache?.clear();
     var filterPreviewWidget = MultiFilterPreviewWidget(_pageRepository);
     return Scaffold(
         appBar: AppBar(
@@ -53,7 +55,7 @@ class MultiPageFiltering extends StatelessWidget {
 
 // ignore: must_be_immutable
 class MultiFilterPreviewWidget extends StatefulWidget {
-  MultiFilterPreviewWidgetState filterPreviewWidgetState;
+  late MultiFilterPreviewWidgetState filterPreviewWidgetState;
   final PageRepository _pageRepository;
 
   MultiFilterPreviewWidget(this._pageRepository) {
@@ -71,7 +73,7 @@ class MultiFilterPreviewWidget extends StatefulWidget {
 }
 
 class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
-  ImageFilterType selectedFilter;
+  late ImageFilterType selectedFilter;
   final PageRepository _pageRepository;
 
   MultiFilterPreviewWidgetState(this._pageRepository) {
@@ -97,7 +99,8 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
-              changeSelectedFilter(value);
+              changeSelectedFilter(
+                  (value as ImageFilterType?) ?? ImageFilterType.NONE);
             },
           ),
       ],

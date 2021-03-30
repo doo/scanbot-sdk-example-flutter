@@ -47,21 +47,20 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
     );
   }
 
-  Widget getImageContainer(Uri imageUri) {
+  Widget getImageContainer(Uri? imageUri) {
     if (preview.barcodeImageURI == null) {
       return Container();
     }
-    var file = File.fromUri(imageUri);
-    if (file?.existsSync() == true) {
+    var file = File.fromUri(imageUri!);
+    if (file.existsSync() == true) {
       return Container(
-        child: Center(
-          child: Image.file(
-            file,
-            height: 200,
-            width: double.infinity,
-          ),
+          child: Center(
+        child: Image.file(
+          file,
+          height: 200,
+          width: double.infinity,
         ),
-      );
+      ));
     }
     return Container();
   }
@@ -81,7 +80,7 @@ class BarcodeItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              barcodeFormatEnumMap[item.barcodeFormat],
+              barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN',
               style: TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -91,7 +90,7 @@ class BarcodeItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              item.text,
+              item.text ?? '',
               style: TextStyle(
                 inherit: true,
                 color: Colors.black,

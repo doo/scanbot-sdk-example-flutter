@@ -14,7 +14,7 @@ class PageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
+    imageCache?.clear();
     var filterPreviewWidget = FilterPreviewWidget(_page);
     return Scaffold(
         appBar: AppBar(
@@ -46,7 +46,7 @@ class PageFiltering extends StatelessWidget {
 // ignore: must_be_immutable
 class FilterPreviewWidget extends StatefulWidget {
   final c.Page page;
-  FilterPreviewWidgetState filterPreviewWidgetState;
+  late FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
     filterPreviewWidgetState = FilterPreviewWidgetState(page);
@@ -64,8 +64,8 @@ class FilterPreviewWidget extends StatefulWidget {
 
 class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   c.Page page;
-  Uri filteredImageUri;
-  c.ImageFilterType selectedFilter;
+  Uri? filteredImageUri;
+  late c.ImageFilterType selectedFilter;
 
   FilterPreviewWidgetState(this.page) {
     filteredImageUri = page.documentImageFileUri;
@@ -75,12 +75,12 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   @override
   Widget build(BuildContext context) {
     final imageData =
-        ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri);
+        ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri!);
     final image = FutureBuilder(
         future: imageData,
         builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
           if (snapshot.data != null) {
-            var image = Image.memory(snapshot.data);
+            var image = Image.memory(snapshot.data!);
             return Center(child: image);
           } else {
             return Container();
@@ -101,7 +101,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
-              previewFilter(page, value);
+              previewFilter(page,
+                  (value as c.ImageFilterType?) ?? c.ImageFilterType.NONE);
             },
           ),
       ],

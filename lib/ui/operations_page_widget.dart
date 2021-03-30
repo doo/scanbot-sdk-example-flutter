@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/common_data.dart' as sdk;
@@ -23,7 +25,7 @@ class PageOperations extends StatefulWidget {
 
 class _PageOperationsState extends State<PageOperations> {
   final PageRepository _pageRepository = PageRepository();
-  sdk.Page _page;
+  late sdk.Page _page;
 
   @override
   void initState() {
@@ -32,7 +34,7 @@ class _PageOperationsState extends State<PageOperations> {
   }
 
   Future<void> _updatePage(sdk.Page page) async {
-    imageCache.clear();
+    imageCache?.clear();
     await _pageRepository.updatePage(page);
     setState(() {
       _page = page;
@@ -43,9 +45,9 @@ class _PageOperationsState extends State<PageOperations> {
   Widget build(BuildContext context) {
     Widget pageView;
     if (shouldInitWithEncryption) {
-      pageView = EncryptedPageWidget(_page.documentImageFileUri);
+      pageView = EncryptedPageWidget(_page.documentImageFileUri!);
     } else {
-      pageView = PageWidget(_page.documentImageFileUri);
+      pageView = PageWidget(_page.documentImageFileUri!);
     }
     return Scaffold(
       appBar: AppBar(
@@ -146,28 +148,6 @@ class _PageOperationsState extends State<PageOperations> {
     }
   }
 
-  Future<void> _rotatePage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    try {
-      final dialog = ProgressDialog(
-        context,
-        type: ProgressDialogType.Normal,
-        isDismissible: false,
-      );
-      dialog.style(message: 'Processing ...');
-      dialog.show();
-      final updatedPage = await ScanbotSdk.rotatePageClockwise(page, 1);
-      await dialog.hide();
-      if (updatedPage != null) {
-        await _updatePage(updatedPage);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future<void> _showFilterPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {
@@ -198,7 +178,7 @@ class _PageOperationsState extends State<PageOperations> {
       );
       final result = await ScanbotSdkUi.startCroppingScreen(page, config);
       if (isOperationSuccessful(result) && result.page != null) {
-        await _updatePage(result.page);
+        await _updatePage(result.page!);
       }
     } catch (e) {
       print(e);

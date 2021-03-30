@@ -5,9 +5,9 @@ import 'package:flutter/rendering.dart';
 
 class MenuItemWidget extends StatelessWidget {
   final String title;
-  final GestureTapCallback onTap;
-  final IconData startIcon;
-  final IconData endIcon;
+  final GestureTapCallback? onTap;
+  final IconData? startIcon;
+  final IconData? endIcon;
 
   MenuItemWidget(this.title, {this.onTap, this.startIcon, this.endIcon});
 

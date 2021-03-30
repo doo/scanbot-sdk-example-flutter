@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PageRepository {
   static final PageRepository _instance = PageRepository._internal();
+
   factory PageRepository() => _instance;
 
   PageRepository._internal() {
@@ -50,10 +51,10 @@ class PageRepository {
     }
     List<dynamic> pagesJson = jsonDecode(pagesJsonString);
     final loadedPages = pagesJson
-        ?.map((p) => Page.fromJson(p as Map<String, dynamic>))
-        ?.toList();
+            .map((p) => Page.fromJson(p as Map<String, dynamic>))
+            .toList();
     _pages.clear();
-    if (loadedPages != null && loadedPages.isNotEmpty) {
+    if (loadedPages.isNotEmpty) {
       var refreshPages = await ScanbotSdk.refreshImageUris(loadedPages);
       _pages.addAll(refreshPages);
     }

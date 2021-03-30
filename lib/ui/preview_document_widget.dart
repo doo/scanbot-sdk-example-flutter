@@ -23,7 +23,7 @@ class DocumentPreview extends StatefulWidget {
 
 class _DocumentPreviewState extends State<DocumentPreview> {
   final PageRepository _pageRepository = PageRepository();
-  List<sdk.Page> _pages;
+  late List<sdk.Page> _pages;
 
   @override
   void initState() {
@@ -60,10 +60,10 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                     Widget pageView;
                     if (shouldInitWithEncryption) {
                       pageView = EncryptedPageWidget(
-                          _pages[position].documentPreviewImageFileUri);
+                          _pages[position].documentPreviewImageFileUri!);
                     } else {
                       pageView = PageWidget(
-                          _pages[position].documentPreviewImageFileUri);
+                          _pages[position].documentPreviewImageFileUri!);
                     }
                     return GridTile(
                       child: GestureDetector(
@@ -73,7 +73,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                           child: pageView),
                     );
                   },
-                  itemCount: _pages?.length ?? 0),
+                  itemCount: _pages.length),
             ),
           ),
           BottomAppBar(
@@ -258,7 +258,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       return;
     }
 
-    DocumentScanningResult result;
+    DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
         orientationLockMode: sdk.CameraOrientationMode.PORTRAIT,
@@ -271,9 +271,11 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     } catch (e) {
       print(e);
     }
-    if (isOperationSuccessful(result)) {
-      await _pageRepository.addPages(result.pages);
-      _updatePagesList();
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        await _pageRepository.addPages(result.pages);
+        _updatePagesList();
+      }
     }
   }
 
@@ -365,9 +367,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   Future<void> _importImage() async {
     try {
       final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      if (image != null) {
-        await _createPage(Uri.file(image.path));
-      }
+      await _createPage(Uri.file(image?.path ?? ''));
     } catch (e) {
       print(e);
     }
@@ -424,26 +424,6 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _detectPage(sdk.Page page) async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: 'Processing ...');
-    dialog.show();
-    try {
-      var updatedPage = await ScanbotSdk.detectDocument(page);
-      await dialog.hide();
-      await _pageRepository.updatePage(updatedPage);
-      _updatePagesList();
-    } catch (e) {
-      print(e);
-      await dialog.hide();
-    }
-  }
-
   Future<void> _performOcr() async {
     if (!await _checkHasPages(context)) {
       return;
@@ -460,7 +440,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       final result = await ScanbotSdk.performOcr(_pages,
           OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
       await dialog.hide();
-      await showAlertDialog(context, 'Plain text:\n' + result.plainText);
+      await showAlertDialog(
+          context, 'Plain text:\n' + (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();
@@ -486,9 +467,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       await showAlertDialog(
           context,
           'PDF File URI:\n' +
-              result.pdfFileUri +
+              (result.pdfFileUri ?? '') +
               '\n\nPlain text:\n' +
-              result.plainText);
+              (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();
@@ -506,7 +487,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   }
 
   void _updatePagesList() {
-    imageCache.clear();
+    imageCache?.clear();
     setState(() {
       _pages = _pageRepository.pages;
     });
