@@ -41,8 +41,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
-  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   scanbot_sdk: f32434ab65e967725d125ed584a0fceec064086d
   ScanbotSDK: fe7f42d3ff2b554d72e0c4c5e4c65958596d8f94
