@@ -11,6 +11,7 @@ import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart';
@@ -201,6 +202,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan License plate',
+            onTap: () {
+              startLicensePlateScanner();
             },
           ),
           TitleItemWidget('Test other SDK API methods'),
@@ -418,6 +425,25 @@ class _MainPageWidgetState extends State<MainPageWidget> {
                 builder: (context) => BarcodesResultPreviewWidget(result)),
           );
         }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> startLicensePlateScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    LicensePlateScanResult requestResult;
+    try {
+      var config = LicensePlateScannerConfiguration(
+          topBarBackgroundColor: Colors.pink,
+          topBarButtonsColor: Colors.white70,
+          confirmationDialogAccentColor: Colors.green);
+      requestResult = await ScanbotSdkUi.startLicensePlateScanner(config);
+      if (requestResult.operationResult == OperationResult.SUCCESS) {
+        showResultTextDialog(requestResult.rawText);
       }
     } catch (e) {
       Logger.root.severe(e);
