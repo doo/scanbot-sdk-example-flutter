@@ -329,6 +329,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: Colors.blue,
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
+        /*  additionalParameters: BarcodeAdditionalParameters(
+          enableGS1Decoding: false,
+          minimumTextLength: 10,
+          maximumTextLength: 11,
+          minimum1DBarcodesQuietZone: 10,
+        )*/
         // ...
       );
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
@@ -379,7 +385,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           // flashEnabled: true,
           orientationLockMode: CameraOrientationMode.PORTRAIT,
           barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-          cancelButtonHidden: false);
+          cancelButtonHidden: false,
+        /*additionalParameters: BarcodeAdditionalParameters(
+          enableGS1Decoding: false,
+          minimumTextLength: 10,
+          maximumTextLength: 11,
+          minimum1DBarcodesQuietZone: 10,
+        )*/);
 
       final result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
       if (result.operationResult == OperationResult.SUCCESS) {
@@ -481,6 +493,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final config = BarcodeScannerConfiguration(
         barcodeFormats: [BarcodeFormat.QR_CODE],
         finderTextHint: 'Please align a QR code in the frame to scan it.',
+        /*  additionalParameters: BarcodeAdditionalParameters(
+          enableGS1Decoding: false,
+          minimumTextLength: 10,
+          maximumTextLength: 11,
+          minimum1DBarcodesQuietZone: 10,
+        )*/
         // ...
       );
       final result = await ScanbotSdkUi.startBarcodeScanner(config);
