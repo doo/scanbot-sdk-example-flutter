@@ -246,7 +246,7 @@ packages:
       name: scanbot_sdk
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.1"
+    version: "2.5.0"
   shared_preferences:
     dependency: "direct main"
     description:
