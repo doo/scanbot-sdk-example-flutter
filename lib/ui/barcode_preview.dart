@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
+
+import '../main.dart';
 
 class BarcodesResultPreviewWidget extends StatelessWidget {
   final BarcodeScanningResult preview;
@@ -48,23 +51,28 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
   }
 
   Widget getImageContainer(Uri? imageUri) {
-    if (preview.barcodeImageURI == null) {
+    if (imageUri == null) {
       return Container();
     }
-    var file = File.fromUri(imageUri!);
+
+    var file = File.fromUri(imageUri);
     if (file.existsSync() == true) {
-      return Container(
-          child: Center(
-        child: Image.file(
-          file,
+      if (shouldInitWithEncryption) {
+        return Container(
           height: 200,
-          width: double.infinity,
-        ),
-      ));
+          child: EncryptedPageWidget(imageUri),
+        );
+      } else {
+        return Container(
+          height: 200,
+          child: PageWidget(imageUri),
+        );
+      }
     }
     return Container();
   }
 }
+
 
 class BarcodeItemWidget extends StatelessWidget {
   final BarcodeItem item;
