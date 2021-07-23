@@ -2,7 +2,7 @@
 
 This example app shows how to integrate the [Scanbot SDK Flutter Plugin](https://pub.dev/packages/scanbot_sdk) on Android and iOS.
 
-For more details about the Plugin please see this [documentation](https://scanbotsdk.github.io/documentation/flutter/).
+For more details about the Plugin please see this [documentation](https://docs.scanbot.io/document-scanner-sdk/flutter/introduction/).
 
 
 ## What is Scanbot SDK?
