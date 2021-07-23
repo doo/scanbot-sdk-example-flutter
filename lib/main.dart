@@ -149,7 +149,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         children: <Widget>[
           TitleItemWidget('Document Scanner'),
           MenuItemWidget(
-            'Scan Document',
+            'Scan Documents',
             onTap: () {
               _startDocumentScanning();
             },
@@ -181,13 +181,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            'Scan Multiple Barcodes ',
+            'Scan Multiple Barcodes (batch mode)',
             onTap: () {
               _startBatchBarcodeScanner();
             },
           ),
           MenuItemWidget(
-            'Detect Barcode image',
+            'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
             },
@@ -205,7 +205,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            'Scan License plate',
+            'Scan License Plate',
             onTap: () {
               startLicensePlateScanner();
             },
@@ -226,12 +226,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            'Licenses info',
+            '3rd-party Libs & Licenses',
             startIcon: Icons.developer_mode,
             onTap: () {
               showLicensePage(
                 context: context,
-                applicationName: 'Scanbot SDK example',
+                applicationName: 'Scanbot SDK Flutter Example',
               );
             },
           ),
@@ -334,6 +334,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: Colors.blue,
+        barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -342,6 +343,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           maximumTextLength: 11,
           minimum1DBarcodesQuietZone: 10,
         )*/
+        //cameraZoomFactor: 0.5,
         // ...
       );
       var result = await ScanbotSdkUi.startBarcodeScanner(config);
@@ -356,7 +358,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      //var config = BarcodeScannerConfiguration(); // testing default configs
       var config = BatchBarcodeScannerConfiguration(
           barcodeFormatter: (item) async {
             final random = Random();
@@ -393,6 +394,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           orientationLockMode: CameraOrientationMode.PORTRAIT,
           barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
           cancelButtonHidden: false,
+          //cameraZoomFactor: 0.5
         /*additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
           minimumTextLength: 10,
@@ -429,8 +431,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
             Uri.file(image?.path ?? ''),
-            PredefinedBarcodes.allBarcodeTypes(),
-            true);
+            PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(

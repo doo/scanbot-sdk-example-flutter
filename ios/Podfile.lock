@@ -8,8 +8,8 @@ PODS:
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 1.14.0)
-  - ScanbotSDK/MRZ (1.14.0)
+    - ScanbotSDK/MRZ (= 1.19.3)
+  - ScanbotSDK/MRZ (1.19.3)
   - shared_preferences (0.0.1):
     - Flutter
 
@@ -44,8 +44,8 @@ SPEC CHECKSUMS:
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  scanbot_sdk: f32434ab65e967725d125ed584a0fceec064086d
-  ScanbotSDK: fe7f42d3ff2b554d72e0c4c5e4c65958596d8f94
+  scanbot_sdk: 9a8f8da7004463202e40301449de72990e4a87a7
+  ScanbotSDK: 1570cd86b33f07b0f0321a6024bb39d414813500
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
