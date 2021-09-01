@@ -23,16 +23,16 @@ class PageFiltering extends StatelessWidget {
               onTap: () {
                 filterPreviewWidget.applyFilter();
               },
-              child: Center(
+              child: const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text('APPLY',
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('APPLY',
                       style: TextStyle(inherit: true, color: Colors.black)),
                 ),
               ),
             ),
           ],
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.black, //change your color here
           ),
           backgroundColor: Colors.white,
@@ -90,7 +90,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
       shrinkWrap: true,
       children: <Widget>[
         buildContainer(image),
-        Text('Select filter',
+        const Text('Select filter',
             style: TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -112,9 +112,9 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   Container buildContainer(Widget image) {
     return Container(
       height: 400,
-      padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
       child: Center(
-        child: Container(
+        child: SizedBox(
           height: double.infinity,
           width: double.infinity,
           child: Center(child: image),
@@ -126,7 +126,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   Text titleFromFilterType(c.ImageFilterType filterType) {
     return Text(
       filterType.toString().replaceAll('ImageFilterType.', ''),
-      style: TextStyle(
+      style: const TextStyle(
         inherit: true,
         color: Colors.black,
         fontStyle: FontStyle.normal,
