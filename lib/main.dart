@@ -491,11 +491,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   void showResultTextDialog(result) {
     Widget okButton = TextButton(
       onPressed: () => Navigator.pop(context),
-      child: Text('OK'),
+      child:  const Text('OK'),
     );
     // set up the AlertDialog
     var alert = AlertDialog(
-      title: Text('Result'),
+      title:  const Text('Result'),
       content: Text(result),
       actions: [
         okButton,

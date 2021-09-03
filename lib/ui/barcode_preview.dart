@@ -15,12 +15,12 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(),
+        iconTheme: const IconThemeData(),
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -58,12 +58,12 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
     var file = File.fromUri(imageUri);
     if (file.existsSync() == true) {
       if (shouldInitWithEncryption) {
-        return Container(
+        return SizedBox(
           height: 200,
           child: EncryptedPageWidget(imageUri),
         );
       } else {
-        return Container(
+        return SizedBox(
           height: 200,
           child: PageWidget(imageUri),
         );
@@ -89,7 +89,7 @@ class BarcodeItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN',
-              style: TextStyle(
+              style:  const TextStyle(
                 inherit: true,
                 color: Colors.black,
               ),
@@ -99,7 +99,7 @@ class BarcodeItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               item.text ?? '',
-              style: TextStyle(
+              style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
               ),
