@@ -122,7 +122,7 @@ class _PageOperationsState extends State<PageOperations> {
                     children: <Widget>[
                       const Icon(Icons.delete, color: Colors.red),
                       Container(width: 4),
-                       const Text(
+                      const Text(
                         'Delete',
                         style: TextStyle(inherit: true, color: Colors.red),
                       ),
@@ -146,7 +146,6 @@ class _PageOperationsState extends State<PageOperations> {
       print(e);
     }
   }
-
 
   Future<void> _showFilterPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {

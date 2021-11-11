@@ -142,7 +142,7 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
 
     try {
       final pages = await Future.wait(futures);
-      for(var page in pages){
+      for (var page in pages) {
         _pageRepository.updatePage(page);
       }
     } catch (e) {
