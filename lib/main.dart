@@ -111,7 +111,24 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> {  @override
+void initState() {
+  super.initState();
+}
+
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(home: MainPageWidget());
+}
+}
+
+class MainPageWidget extends StatefulWidget {
+  @override
+  _MainPageWidgetState createState() => _MainPageWidgetState();
+}
+
+class _MainPageWidgetState extends State<MainPageWidget> {
+
   final PageRepository _pageRepository = PageRepository();
 
   @override
@@ -279,7 +296,7 @@ class _MyAppState extends State<MyApp> {
     DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
-        bottomBarBackgroundColor: Colors.blue,
+        bottomBarBackgroundColor: ScanbotRedColor,
         ignoreBadAspectRatio: true,
         multiPageEnabled: true,
         //maxNumberOfPages: 3,
@@ -313,7 +330,7 @@ class _MyAppState extends State<MyApp> {
 
     try {
       var config = BarcodeScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
@@ -347,11 +364,6 @@ class _MyAppState extends State<MyApp> {
               title: item.barcodeFormat.toString(),
               subtitle: (item.text ?? '') + 'custom string');
         },
-        topBarBackgroundColor: Colors.blueAccent,
-        topBarButtonsColor: Colors.white70,
-        cameraOverlayColor: Colors.black26,
-        finderLineColor: Colors.red,
-        finderTextHintColor: Colors.cyanAccent,
         cancelButtonTitle: 'Cancel',
         enableCameraButtonTitle: 'camera enable',
         enableCameraExplanationText: 'explanation text',
@@ -362,12 +374,7 @@ class _MyAppState extends State<MyApp> {
         barcodesCountText: '%d codes',
         fetchingStateText: 'might be not needed',
         noBarcodesTitle: 'nothing to see here',
-        barcodesCountTextColor: Colors.purple,
         finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
-        topBarButtonsInactiveColor: Colors.orange,
-        detailsActionColor: Colors.yellow,
-        detailsBackgroundColor: Colors.amber,
-        detailsPrimaryColor: Colors.yellowAccent,
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
@@ -533,7 +540,7 @@ class _MyAppState extends State<MyApp> {
     HealthInsuranceCardRecognitionResult? result;
     try {
       final config = HealthInsuranceScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
         topBarButtonsColor: Colors.white70,
         // ...
       );
@@ -563,7 +570,7 @@ class _MyAppState extends State<MyApp> {
     MrzScanningResult? result;
     try {
       final config = MrzScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
         config.finderAspectRatio = FinderAspectRatio(width: 3, height: 1);
