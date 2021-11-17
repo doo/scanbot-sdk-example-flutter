@@ -111,15 +111,18 @@ class MyApp extends StatefulWidget {
   }
 }
 
-class _MyAppState extends State<MyApp> {  @override
-void initState() {
-  super.initState();
-}
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
-@override
-Widget build(BuildContext context) {
-  return MaterialApp(home: MainPageWidget());
-}
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MainPageWidget(),
+    );
+  }
 }
 
 class MainPageWidget extends StatefulWidget {
@@ -128,111 +131,108 @@ class MainPageWidget extends StatefulWidget {
 }
 
 class _MainPageWidgetState extends State<MainPageWidget> {
-
   final PageRepository _pageRepository = PageRepository();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ScanbotRedColor,
-          title: const Text(
-            'Scanbot SDK Example Flutter',
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ScanbotRedColor,
+        title: const Text(
+          'Scanbot SDK Example Flutter',
+        ),
+      ),
+      body: ListView(
+        children: <Widget>[
+          TitleItemWidget('Document Scanner'),
+          MenuItemWidget(
+            'Scan Documents',
+            onTap: () {
+              _startDocumentScanning();
+            },
           ),
-        ),
-        body: ListView(
-          children: <Widget>[
-            TitleItemWidget('Document Scanner'),
-            MenuItemWidget(
-              'Scan Documents',
-              onTap: () {
-                _startDocumentScanning();
-              },
-            ),
-            MenuItemWidget(
-              'Import Image',
-              onTap: () {
-                _importImage();
-              },
-            ),
-            MenuItemWidget(
-              'View Image Results',
-              endIcon: Icons.keyboard_arrow_right,
-              onTap: () {
-                _gotoImagesView();
-              },
-            ),
-            TitleItemWidget('Data Detectors'),
-            MenuItemWidget(
-              'Scan Barcode (all formats: 1D + 2D)',
-              onTap: () {
-                _startBarcodeScanner();
-              },
-            ),
-            MenuItemWidget(
-              'Scan QR code (QR format only)',
-              onTap: () {
-                _startQRScanner();
-              },
-            ),
-            MenuItemWidget(
-              'Scan Multiple Barcodes (batch mode)',
-              onTap: () {
-                _startBatchBarcodeScanner();
-              },
-            ),
-            MenuItemWidget(
-              'Detect Barcodes from Still Image',
-              onTap: () {
-                _detectBarcodeOnImage();
-              },
-            ),
-            MenuItemWidget(
-              'Scan MRZ (Machine Readable Zone)',
-              onTap: () {
-                _startMRZScanner();
-              },
-            ),
-            MenuItemWidget(
-              'Scan EHIC (European Health Insurance Card)',
-              onTap: () {
-                _startEhicScanner();
-              },
-            ),
-            MenuItemWidget(
-              'Scan License Plate',
-              onTap: () {
-                startLicensePlateScanner();
-              },
-            ),
-            TitleItemWidget('Test other SDK API methods'),
-            MenuItemWidget(
-              'getLicenseStatus()',
-              startIcon: Icons.phonelink_lock,
-              onTap: () {
-                _getLicenseStatus();
-              },
-            ),
-            MenuItemWidget(
-              'getOcrConfigs()',
-              startIcon: Icons.settings,
-              onTap: () {
-                _getOcrConfigs();
-              },
-            ),
-            MenuItemWidget(
-              '3rd-party Libs & Licenses',
-              startIcon: Icons.developer_mode,
-              onTap: () {
-                showLicensePage(
-                  context: context,
-                  applicationName: 'Scanbot SDK Flutter Example',
-                );
-              },
-            ),
-          ],
-        ),
+          MenuItemWidget(
+            'Import Image',
+            onTap: () {
+              _importImage();
+            },
+          ),
+          MenuItemWidget(
+            'View Image Results',
+            endIcon: Icons.keyboard_arrow_right,
+            onTap: () {
+              _gotoImagesView();
+            },
+          ),
+          TitleItemWidget('Data Detectors'),
+          MenuItemWidget(
+            'Scan Barcode (all formats: 1D + 2D)',
+            onTap: () {
+              _startBarcodeScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan QR code (QR format only)',
+            onTap: () {
+              _startQRScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan Multiple Barcodes (batch mode)',
+            onTap: () {
+              _startBatchBarcodeScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Detect Barcodes from Still Image',
+            onTap: () {
+              _detectBarcodeOnImage();
+            },
+          ),
+          MenuItemWidget(
+            'Scan MRZ (Machine Readable Zone)',
+            onTap: () {
+              _startMRZScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan EHIC (European Health Insurance Card)',
+            onTap: () {
+              _startEhicScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan License Plate',
+            onTap: () {
+              startLicensePlateScanner();
+            },
+          ),
+          TitleItemWidget('Test other SDK API methods'),
+          MenuItemWidget(
+            'getLicenseStatus()',
+            startIcon: Icons.phonelink_lock,
+            onTap: () {
+              _getLicenseStatus();
+            },
+          ),
+          MenuItemWidget(
+            'getOcrConfigs()',
+            startIcon: Icons.settings,
+            onTap: () {
+              _getOcrConfigs();
+            },
+          ),
+          MenuItemWidget(
+            '3rd-party Libs & Licenses',
+            startIcon: Icons.developer_mode,
+            onTap: () {
+              showLicensePage(
+                context: context,
+                applicationName: 'Scanbot SDK Flutter Example',
+              );
+            },
+          ),
+        ],
       ),
     );
   }
