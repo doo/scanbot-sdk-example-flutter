@@ -267,9 +267,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       await _createPage(Uri.file(image?.path ?? ''));
 
-      /// Image Picker with bytes (scanbot_sdk 2.7.0)
+      /// Image Picker with bytes
       // final bytes = await image?.readAsBytes();
       // await _createPageWithBytes(bytes ?? Uint8List(0));
+
       await _gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
