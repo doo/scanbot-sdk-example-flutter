@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -263,8 +264,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       await _createPage(Uri.file(image?.path ?? ''));
+
+      /// Image Picker with bytes (scanbot_sdk 2.7.0)
+      // final bytes = await image?.readAsBytes();
+      // await _createPageWithBytes(bytes ?? Uint8List(0));
       await _gotoImagesView();
     } catch (e) {
       Logger.root.severe(e);
@@ -282,6 +287,26 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     dialog.show();
     try {
       var page = await ScanbotSdk.createPage(uri, false);
+      page = await ScanbotSdk.detectDocument(page);
+      await _pageRepository.addPage(page);
+    } catch (e) {
+      Logger.root.severe(e);
+    } finally {
+      await dialog.hide();
+    }
+  }
+
+  Future<void> _createPageWithBytes(Uint8List bytes) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    final dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    dialog.style(message: 'Processing');
+    dialog.show();
+    try {
+      var page = await ScanbotSdk.createPageWithImageBytes(bytes, false);
       page = await ScanbotSdk.detectDocument(page);
       await _pageRepository.addPage(page);
     } catch (e) {
@@ -419,7 +444,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
       ///before processing image sdk need storage read permission
 
@@ -468,7 +493,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
       ///before processing an image the SDK need storage read permission
 
