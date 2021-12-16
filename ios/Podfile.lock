@@ -2,21 +2,21 @@ PODS:
   - Flutter (1.0.0)
   - image_picker (0.0.1):
     - Flutter
-  - path_provider (0.0.1):
+  - path_provider_ios (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 1.21.2)
-  - ScanbotSDK/MRZ (1.21.2)
+    - ScanbotSDK/MRZ (= 1.19.3)
+  - ScanbotSDK/MRZ (1.19.3)
   - shared_preferences (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - scanbot_sdk (from `.symlinks/plugins/scanbot_sdk/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -30,8 +30,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_ios:
+    :path: ".symlinks/plugins/path_provider_ios/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   scanbot_sdk:
@@ -42,10 +42,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  scanbot_sdk: 5c2e5d9b895ec90641a7619ac595293946d93411
-  ScanbotSDK: 1ff91a1758c53664f88e5c22d78b88dfeaf2f4eb
+  scanbot_sdk: 9a8f8da7004463202e40301449de72990e4a87a7
+  ScanbotSDK: 1570cd86b33f07b0f0321a6024bb39d414813500
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
