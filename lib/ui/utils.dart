@@ -15,13 +15,13 @@ Future<void> showAlertDialog(BuildContext context, String textToShow,
   final dialog = AlertDialog(
     title: title != null ? Text(title) : null,
     content: text,
-    contentPadding: EdgeInsets.all(0),
+    contentPadding: const EdgeInsets.all(0),
     actions: <Widget>[
       TextButton(
         onPressed: () {
           Navigator.of(context).pop();
         },
-        child: Text('OK'),
+        child: const Text('OK'),
       ),
     ],
   );
