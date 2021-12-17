@@ -17,6 +17,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
@@ -193,6 +194,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            'Scan Barcode custom ui',
+            onTap: () {
+              _startBarcodeCustomUIScanner();
+            },
+          ),
+          MenuItemWidget(
             'Scan MRZ (Machine Readable Zone)',
             onTap: () {
               _startMRZScanner();
@@ -353,54 +360,65 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  Future<void> _startBarcodeCustomUIScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => BarcodeScannerWidget()),
+    );
+  }
+
   Future<void> _startBatchBarcodeScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
     try {
       var config = BatchBarcodeScannerConfiguration(
-          barcodeFormatter: (item) async {
-            final random = Random();
-            final randomNumber = random.nextInt(4) + 2;
-            await Future.delayed(Duration(seconds: randomNumber));
-            return BarcodeFormattedData(
-                title: item.barcodeFormat.toString(),
-                subtitle: (item.text ?? '') + 'custom string');
-          },
-          topBarBackgroundColor: Colors.blueAccent,
-          topBarButtonsColor: Colors.white70,
-          cameraOverlayColor: Colors.black26,
-          finderLineColor: Colors.red,
-          finderTextHintColor: Colors.cyanAccent,
-          cancelButtonTitle: 'Cancel',
-          enableCameraButtonTitle: 'camera enable',
-          enableCameraExplanationText: 'explanation text',
-          finderTextHint:
-              'Please align any supported barcode in the frame to scan it.',
-          // clearButtonTitle: "CCCClear",
-          // submitButtonTitle: "Submitt",
-          barcodesCountText: '%d codes',
-          fetchingStateText: 'might be not needed',
-          noBarcodesTitle: 'nothing to see here',
-          barcodesCountTextColor: Colors.purple,
-          finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
-          topBarButtonsInactiveColor: Colors.orange,
-          detailsActionColor: Colors.yellow,
-          detailsBackgroundColor: Colors.amber,
-          detailsPrimaryColor: Colors.yellowAccent,
-          finderLineWidth: 7,
-          successBeepEnabled: true,
-          // flashEnabled: true,
-          orientationLockMode: CameraOrientationMode.PORTRAIT,
-          barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-          cancelButtonHidden: false,
-          //cameraZoomFactor: 0.5
+        barcodeFormatter: (item) async {
+          final random = Random();
+          final randomNumber = random.nextInt(4) + 2;
+          await Future.delayed(Duration(seconds: randomNumber));
+          return BarcodeFormattedData(
+              title: item.barcodeFormat.toString(),
+              subtitle: (item.text ?? '') + 'custom string');
+        },
+        topBarBackgroundColor: Colors.blueAccent,
+        topBarButtonsColor: Colors.white70,
+        cameraOverlayColor: Colors.black26,
+        finderLineColor: Colors.red,
+        finderTextHintColor: Colors.cyanAccent,
+        cancelButtonTitle: 'Cancel',
+        enableCameraButtonTitle: 'camera enable',
+        enableCameraExplanationText: 'explanation text',
+        finderTextHint:
+            'Please align any supported barcode in the frame to scan it.',
+        // clearButtonTitle: "CCCClear",
+        // submitButtonTitle: "Submitt",
+        barcodesCountText: '%d codes',
+        fetchingStateText: 'might be not needed',
+        noBarcodesTitle: 'nothing to see here',
+        barcodesCountTextColor: Colors.purple,
+        finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
+        topBarButtonsInactiveColor: Colors.orange,
+        detailsActionColor: Colors.yellow,
+        detailsBackgroundColor: Colors.amber,
+        detailsPrimaryColor: Colors.yellowAccent,
+        finderLineWidth: 7,
+        successBeepEnabled: true,
+        // flashEnabled: true,
+        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+        cancelButtonHidden: false,
+        //cameraZoomFactor: 0.5
         /*additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
           minimumTextLength: 10,
           maximumTextLength: 11,
           minimum1DBarcodesQuietZone: 10,
-        )*/);
+        )*/
+      );
 
       final result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
       if (result.operationResult == OperationResult.SUCCESS) {
@@ -430,8 +448,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
-            Uri.file(image?.path ?? ''),
-            PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
