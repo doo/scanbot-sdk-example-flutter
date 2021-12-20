@@ -11,9 +11,9 @@ BuildContext? _context, _dismissingContext;
 ProgressDialogType? _progressDialogType;
 bool _barrierDismissible = true, _showLogs = false;
 
-TextStyle _progressTextStyle = TextStyle(
+TextStyle _progressTextStyle = const TextStyle(
         color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-    _messageStyle = TextStyle(
+    _messageStyle = const TextStyle(
         color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600);
 
 double _dialogElevation = 8.0, _borderRadius = 8.0;
@@ -135,7 +135,7 @@ class ProgressDialog {
             child: Dialog(
                 backgroundColor: _backgroundColor,
                 insetAnimationCurve: _insetAnimCurve,
-                insetAnimationDuration: Duration(milliseconds: 100),
+                insetAnimationDuration: const Duration(milliseconds: 100),
                 elevation: _dialogElevation,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(

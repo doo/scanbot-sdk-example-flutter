@@ -35,7 +35,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black, //change your color here
         ),
         backgroundColor: Colors.white,
@@ -51,10 +51,10 @@ class _DocumentPreviewState extends State<DocumentPreview> {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
               child: GridView.builder(
                   scrollDirection: Axis.vertical,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                       maxCrossAxisExtent: 200),
                   itemBuilder: (context, position) {
                     Widget pageView;
@@ -87,9 +87,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.add_circle),
+                      const Icon(Icons.add_circle),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'Add',
                         style: TextStyle(
                           inherit: true,
@@ -105,9 +105,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.more_vert),
+                      const Icon(Icons.more_vert),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'More',
                         style: TextStyle(
                           inherit: true,
@@ -123,12 +123,12 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(
+                      const Icon(
                         Icons.delete,
                         color: Colors.red,
                       ),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'Delete All',
                         style: TextStyle(
                           inherit: true,
@@ -157,64 +157,62 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.text_fields),
-                  title: Text('Perform OCR'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _performOcr();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.picture_as_pdf),
-                  title: Text('Save as PDF'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _createPdf();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.picture_as_pdf),
-                  title: Text('Save as PDF with OCR'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _createOcrPdf();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text('Safe as TIFF'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _createTiff(false);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text('Save as TIFF 1-bit encoded'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _createTiff(true);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.image),
-                  title: Text('Apply Image Filter on ALL pages'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _filterAllPages();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.close),
-                  title: Text('Cancel'),
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
-            ),
+          return Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.text_fields),
+                title: const Text('Perform OCR'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _performOcr();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf),
+                title: const Text('Save as PDF'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _createPdf();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.picture_as_pdf),
+                title: const  Text('Save as PDF with OCR'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _createOcrPdf();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Safe as TIFF'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _createTiff(false);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Save as TIFF 1-bit encoded'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _createTiff(true);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.image),
+                title: const Text('Apply Image Filter on ALL pages'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _filterAllPages();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: const Text('Cancel'),
+                onTap: () => Navigator.pop(context),
+              ),
+            ],
           );
         });
   }
@@ -223,32 +221,30 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            child: Wrap(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(Icons.scanner),
-                  title: Text('Scan Page'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _startDocumentScanning();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.photo_size_select_actual),
-                  title: Text('Import Page'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _importImage();
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.close),
-                  title: Text('Cancel'),
-                  onTap: () => Navigator.pop(context),
-                ),
-              ],
-            ),
+          return Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.scanner),
+                title: const Text('Scan Page'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _startDocumentScanning();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_size_select_actual),
+                title: const Text('Import Page'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _importImage();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.close),
+                title: const Text('Cancel'),
+                onTap: () => Navigator.pop(context),
+              ),
+            ],
           );
         });
   }
@@ -280,7 +276,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   }
 
   void _showCleanupStorageDialog() {
-    Widget text = SimpleDialogOption(
+    Widget text = const SimpleDialogOption(
       child: Text('Delete all images and generated files (PDF, TIFF, etc)?'),
     );
 
@@ -288,20 +284,20 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     final dialog = AlertDialog(
       title: const Text('Delete all'),
       content: text,
-      contentPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.all(0),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             _cleanupStorage();
             Navigator.of(context).pop();
           },
-          child: Text('OK'),
+          child: const Text('OK'),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('CANCEL'),
+          child: const Text('CANCEL'),
         ),
       ],
     );

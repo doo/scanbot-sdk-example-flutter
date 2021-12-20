@@ -1,1 +1,10 @@
-include: package:pedantic/analysis_options.yaml
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    constant_identifier_names: false
+    non_constant_identifier_names: false
+    avoid_print: false
+    prefer_const_constructors_in_immutables: false
+    use_key_in_widget_constructors: false
+    no_logic_in_create_state: false
