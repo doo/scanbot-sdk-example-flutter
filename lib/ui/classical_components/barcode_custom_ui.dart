@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk/classical_components/barcode_camera.dart';
 import 'package:scanbot_sdk/classical_components/barcode_live_detection.dart';
 import 'package:scanbot_sdk/classical_components/barcode_scanner_configuration.dart';
 import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
 import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/common_data.dart';
+
+import '../../main.dart';
+import '../pages_widget.dart';
 
 class BarcodeScannerWidget extends StatefulWidget {
   const BarcodeScannerWidget({Key? key}) : super(key: key);
@@ -20,13 +24,28 @@ class BarcodeScannerWidget extends StatefulWidget {
 class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   final resultStream = StreamController<BarcodeScanningResult>();
   ScanbotCameraController? controller;
-
-  void updateUi(BarcodeScanningResult scanningResult) {
-    resultStream.add(scanningResult);
-  }
-
+  late BarcodeCameraLiveDetector barcodeCameraDetector;
   bool permissionGranted = false;
-  bool flashEnabled = true;
+  bool flashEnabled = false;
+  bool showProgressBar = false;
+
+  _BarcodeScannerWidgetState() {
+    barcodeCameraDetector = BarcodeCameraLiveDetector(
+      // Subscribe to the success result of the scanning end error handling
+      barcodeListener: (scanningResult) {
+        // Use update function to show result overlay on top of the camera or
+        resultStream.add(scanningResult);
+        // this to return result to screen caller
+        // barcodeCameraLiveDetector.pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
+        // Navigator.pop(context, scanningResult);
+
+        print(scanningResult.toJson().toString());
+      },
+      errorListener: (error) {
+        Logger.root.severe(error.toString());
+      },
+    );
+  }
 
   void checkPermission() async {
     // Don't forget to update ios Podfile according to the `permission_handler` official installation guide!! https://pub.dev/packages/permission_handler
@@ -45,21 +64,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final barcodeCameraLiveDetector = BarcodeCameraLiveDetector(
-      // Initial configuration for the scanner itself
-      configuration: BarcodeClassicalScannerConfiguration(
-          barcodeFormats: [BarcodeFormat.QR_CODE],
-          engineMode: EngineMode.NextGen),
-      // Subscribe to the successful result of the scanning end error handling
-      barcodeListener: (scanningResult) {
-        updateUi(scanningResult);
-        print(scanningResult.toJson().toString());
-      },
-      errorListener: (error) {
-        Logger.root.severe(error.toString());
-      },
-    );
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(),
@@ -93,34 +97,45 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       ),
       body: Stack(
         children: <Widget>[
-          // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
+          // Check permission and show some placeholder if its not granted, or show camera otherwise
           permissionGranted
-              ? ScanbotCamera(
-            detector: barcodeCameraLiveDetector,
-            // Here we set initial configurations of the camera
-            configuration: BarcodeWidgetConfiguration(
-                flashEnabled: flashEnabled,
-                finder: FinderConfiguration(
-                    finderLineWidth: 20,
-                    finderVerticalOffset: 100,
-                    finderLineColor: Colors.deepPurpleAccent,
-                    finderBackgroundColor: Colors.amber.withAlpha(150),
-                    finderAspectRatio:
-                    FinderAspectRatio(width: 100, height: 100))),
-            onWidgetReady: (controller) {
-              // Once your camera initialized you are now able to control camera parameters
-              this.controller = controller;
-            },
-          )
+              ? BarcodeScannerCamera(
+                  cameraDetector: barcodeCameraDetector,
+                  // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
+                  configuration: BarcodeCameraConfiguration(
+                      flashEnabled: flashEnabled,
+                      // Initial configuration for the scanner itself
+                      scannerConfiguration: BarcodeClassicScannerConfiguration(
+                        barcodeFormats: [BarcodeFormat.QR_CODE],
+                        engineMode: EngineMode.NextGen,
+                        // barcodeImageGenerationType:
+                        //   BarcodeImageGenerationType.CAPTURED_IMAGE
+                      ),
+                      finder: FinderConfiguration(
+                          finderLineWidth: 20,
+                          finderVerticalOffset: 100,
+                          finderLineColor: Colors.deepPurpleAccent,
+                          finderBackgroundColor: Colors.amber.withAlpha(150),
+                          finderAspectRatio:
+                              FinderAspectRatio(width: 100, height: 100))),
+                  onWidgetReady: (controller) {
+                    // Once your camera initialized you are now able to control camera parameters
+                    this.controller = controller;
+                  },
+                  onShowProgress: (show) {
+                    showProgressBar = show;
+                  },
+                )
               : Container(
-            width: double.infinity,
-            height: double.infinity,
-            alignment: Alignment.center,
-            child: Text(
-              'Permissions not granted',
-              style: TextStyle(fontSize: 16),
-            ),
-          ),
+                  width: double.infinity,
+                  height: double.infinity,
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Permissions not granted',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+
           //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
           StreamBuilder<BarcodeScanningResult>(
               stream: resultStream.stream,
@@ -128,15 +143,63 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                 if (snapshot.data == null) {
                   return Container();
                 }
-                return ListView.builder(
-                    itemCount: snapshot.data?.barcodeItems.length ?? 0,
-                    itemBuilder: (context, index) {
-                      var barcode =
-                          snapshot.data?.barcodeItems[index].text ?? '';
-                      return Container(
-                          color: Colors.white60, child: Text(barcode));
-                    });
+
+                Widget pageView;
+                if (snapshot.data?.barcodeImageURI != null) {
+                  if (shouldInitWithEncryption) {
+                    pageView =
+                        EncryptedPageWidget((snapshot.data?.barcodeImageURI)!);
+                  } else {
+                    pageView = PageWidget((snapshot.data?.barcodeImageURI)!);
+                  }
+                }else {
+                  pageView = Container();
+                }
+
+                return Stack(
+                  children: [
+                    ListView.builder(
+                        itemCount: snapshot.data?.barcodeItems.length ?? 0,
+                        itemBuilder: (context, index) {
+                          var barcode =
+                              snapshot.data?.barcodeItems[index].text ?? '';
+                          return Container(
+                              color: Colors.white60, child: Text(barcode));
+                        }),
+                    (snapshot.data?.barcodeImageURI != null)
+                        ? Container(
+                            width: double.infinity,
+                            height: double.infinity,
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              width: 100,
+                              height: 200,
+                              child: pageView,
+                            ),
+                          )
+                        : Container(),
+                  ],
+                );
               }),
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.bottomCenter,
+            child: FloatingActionButton(onPressed: () {
+              controller?.takeSnapshot();
+            }),
+          ),
+          showProgressBar
+              ? Center(
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 10,
+                    ),
+                  ),
+                )
+              : Container()
         ],
       ),
     );
