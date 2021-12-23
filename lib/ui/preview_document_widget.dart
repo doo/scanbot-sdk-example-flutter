@@ -177,7 +177,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               ),
               ListTile(
                 leading: const Icon(Icons.picture_as_pdf),
-                title: const  Text('Save as PDF with OCR'),
+                title: const Text('Save as PDF with OCR'),
                 onTap: () {
                   Navigator.pop(context);
                   _createOcrPdf();

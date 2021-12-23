@@ -119,7 +119,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MainPageWidget());
+    return MaterialApp(
+      home: MainPageWidget(),
+    );
   }
 }
 
@@ -132,18 +134,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   final PageRepository _pageRepository = PageRepository();
 
   @override
-  void initState() {
-    super.initState();
-    // add some custom init code here
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text('Scanbot SDK Example Flutter',
-            style: TextStyle(inherit: true, color: Colors.black)),
+        backgroundColor: ScanbotRedColor,
+        title: const Text(
+          'Scanbot SDK Example Flutter',
+        ),
       ),
       body: ListView(
         children: <Widget>[
@@ -299,7 +296,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
-        bottomBarBackgroundColor: Colors.blue,
+        bottomBarBackgroundColor: ScanbotRedColor,
         ignoreBadAspectRatio: true,
         multiPageEnabled: true,
         //maxNumberOfPages: 3,
@@ -333,7 +330,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     try {
       var config = BarcodeScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
@@ -359,48 +356,39 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
     try {
       var config = BatchBarcodeScannerConfiguration(
-          barcodeFormatter: (item) async {
-            final random = Random();
-            final randomNumber = random.nextInt(4) + 2;
-            await Future.delayed(Duration(seconds: randomNumber));
-            return BarcodeFormattedData(
-                title: item.barcodeFormat.toString(),
-                subtitle: (item.text ?? '') + 'custom string');
-          },
-          topBarBackgroundColor: Colors.blueAccent,
-          topBarButtonsColor: Colors.white70,
-          cameraOverlayColor: Colors.black26,
-          finderLineColor: Colors.red,
-          finderTextHintColor: Colors.cyanAccent,
-          cancelButtonTitle: 'Cancel',
-          enableCameraButtonTitle: 'camera enable',
-          enableCameraExplanationText: 'explanation text',
-          finderTextHint:
-              'Please align any supported barcode in the frame to scan it.',
-          // clearButtonTitle: "CCCClear",
-          // submitButtonTitle: "Submitt",
-          barcodesCountText: '%d codes',
-          fetchingStateText: 'might be not needed',
-          noBarcodesTitle: 'nothing to see here',
-          barcodesCountTextColor: Colors.purple,
-          finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
-          topBarButtonsInactiveColor: Colors.orange,
-          detailsActionColor: Colors.yellow,
-          detailsBackgroundColor: Colors.amber,
-          detailsPrimaryColor: Colors.yellowAccent,
-          finderLineWidth: 7,
-          successBeepEnabled: true,
-          // flashEnabled: true,
-          orientationLockMode: CameraOrientationMode.PORTRAIT,
-          barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-          cancelButtonHidden: false,
-          //cameraZoomFactor: 0.5
+        barcodeFormatter: (item) async {
+          final random = Random();
+          final randomNumber = random.nextInt(4) + 2;
+          await Future.delayed(Duration(seconds: randomNumber));
+          return BarcodeFormattedData(
+              title: item.barcodeFormat.toString(),
+              subtitle: (item.text ?? '') + 'custom string');
+        },
+        cancelButtonTitle: 'Cancel',
+        enableCameraButtonTitle: 'camera enable',
+        enableCameraExplanationText: 'explanation text',
+        finderTextHint:
+            'Please align any supported barcode in the frame to scan it.',
+        // clearButtonTitle: "CCCClear",
+        // submitButtonTitle: "Submitt",
+        barcodesCountText: '%d codes',
+        fetchingStateText: 'might be not needed',
+        noBarcodesTitle: 'nothing to see here',
+        finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
+        finderLineWidth: 7,
+        successBeepEnabled: true,
+        // flashEnabled: true,
+        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+        cancelButtonHidden: false,
+        //cameraZoomFactor: 0.5
         /*additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
           minimumTextLength: 10,
           maximumTextLength: 11,
           minimum1DBarcodesQuietZone: 10,
-        )*/);
+        )*/
+      );
 
       final result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
       if (result.operationResult == OperationResult.SUCCESS) {
@@ -430,8 +418,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodeFromImageFile(
-            Uri.file(image?.path ?? ''),
-            PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -491,11 +478,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   void showResultTextDialog(result) {
     Widget okButton = TextButton(
       onPressed: () => Navigator.pop(context),
-      child:  const Text('OK'),
+      child: const Text('OK'),
     );
     // set up the AlertDialog
     var alert = AlertDialog(
-      title:  const Text('Result'),
+      title: const Text('Result'),
       content: Text(result),
       actions: [
         okButton,
@@ -553,7 +540,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     HealthInsuranceCardRecognitionResult? result;
     try {
       final config = HealthInsuranceScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
         topBarButtonsColor: Colors.white70,
         // ...
       );
@@ -583,7 +570,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     MrzScanningResult? result;
     try {
       final config = MrzScannerConfiguration(
-        topBarBackgroundColor: Colors.blue,
+        topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
         config.finderAspectRatio = FinderAspectRatio(width: 3, height: 1);

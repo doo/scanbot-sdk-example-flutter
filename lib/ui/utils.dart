@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
+// Colors
+const Color ScanbotRedColor = Color(0xFFc8193c);
+
+// Alert Dialog
 Future<void> showAlertDialog(BuildContext context, String textToShow,
     {String? title}) async {
   Widget text = SimpleDialogOption(
@@ -49,3 +53,5 @@ Future<bool> checkLicenseStatus(BuildContext context) async {
 bool isOperationSuccessful(Result result) {
   return result.operationResult == OperationResult.SUCCESS;
 }
+
+
