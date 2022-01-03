@@ -34,10 +34,12 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
         // Use update function to show result overlay on top of the camera or
-        resultStream.add(scanningResult);
+        //resultStream.add(scanningResult);
+
         // this to return result to screen caller
-        // barcodeCameraLiveDetector.pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        // Navigator.pop(context, scanningResult);
+        barcodeCameraDetector
+            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
+        Navigator.pop(context, scanningResult);
 
         print(scanningResult.toJson().toString());
       },
@@ -103,21 +105,38 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   cameraDetector: barcodeCameraDetector,
                   // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
                   configuration: BarcodeCameraConfiguration(
-                      flashEnabled: flashEnabled,
-                      // Initial configuration for the scanner itself
-                      scannerConfiguration: BarcodeClassicScannerConfiguration(
-                        barcodeFormats: [BarcodeFormat.QR_CODE],
-                        engineMode: EngineMode.NextGen,
-                        // barcodeImageGenerationType:
-                        //   BarcodeImageGenerationType.CAPTURED_IMAGE
-                      ),
-                      finder: FinderConfiguration(
-                          finderLineWidth: 20,
-                          finderVerticalOffset: 100,
-                          finderLineColor: Colors.deepPurpleAccent,
-                          finderBackgroundColor: Colors.amber.withAlpha(150),
-                          finderAspectRatio:
-                              FinderAspectRatio(width: 100, height: 100))),
+                    flashEnabled: flashEnabled,
+                    // Initial configuration for the scanner itself
+                    scannerConfiguration: BarcodeClassicScannerConfiguration(
+                      barcodeFormats: [BarcodeFormat.QR_CODE],
+                      engineMode: EngineMode.NextGen,
+                      // barcodeImageGenerationType:
+                      //   BarcodeImageGenerationType.CAPTURED_IMAGE
+                    ),
+                    finder: FinderConfiguration(
+                        topWidget: Center(
+                            child: Text(
+                          'Top hint text in centre',
+                          style: TextStyle(color: Colors.white),
+                        )),
+                        bottomWidget: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              'This is text in finder bottom TopCenter  part',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 5,
+                              color: Colors.deepPurple,
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20))),
+                        backgroundColor: Colors.amber.withAlpha(150),
+                        finderVerticalOffset: 0,
+                        finderAspectRatio:
+                            FinderAspectRatio(width: 100, height: 100)),
+                  ),
                   onWidgetReady: (controller) {
                     // Once your camera initialized you are now able to control camera parameters
                     this.controller = controller;
@@ -152,7 +171,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   } else {
                     pageView = PageWidget((snapshot.data?.barcodeImageURI)!);
                   }
-                }else {
+                } else {
                   pageView = Container();
                 }
 

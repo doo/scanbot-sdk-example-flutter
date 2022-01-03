@@ -365,9 +365,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    await Navigator.of(context).push(
+    var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => BarcodeScannerWidget()),
     );
+    if(result is BarcodeScanningResult){
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
   }
 
   Future<void> _startBatchBarcodeScanner() async {
