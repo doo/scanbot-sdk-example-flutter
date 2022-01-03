@@ -21,7 +21,7 @@ class PageWidget extends StatelessWidget {
     //    width: double.infinity,
     // );
     final image = Image.memory(bytes);
-    return Container(
+    return SizedBox(
       height: double.infinity,
       width: double.infinity,
       child: Center(child: image),
@@ -46,7 +46,7 @@ class EncryptedPageWidget extends StatelessWidget {
     //    width: double.infinity,
     // );
     final imageData = ScanbotEncryptionHandler.getDecryptedDataFromFile(path);
-    return Container(
+    return SizedBox(
       height: double.infinity,
       width: double.infinity,
       child: FutureBuilder(

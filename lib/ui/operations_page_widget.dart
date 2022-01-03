@@ -6,7 +6,6 @@ import 'package:scanbot_sdk/common_data.dart' as sdk;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 import '../main.dart';
@@ -51,7 +50,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
+        iconTheme: const IconThemeData(
           color: Colors.black, //change your color here
         ),
         backgroundColor: Colors.white,
@@ -61,12 +60,12 @@ class _PageOperationsState extends State<PageOperations> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 20.0),
+            padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
                 _estimateBlurriness(_page);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.image_search,
                 size: 26.0,
               ),
@@ -78,7 +77,7 @@ class _PageOperationsState extends State<PageOperations> {
         children: <Widget>[
           Expanded(
               child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
                   child: Center(child: pageView))),
           BottomAppBar(
             child: Row(
@@ -91,9 +90,9 @@ class _PageOperationsState extends State<PageOperations> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.crop),
+                      const Icon(Icons.crop),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'Crop & Rotate',
                         style: TextStyle(inherit: true, color: Colors.black),
                       ),
@@ -106,9 +105,9 @@ class _PageOperationsState extends State<PageOperations> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.filter),
+                      const Icon(Icons.filter),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'Filter',
                         style: TextStyle(inherit: true, color: Colors.black),
                       ),
@@ -121,9 +120,9 @@ class _PageOperationsState extends State<PageOperations> {
                   },
                   child: Row(
                     children: <Widget>[
-                      Icon(Icons.delete, color: Colors.red),
+                      const Icon(Icons.delete, color: Colors.red),
                       Container(width: 4),
-                      Text(
+                      const Text(
                         'Delete',
                         style: TextStyle(inherit: true, color: Colors.red),
                       ),
@@ -147,7 +146,6 @@ class _PageOperationsState extends State<PageOperations> {
       print(e);
     }
   }
-
 
   Future<void> _showFilterPage(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {

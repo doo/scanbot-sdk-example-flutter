@@ -23,10 +23,10 @@ class MultiPageFiltering extends StatelessWidget {
               onTap: () {
                 filterPreviewWidget.applyFilter();
               },
-              child: Center(
+              child: const Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
                     'APPLY',
                     style: TextStyle(
                       inherit: true,
@@ -37,7 +37,7 @@ class MultiPageFiltering extends StatelessWidget {
               ),
             ),
           ],
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.black, //change your color here
           ),
           backgroundColor: Colors.white,
@@ -85,8 +85,8 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
     return ListView(
       shrinkWrap: true,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(16.0),
+        const Padding(
+          padding: EdgeInsets.all(16.0),
           child: Text('Select filter',
               style: TextStyle(
                   inherit: true,
@@ -110,7 +110,7 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
   Text titleFromFilterType(ImageFilterType filterType) {
     return Text(
       filterType.toString().replaceAll('ImageFilterType.', ''),
-      style: TextStyle(
+      style: const TextStyle(
         inherit: true,
         color: Colors.black,
         fontStyle: FontStyle.normal,
@@ -142,9 +142,9 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
 
     try {
       final pages = await Future.wait(futures);
-      pages.forEach((page) {
+      for (var page in pages) {
         _pageRepository.updatePage(page);
-      });
+      }
     } catch (e) {
       print(e);
     }
