@@ -17,6 +17,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
@@ -190,6 +191,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
+            },
+          ),
+          MenuItemWidget(
+            'Detect Barcodes from Multiple Still Images',
+            onTap: () {
+              _detectBarcodesOnImages();
             },
           ),
           MenuItemWidget(
@@ -437,6 +444,49 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             MaterialPageRoute(
                 builder: (context) => BarcodesResultPreviewWidget(result)),
           );
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  /// Detect barcodes from multiple still images
+  Future<void> _detectBarcodesOnImages() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      List<Uri> lstUris = List.empty(growable: true);
+      var lstImages = await ImagePicker().pickMultiImage(
+          maxWidth: double.infinity,
+          maxHeight: double.infinity,
+          imageQuality: 75);
+      if (lstImages == null || lstImages.isEmpty) {
+        return;
+      } else {
+        for (var image in lstImages) {
+          lstUris.add(Uri.file(image?.path ?? ''));
+        }
+
+        ///before processing image sdk need storage read permission
+        final permissions =
+        await [Permission.storage, Permission.photos].request();
+        if (permissions[Permission.storage] ==
+            PermissionStatus.granted || //android
+            permissions[Permission.photos] == PermissionStatus.granted) {
+          //ios
+          var result = await ScanbotSdk.detectBarcodesOnImages(
+              lstUris,
+              PredefinedBarcodes.allBarcodeTypes());
+          if (result.operationResult == OperationResult.SUCCESS) {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MultiImageBarcodesResultPreviewWidget(
+                          result.barcodeResults)),
+            );
+          }
         }
       }
     } catch (e) {
