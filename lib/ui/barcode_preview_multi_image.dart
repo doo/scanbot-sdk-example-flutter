@@ -15,74 +15,75 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+        appBar: AppBar(
+          iconTheme: const IconThemeData(),
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
+            ),
+          ),
+          backgroundColor: Colors.white,
+          title: const Text(
+            'Scanned barcodes',
+            style: TextStyle(
+              inherit: true,
+              color: Colors.black,
+            ),
           ),
         ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Scanned barcodes',
-          style: TextStyle(
-            inherit: true,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: ConstrainedBox(
-    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-    child: ListView.builder(
-          shrinkWrap: true,
-          physics: const ScrollPhysics(),
-          itemCount: lstPreviewItems.length,
-          itemBuilder: (context, positionImages) {
-            return SizedBox(
-              height: 200,
-              width: 200,
-              child: Row(children: [
-                getImageContainer(
-                    lstPreviewItems[positionImages].barcodeImageURI),
-                   ListView.builder(
-                     itemBuilder: (context, positionBarcodes) {
-                       return Text(lstPreviewItems[positionImages].barcodeItems[positionBarcodes].text ?? "No barcode found.");
-                     },
-                     itemCount:
-                         lstPreviewItems[positionImages].barcodeItems.length,
-                   )
-              ]),
-            );
-          }),
-      )
+        body: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: MediaQuery
+              .of(context)
+              .size
+              .width, maxHeight: MediaQuery
+              .of(context)
+              .size
+              .height),
+          child: ListView.builder(
+              // shrinkWrap: true,
+              // physics: const ScrollPhysics(),
+              itemCount: lstPreviewItems.length,
+              itemBuilder: (context, positionImages) {
+                return Column(children: [
+                  getImageContainer(
+                      lstPreviewItems[positionImages].barcodeImageURI),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: MediaQuery
+                          .of(context)
+                          .size
+                          .width, maxHeight: 70),
+                      child:
+                      ListView.builder(
+                        itemCount: lstPreviewItems[positionImages]
+                            .barcodeItems.length,
+                        itemBuilder: (context, positionBarcodes) {
+                          return Text(lstPreviewItems[positionImages]
+                                .barcodeItems[positionBarcodes].text ??
+                                "No barcode found.");
+                        },
+                      )
+                  )
+                ]);
+              }),
+        )
     );
   }
-
-
 
   Widget getImageContainer(Uri? imageUri) {
     if (imageUri == null) {
       return Container();
     }
-
     var file = File.fromUri(imageUri);
-    if (file.existsSync() == true) {
-      if (shouldInitWithEncryption) {
-        return SizedBox(
-          height: 200,
-          child: EncryptedPageWidget(imageUri),
-        );
-      } else {
-        return SizedBox(
-          height: 200,
-          child: PageWidget(imageUri),
-        );
-      }
-    }
-    return Container();
+    var bytes = file.readAsBytesSync();
+    final image = Image.memory(bytes);
+    return SizedBox(
+      height: 250,
+      width: 250,
+      child: Center(child: image),
+    );
   }
 }
