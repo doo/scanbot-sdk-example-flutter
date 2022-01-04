@@ -1,16 +1,12 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
-
-import '../main.dart';
-import 'barcode_preview.dart';
 
 class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
-  final List<BarcodeScanningResult> lstPreviewItems;
+  final List<BarcodeScanningResult> previewItems;
 
-  MultiImageBarcodesResultPreviewWidget(this.lstPreviewItems);
+  /// constructor
+  MultiImageBarcodesResultPreviewWidget(this.previewItems);
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +42,11 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
           child: ListView.builder(
               // shrinkWrap: true,
               // physics: const ScrollPhysics(),
-              itemCount: lstPreviewItems.length,
+              itemCount: previewItems.length,
               itemBuilder: (context, positionImages) {
                 return Column(children: [
                   getImageContainer(
-                      lstPreviewItems[positionImages].barcodeImageURI),
+                      previewItems[positionImages].barcodeImageURI),
                   ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: MediaQuery
                           .of(context)
@@ -58,12 +54,12 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
                           .width, maxHeight: 70),
                       child:
                       ListView.builder(
-                        itemCount: lstPreviewItems[positionImages]
+                        itemCount: previewItems[positionImages]
                             .barcodeItems.length,
                         itemBuilder: (context, positionBarcodes) {
-                          return Text(lstPreviewItems[positionImages]
+                          return Padding(padding: const EdgeInsets.all(5), child: Text(previewItems[positionImages]
                                 .barcodeItems[positionBarcodes].text ??
-                                "No barcode found.");
+                                "No barcode found.", textAlign: TextAlign.center));
                         },
                       )
                   )
@@ -73,6 +69,7 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
     );
   }
 
+  /// returns the image container widget with mentioned size.
   Widget getImageContainer(Uri? imageUri) {
     if (imageUri == null) {
       return Container();

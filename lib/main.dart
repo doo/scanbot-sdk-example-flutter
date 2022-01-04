@@ -457,7 +457,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      List<Uri> lstUris = List.empty(growable: true);
+      List<Uri> uris = List.empty(growable: true);
       var lstImages = await ImagePicker().pickMultiImage(
           maxWidth: double.infinity,
           maxHeight: double.infinity,
@@ -466,7 +466,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         return;
       } else {
         for (var image in lstImages) {
-          lstUris.add(Uri.file(image?.path ?? ''));
+          uris.add(Uri.file(image?.path ?? ''));
         }
 
         ///before processing image sdk need storage read permission
@@ -477,7 +477,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             permissions[Permission.photos] == PermissionStatus.granted) {
           //ios
           var result = await ScanbotSdk.detectBarcodesOnImages(
-              lstUris,
+              uris,
               PredefinedBarcodes.allBarcodeTypes());
           if (result.operationResult == OperationResult.SUCCESS) {
             await Navigator.of(context).push(
