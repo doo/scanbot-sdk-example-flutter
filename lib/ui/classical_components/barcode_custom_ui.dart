@@ -114,28 +114,40 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                       //   BarcodeImageGenerationType.CAPTURED_IMAGE
                     ),
                     finder: FinderConfiguration(
-                        topWidget: Center(
+                        topWidget: const Center(
                             child: Text(
                           'Top hint text in centre',
                           style: TextStyle(color: Colors.white),
                         )),
-                        bottomWidget: Align(
+                        bottomWidget: const Align(
                             alignment: Alignment.topCenter,
                             child: Text(
                               'This is text in finder bottom TopCenter  part',
                               style: TextStyle(color: Colors.white),
                             )),
+                        widget: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 5,
+                                  color: Colors.lightBlue.withAlpha(155),
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                          ),
+                        ),
                         decoration: BoxDecoration(
                             border: Border.all(
                               width: 5,
                               color: Colors.deepPurple,
                             ),
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
+                                const BorderRadius.all(Radius.circular(20))),
                         backgroundColor: Colors.amber.withAlpha(150),
-                        finderVerticalOffset: 0,
+                        finderVerticalOffset: -100,
                         finderAspectRatio:
-                            FinderAspectRatio(width: 100, height: 100)),
+                            const FinderAspectRatio(width: 100, height: 100)),
                   ),
                   onWidgetReady: (controller) {
                     // Once your camera initialized you are now able to control camera parameters
