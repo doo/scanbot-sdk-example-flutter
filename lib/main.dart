@@ -484,7 +484,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               MaterialPageRoute(
                   builder: (context) =>
                       MultiImageBarcodesResultPreviewWidget(
-                          result.barcodeResults)),
+                          result.barcodeResults))
             );
           }
         }
