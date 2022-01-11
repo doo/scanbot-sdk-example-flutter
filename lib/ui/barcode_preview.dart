@@ -73,7 +73,6 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
   }
 }
 
-
 class BarcodeItemWidget extends StatelessWidget {
   final BarcodeItem item;
 
@@ -89,7 +88,7 @@ class BarcodeItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN',
-              style:  const TextStyle(
+              style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
               ),

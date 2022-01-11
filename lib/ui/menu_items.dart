@@ -18,8 +18,8 @@ class MenuItemWidget extends StatelessWidget {
       trailing: endIcon != null ? Icon(endIcon) : null,
       title: Text(
         title,
-        style: const
-        TextStyle(inherit: true, fontSize: 16.0, color: Colors.black87),
+        style: const TextStyle(
+            inherit: true, fontSize: 16.0, color: Colors.black87),
       ),
       onTap: onTap,
     );
@@ -52,7 +52,8 @@ class TitleItemWidget extends StatelessWidget {
       height: 52,
       child: Text(
         title.toUpperCase(),
-        style: const TextStyle(inherit: true, fontSize: 16.0, color: Colors.black),
+        style:
+            const TextStyle(inherit: true, fontSize: 16.0, color: Colors.black),
       ),
     );
   }
