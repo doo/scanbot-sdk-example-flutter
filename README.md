@@ -31,7 +31,7 @@ flutter pub get
 Connect a mobile device via USB and run the app.
 
 **Android:**
-
+ 
 ```
 flutter run -d <DEVICE_ID>
 ```
