@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
@@ -11,12 +12,14 @@ import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_models.dart';
+import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
@@ -149,6 +152,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan Documents',
             onTap: () {
               _startDocumentScanning();
+            },
+          ),
+          MenuItemWidget(
+            'Generic Document Scanner',
+            onTap: () {
+              _startGenericDocumentScanner();
             },
           ),
           MenuItemWidget(
@@ -320,6 +329,29 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         await _pageRepository.addPages(result.pages);
         await _gotoImagesView();
       }
+    }
+  }
+
+  Future<void> _startGenericDocumentScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    GenericDocumentRecognizerResult? result;
+    try {
+      var config = GenericDocumentRecognizerConfiguration(
+        acceptedDocumentTypes: [
+          RootDocumentType.DeDriverLicenseFront,
+          RootDocumentType.DeDriverLicenseBack,
+          RootDocumentType.DePassport,
+          RootDocumentType.DeIdCardBack,
+          RootDocumentType.DeIdCardFront,
+        ],
+      );
+      result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
+      _showGenericDocumentRecognizerResult(result);
+    } catch (e) {
+      Logger.root.severe(e);
     }
   }
 
@@ -519,6 +551,19 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       await _showBarcodeScanningResult(result);
     } catch (e) {
       Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _showGenericDocumentRecognizerResult(
+      final GenericDocumentRecognizerResult result) async {
+    if (result.status == Status.OK) {
+      print(result.fields);
+      inspect(result);
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => GenericDocumentResultPreview(result),
+        ),
+      );
     }
   }
 

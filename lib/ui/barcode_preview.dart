@@ -50,28 +50,30 @@ class BarcodesResultPreviewWidget extends StatelessWidget {
     );
   }
 
-  Widget getImageContainer(Uri? imageUri) {
-    if (imageUri == null) {
-      return Container();
-    }
 
-    var file = File.fromUri(imageUri);
-    if (file.existsSync() == true) {
-      if (shouldInitWithEncryption) {
-        return SizedBox(
-          height: 200,
-          child: EncryptedPageWidget(imageUri),
-        );
-      } else {
-        return SizedBox(
-          height: 200,
-          child: PageWidget(imageUri),
-        );
-      }
-    }
+}
+Widget getImageContainer(Uri? imageUri) {
+  if (imageUri == null) {
     return Container();
   }
+
+  var file = File.fromUri(imageUri);
+  if (file.existsSync() == true) {
+    if (shouldInitWithEncryption) {
+      return SizedBox(
+        height: 200,
+        child: EncryptedPageWidget(imageUri),
+      );
+    } else {
+      return SizedBox(
+        height: 200,
+        child: PageWidget(imageUri),
+      );
+    }
+  }
+  return Container();
 }
+
 
 class BarcodeItemWidget extends StatelessWidget {
   final BarcodeItem item;
