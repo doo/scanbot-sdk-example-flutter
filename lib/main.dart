@@ -466,7 +466,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         return;
       } else {
         for (var image in lstImages) {
-          uris.add(Uri.file(image?.path ?? ''));
+          uris.add(Uri.file(image.path));
         }
 
         ///before processing image sdk need storage read permission
