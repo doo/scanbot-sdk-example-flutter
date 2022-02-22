@@ -78,6 +78,8 @@ class GMImagePickerHelper : NSObject, GMImagePickerControllerDelegate {
         picker.displaySelectionInfoToolbar = true
         picker.displayAlbumsNumberOfAssets = true
         picker.modalPresentationStyle = .fullScreen
+        // below line is added to avoid/fix a library specific crash
+        picker.navigationController?.toolbar?.addSubview(UIView())
         
         if let viewController = (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController {
             viewController.present(picker, animated: true, completion: nil)
