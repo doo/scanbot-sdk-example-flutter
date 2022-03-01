@@ -69,7 +69,6 @@ class DeDriverLicenseResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        getImageContainer(result.photoImageUri),
         GenericDocumentFieldView(
           title: "Birth Date",
           genericDocumentField: result.birthDate,
@@ -121,7 +120,6 @@ class DeIdCardResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        getImageContainer(result.photoImageUri),
         GenericDocumentFieldView(
           title: "Birth Date",
           genericDocumentField: result.birthDate,
@@ -200,7 +198,6 @@ class DePassportResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        getImageContainer(result.photoImageUri),
         GenericDocumentFieldView(
           title: "Birth Date",
           genericDocumentField: result.birthDate,
@@ -294,7 +291,7 @@ class GenericDocumentFieldView extends StatelessWidget {
                       genericDocumentField?.text ?? "",
                     ),
                     Text(
-                      "(Confidence: ${(genericDocumentField?.confidence?? 1) *100}% )",
+                      "(Confidence: ${((genericDocumentField?.confidence?? 1) *100).toInt()}% )",
                     ),
                   ],
                 ),
