@@ -495,7 +495,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var uris = List<Uri>.empty(growable: true);
     if (Platform.isIOS && await PlatformHelper.versionLessThanIOSFourteen()) {
       var result = await PlatformHelper.pickPhotosAsync();
-      print("The main method is executed");
       if (result?.uris?.isNotEmpty ?? false) {
         for (var path in result?.uris ?? List<String>.empty(growable: false)) {
           uris.add(Uri.file(path));

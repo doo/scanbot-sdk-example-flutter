@@ -25,7 +25,6 @@ class GMImagePickerHelper : NSObject, GMImagePickerControllerDelegate {
     
     /** Finish selecting photos from Photos App */
     public func assetsPickerController(_ picker: GMImagePickerController!, didFinishPickingAssets assets: [Any]!) {
-        print("photos selected")
         // background thread
         DispatchQueue.global(qos: .background).async {
             if assets is [PHAsset] {
@@ -55,8 +54,6 @@ class GMImagePickerHelper : NSObject, GMImagePickerControllerDelegate {
             imagePickerChannel.setMethodCallHandler({
                 (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
                 DispatchQueue.main.async {
-                    
-                    print("This method is called")
                     if call.method == "pickImagesFromPhotosApp" {
                         self.result = result
                         self.pickImagesFromPhotosApp()

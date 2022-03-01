@@ -14,7 +14,6 @@ class PlatformHelper {
       var result = await _imagePickerOldVersionChannel.invokeMethod(
           'pickImagesFromPhotosApp');
       var resultData = ImagePickerResponse.fromJson(jsonDecode(result));
-      print("Result is:");
       return resultData;
     } catch (e) {
       return null;
@@ -30,7 +29,6 @@ class PlatformHelper {
     try {
       var result = await _imagePickerOldVersionChannel.invokeMethod(
           'versionLessThanIOSFourteen');
-      print(result.toString());
       if (result.toString() == "true") {
         isVersionLess = true;
       }
