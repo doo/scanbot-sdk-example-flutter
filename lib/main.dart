@@ -38,7 +38,21 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.sdk.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY = '';
+const SCANBOT_SDK_LICENSE_KEY = "dPtGiMU2m+f/akyulOtkc9eXnx7A8S" +
+"AbK4j6uc3XbiwiKkB6b5EpOweF+NC/" +
+"ufTroujKcvDh+jKOXpxNxKJ5Le+WNI" +
+"DeJO6IFs4fI4VezAcf5nS9eyquNz21" +
+"JkTaxW060dOBhybW4XSj/GJ24MRxlw" +
+"JW2yyy5yZcMo0HzeK2P4a8sD9w7F++" +
+"SnOSmD4Z0Gks694ZsVqVOfh2xb6gbw" +
+"OVXWd0WzjedmdBjU+CnwyWzmVUZ7xX" +
+"ogHg2HHnh1InKAgf6jjcf8NBpL/7NN" +
+"cwGZhd0Nctch7zwzvmDrnPr7O76B/D" +
+"sJklqL/jIjqTJiBYq6BuL3m+Re1AA6" +
+"wax8iFOfJ97g==\nU2NhbmJvdFNESw" +
+"ppby5zY2FuYm90LmV4YW1wbGUuc2Rr" +
+"LmZsdXR0ZXIKMTY0ODI1Mjc5OQo4Mz" +
+"g4NjA3CjM=\n";
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
@@ -347,6 +361,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           RootDocumentType.DeIdCardBack,
           RootDocumentType.DeIdCardFront,
         ],
+        cameraModule: CameraModule.BACK
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
