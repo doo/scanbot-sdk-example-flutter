@@ -361,7 +361,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           RootDocumentType.DeIdCardBack,
           RootDocumentType.DeIdCardFront,
         ],
-        cameraModule: CameraModule.BACK
+        cameraModule: CameraModule.FRONT
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
@@ -464,7 +464,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodeFromImageFile(
+        var result = await ScanbotSdk.detectBarcodesOnImage(
             Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
