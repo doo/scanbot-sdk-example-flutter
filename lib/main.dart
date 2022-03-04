@@ -268,8 +268,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _importImage() async {
     try {
       final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await _createPage(Uri.file(image?.path ?? ''));
-      await _gotoImagesView();
+      if (image != null) {
+        await _createPage(Uri.file(image.path));
+        await _gotoImagesView();
+      }
     } catch (e) {
       Logger.root.severe(e);
     }
@@ -364,16 +366,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     GenericDocumentRecognizerResult? result;
     try {
-      var config = GenericDocumentRecognizerConfiguration(
-          acceptedDocumentTypes: [
-            RootDocumentType.DeDriverLicenseFront,
-            RootDocumentType.DeDriverLicenseBack,
-            RootDocumentType.DePassport,
-            RootDocumentType.DeIdCardBack,
-            RootDocumentType.DeIdCardFront,
-          ],
-          cameraModule: CameraModule.FRONT
-      );
+      var config =
+          GenericDocumentRecognizerConfiguration(acceptedDocumentTypes: [
+        RootDocumentType.DeDriverLicenseFront,
+        RootDocumentType.DeDriverLicenseBack,
+        RootDocumentType.DePassport,
+        RootDocumentType.DeIdCardBack,
+        RootDocumentType.DeIdCardFront,
+      ], cameraModule: CameraModule.FRONT);
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
     } catch (e) {
@@ -441,7 +441,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
       ///before processing image sdk need storage read permission
-
       final permissions =
           await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
@@ -450,6 +449,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
             Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
+
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
