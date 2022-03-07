@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/common_data.dart';
@@ -14,12 +15,12 @@ import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_models.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-
+import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
@@ -152,6 +153,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            'Generic Document Scanner',
+            onTap: () {
+              _startGenericDocumentScanner();
+            },
+          ),
+          MenuItemWidget(
             'Import Image',
             onTap: () {
               _importImage();
@@ -261,8 +268,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _importImage() async {
     try {
       final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await _createPage(Uri.file(image?.path ?? ''));
-      await _gotoImagesView();
+      if (image != null) {
+        await _createPage(Uri.file(image.path));
+        await _gotoImagesView();
+      }
     } catch (e) {
       Logger.root.severe(e);
     }
@@ -350,6 +359,29 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  Future<void> _startGenericDocumentScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    GenericDocumentRecognizerResult? result;
+    try {
+      var config = GenericDocumentRecognizerConfiguration(
+        acceptedDocumentTypes: [
+          RootDocumentType.DeDriverLicenseFront,
+          RootDocumentType.DeDriverLicenseBack,
+          RootDocumentType.DePassport,
+          RootDocumentType.DeIdCardBack,
+          RootDocumentType.DeIdCardFront,
+        ],
+      );
+      result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
+      _showGenericDocumentRecognizerResult(result);
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
   Future<void> _startBatchBarcodeScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
@@ -410,15 +442,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var image = await ImagePicker().getImage(source: ImageSource.gallery);
 
       ///before processing image sdk need storage read permission
-
       final permissions =
           await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodeFromImageFile(
+        var result = await ScanbotSdk.detectBarcodesOnImage(
             Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
+
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -528,6 +560,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       await Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
+  }
+
+  Future<void> _showGenericDocumentRecognizerResult(
+      final GenericDocumentRecognizerResult result) async {
+    if (result.status == Status.OK) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => GenericDocumentResultPreview(result),
+        ),
       );
     }
   }
