@@ -366,14 +366,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     GenericDocumentRecognizerResult? result;
     try {
-      var config =
-          GenericDocumentRecognizerConfiguration(acceptedDocumentTypes: [
-        RootDocumentType.DeDriverLicenseFront,
-        RootDocumentType.DeDriverLicenseBack,
-        RootDocumentType.DePassport,
-        RootDocumentType.DeIdCardBack,
-        RootDocumentType.DeIdCardFront,
-      ], cameraModule: CameraModule.FRONT);
+      var config = GenericDocumentRecognizerConfiguration(
+        acceptedDocumentTypes: [
+          RootDocumentType.DeDriverLicenseFront,
+          RootDocumentType.DeDriverLicenseBack,
+          RootDocumentType.DePassport,
+          RootDocumentType.DeIdCardBack,
+          RootDocumentType.DeIdCardFront,
+        ],
+      );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
     } catch (e) {
