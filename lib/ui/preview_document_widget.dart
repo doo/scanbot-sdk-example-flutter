@@ -177,7 +177,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               ),
               ListTile(
                 leading: const Icon(Icons.picture_as_pdf),
-                title: const  Text('Save as PDF with OCR'),
+                title: const Text('Save as PDF with OCR'),
                 onTap: () {
                   Navigator.pop(context);
                   _createOcrPdf();
@@ -375,7 +375,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
 
     var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
+        type: ProgressDialogType.Normal, isDismissible: true);
     dialog.style(message: 'Processing ...');
     dialog.show();
     try {
