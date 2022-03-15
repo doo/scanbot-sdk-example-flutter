@@ -259,7 +259,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/GMImagePicker/GMImagePicker.framework",
+				"${BUILT_PRODUCTS_DIR}/GMImagePicker-framework/GMImagePicker.framework",
 				"${BUILT_PRODUCTS_DIR}/image_picker/image_picker.framework",
 				"${BUILT_PRODUCTS_DIR}/path_provider_ios/path_provider_ios.framework",
 				"${BUILT_PRODUCTS_DIR}/scanbot_sdk/scanbot_sdk.framework",
