@@ -17,13 +17,17 @@ import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
-import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
+import 'package:scanbot_sdk_example_flutter/utility/platform_helper.dart';
+
+import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
+import 'dart:async';
 
 /// true - if you need to enable encryption for example app
 bool shouldInitWithEncryption = false;
@@ -133,7 +137,6 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   final PageRepository _pageRepository = PageRepository();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,6 +197,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
+            },
+          ),
+          MenuItemWidget(
+            'Detect Barcodes from Multiple Still Images',
+            onTap: () {
+              _detectBarcodesOnImages();
             },
           ),
           MenuItemWidget(
@@ -373,6 +382,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           RootDocumentType.DePassport,
           RootDocumentType.DeIdCardBack,
           RootDocumentType.DeIdCardFront,
+
         ],
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
@@ -449,8 +459,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
-
+            Uri.file(image?.path ?? ''),
+            PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -461,6 +471,69 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
+  }
+
+  /// Detect barcodes from multiple still images
+  Future<void> _detectBarcodesOnImages() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      List<Uri> uris = List.empty(growable: true);
+      uris = await pickImagesWithUri();
+      if (uris.isEmpty) {
+        return;
+      }
+
+      ///before processing image sdk need storage read permission
+      final permissions =
+      await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] ==
+          PermissionStatus.granted || //android
+          permissions[Permission.photos] == PermissionStatus.granted) {
+        //ios
+        var result = await ScanbotSdk.detectBarcodesOnImages(
+            uris,
+            PredefinedBarcodes.allBarcodeTypes());
+        if (result.operationResult == OperationResult.SUCCESS) {
+          await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MultiImageBarcodesResultPreviewWidget(
+                          result.barcodeResults))
+          );
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  /// pick images from gallery and get the uris list
+  Future<List<Uri>> pickImagesWithUri() async {
+    var uris = List<Uri>.empty(growable: true);
+    if (Platform.isIOS && await PlatformHelper.versionLessThanIOSFourteen()) {
+      var result = await PlatformHelper.pickPhotosAsync();
+      if (result?.uris?.isNotEmpty ?? false) {
+        for (var path in result?.uris ?? List<String>.empty(growable: false)) {
+          uris.add(Uri.file(path));
+        }
+      }
+    } else {
+      var lstImages = await ImagePicker().pickMultiImage(
+          maxWidth: double.infinity,
+          maxHeight: double.infinity,
+          imageQuality: 75);
+      if (lstImages == null || lstImages.isEmpty) {
+        return uris;
+      } else {
+        for (var image in lstImages) {
+          uris.add(Uri.file(image.path));
+        }
+      }
+    }
+    return uris;
   }
 
   Future<void> startLicensePlateScanner() async {
