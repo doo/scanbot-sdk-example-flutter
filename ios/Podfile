@@ -27,6 +27,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+pod 'GMImagePicker', '~> 0.0.2'
+
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
