@@ -375,7 +375,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
 
     var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
+        type: ProgressDialogType.Normal, isDismissible: true);
     dialog.style(message: 'Processing ...');
     dialog.show();
     try {
