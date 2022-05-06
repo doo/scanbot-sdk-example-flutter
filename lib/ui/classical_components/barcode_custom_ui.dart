@@ -10,6 +10,7 @@ import 'package:scanbot_sdk/classical_components/barcode_scanner_configuration.d
 import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
 import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../main.dart';
 import '../pages_widget.dart';
@@ -26,9 +27,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   ScanbotCameraController? controller;
   late BarcodeCameraLiveDetector barcodeCameraDetector;
   bool permissionGranted = false;
-  bool flashEnabled = false;
+  bool flashEnabled = true;
   bool showProgressBar = false;
-
+  bool liceneIsActive = true;
   _BarcodeScannerWidgetState() {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
@@ -44,6 +45,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         print(scanningResult.toJson().toString());
       },
       errorListener: (error) {
+        setState(() {
+          liceneIsActive = false;
+        });
         Logger.root.severe(error.toString());
       },
     );
@@ -68,12 +72,12 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(),
+        iconTheme: const IconThemeData(),
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
@@ -100,7 +104,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       body: Stack(
         children: <Widget>[
           // Check permission and show some placeholder if its not granted, or show camera otherwise
-          permissionGranted
+
+          liceneIsActive ? permissionGranted
               ? BarcodeScannerCamera(
                   cameraDetector: barcodeCameraDetector,
                   // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
@@ -114,6 +119,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                       //   BarcodeImageGenerationType.CAPTURED_IMAGE
                     ),
                     finder: FinderConfiguration(
+                        onFinderRectChange: (left, top, right, bottom) {
+                          // aling some text view to the finder dynamically by calculating its position from finder changes
+                        },
                         topWidget: const Center(
                             child: Text(
                           'Top hint text in centre',
@@ -145,9 +153,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20))),
                         backgroundColor: Colors.amber.withAlpha(150),
-                        finderVerticalOffset: -100,
+                        finderVerticalOffset: 150,
                         finderAspectRatio:
-                            const FinderAspectRatio(width: 100, height: 100)),
+                            const FinderAspectRatio(width: 3, height: 2)),
                   ),
                   onWidgetReady: (controller) {
                     // Once your camera initialized you are now able to control camera parameters
@@ -161,11 +169,19 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   width: double.infinity,
                   height: double.infinity,
                   alignment: Alignment.center,
-                  child: Text(
+                  child: const Text(
                     'Permissions not granted',
                     style: TextStyle(fontSize: 16),
                   ),
-                ),
+                ) :  Container(
+            width: double.infinity,
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: const Text(
+              'License is No more active',
+              style: TextStyle(fontSize: 16),
+            ),
+          )  ,
 
           //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
           StreamBuilder<BarcodeScanningResult>(
@@ -212,14 +228,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   ],
                 );
               }),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            alignment: Alignment.bottomCenter,
-            child: FloatingActionButton(onPressed: () {
-              controller?.takeSnapshot();
-            }),
-          ),
           showProgressBar
               ? Center(
                   child: Container(
