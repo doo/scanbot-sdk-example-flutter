@@ -44,6 +44,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
         print(scanningResult.toJson().toString());
       },
+      //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
         setState(() {
           liceneIsActive = false;
@@ -115,8 +116,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                     scannerConfiguration: BarcodeClassicScannerConfiguration(
                       barcodeFormats: [BarcodeFormat.QR_CODE],
                       engineMode: EngineMode.NextGen,
-                      // barcodeImageGenerationType:
-                      //   BarcodeImageGenerationType.CAPTURED_IMAGE
+                       barcodeImageGenerationType:
+                         BarcodeImageGenerationType.CAPTURED_IMAGE
                     ),
                     finder: FinderConfiguration(
                         onFinderRectChange: (left, top, right, bottom) {
@@ -161,7 +162,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                     // Once your camera initialized you are now able to control camera parameters
                     this.controller = controller;
                   },
-                  onShowProgress: (show) {
+                  onHeavyOperationProcessing: (show) {
                     showProgressBar = show;
                   },
                 )
