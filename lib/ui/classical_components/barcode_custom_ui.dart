@@ -29,7 +29,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   bool permissionGranted = false;
   bool flashEnabled = true;
   bool showProgressBar = false;
-  bool liceneIsActive = true;
+  bool licenseIsActive = true;
   _BarcodeScannerWidgetState() {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
@@ -47,7 +47,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
         setState(() {
-          liceneIsActive = false;
+          licenseIsActive = false;
         });
         Logger.root.severe(error.toString());
       },
@@ -106,7 +106,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         children: <Widget>[
           // Check permission and show some placeholder if its not granted, or show camera otherwise
 
-          liceneIsActive ? permissionGranted
+          licenseIsActive ? permissionGranted
               ? BarcodeScannerCamera(
                   cameraDetector: barcodeCameraDetector,
                   // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
@@ -116,24 +116,28 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                     scannerConfiguration: BarcodeClassicScannerConfiguration(
                       barcodeFormats: [BarcodeFormat.QR_CODE],
                       engineMode: EngineMode.NextGen,
-                       barcodeImageGenerationType:
-                         BarcodeImageGenerationType.CAPTURED_IMAGE
+                        // get full size image of document with successfully scanned barcode
+                        // barcodeImageGenerationType:
+                        // BarcodeImageGenerationType.CAPTURED_IMAGE
                     ),
                     finder: FinderConfiguration(
                         onFinderRectChange: (left, top, right, bottom) {
-                          // aling some text view to the finder dynamically by calculating its position from finder changes
+                          // aligning some text view to the finder dynamically by calculating its position from finder changes
                         },
+                        // widget that can be inserted in the region between finder hole and top of the camera
                         topWidget: const Center(
                             child: Text(
                           'Top hint text in centre',
                           style: TextStyle(color: Colors.white),
                         )),
+                        // widget that can be inserted in the region between finder hole and bottom of the camera
                         bottomWidget: const Align(
                             alignment: Alignment.topCenter,
                             child: Text(
                               'This is text in finder bottom TopCenter  part',
                               style: TextStyle(color: Colors.white),
                             )),
+                        // widget that can be inserted inside finder window
                         widget: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Container(
@@ -146,6 +150,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                                     Radius.circular(20))),
                           ),
                         ),
+                        // The shape by which background will be clipped and which will be presented as finder hole
                         decoration: BoxDecoration(
                             border: Border.all(
                               width: 5,
