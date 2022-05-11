@@ -10,11 +10,12 @@ import 'package:scanbot_sdk/classical_components/barcode_scanner_configuration.d
 import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
 import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/common_data.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../main.dart';
 import '../pages_widget.dart';
 
+/// This is an example screen of how to integrate new classical barcode scanner component
+///
 class BarcodeScannerWidget extends StatefulWidget {
   const BarcodeScannerWidget({Key? key}) : super(key: key);
 
@@ -23,6 +24,8 @@ class BarcodeScannerWidget extends StatefulWidget {
 }
 
 class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
+  /// this stream only used if you need to show live scanned results on top of the camera
+  /// otherwise we stop scanning and return first result out of the screen
   final resultStream = StreamController<BarcodeScanningResult>();
   ScanbotCameraController? controller;
   late BarcodeCameraLiveDetector barcodeCameraDetector;
@@ -34,10 +37,10 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
-        // Use update function to show result overlay on top of the camera or
+        /// Use update function to show result overlay on top of the camera or
         //resultStream.add(scanningResult);
 
-        // this to return result to screen caller
+        /// this to return result to screen caller
         barcodeCameraDetector
             .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
         Navigator.pop(context, scanningResult);
@@ -111,10 +114,10 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   cameraDetector: barcodeCameraDetector,
                   // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
                   configuration: BarcodeCameraConfiguration(
-                    flashEnabled: flashEnabled,
+                    flashEnabled: flashEnabled, //initial flash state
                     // Initial configuration for the scanner itself
                     scannerConfiguration: BarcodeClassicScannerConfiguration(
-                      barcodeFormats: [BarcodeFormat.QR_CODE],
+                      barcodeFormats: PredefinedBarcodes.allBarcodeTypes(), //[BarcodeFormat.QR_CODE] for ine barcode type
                       engineMode: EngineMode.NextGen,
                         // get full size image of document with successfully scanned barcode
                         // barcodeImageGenerationType:
