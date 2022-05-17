@@ -15,7 +15,6 @@ import '../../main.dart';
 import '../pages_widget.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
-///
 class BarcodeScannerWidget extends StatefulWidget {
   const BarcodeScannerWidget({Key? key}) : super(key: key);
 
@@ -121,7 +120,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                       engineMode: EngineMode.NextGen,
                         // get full size image of document with successfully scanned barcode
                         // barcodeImageGenerationType:
-                        // BarcodeImageGenerationType.CAPTURED_IMAGE
+                         // BarcodeImageGenerationType.CAPTURED_IMAGE
                     ),
                     finder: FinderConfiguration(
                         onFinderRectChange: (left, top, right, bottom) {
@@ -162,7 +161,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(20))),
                         backgroundColor: Colors.amber.withAlpha(150),
-                        finderVerticalOffset: 150,
                         finderAspectRatio:
                             const FinderAspectRatio(width: 3, height: 2)),
                   ),
@@ -227,7 +225,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                             width: double.infinity,
                             height: double.infinity,
                             alignment: Alignment.bottomRight,
-                            child: Container(
+                            child: SizedBox(
                               width: 100,
                               height: 200,
                               child: pageView,
@@ -242,7 +240,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                   child: Container(
                     width: 100,
                     height: 100,
-                    child: CircularProgressIndicator(
+                    child: const CircularProgressIndicator(
                       strokeWidth: 10,
                     ),
                   ),
