@@ -99,10 +99,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
           if (flashAvailable)
             IconButton(
                 onPressed: () {
-                  controller?.setFlashEnabled(!flashEnabled);
-                  setState(() {
-                    flashEnabled = !flashEnabled;
-                  });
+                  controller?.setFlashEnabled(!flashEnabled).then((value) => {
+                        setState(() {
+                          flashEnabled = !flashEnabled;
+                        })
+                      });
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off))
         ],
