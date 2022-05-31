@@ -636,7 +636,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<dynamic> _gotoImagesView() async {
-    imageCache?.clear();
+    imageCache.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
