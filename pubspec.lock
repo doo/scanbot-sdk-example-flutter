@@ -295,7 +295,7 @@ packages:
       path: "../scanbot-sdk-flutter"
       relative: true
     source: path
-    version: "2.8.1"
+    version: "2.9.0"
   shared_preferences:
     dependency: "direct main"
     description:
