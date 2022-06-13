@@ -14,7 +14,7 @@ class PageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache?.clear();
+    imageCache.clear();
     var filterPreviewWidget = FilterPreviewWidget(_page);
     return Scaffold(
         appBar: AppBar(

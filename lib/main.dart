@@ -257,7 +257,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
     } catch (e) {
       Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting license status');
+      await showAlertDialog(context, 'Error getting OCR configs');
     }
   }
 
@@ -268,7 +268,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting OCR configs');
+      await showAlertDialog(context, 'Error getting license status');
     }
   }
 
@@ -655,7 +655,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<dynamic> _gotoImagesView() async {
-    imageCache?.clear();
+    imageCache.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
