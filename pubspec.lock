@@ -292,10 +292,10 @@ packages:
   scanbot_sdk:
     dependency: "direct main"
     description:
-      name: scanbot_sdk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.9.0-alpha1"
+      path: "../scanbot-sdk-flutter"
+      relative: true
+    source: path
+    version: "2.9.0"
   shared_preferences:
     dependency: "direct main"
     description:

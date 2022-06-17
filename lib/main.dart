@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
@@ -319,7 +319,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //flashEnabled: true,
         //autoSnappingSensitivity: 0.7,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: InterfaceOrientation.portrait,
         //documentImageSizeLimit: Size(2000, 3000),
         cancelButtonTitle: 'Cancel',
         pageCounterButtonTitle: '%d Page(s)',
@@ -348,6 +348,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+        cameraOverlayColor: Colors.amber,
+        finderAspectRatio: FinderAspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -429,7 +431,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: InterfaceOrientation.portrait,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cancelButtonHidden: false,
         //cameraZoomFactor: 0.5

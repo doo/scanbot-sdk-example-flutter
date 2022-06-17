@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/common_data.dart' as c;
+import 'package:scanbot_sdk/json/common_data.dart' as c;
 import 'package:scanbot_sdk/scanbot_encryption_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';

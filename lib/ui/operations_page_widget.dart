@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:scanbot_sdk/common_data.dart' as sdk;
+import 'package:scanbot_sdk/json/common_data.dart' as sdk;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
