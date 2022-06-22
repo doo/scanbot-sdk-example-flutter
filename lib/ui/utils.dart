@@ -53,5 +53,3 @@ Future<bool> checkLicenseStatus(BuildContext context) async {
 bool isOperationSuccessful(Result result) {
   return result.operationResult == OperationResult.SUCCESS;
 }
-
-

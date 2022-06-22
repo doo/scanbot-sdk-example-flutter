@@ -1,6 +1,3 @@
-
-
-
 class ImagePickerResponse {
   List<String>? uris;
 
