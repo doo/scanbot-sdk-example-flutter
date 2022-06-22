@@ -17,6 +17,8 @@ import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
@@ -200,6 +202,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            'Scan Barcode custom ui',
+            onTap: () {
+              _startBarcodeCustomUIScanner();
+            },
+          ),
+          MenuItemWidget(
             'Detect Barcodes from Multiple Still Images',
             onTap: () {
               _detectBarcodesOnImages();
@@ -368,6 +376,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  Future<void> _startBarcodeCustomUIScanner() async {
+    var result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => BarcodeScannerWidget()),
+    );
+    if (result is BarcodeScanningResult) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
+  }
+
   Future<void> _startGenericDocumentScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
@@ -382,7 +402,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           RootDocumentType.DePassport,
           RootDocumentType.DeIdCardBack,
           RootDocumentType.DeIdCardFront,
-
         ],
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
@@ -459,8 +478,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(image?.path ?? ''),
-            PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -488,21 +506,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       ///before processing image sdk need storage read permission
       final permissions =
-      await [Permission.storage, Permission.photos].request();
+          await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
-          PermissionStatus.granted || //android
+              PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImages(
-            uris,
-            PredefinedBarcodes.allBarcodeTypes());
+            uris, PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
-          await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MultiImageBarcodesResultPreviewWidget(
-                          result.barcodeResults))
-          );
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => MultiImageBarcodesResultPreviewWidget(
+                  result.barcodeResults)));
         }
       }
     } catch (e) {

@@ -9,8 +9,8 @@ PODS:
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 1.24.1)
-  - ScanbotSDK/MRZ (1.24.1)
+    - ScanbotSDK/MRZ (= 1.27.1)
+  - ScanbotSDK/MRZ (1.27.1)
   - shared_preferences (0.0.1):
     - Flutter
 
@@ -45,13 +45,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   GMImagePicker: 6438a6764d6280b1dbf19b59140313f5a73daeeb
-  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
+  image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
-  scanbot_sdk: 39f3f19dc21dd22f51b9085b9af706ea15e2b529
-  ScanbotSDK: c946aca754ba83f7fa5f5f20585261a5fdf7da84
+  scanbot_sdk: 162e73cd76c9ae0b0812c4e15eff8c1279926ea7
+  ScanbotSDK: e8cf2409fd648b154f8163942adf297f21822e74
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
-PODFILE CHECKSUM: 964b83a66c09c6d8d3a0fba349a78c4e592e2a6a
+PODFILE CHECKSUM: 5429ee8c498e8683698bc8efc991a9968dd47b1a
 
 COCOAPODS: 1.11.3
