@@ -1,5 +1,6 @@
 PODS:
   - Flutter (1.0.0)
+  - GMImagePicker (0.0.2)
   - image_picker (0.0.1):
     - Flutter
   - path_provider_ios (0.0.1):
@@ -15,6 +16,7 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - GMImagePicker (~> 0.0.2)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -23,6 +25,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - GMImagePicker
     - ScanbotSDK
 
 EXTERNAL SOURCES:
@@ -41,6 +44,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  GMImagePicker: 6438a6764d6280b1dbf19b59140313f5a73daeeb
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
@@ -48,6 +52,6 @@ SPEC CHECKSUMS:
   ScanbotSDK: e8cf2409fd648b154f8163942adf297f21822e74
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
-PODFILE CHECKSUM: 08b3263b008e9ac3809ff2bca1b9f415301c8044
+PODFILE CHECKSUM: 5429ee8c498e8683698bc8efc991a9968dd47b1a
 
 COCOAPODS: 1.11.3
