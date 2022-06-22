@@ -26,7 +26,7 @@ Fetch and install the dependencies of this example project via Flutter CLI:
 
 ```
 flutter pub get
-```
+``` 
 
 Connect a mobile device via USB and run the app.
 
