@@ -10,6 +10,7 @@ import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
@@ -18,6 +19,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
@@ -151,6 +153,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan Documents',
             onTap: () {
               _startDocumentScanning();
+            },
+          ),
+          MenuItemWidget(
+            'Scan Documents custom ui',
+            onTap: () {
+              _startDocumentsCustomUIScanner();
             },
           ),
           MenuItemWidget(
@@ -376,6 +384,19 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       await Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
+  }
+
+  Future<void> _startDocumentsCustomUIScanner() async {
+    var result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const DocumentScannerWidget()),
+    );
+    if (result is List<common.Page>) {
+      _pageRepository.addPages(result);
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => DocumentPreview()),
       );
     }
   }
