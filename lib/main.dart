@@ -469,7 +469,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uri = await ScanbotImagePickerFlutter.pickImageAsync();
+      if (uri.hasEmptyPath) {
+        return;
+      }
 
       ///before processing image sdk need storage read permission
       final permissions =
@@ -479,7 +482,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(image.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(uri.path), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -549,8 +552,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ScanbotImagePickerFlutter.pickImageAsync();
-
+      var uri = await ScanbotImagePickerFlutter.pickImageAsync();
+      if (uri.hasEmptyPath) {
+        return;
+      }
       ///before processing an image the SDK need storage read permission
 
       var permissions = await [Permission.storage, Permission.photos].request();
@@ -559,7 +564,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page =
-            await ScanbotSdk.createPage(Uri.file(image.path ?? ''), true);
+            await ScanbotSdk.createPage(Uri.file(uri.path), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
