@@ -156,7 +156,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            'Scan Documents custom ui',
+            'Scan Documents (Custom UI)',
             onTap: () {
               _startDocumentsCustomUIScanner();
             },
@@ -206,7 +206,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            'Scan Barcode custom ui',
+            'Scan Barcode (Custom UI)',
             onTap: () {
               _startBarcodeCustomUIScanner();
             },
