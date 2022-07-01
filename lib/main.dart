@@ -3,9 +3,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
@@ -284,8 +285,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      if (image != null) {
+      final image = await ScanbotImagePickerFlutter.pickImageAsync();
+      if (!image.hasEmptyPath) {
         await _createPage(Uri.file(image.path));
         await _gotoImagesView();
       }
@@ -468,7 +469,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var image = await ScanbotImagePickerFlutter.pickImageAsync();
 
       ///before processing image sdk need storage read permission
       final permissions =
@@ -478,7 +479,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(image.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -499,7 +500,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     try {
       List<Uri> uris = List.empty(growable: true);
-      uris = await pickImagesWithUri();
+      uris = await ScanbotImagePickerFlutter.pickImagesAsync();
       if (uris.isEmpty) {
         return;
       }
@@ -522,32 +523,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     } catch (e) {
       Logger.root.severe(e);
     }
-  }
-
-  /// pick images from gallery and get the uris list
-  Future<List<Uri>> pickImagesWithUri() async {
-    var uris = List<Uri>.empty(growable: true);
-    if (Platform.isIOS && await PlatformHelper.versionLessThanIOSFourteen()) {
-      var result = await PlatformHelper.pickPhotosAsync();
-      if (result?.uris?.isNotEmpty ?? false) {
-        for (var path in result?.uris ?? List<String>.empty(growable: false)) {
-          uris.add(Uri.file(path));
-        }
-      }
-    } else {
-      var lstImages = await ImagePicker().pickMultiImage(
-          maxWidth: double.infinity,
-          maxHeight: double.infinity,
-          imageQuality: 75);
-      if (lstImages == null || lstImages.isEmpty) {
-        return uris;
-      } else {
-        for (var image in lstImages) {
-          uris.add(Uri.file(image.path));
-        }
-      }
-    }
-    return uris;
   }
 
   Future<void> startLicensePlateScanner() async {
@@ -574,7 +549,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var image = await ScanbotImagePickerFlutter.pickImageAsync();
 
       ///before processing an image the SDK need storage read permission
 
@@ -584,7 +559,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page =
-            await ScanbotSdk.createPage(Uri.file(image?.path ?? ''), true);
+            await ScanbotSdk.createPage(Uri.file(image.path ?? ''), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
