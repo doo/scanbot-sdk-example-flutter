@@ -36,18 +36,16 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool flashAvailable = false;
   bool showProgressBar = false;
   bool licenseIsActive = true;
-
   _DocumentScannerWidgetState() {
     liveDetector = DocumentCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       snapListener: (page) {
         /// Use update function to show result overlay on top of the camera or
-        resultStream.add(page);
-
+        //resultStream.add(page);
         /// this to return result to screen caller
-        // liveDetector
-        //     .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        // Navigator.pop(context, [page]);
+         liveDetector
+             .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
+         Navigator.pop(context, [page]);
         //
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
@@ -190,29 +188,17 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                               return SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.green.withAlpha(150),
-                                        borderRadius:
-                                            const BorderRadiusDirectional.all(
-                                                Radius.circular(5)),
-                                        shape: BoxShape.rectangle,
-                                        border: Border.all(
-                                          color: Colors.green.withAlpha(150),
-                                          width: 1.0,
+                                  child: Center(
+                                    child: Wrap(
+                                      children: [
+                                        DetectionStatusWidget(
+                                          status: snapshot.data ??
+                                              DetectionResult
+                                                  .ERROR_NOTHING_DETECTED,
                                         ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          snapshot.data?.name ?? "",
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
+                                      ],
                                     ),
-                                  );
+                                  ));
                             }),
                       ],
                     )
@@ -249,7 +235,10 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                       child: SizedBox(
                           width: 100,
                           height: 200,
-                          child: FadeOutHintView(child: PagePreview(page: snapshot.data!))),
+                          child: FadeOutView(
+                            key: Key(snapshot.data?.pageId ?? ""),
+                              fadeDelay: const Duration(milliseconds: 500),
+                              child: PagePreview(page: snapshot.data!))),
                       alignment: Alignment.bottomRight,
                     ));
               }),
@@ -270,6 +259,36 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   }
 }
 
+class DetectionStatusWidget extends StatelessWidget {
+  final DetectionResult status;
+
+  const DetectionStatusWidget({Key? key, required this.status})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.green.withAlpha(150),
+        borderRadius: const BorderRadiusDirectional.all(Radius.circular(5)),
+        shape: BoxShape.rectangle,
+        border: Border.all(
+          color: Colors.green.withAlpha(150),
+          width: 1.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          status.name,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
 class PagePreview extends StatelessWidget {
   final common.Page page;
 
@@ -279,8 +298,12 @@ class PagePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     var documentPreviewFile = File.fromUri(page.documentPreviewImageFileUri!);
     var originalPreviewFile = File.fromUri(page.originalPreviewImageFileUri!);
-    var file = documentPreviewFile.existsSync() ? documentPreviewFile : originalPreviewFile;
-    var imageUri = documentPreviewFile.existsSync() ? page.documentPreviewImageFileUri! : page.originalPreviewImageFileUri!;
+    var file = documentPreviewFile.existsSync()
+        ? documentPreviewFile
+        : originalPreviewFile;
+    var imageUri = documentPreviewFile.existsSync()
+        ? page.documentPreviewImageFileUri!
+        : page.originalPreviewImageFileUri!;
     if (file.existsSync() == true) {
       if (shouldInitWithEncryption) {
         return SizedBox(
