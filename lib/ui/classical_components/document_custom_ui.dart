@@ -9,6 +9,7 @@ import 'package:scanbot_sdk/classical_components/document_camera.dart';
 import 'package:scanbot_sdk/classical_components/document_live_detection.dart';
 import 'package:scanbot_sdk/classical_components/document_scanner_configuration.dart';
 import 'package:scanbot_sdk/classical_components/hint.dart';
+import 'package:scanbot_sdk/classical_components/shutter.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
 
@@ -36,16 +37,18 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool flashAvailable = false;
   bool showProgressBar = false;
   bool licenseIsActive = true;
+
   _DocumentScannerWidgetState() {
     liveDetector = DocumentCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       snapListener: (page) {
         /// Use update function to show result overlay on top of the camera or
-        //resultStream.add(page);
+        resultStream.add(page);
+
         /// this to return result to screen caller
-         liveDetector
-             .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-         Navigator.pop(context, [page]);
+        //liveDetector
+        //    .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
+        //Navigator.pop(context, [page]);
         //
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
@@ -99,22 +102,20 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           ),
         ),
         actions: [
-          IconButton(
-              onPressed: () {
-                liveDetector
-                    .setAutoSnappingEnabled(!autoSnappingEnabled)
-                    .then((value) => {
-                          setState(() {
-                            autoSnappingEnabled = !autoSnappingEnabled;
-                          })
-                        });
-                liveDetector
-                    .setPolygonViewVisible(!autoSnappingEnabled)
-                    .then((value) => {});
-              },
-              icon: Icon(autoSnappingEnabled
-                  ? Icons.auto_mode_outlined
-                  : Icons.disabled_by_default)),
+          if (permissionGranted && licenseIsActive)
+            IconButton(
+                onPressed: () {
+                  liveDetector
+                      .setAutoSnappingEnabled(!autoSnappingEnabled)
+                      .then((value) => {
+                            setState(() {
+                              autoSnappingEnabled = !autoSnappingEnabled;
+                            })
+                          });
+                },
+                icon: Icon(autoSnappingEnabled
+                    ? Icons.auto_mode_outlined
+                    : Icons.disabled_by_default)),
           if (flashAvailable)
             IconButton(
                 onPressed: () {
@@ -200,6 +201,22 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                     ),
                                   ));
                             }),
+                        SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: ShutterButton(
+                              onPressed: (){
+                                liveDetector.sn
+                              },
+                              autosnappingMode: autoSnappingEnabled,
+                              primaryColor: Colors.pink,
+                              accentColor: Colors.white,
+                              animatedLineStrokeWidth: 2,
+                            ),
+                          ),
+                        ),
                       ],
                     )
                   : Container(
@@ -228,20 +245,23 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                 if (snapshot.data == null) {
                   return Container();
                 }
-                return SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: Align(
-                      child: SizedBox(
-                          width: 100,
-                          height: 200,
-                          child: FadeOutView(
-                            key: Key(snapshot.data?.pageId ?? ""),
-                              fadeDelay: const Duration(milliseconds: 500),
-                              child: PagePreview(page: snapshot.data!))),
-                      alignment: Alignment.bottomRight,
-                    ));
+                return autoSnappingEnabled
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: double.infinity,
+                        child: Align(
+                          child: SizedBox(
+                              width: 100,
+                              height: 200,
+                              child: FadeOutView(
+                                  key: Key(snapshot.data?.pageId ?? ""),
+                                  fadeDelay: const Duration(milliseconds: 500),
+                                  child: PagePreview(page: snapshot.data!))),
+                          alignment: Alignment.bottomRight,
+                        ))
+                    : Container();
               }),
+
           showProgressBar
               ? const Center(
                   child: SizedBox(
