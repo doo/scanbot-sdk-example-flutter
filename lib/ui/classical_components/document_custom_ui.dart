@@ -182,7 +182,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                         StreamBuilder<DetectionResult>(
                             stream: detectionStatusStream.stream,
                             builder: (context, snapshot) {
-                              if (snapshot.data == null) {
+                              if (snapshot.data == null || !permissionGranted || !licenseIsActive || !autoSnappingEnabled) {
                                 return Container();
                               }
 
@@ -206,14 +206,17 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                           height: double.infinity,
                           child: Align(
                             alignment: Alignment.bottomCenter,
-                            child: ShutterButton(
-                              onPressed: (){
-                                liveDetector.sn
-                              },
-                              autosnappingMode: autoSnappingEnabled,
-                              primaryColor: Colors.pink,
-                              accentColor: Colors.white,
-                              animatedLineStrokeWidth: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(24.0),
+                              child: ShutterButton(
+                                onPressed: (){
+                                  liveDetector.makeSnap();
+                                },
+                                autosnappingMode: autoSnappingEnabled,
+                                primaryColor: Colors.pink,
+                                accentColor: Colors.white,
+                                animatedLineStrokeWidth: 2,
+                              ),
                             ),
                           ),
                         ),
