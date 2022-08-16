@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_image_picker/models/image_picker_response.dart';
 import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -285,9 +286,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ScanbotImagePickerFlutter.pickImageAsync();
-      if (!image.hasEmptyPath) {
-        await _createPage(Uri.file(image.path));
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        await _createPage(Uri.file(uriPath));
         await _gotoImagesView();
       }
     } catch (e) {
@@ -469,8 +471,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var uri = await ScanbotImagePickerFlutter.pickImageAsync();
-      if (uri.hasEmptyPath) {
+      var response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isEmpty) {
+        ValidateUriError(response);
         return;
       }
 
@@ -482,7 +486,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(uri.path), PredefinedBarcodes.allBarcodeTypes());
+            Uri.file(uriPath), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -503,9 +507,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     try {
       List<Uri> uris = List.empty(growable: true);
-      uris = await ScanbotImagePickerFlutter.pickImagesAsync();
-      if (uris.isEmpty) {
-        return;
+      var response = await ScanbotImagePickerFlutter.pickImagesAsync();
+      if (response.uris?.isNotEmpty == true) {
+        uris = response.PathsToUris(response.uris);
+      }
+
+      if (response.message?.isNotEmpty == true) {
+        ValidateUriError(response);
       }
 
       ///before processing image sdk need storage read permission
@@ -552,19 +560,21 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var uri = await ScanbotImagePickerFlutter.pickImageAsync();
-      if (uri.hasEmptyPath) {
+      var response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isEmpty) {
+        ValidateUriError(response);
         return;
       }
-      ///before processing an image the SDK need storage read permission
 
+      ///before processing an image the SDK need storage read permission
       var permissions = await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page =
-            await ScanbotSdk.createPage(Uri.file(uri.path), true);
+            await ScanbotSdk.createPage(Uri.file(uriPath), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
@@ -706,5 +716,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
+  }
+
+  /// Check for error message and display accordingly.
+  void ValidateUriError(ImagePickerResponse response) {
+    String message = response.message ?? "";
+    showAlertDialog(context, message);
   }
 }
