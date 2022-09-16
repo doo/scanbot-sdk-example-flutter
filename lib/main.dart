@@ -16,6 +16,7 @@ import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
+import 'package:scanbot_sdk/nfc_reader_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
@@ -225,6 +226,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan NFC',
+            onTap: () {
+              _startNfcScanner();
             },
           ),
           MenuItemWidget(
@@ -679,6 +686,24 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         });
         await showAlertDialog(context, concatenate.toString());
       }
+    }
+  }
+
+  Future<void> _startNfcScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      final config = NfcPassportReaderConfiguration(
+        topBarBackgroundColor: ScanbotRedColor,
+        topBarButtonsColor: Colors.white70,
+      );
+      var result = await ScanbotSdkUi.startNfcPassportReader(config);
+      if (isOperationSuccessful(result)) {
+        await showAlertDialog(context, result.toString());
+      }
+    } catch (e) {
+      Logger.root.severe(e);
     }
   }
 
