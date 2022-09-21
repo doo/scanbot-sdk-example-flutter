@@ -44,7 +44,7 @@ void main() => runApp(MyApp());
 // After the trial period is over all Scanbot SDK functions as well as the UI components will stop working
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
-// the app identifier "io.scanbot.example.sdk.flutter" of this example app or of your app.
+// the app identifier "io.scanbot.example.flutter" of this example app or of your app.
 const SCANBOT_SDK_LICENSE_KEY = '';
 
 Future<void> _initScanbotSdk() async {
@@ -580,8 +580,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var page =
-            await ScanbotSdk.createPage(Uri.file(uriPath), true);
+        var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
