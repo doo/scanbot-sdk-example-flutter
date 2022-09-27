@@ -699,7 +699,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       );
       var result = await ScanbotSdkUi.startNfcPassportReader(config);
       if (isOperationSuccessful(result)) {
-        await showAlertDialog(context, result.toString());
+        await showAlertDialog(context, result.toJson().toString());
       }
     } catch (e) {
       Logger.root.severe(e);
