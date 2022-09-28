@@ -16,6 +16,7 @@ import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
+import 'package:scanbot_sdk/nfc_reader_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
@@ -43,7 +44,7 @@ void main() => runApp(MyApp());
 // After the trial period is over all Scanbot SDK functions as well as the UI components will stop working
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
-// the app identifier "io.scanbot.example.sdk.flutter" of this example app or of your app.
+// the app identifier "io.scanbot.example.flutter" of this example app or of your app.
 const SCANBOT_SDK_LICENSE_KEY = '';
 
 Future<void> _initScanbotSdk() async {
@@ -225,6 +226,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan NFC',
+            onTap: () {
+              _startNfcScanner();
             },
           ),
           MenuItemWidget(
@@ -573,8 +580,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var page =
-            await ScanbotSdk.createPage(Uri.file(uriPath), true);
+        var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
@@ -679,6 +685,24 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         });
         await showAlertDialog(context, concatenate.toString());
       }
+    }
+  }
+
+  Future<void> _startNfcScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      final config = NfcPassportReaderConfiguration(
+        topBarBackgroundColor: ScanbotRedColor,
+        topBarButtonsColor: Colors.white70,
+      );
+      var result = await ScanbotSdkUi.startNfcPassportReader(config);
+      if (isOperationSuccessful(result)) {
+        await showAlertDialog(context, result.toJson().toString());
+      }
+    } catch (e) {
+      Logger.root.severe(e);
     }
   }
 
