@@ -6,16 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/generic_document_recognizer.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
@@ -23,7 +24,7 @@ import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_cus
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
+
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
@@ -327,7 +328,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //flashEnabled: true,
         //autoSnappingSensitivity: 0.7,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
-        orientationLockMode: InterfaceOrientation.portrait,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         //documentImageSizeLimit: Size(2000, 3000),
         cancelButtonTitle: 'Cancel',
         pageCounterButtonTitle: '%d Page(s)',
@@ -395,8 +396,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     if (result is List<common.Page>) {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => DocumentPreview()),
+        MaterialPageRoute(builder: (context) => DocumentPreview()),
       );
     }
   }
@@ -452,7 +452,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
-        orientationLockMode: InterfaceOrientation.portrait,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cancelButtonHidden: false,
         //cameraZoomFactor: 0.5

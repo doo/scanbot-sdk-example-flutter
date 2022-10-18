@@ -257,7 +257,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
-        orientationLockMode: sdk.InterfaceOrientation.portrait,
+        orientationLockMode: sdk.OrientationLockMode.PORTRAIT,
         cameraPreviewMode: sdk.CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
