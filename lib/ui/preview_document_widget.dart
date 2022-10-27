@@ -185,7 +185,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               ),
               ListTile(
                 leading: const Icon(Icons.image),
-                title: const Text('Safe as TIFF'),
+                title: const Text('Save as TIFF'),
                 onTap: () {
                   Navigator.pop(context);
                   _createTiff(false);
