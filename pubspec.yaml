@@ -14,7 +14,7 @@ description: An example app to show the integration of the Scanbot SDK Flutter P
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.14.0-0 <3.0.0'
+  sdk: '>=2.14.0 <3.0.0'
   flutter: '>=2.0.1'
 
 
@@ -28,7 +28,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   permission_handler: ^8.3.0
-  image_picker: ^0.8.4+4
+  scanbot_image_picker: 1.0.0
   logging: ^1.0.0
   shared_preferences: 2.0.4
   path_provider: ^2.0.9

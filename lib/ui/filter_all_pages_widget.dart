@@ -14,7 +14,6 @@ class MultiPageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    imageCache.clear();
     var filterPreviewWidget = MultiFilterPreviewWidget(_pageRepository);
     return Scaffold(
         appBar: AppBar(

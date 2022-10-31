@@ -4,8 +4,8 @@ import 'package:scanbot_sdk/generic_document_recognizer.dart';
 class GenericDocumentResultPreview extends StatefulWidget {
   final GenericDocumentRecognizerResult result;
   GenericDocumentResultPreview(
-      this.result,
-      );
+    this.result,
+  );
 
   @override
   State<GenericDocumentResultPreview> createState() =>
@@ -17,6 +17,7 @@ class _GenericDocumentResultPreviewState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         iconTheme: const IconThemeData(),
         leading: GestureDetector(
@@ -53,7 +54,7 @@ Widget genericDocumentResultView(
     case GenericDocumentType.DePassport:
       return DePassportResultView(fields as DePassportResult);
     case GenericDocumentType.DeDriverLicense:
-      return DeDriverLicenseResultView (fields as DeDriverLicenseResult);
+      return DeDriverLicenseResultView(fields as DeDriverLicenseResult);
     default:
       return Container();
   }
@@ -62,8 +63,8 @@ Widget genericDocumentResultView(
 class DeDriverLicenseResultView extends StatelessWidget {
   final DeDriverLicenseResult result;
   DeDriverLicenseResultView(
-      this.result,
-      );
+    this.result,
+  );
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -88,7 +89,6 @@ class DeDriverLicenseResultView extends StatelessWidget {
           title: "Id",
           genericDocumentField: result.id,
         ),
-
         GenericDocumentFieldView(
           title: "Issue Date",
           genericDocumentField: result.issueDate,
@@ -113,8 +113,8 @@ class DeDriverLicenseResultView extends StatelessWidget {
 class DeIdCardResultView extends StatelessWidget {
   final DeIdCardResult result;
   DeIdCardResultView(
-      this.result,
-      );
+    this.result,
+  );
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -191,8 +191,8 @@ class DeIdCardResultView extends StatelessWidget {
 class DePassportResultView extends StatelessWidget {
   final DePassportResult result;
   DePassportResultView(
-      this.result,
-      );
+    this.result,
+  );
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -282,7 +282,7 @@ class GenericDocumentFieldView extends StatelessWidget {
                 title,
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width/2,
+                width: MediaQuery.of(context).size.width / 2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -290,7 +290,7 @@ class GenericDocumentFieldView extends StatelessWidget {
                       genericDocumentField?.text ?? "",
                     ),
                     Text(
-                      "(Confidence: ${((genericDocumentField?.confidence?? 1) *100).toInt()}% )",
+                      "(Confidence: ${((genericDocumentField?.confidence ?? 1) * 100).toInt()}% )",
                     ),
                   ],
                 ),

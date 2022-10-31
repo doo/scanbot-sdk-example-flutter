@@ -483,7 +483,6 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   }
 
   void _updatePagesList() {
-    imageCache.clear();
     setState(() {
       _pages = _pageRepository.pages;
     });

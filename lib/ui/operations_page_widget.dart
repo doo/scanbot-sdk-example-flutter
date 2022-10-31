@@ -33,7 +33,6 @@ class _PageOperationsState extends State<PageOperations> {
   }
 
   Future<void> _updatePage(sdk.Page page) async {
-    imageCache.clear();
     await _pageRepository.updatePage(page);
     setState(() {
       _page = page;

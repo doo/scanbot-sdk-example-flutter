@@ -3,9 +3,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_image_picker/models/image_picker_response.dart';
+import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
+import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
@@ -15,6 +18,7 @@ import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
+import 'package:scanbot_sdk/nfc_reader_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
@@ -22,12 +26,14 @@ import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
+import 'dart:async';
 
 /// true - if you need to enable encryption for example app
 bool shouldInitWithEncryption = false;
@@ -39,7 +45,7 @@ void main() => runApp(MyApp());
 // After the trial period is over all Scanbot SDK functions as well as the UI components will stop working
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
-// the app identifier "io.scanbot.example.sdk.flutter" of this example app or of your app.
+// the app identifier "io.scanbot.example.flutter" of this example app or of your app.
 const SCANBOT_SDK_LICENSE_KEY = '';
 
 Future<void> _initScanbotSdk() async {
@@ -137,7 +143,6 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   final PageRepository _pageRepository = PageRepository();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,6 +218,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            'Detect Barcodes from Multiple Still Images',
+            onTap: () {
+              _detectBarcodesOnImages();
+            },
+          ),
+          MenuItemWidget(
             'Scan MRZ (Machine Readable Zone)',
             onTap: () {
               _startMRZScanner();
@@ -222,6 +233,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
+            },
+          ),
+          MenuItemWidget(
+            'Scan NFC',
+            onTap: () {
+              _startNfcScanner();
             },
           ),
           MenuItemWidget(
@@ -283,9 +300,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      if (image != null) {
-        await _createPage(Uri.file(image.path));
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        await _createPage(Uri.file(uriPath));
         await _gotoImagesView();
       }
     } catch (e) {
@@ -481,7 +499,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isEmpty) {
+        ValidateUriError(response);
+        return;
+      }
 
       ///before processing image sdk need storage read permission
       final permissions =
@@ -491,13 +514,49 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(image?.path ?? ''), PredefinedBarcodes.allBarcodeTypes());
-
+            Uri.file(uriPath), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => BarcodesResultPreviewWidget(result)),
           );
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  /// Detect barcodes from multiple still images
+  Future<void> _detectBarcodesOnImages() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      List<Uri> uris = List.empty(growable: true);
+      var response = await ScanbotImagePickerFlutter.pickImagesAsync();
+      if (response.uris?.isNotEmpty == true) {
+        uris = response.PathsToUris(response.uris);
+      }
+
+      if (response.message?.isNotEmpty == true) {
+        ValidateUriError(response);
+      }
+
+      ///before processing image sdk need storage read permission
+      final permissions =
+          await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] ==
+              PermissionStatus.granted || //android
+          permissions[Permission.photos] == PermissionStatus.granted) {
+        //ios
+        var result = await ScanbotSdk.detectBarcodesOnImages(
+            uris, PredefinedBarcodes.allBarcodeTypes());
+        if (result.operationResult == OperationResult.SUCCESS) {
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => MultiImageBarcodesResultPreviewWidget(
+                  result.barcodeResults)));
         }
       }
     } catch (e) {
@@ -529,17 +588,20 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var image = await ImagePicker().getImage(source: ImageSource.gallery);
+      var response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isEmpty) {
+        ValidateUriError(response);
+        return;
+      }
 
       ///before processing an image the SDK need storage read permission
-
       var permissions = await [Permission.storage, Permission.photos].request();
       if (permissions[Permission.storage] ==
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var page =
-            await ScanbotSdk.createPage(Uri.file(image?.path ?? ''), true);
+        var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
         var result = await ScanbotSdk.estimateBlurOnPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.toStringAsFixed(2)} ');
@@ -647,6 +709,24 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  Future<void> _startNfcScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    try {
+      final config = NfcPassportReaderConfiguration(
+        topBarBackgroundColor: ScanbotRedColor,
+        topBarButtonsColor: Colors.white70,
+      );
+      var result = await ScanbotSdkUi.startNfcPassportReader(config);
+      if (isOperationSuccessful(result)) {
+        await showAlertDialog(context, result.toJson().toString());
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
   Future<void> _startMRZScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
@@ -678,9 +758,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<dynamic> _gotoImagesView() async {
-    imageCache.clear();
     return await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     );
+  }
+
+  /// Check for error message and display accordingly.
+  void ValidateUriError(ImagePickerResponse response) {
+    String message = response.message ?? "";
+    showAlertDialog(context, message);
   }
 }
