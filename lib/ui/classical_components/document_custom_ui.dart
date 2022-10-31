@@ -43,19 +43,20 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       // Subscribe to the success result of the scanning end error handling
       snapListener: (page) {
         /// Use update function to show result overlay on top of the camera or
-        resultStream.add(page);
+        // resultStream.add(page);
 
         /// this to return result to screen caller
-        //liveDetector
-        //    .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        //Navigator.pop(context, [page]);
-        //
+        liveDetector
+            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
+        Navigator.pop(context, [page]);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
-        setState(() {
-          licenseIsActive = false;
-        });
+        if (mounted) {
+          setState(() {
+            licenseIsActive = false;
+          });
+        }
         Logger.root.severe(error.toString());
       },
       documentContourListener: (DocumentContourScanningResult result) {
@@ -67,10 +68,12 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   void checkPermission() async {
     // Don't forget to update ios Podfile according to the `permission_handler` official installation guide!! https://pub.dev/packages/permission_handler
     final permissionResult = await [Permission.camera].request();
-    setState(() {
-      permissionGranted =
-          permissionResult[Permission.camera]?.isGranted ?? false;
-    });
+    if (mounted) {
+      setState(() {
+        permissionGranted =
+            permissionResult[Permission.camera]?.isGranted ?? false;
+      });
+    }
   }
 
   @override
@@ -108,9 +111,12 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                   liveDetector
                       .setAutoSnappingEnabled(!autoSnappingEnabled)
                       .then((value) => {
-                            setState(() {
-                              autoSnappingEnabled = !autoSnappingEnabled;
-                            })
+                            if (mounted)
+                              {
+                                setState(() {
+                                  autoSnappingEnabled = !autoSnappingEnabled;
+                                })
+                              }
                           });
                 },
                 icon: Icon(autoSnappingEnabled
@@ -120,9 +126,12 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             IconButton(
                 onPressed: () {
                   controller?.setFlashEnabled(!flashEnabled).then((value) => {
-                        setState(() {
-                          flashEnabled = !flashEnabled;
-                        })
+                        if (mounted)
+                          {
+                            setState(() {
+                              flashEnabled = !flashEnabled;
+                            })
+                          }
                       });
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off)),
@@ -170,9 +179,12 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                             this.controller = controller;
                             // This option uses to check from platform whether flash is available and display control button
                             controller.isFlashAvailable().then((value) => {
-                                  setState(() {
-                                    flashAvailable = value;
-                                  })
+                                  if (mounted)
+                                    {
+                                      setState(() {
+                                        flashAvailable = value;
+                                      })
+                                    }
                                 });
                           },
                           onHeavyOperationProcessing: (show) {
@@ -182,7 +194,10 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                         StreamBuilder<DetectionResult>(
                             stream: detectionStatusStream.stream,
                             builder: (context, snapshot) {
-                              if (snapshot.data == null || !permissionGranted || !licenseIsActive || !autoSnappingEnabled) {
+                              if (snapshot.data == null ||
+                                  !permissionGranted ||
+                                  !licenseIsActive ||
+                                  !autoSnappingEnabled) {
                                 return Container();
                               }
 
@@ -209,7 +224,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                             child: Padding(
                               padding: const EdgeInsets.all(24.0),
                               child: ShutterButton(
-                                onPressed: (){
+                                onPressed: () {
                                   liveDetector.makeSnap();
                                 },
                                 autosnappingMode: autoSnappingEnabled,
