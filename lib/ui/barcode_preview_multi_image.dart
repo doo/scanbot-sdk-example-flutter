@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
 
 class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   final List<BarcodeScanningResult> previewItems;

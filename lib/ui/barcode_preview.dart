@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
 
 import '../main.dart';
