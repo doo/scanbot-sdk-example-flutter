@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scanbot_image_picker/models/image_picker_response.dart';
@@ -11,9 +10,9 @@ import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/nfc_reader_data.dart';
@@ -339,7 +338,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //flashEnabled: true,
         //autoSnappingSensitivity: 0.7,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         //documentImageSizeLimit: Size(2000, 3000),
         cancelButtonTitle: 'Cancel',
         pageCounterButtonTitle: '%d Page(s)',
@@ -449,7 +448,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cancelButtonHidden: false,
         //cameraZoomFactor: 0.5

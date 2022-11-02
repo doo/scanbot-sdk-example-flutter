@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: 2.9.1
+  scanbot_sdk: ^2.10.0-beta3
   cupertino_icons: ^1.0.2
 
   permission_handler: ^8.3.0

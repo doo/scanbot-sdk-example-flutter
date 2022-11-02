@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scanbot_sdk/common_data.dart' as sdk;
+import 'package:scanbot_sdk/json/common_data.dart' as sdk;
 import 'package:scanbot_sdk/create_tiff_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ocr_data.dart';
@@ -257,7 +257,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
-        orientationLockMode: sdk.CameraOrientationMode.PORTRAIT,
+        orientationLockMode: sdk.OrientationLockMode.PORTRAIT,
         cameraPreviewMode: sdk.CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
