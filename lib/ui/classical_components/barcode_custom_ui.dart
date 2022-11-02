@@ -122,13 +122,20 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                         // Initial configuration for the scanner itself
                         scannerConfiguration:
                             BarcodeClassicScannerConfiguration(
-                          barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-                          //[BarcodeFormat.QR_CODE] for ine barcode type
-                          engineMode: EngineMode.NextGen,
-                          // get full size image of document with successfully scanned barcode
-                          // barcodeImageGenerationType:
-                          // BarcodeImageGenerationType.CAPTURED_IMAGE
-                        ),
+                                barcodeFormats:
+                                    PredefinedBarcodes.allBarcodeTypes(),
+                                //[BarcodeFormat.QR_CODE] for ine barcode type
+                                engineMode: EngineMode.NextGen,
+                                additionalParameters:
+                                    BarcodeAdditionalParameters(
+                                        msiPlesseyChecksumAlgorithm:
+                                            MSIPlesseyChecksumAlgorithm
+                                                .Mod11NCR,
+                                        enableGS1Decoding: true)
+                                // get full size image of document with successfully scanned barcode
+                                // barcodeImageGenerationType:
+                                // BarcodeImageGenerationType.CAPTURED_IMAGE
+                                ),
                         finder: FinderConfiguration(
                             onFinderRectChange: (left, top, right, bottom) {
                               // aligning some text view to the finder dynamically by calculating its position from finder changes
