@@ -13,8 +13,8 @@ PODS:
     - GMImagePickerWithCloudMediaDownloading
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 1.27.1)
-  - ScanbotSDK/MRZ (1.27.1)
+    - ScanbotSDK/MRZ (= 1.29.0)
+  - ScanbotSDK/MRZ (1.29.0)
   - shared_preferences (0.0.1):
     - Flutter
 
@@ -51,15 +51,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GMImagePicker: 6438a6764d6280b1dbf19b59140313f5a73daeeb
   GMImagePickerWithCloudMediaDownloading: 47bb09b84bd14e0fcff2c982841b2b6ef3b923c5
   image_picker: 9aa50e1d8cdacdbed739e925b7eea16d014367e6
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
   scanbot_image_picker: 2b8d9d7aae8b46d5ae2476a09a9b66bd507de577
-  scanbot_sdk: 162e73cd76c9ae0b0812c4e15eff8c1279926ea7
-  ScanbotSDK: e8cf2409fd648b154f8163942adf297f21822e74
+  scanbot_sdk: cc07e1874133a66cd257fb7a59457de04080bd7e
+  ScanbotSDK: 16bc5c75144314edb5bb183c390c81cc6d38576c
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
 PODFILE CHECKSUM: 5429ee8c498e8683698bc8efc991a9968dd47b1a

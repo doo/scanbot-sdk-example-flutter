@@ -3,7 +3,6 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:scanbot_image_picker/models/image_picker_response.dart';
@@ -11,24 +10,24 @@ import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/common_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/nfc_reader_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/utility/platform_helper.dart';
 
-import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
-import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
@@ -158,6 +157,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Scan Documents',
             onTap: () {
               _startDocumentScanning();
+            },
+          ),
+          MenuItemWidget(
+            'Scan Documents (Custom UI)',
+            onTap: () {
+              _startDocumentsCustomUIScanner();
             },
           ),
           MenuItemWidget(
@@ -339,7 +344,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         //flashEnabled: true,
         //autoSnappingSensitivity: 0.7,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         //documentImageSizeLimit: Size(2000, 3000),
         cancelButtonTitle: 'Cancel',
         pageCounterButtonTitle: '%d Page(s)',
@@ -368,6 +373,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       var config = BarcodeScannerConfiguration(
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+        cameraOverlayColor: Colors.amber,
+        finderAspectRatio: const FinderAspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -388,12 +395,24 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _startBarcodeCustomUIScanner() async {
     var result = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => BarcodeScannerWidget()),
+      MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
     );
     if (result is BarcodeScanningResult) {
       await Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
+  }
+
+  Future<void> _startDocumentsCustomUIScanner() async {
+    var result = await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const DocumentScannerWidget()),
+    );
+    if (result is List<common.Page>) {
+      _pageRepository.addPages(result);
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => DocumentPreview()),
       );
     }
   }
@@ -445,11 +464,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         barcodesCountText: '%d codes',
         fetchingStateText: 'might be not needed',
         noBarcodesTitle: 'nothing to see here',
-        finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
+        finderAspectRatio: const FinderAspectRatio(width: 3, height: 2),
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
-        orientationLockMode: CameraOrientationMode.PORTRAIT,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cancelButtonHidden: false,
         //cameraZoomFactor: 0.5
@@ -717,7 +736,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
-        config.finderAspectRatio = FinderAspectRatio(width: 3, height: 1);
+        config.finderAspectRatio = const FinderAspectRatio(width: 7, height: 1);
       }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {

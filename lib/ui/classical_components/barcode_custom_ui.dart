@@ -9,7 +9,7 @@ import 'package:scanbot_sdk/classical_components/barcode_live_detection.dart';
 import 'package:scanbot_sdk/classical_components/barcode_scanner_configuration.dart';
 import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
 import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/common_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart';
 
 import '../../main.dart';
 import '../pages_widget.dart';
@@ -122,13 +122,20 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                         // Initial configuration for the scanner itself
                         scannerConfiguration:
                             BarcodeClassicScannerConfiguration(
-                          barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-                          //[BarcodeFormat.QR_CODE] for ine barcode type
-                          engineMode: EngineMode.NextGen,
-                          // get full size image of document with successfully scanned barcode
-                          // barcodeImageGenerationType:
-                          // BarcodeImageGenerationType.CAPTURED_IMAGE
-                        ),
+                                barcodeFormats:
+                                    PredefinedBarcodes.allBarcodeTypes(),
+                                //[BarcodeFormat.QR_CODE] for ine barcode type
+                                engineMode: EngineMode.NextGen,
+                                additionalParameters:
+                                    BarcodeAdditionalParameters(
+                                        msiPlesseyChecksumAlgorithm:
+                                            MSIPlesseyChecksumAlgorithm
+                                                .Mod11NCR,
+                                        enableGS1Decoding: true)
+                                // get full size image of document with successfully scanned barcode
+                                // barcodeImageGenerationType:
+                                // BarcodeImageGenerationType.CAPTURED_IMAGE
+                                ),
                         finder: FinderConfiguration(
                             onFinderRectChange: (left, top, right, bottom) {
                               // aligning some text view to the finder dynamically by calculating its position from finder changes
@@ -250,11 +257,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                 );
               }),
           showProgressBar
-              ? Center(
-                  child: Container(
+              ? const Center(
+                  child: SizedBox(
                     width: 100,
                     height: 100,
-                    child: const CircularProgressIndicator(
+                    child: CircularProgressIndicator(
                       strokeWidth: 10,
                     ),
                   ),

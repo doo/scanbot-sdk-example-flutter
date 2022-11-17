@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.9.1:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 2.10.0:
 
 //-------------------------------------------------------------
 json_serializable
@@ -230,7 +230,7 @@ limitations under the License.
 
 
 
-Open Source libraries used in the Scanbot SDK for Android version 1.94.0
+Open Source libraries used in the Scanbot SDK for Android version 1.96.0
 
 Apache Commons Codec
 
@@ -251,7 +251,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 CWAC-Camera
 
 Version 0.6.42
@@ -272,7 +273,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Android PDF Writer
 
 Version 1.0.10
@@ -314,7 +316,8 @@ License is distributed on an AS IS BASIS, WITHOUT WARRANTIES OR CONDITIONS OF AN
 either express or implied. See the License for the specific language governing
 permissions and limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Apache Commons IO
 
 Version 2.4
@@ -337,7 +340,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Apache Commons Lang
 
 Version 2.6
@@ -363,10 +367,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Kotlin Standard Library
 
-Version 1.4.20
+Version 1.6.21
 (https://github.com/JetBrains/kotlin)
 
 Copyright 2010-2018 JetBrains s.r.o.
@@ -383,7 +388,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Kotlin Standard Library JDK
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -398,7 +404,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
 google-gson
 Version 2.8.6
 (https://github.com/google/gson/blob/gson-parent-2.8.5/LICENSE)
@@ -417,10 +423,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
 Dagger
 
-Version 2.35
+Version 2.41
 (https://github.com/google/dagger)
 
 Copyright 2012 The Dagger Authors
@@ -437,7 +443,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 Dagger Compiler
 
 Copyright 2012 The Dagger Authors
@@ -454,12 +461,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-//-------------------------------------------------------------
+
+
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 Boost C++
 
-Version 1.75.0
+Version 1.79.0
 (https://github.com/boostorg/boost)
 
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -2407,18 +2415,17 @@ Version 1.1.0
    limitations under the License.
 
 
-
 ------------------------------------------------------------------------------------------------------------------------
 
 
 
-Open Source libraries used in the Scanbot SDK for iOS version 1.27.1:
+Open Source libraries used in the Scanbot SDK for iOS version 1.29.0:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 Boost C++
 
-Version 1.75.0
+Version 1.79.0
 (https://github.com/boostorg/boost)
 
 Boost Software License - Version 1.0 - August 17th, 2003
@@ -3537,7 +3544,7 @@ and users must comply to its license: https://github.com/fmtlib/fmt/blob/master/
 
 Tensorflow
 
-Version 2.6.1
+Version v2.6.1
 (https://github.com/tensorflow/tensorflow)
 
                                  Apache License
