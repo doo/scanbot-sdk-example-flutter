@@ -257,11 +257,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                 );
               }),
           showProgressBar
-              ? Center(
-                  child: Container(
+              ? const Center(
+                  child: SizedBox(
                     width: 100,
                     height: 100,
-                    child: const CircularProgressIndicator(
+                    child: CircularProgressIndicator(
                       strokeWidth: 10,
                     ),
                   ),
