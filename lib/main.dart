@@ -13,7 +13,6 @@ import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
-import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
@@ -375,7 +374,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
-        finderAspectRatio: FinderAspectRatio(width: 4, height: 2),
+        finderAspectRatio: const FinderAspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -396,7 +395,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _startBarcodeCustomUIScanner() async {
     var result = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => BarcodeScannerWidget()),
+      MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
     );
     if (result is BarcodeScanningResult) {
       await Navigator.of(context).push(
@@ -465,7 +464,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         barcodesCountText: '%d codes',
         fetchingStateText: 'might be not needed',
         noBarcodesTitle: 'nothing to see here',
-        finderAspectRatio: FinderAspectRatio(width: 3, height: 2),
+        finderAspectRatio: const FinderAspectRatio(width: 3, height: 2),
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
@@ -737,7 +736,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
-        config.finderAspectRatio = FinderAspectRatio(width: 3, height: 1);
+        config.finderAspectRatio = const FinderAspectRatio(width: 7, height: 1);
       }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {

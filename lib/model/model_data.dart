@@ -8,8 +8,8 @@ class ImagePickerResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uris'] = this.uris;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['uris'] = uris;
     return data;
   }
 }
