@@ -28,7 +28,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
   final resultStream = StreamController<common.Page>();
-  final detectionStatusStream = StreamController<DetectionResult>();
+  final detectionStatusStream = StreamController<DetectionStatus>();
   ScanbotCameraController? controller;
   late DocumentCameraLiveDetector liveDetector;
   bool permissionGranted = false;
@@ -60,7 +60,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         Logger.root.severe(error.toString());
       },
       documentContourListener: (DocumentContourScanningResult result) {
-        detectionStatusStream.add(result.detectionResult);
+        detectionStatusStream.add(result.detectionStatus);
       },
     );
   }
@@ -191,7 +191,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                             showProgressBar = show;
                           },
                         ),
-                        StreamBuilder<DetectionResult>(
+                        StreamBuilder<DetectionStatus>(
                             stream: detectionStatusStream.stream,
                             builder: (context, snapshot) {
                               if (snapshot.data == null ||
@@ -209,7 +209,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                       children: [
                                         DetectionStatusWidget(
                                           status: snapshot.data ??
-                                              DetectionResult
+                                              DetectionStatus
                                                   .ERROR_NOTHING_DETECTED,
                                         ),
                                       ],
@@ -298,7 +298,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 }
 
 class DetectionStatusWidget extends StatelessWidget {
-  final DetectionResult status;
+  final DetectionStatus status;
 
   const DetectionStatusWidget({Key? key, required this.status})
       : super(key: key);
