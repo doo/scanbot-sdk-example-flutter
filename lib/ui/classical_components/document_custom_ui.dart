@@ -98,7 +98,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         ),
         backgroundColor: Colors.white,
         title: const Text(
-          'Scan barcodes',
+          'Scan Documents',
           style: TextStyle(
             inherit: true,
             color: Colors.black,
