@@ -32,7 +32,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   ScanbotCameraController? controller;
   late DocumentCameraLiveDetector liveDetector;
   bool permissionGranted = false;
-  bool flashEnabled = true;
+  bool flashEnabled = false;
   bool autoSnappingEnabled = true;
   bool flashAvailable = false;
   bool showProgressBar = false;
