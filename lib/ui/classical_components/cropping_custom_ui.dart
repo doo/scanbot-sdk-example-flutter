@@ -133,13 +133,19 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   Future<common.Page> proceedImage(
       common.Page page, CroppingResult croppingResult) async {
     //transform rotation degrees to rotation times (each time is 90degree) + direction
-    var times = croppingResult.rotation ~/ (-90);
+
     return await ScanbotSdk.cropAndRotatePage(
-        page, croppingResult.polygon, times);
+        page, croppingResult.polygon, croppingResult.rotationTimesCw);
   }
 
   cropAndPop() async {
+    setState(() {
+      showProgressBar = true;
+    });
     var croppingResult = await croppingController?.getPolygon();
+    setState(() {
+     showProgressBar = false;
+    });
     if (croppingResult != null) {
       var newPage = proceedImage(widget.page, croppingResult);
       Navigator.of(context).pop(newPage);
