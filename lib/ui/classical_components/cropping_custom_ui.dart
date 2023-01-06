@@ -70,7 +70,10 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
                         showProgressBar = isProcessing;
                       });
                     },
-                  )
+                    edgeColor: Colors.red,
+                    edgeColorOnLine: Colors.blue,
+                    anchorPointsColor: Colors.amberAccent,
+                    borderInsets: common.Insets.all(16))
                 : Container(
                     width: double.infinity,
                     height: double.infinity,
@@ -144,7 +147,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
     var croppingResult = await croppingController?.getPolygon();
     setState(() {
-     showProgressBar = false;
+      showProgressBar = false;
     });
     if (croppingResult != null) {
       var newPage = proceedImage(widget.page, croppingResult);

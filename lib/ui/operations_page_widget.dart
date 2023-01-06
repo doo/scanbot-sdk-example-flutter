@@ -26,6 +26,7 @@ class PageOperations extends StatefulWidget {
 class _PageOperationsState extends State<PageOperations> {
   final PageRepository _pageRepository = PageRepository();
   late sdk.Page _page;
+  bool showProgressBar = false;
 
   @override
   void initState() {
@@ -34,8 +35,12 @@ class _PageOperationsState extends State<PageOperations> {
   }
 
   Future<void> _updatePage(sdk.Page page) async {
+    setState(() {
+      showProgressBar = true;
+    });
     await _pageRepository.updatePage(page);
     setState(() {
+      showProgressBar = false;
       _page = page;
     });
   }
@@ -73,14 +78,27 @@ class _PageOperationsState extends State<PageOperations> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: Center(child: pageView))),
-        ],
-      ),
+      body: Stack(children: <Widget>[
+        Column(
+          children: <Widget>[
+            Expanded(
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Center(child: pageView))),
+          ],
+        ),
+        showProgressBar
+            ? const Center(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 10,
+                  ),
+                ),
+              )
+            : Container()
+      ]),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
