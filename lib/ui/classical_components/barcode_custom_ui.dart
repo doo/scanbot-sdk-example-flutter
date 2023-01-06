@@ -29,7 +29,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   ScanbotCameraController? controller;
   late BarcodeCameraLiveDetector barcodeCameraDetector;
   bool permissionGranted = false;
-  bool flashEnabled = true;
+  bool flashEnabled = false;
   bool flashAvailable = false;
   bool showProgressBar = false;
   bool licenseIsActive = true;
