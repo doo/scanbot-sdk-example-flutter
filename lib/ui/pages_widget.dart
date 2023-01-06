@@ -49,8 +49,8 @@ class EncryptedPageWidget extends StatelessWidget {
     return SizedBox(
       height: double.infinity,
       width: double.infinity,
-      child: FutureBuilder(
-        future: imageData,
+      child: FutureBuilder<Uint8List>(
+        future: imageData as Future<Uint8List>,
         builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
           if (snapshot.data != null) {
             final image = Image.memory(snapshot.data!);

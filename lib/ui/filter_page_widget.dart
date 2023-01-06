@@ -75,8 +75,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   Widget build(BuildContext context) {
     final imageData =
         ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri!);
-    final image = FutureBuilder(
-        future: imageData,
+    final image = FutureBuilder<Uint8List>(
+        future: imageData as Future<Uint8List>,
         builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
           if (snapshot.data != null) {
             var image = Image.memory(snapshot.data!);
