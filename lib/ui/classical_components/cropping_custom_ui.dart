@@ -6,7 +6,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 /// This is an example screen of how to integrate new classical barcode scanner component
 class CroppingScreenWidget extends StatefulWidget {
   CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
-  common.Page page;
+  final common.Page page;
 
   @override
   _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
@@ -16,7 +16,6 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
   bool showProgressBar = false;
-  bool licenseIsActive = true;
   CroppingController? croppingController;
 
   _CroppingScreenWidgetState() {}
@@ -59,30 +58,20 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
         body: Stack(
           children: <Widget>[
             // Check permission and show some placeholder if its not granted, or show camera otherwise
-            licenseIsActive
-                ? ScanbotCroppingWidget(
-                    page: widget.page,
-                    onViewReady: (controller) {
-                      croppingController = controller;
-                    },
-                    onHeavyOperationProcessing: (isProcessing) {
-                      setState(() {
-                        showProgressBar = isProcessing;
-                      });
-                    },
-                    edgeColor: Colors.red,
-                    edgeColorOnLine: Colors.blue,
-                    anchorPointsColor: Colors.amberAccent,
-                    borderInsets: common.Insets.all(16))
-                : Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'License is No more active',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
+            ScanbotCroppingWidget(
+                page: widget.page,
+                onViewReady: (controller) {
+                  croppingController = controller;
+                },
+                onHeavyOperationProcessing: (isProcessing) {
+                  setState(() {
+                    showProgressBar = isProcessing;
+                  });
+                },
+                edgeColor: Colors.red,
+                edgeColorOnLine: Colors.blue,
+                anchorPointsColor: Colors.amberAccent,
+                borderInsets: common.Insets.all(16)),
 
             showProgressBar
                 ? const Center(
