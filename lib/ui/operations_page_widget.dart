@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as sdk;
 import 'package:scanbot_sdk/cropping_screen_data.dart';
+import 'package:scanbot_sdk/json/common_data.dart' as sdk;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/cropping_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 import '../main.dart';
@@ -25,6 +26,7 @@ class PageOperations extends StatefulWidget {
 class _PageOperationsState extends State<PageOperations> {
   final PageRepository _pageRepository = PageRepository();
   late sdk.Page _page;
+  bool showProgressBar = false;
 
   @override
   void initState() {
@@ -33,8 +35,12 @@ class _PageOperationsState extends State<PageOperations> {
   }
 
   Future<void> _updatePage(sdk.Page page) async {
+    setState(() {
+      showProgressBar = true;
+    });
     await _pageRepository.updatePage(page);
     setState(() {
+      showProgressBar = false;
       _page = page;
     });
   }
@@ -72,66 +78,95 @@ class _PageOperationsState extends State<PageOperations> {
           ),
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-              child: Container(
-                  padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                  child: Center(child: pageView))),
-          BottomAppBar(
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    _startCroppingScreen(_page);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(Icons.crop),
-                      Container(width: 4),
-                      const Text(
-                        'Crop & Rotate',
-                        style: TextStyle(inherit: true, color: Colors.black),
-                      ),
-                    ],
+      body: Stack(children: <Widget>[
+        Column(
+          children: <Widget>[
+            Expanded(
+                child: Container(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: Center(child: pageView))),
+          ],
+        ),
+        showProgressBar
+            ? const Center(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 10,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    _showFilterPage(_page);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(Icons.filter),
-                      Container(width: 4),
-                      const Text(
-                        'Filter',
-                        style: TextStyle(inherit: true, color: Colors.black),
-                      ),
-                    ],
+              )
+            : Container()
+      ]),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TextButton(
+              onPressed: () {
+                _startCroppingScreen(_page);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const <Widget>[
+                  Icon(Icons.crop),
+                  Text(
+                    'Crop & Rotate',
+                    style: TextStyle(inherit: true, color: Colors.black),
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    _deletePage(_page);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(Icons.delete, color: Colors.red),
-                      Container(width: 4),
-                      const Text(
-                        'Delete',
-                        style: TextStyle(inherit: true, color: Colors.red),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            TextButton(
+              onPressed: () {
+                _startCustomUiCroppingScreen(_page);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const <Widget>[
+                  Icon(Icons.crop),
+                  Text(
+                    'Crop(custom ui)',
+                    style: TextStyle(inherit: true, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _showFilterPage(_page);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(Icons.filter),
+                  Container(height: 4),
+                  const Text(
+                    'Filter',
+                    style: TextStyle(inherit: true, color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _deletePage(_page);
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const Icon(Icons.delete, color: Colors.red),
+                  Container(width: 4),
+                  const Text(
+                    'Delete',
+                    style: TextStyle(inherit: true, color: Colors.red),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -177,6 +212,22 @@ class _PageOperationsState extends State<PageOperations> {
       if (isOperationSuccessful(result) && result.page != null) {
         await _updatePage(result.page!);
       }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> _startCustomUiCroppingScreen(sdk.Page page) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      var newPage = await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => CroppingScreenWidget(page: page)),
+      );
+      await _updatePage(newPage!);
     } catch (e) {
       print(e);
     }
