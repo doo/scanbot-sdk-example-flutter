@@ -57,9 +57,12 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
               if (position == 2) {
                 return Column(children: patientInfos);
               }
+              if (position == 3) {
+                return   getImageContainer(preview.croppedDocumentURI);
+              }
               return Container();
             },
-            itemCount: 3,
+            itemCount: 4,
           ),
     );
   }
