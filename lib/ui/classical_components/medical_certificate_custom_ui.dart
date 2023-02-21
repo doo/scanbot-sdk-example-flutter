@@ -207,51 +207,6 @@ class _MedicalCertificateScannerWidgetState
                   ),
                 ),
 
-          //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
-          // StreamBuilder<MedicalCertificateResult>(
-          //     stream: resultStream.stream,
-          //     builder: (context, snapshot) {
-          //       if (snapshot.data == null) {
-          //         return Container();
-          //       }
-          //
-          //       Widget pageView;
-          //       if (snapshot.data?.barcodeImageURI != null) {
-          //         if (shouldInitWithEncryption) {
-          //           pageView =
-          //               EncryptedPageWidget((snapshot.data?.barcodeImageURI)!);
-          //         } else {
-          //           pageView = PageWidget((snapshot.data?.barcodeImageURI)!);
-          //         }
-          //       } else {
-          //         pageView = Container();
-          //       }
-          //
-          //       return Stack(
-          //         children: [
-          //           ListView.builder(
-          //               itemCount: snapshot.data?.barcodeItems.length ?? 0,
-          //               itemBuilder: (context, index) {
-          //                 var barcode =
-          //                     snapshot.data?.barcodeItems[index].text ?? '';
-          //                 return Container(
-          //                     color: Colors.white60, child: Text(barcode));
-          //               }),
-          //           (snapshot.data?.barcodeImageURI != null)
-          //               ? Container(
-          //                   width: double.infinity,
-          //                   height: double.infinity,
-          //                   alignment: Alignment.bottomRight,
-          //                   child: SizedBox(
-          //                     width: 100,
-          //                     height: 200,
-          //                     child: pageView,
-          //                   ),
-          //                 )
-          //               : Container(),
-          //         ],
-          //       );
-          //     }),
           showProgressBar
               ? const Center(
                   child: SizedBox(
