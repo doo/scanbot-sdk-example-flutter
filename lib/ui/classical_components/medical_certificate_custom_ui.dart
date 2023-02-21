@@ -183,7 +183,9 @@ class _MedicalCertificateScannerWidgetState
                             });
                       },
                       onHeavyOperationProcessing: (show) {
-                        showProgressBar = show;
+                        setState(() {
+                          showProgressBar = show;
+                        });
                       },
                     )
                   : Container(

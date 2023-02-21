@@ -189,7 +189,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                             });
                       },
                       onHeavyOperationProcessing: (show) {
-                        showProgressBar = show;
+                        setState(() {
+                          showProgressBar = show;
+                        });
                       },
                     )
                   : Container(

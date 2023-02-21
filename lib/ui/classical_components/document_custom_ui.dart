@@ -188,7 +188,9 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                 });
                           },
                           onHeavyOperationProcessing: (show) {
-                            showProgressBar = show;
+                            setState(() {
+                              showProgressBar = show;
+                            });
                           },
                         ),
                         StreamBuilder<DetectionStatus>(
