@@ -138,9 +138,9 @@ class _MedicalCertificateScannerWidgetState
                           )),
                           // widget that can be inserted in the region between finder hole and bottom of the camera
                           bottomWidget: const Align(
-                              alignment: Alignment.center,
+                              alignment: Alignment.topCenter,
                               child: Text(
-                                'This is text in finder bottom TopCenter  part',
+                                'Bottom hint text in topCenter',
                                 style: TextStyle(color: Colors.white),
                               )),
                           // widget that can be inserted inside finder window
@@ -202,7 +202,7 @@ class _MedicalCertificateScannerWidgetState
                   height: double.infinity,
                   alignment: Alignment.center,
                   child: const Text(
-                    'License is No more active',
+                    'License has expired',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
