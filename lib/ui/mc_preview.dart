@@ -98,32 +98,30 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Expanded(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                field.patientInfoFieldType.name,
-                style: const TextStyle(
-                  inherit: true,
-                  color: Colors.black,
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              field.patientInfoFieldType.name,
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                (field.value).toString(),
-                style: const TextStyle(
-                  inherit: true,
-                  color: Colors.black,
-                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              (field.value).toString(),
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -137,32 +135,30 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Expanded(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                field.subType.name,
-                style: const TextStyle(
-                  inherit: true,
-                  color: Colors.black,
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              field.subType.name,
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                (field.hasContents).toString(),
-                style: const TextStyle(
-                  inherit: true,
-                  color: Colors.black,
-                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              (field.hasContents).toString(),
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
