@@ -35,12 +35,6 @@ class _MedicalCertificateScannerWidgetState
     mcCameraDetector = MedicalCertificateCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       mcListener: (scanningResult) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => MedicalCertificatePreviewWidget(
-                  MedicalCertificateResult(true, List.empty(), List.empty(),
-                      List.empty(), McFormType.Form_1a))),
-        );
         if (scanningResult.recognitionSuccessful) {
           ///pause whole detection process if you are going to show result on other screen
           mcCameraDetector.pauseDetection();
