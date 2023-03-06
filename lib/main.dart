@@ -400,6 +400,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
     );
+
+    //handle result if it was returned
     if (result is BarcodeScanningResult) {
       await Navigator.of(context).push(
         MaterialPageRoute(
@@ -412,6 +414,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const DocumentScannerWidget()),
     );
+
+    //handle result if it was returned
     if (result is List<common.Page>) {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
@@ -425,6 +429,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       MaterialPageRoute(
           builder: (context) => const MedicalCertificateScannerWidget()),
     );
+
+    //handle result if it was returned
     if (result is MedicalCertificateResult) {
       await Navigator.of(context).push(
         MaterialPageRoute(

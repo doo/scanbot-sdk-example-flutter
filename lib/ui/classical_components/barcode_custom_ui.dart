@@ -12,6 +12,7 @@ import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 
 import '../../main.dart';
+import '../barcode_preview.dart';
 import '../pages_widget.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
@@ -41,12 +42,16 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         /// Use update function to show result overlay on top of the camera or
         //resultStream.add(scanningResult);
 
-        /// this to return result to screen caller
+        ///pause whole detection process if you are going to show result on other screen
         barcodeCameraDetector
-            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        Navigator.pop(context, scanningResult);
+            .pauseDetection();
+        controller?.stopPreview();
 
-        print(scanningResult.toJson().toString());
+        /// for returning scanning result back
+        // Navigator.pop(context, scanningResult);
+
+        /// for showing result in next screen in stack
+        showResult(scanningResult);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
@@ -56,6 +61,19 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         Logger.root.severe(error.toString());
       },
     );
+  }
+
+  Future<void> showResult(BarcodeScanningResult scanningResult) async {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+          builder: (context) => BarcodesResultPreviewWidget(scanningResult)),
+    )
+        .then((value) {
+      ///resume camera when going back to camera from other screen
+      barcodeCameraDetector.resumeDetection();
+      controller?.resumePreview();
+    });
   }
 
   void checkPermission() async {

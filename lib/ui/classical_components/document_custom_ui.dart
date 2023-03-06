@@ -14,7 +14,9 @@ import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
 
 import '../../main.dart';
+import '../../pages_repository.dart';
 import '../pages_widget.dart';
+import '../preview_document_widget.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
 class DocumentScannerWidget extends StatefulWidget {
@@ -38,6 +40,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool showProgressBar = false;
   bool licenseIsActive = true;
 
+  final PageRepository _pageRepository = PageRepository();
+
   _DocumentScannerWidgetState() {
     liveDetector = DocumentCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
@@ -45,10 +49,16 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         /// Use update function to show result overlay on top of the camera or
         // resultStream.add(page);
 
+        ///pause camera if you are going to show result on other screen
+        liveDetector.pauseDetection();
+        controller?.stopPreview();
+        var pages = [page];
+
         /// this to return result to screen caller
-        liveDetector
-            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        Navigator.pop(context, [page]);
+        // Navigator.pop(context, pages);
+
+        /// for showing result in next screen in stack
+        showPageResult(pages);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
@@ -63,6 +73,19 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         detectionStatusStream.add(result.detectionStatus);
       },
     );
+  }
+
+  void showPageResult(List<common.Page> pages) {
+    _pageRepository.addPages(pages);
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(builder: (context) => DocumentPreview()),
+    )
+        .then((value) {
+      ///resume camera when going back to camera from other screen
+      liveDetector.resumeDetection();
+      controller?.resumePreview();
+    });
   }
 
   void checkPermission() async {

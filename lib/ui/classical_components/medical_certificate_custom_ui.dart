@@ -10,6 +10,7 @@ import 'package:scanbot_sdk/classical_components/medical_certificate_live_detect
 import 'package:scanbot_sdk/classical_components/medical_certificate_scanner_configuration.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/mc_scanning_data.dart';
+import 'package:scanbot_sdk_example_flutter/ui/mc_preview.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
 class MedicalCertificateScannerWidget extends StatefulWidget {
@@ -22,9 +23,6 @@ class MedicalCertificateScannerWidget extends StatefulWidget {
 
 class _MedicalCertificateScannerWidgetState
     extends State<MedicalCertificateScannerWidget> {
-  /// this stream only used if you need to show live scanned results on top of the camera
-  /// otherwise we stop scanning and return first result out of the screen
-  final resultStream = StreamController<MedicalCertificateResult>();
   ScanbotCameraController? controller;
   late MedicalCertificateCameraLiveDetector mcCameraDetector;
   bool permissionGranted = false;
@@ -37,15 +35,24 @@ class _MedicalCertificateScannerWidgetState
     mcCameraDetector = MedicalCertificateCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       mcListener: (scanningResult) {
-        if(scanningResult.recognitionSuccessful){
-        /// Use update function to show result overlay on top of the camera or
-        //resultStream.add(scanningResult);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => MedicalCertificatePreviewWidget(
+                  MedicalCertificateResult(true, List.empty(), List.empty(),
+                      List.empty(), McFormType.Form_1a))),
+        );
+        if (scanningResult.recognitionSuccessful) {
+          ///pause whole detection process if you are going to show result on other screen
+          mcCameraDetector.pauseDetection();
+          controller?.stopPreview();
 
-        /// this to return result to screen caller
-        mcCameraDetector
-            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        Navigator.pop(context, scanningResult);
-      }},
+          /// this to return result to screen caller
+          // Navigator.pop(context, scanningResult);
+
+          /// for showing result in next screen in stack
+          showResult(scanningResult);
+        }
+      },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
         setState(() {
@@ -54,6 +61,20 @@ class _MedicalCertificateScannerWidgetState
         Logger.root.severe(error.toString());
       },
     );
+  }
+
+  Future<void> showResult(MedicalCertificateResult scanningResult) async {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+          builder: (context) =>
+              MedicalCertificatePreviewWidget(scanningResult)),
+    )
+        .then((value) {
+      ///resume camera when going back to camera from other screen
+      mcCameraDetector.resumeDetection();
+      controller?.resumePreview();
+    });
   }
 
   void checkPermission() async {
