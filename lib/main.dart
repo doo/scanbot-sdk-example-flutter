@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_image_picker/models/image_picker_response.dart';
 import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
@@ -132,6 +133,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MainPageWidget(),
+      navigatorObservers: [ScanbotCamera.scanbotSdkRouteObserver],
     );
   }
 }

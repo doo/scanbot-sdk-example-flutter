@@ -39,13 +39,13 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
-        /// Use update function to show result overlay on top of the camera or
-        //resultStream.add(scanningResult);
 
         ///pause whole detection process if you are going to show result on other screen
         barcodeCameraDetector
             .pauseDetection();
-        controller?.stopPreview();
+
+        /// Use update function to show result overlay on top of the camera or
+        //resultStream.add(scanningResult);
 
         /// for returning scanning result back
         // Navigator.pop(context, scanningResult);
@@ -72,7 +72,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         .then((value) {
       ///resume camera when going back to camera from other screen
       barcodeCameraDetector.resumeDetection();
-      controller?.resumePreview();
     });
   }
 

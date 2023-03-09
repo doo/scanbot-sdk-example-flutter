@@ -38,7 +38,6 @@ class _MedicalCertificateScannerWidgetState
         if (scanningResult.recognitionSuccessful) {
           ///pause whole detection process if you are going to show result on other screen
           mcCameraDetector.pauseDetection();
-          controller?.stopPreview();
 
           /// this to return result to screen caller
           // Navigator.pop(context, scanningResult);

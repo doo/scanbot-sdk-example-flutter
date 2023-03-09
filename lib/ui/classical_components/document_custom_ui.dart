@@ -46,12 +46,13 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     liveDetector = DocumentCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       snapListener: (page) {
-        /// Use update function to show result overlay on top of the camera or
-        // resultStream.add(page);
 
         ///pause camera if you are going to show result on other screen
         liveDetector.pauseDetection();
-        controller?.stopPreview();
+
+        /// Use update function to show result overlay on top of the camera or
+        // resultStream.add(page);
+
         var pages = [page];
 
         /// this to return result to screen caller
@@ -80,11 +81,9 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     Navigator.of(context)
         .push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
-    )
-        .then((value) {
+    ).then((value) {
       ///resume camera when going back to camera from other screen
       liveDetector.resumeDetection();
-      controller?.resumePreview();
     });
   }
 
