@@ -46,7 +46,6 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     liveDetector = DocumentCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       snapListener: (page) {
-
         ///pause camera if you are going to show result on other screen
         liveDetector.pauseDetection();
 
@@ -81,7 +80,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     Navigator.of(context)
         .push(
       MaterialPageRoute(builder: (context) => DocumentPreview()),
-    ).then((value) {
+    )
+        .then((value) {
       ///resume camera when going back to camera from other screen
       liveDetector.resumeDetection();
     });
@@ -159,163 +159,171 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off)),
         ],
       ),
-      body: Stack(
-        children: <Widget>[
-          // Check permission and show some placeholder if its not granted, or show camera otherwise
-          licenseIsActive
-              ? permissionGranted
-                  ? Stack(
-                      children: [
-                        DocumentScannerCamera(
-                          cameraDetector: liveDetector,
-                          // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                          configuration: DocumentCameraConfiguration(
-                              flashEnabled: flashEnabled, //initial flash state
-                              // Initial configuration for the scanner itself
-                              scannerConfiguration:
-                                  DocumentClassicScannerConfiguration(
-                                      // ignoreBadAspectRatio: false,
-                                      autoSnapEnabled: autoSnappingEnabled,
-                                      //initial autosnapping
-                                      //acceptedAngleScore: 35,
-                                      //acceptedSizeScore: 0.75,
-                                      /*  requiredAspectRatios: [
-                                    const PageAspectRatio(
-                                        width: 1.0, height: 1.0)
-                                  ],*/
-                                      detectDocumentAfterSnap: true,
-                                      autoSnapSensitivity: 0.5),
-                              contourConfiguration: ContourConfiguration(
-                                strokeOkColor: Colors.red,
-                                fillOkColor: Colors.red.withAlpha(150),
-                                strokeColor: Colors.blue,
-                                fillColor: Colors.blue.withAlpha(150),
-                                cornerRadius: 35,
-                                strokeWidth: 10,
-                                autoSnapProgressStrokeColor: Colors.greenAccent,
-                                autoSnapProgressEnabled: true,
-                                autoSnapProgressStrokeWidth: 5,
-                              )),
-                          onWidgetReady: (controller) {
-                            // Once your camera initialized you are now able to control camera parameters
-                            this.controller = controller;
-                            // This option uses to check from platform whether flash is available and display control button
-                            controller.isFlashAvailable().then((value) => {
-                                  if (mounted)
-                                    {
-                                      setState(() {
-                                        flashAvailable = value;
-                                      })
-                                    }
-                                });
-                          },
-                          onHeavyOperationProcessing: (show) {
-                            setState(() {
-                              showProgressBar = show;
-                            });
-                          },
-                        ),
-                        StreamBuilder<DetectionStatus>(
-                            stream: detectionStatusStream.stream,
-                            builder: (context, snapshot) {
-                              if (snapshot.data == null ||
-                                  !permissionGranted ||
-                                  !licenseIsActive ||
-                                  !autoSnappingEnabled) {
-                                return Container();
-                              }
+      body: Container(
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            // Check permission and show some placeholder if its not granted, or show camera otherwise
+            licenseIsActive
+                ? permissionGranted
+                    ? Stack(
+                        children: [
+                          DocumentScannerCamera(
+                            cameraDetector: liveDetector,
+                            // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
+                            configuration: DocumentCameraConfiguration(
+                                flashEnabled:
+                                    flashEnabled, //initial flash state
+                                // Initial configuration for the scanner itself
+                                scannerConfiguration:
+                                    DocumentClassicScannerConfiguration(
+                                        // ignoreBadAspectRatio: false,
+                                        autoSnapEnabled: autoSnappingEnabled,
+                                        //initial autosnapping
+                                        //acceptedAngleScore: 35,
+                                        //acceptedSizeScore: 0.75,
+                                        /*  requiredAspectRatios: [
+                                      const PageAspectRatio(
+                                          width: 1.0, height: 1.0)
+                                    ],*/
+                                        detectDocumentAfterSnap: true,
+                                        autoSnapSensitivity: 0.5),
+                                contourConfiguration: ContourConfiguration(
+                                  strokeOkColor: Colors.red,
+                                  fillOkColor: Colors.red.withAlpha(150),
+                                  strokeColor: Colors.blue,
+                                  fillColor: Colors.blue.withAlpha(150),
+                                  cornerRadius: 35,
+                                  strokeWidth: 10,
+                                  autoSnapProgressStrokeColor:
+                                      Colors.greenAccent,
+                                  autoSnapProgressEnabled: true,
+                                  autoSnapProgressStrokeWidth: 5,
+                                )),
+                            onWidgetReady: (controller) {
+                              // Once your camera initialized you are now able to control camera parameters
+                              this.controller = controller;
+                              // This option uses to check from platform whether flash is available and display control button
+                              controller.isFlashAvailable().then((value) => {
+                                    if (mounted)
+                                      {
+                                        setState(() {
+                                          flashAvailable = value;
+                                        })
+                                      }
+                                  });
+                            },
+                            onHeavyOperationProcessing: (show) {
+                              setState(() {
+                                showProgressBar = show;
+                              });
+                            },
+                          ),
+                          StreamBuilder<DetectionStatus>(
+                              stream: detectionStatusStream.stream,
+                              builder: (context, snapshot) {
+                                if (snapshot.data == null ||
+                                    !permissionGranted ||
+                                    !licenseIsActive ||
+                                    !autoSnappingEnabled) {
+                                  return Container();
+                                }
 
-                              return SizedBox(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: Center(
-                                    child: Wrap(
-                                      children: [
-                                        DetectionStatusWidget(
-                                          status: snapshot.data ??
-                                              DetectionStatus
-                                                  .ERROR_NOTHING_DETECTED,
-                                        ),
-                                      ],
-                                    ),
-                                  ));
-                            }),
-                        SizedBox(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Padding(
-                              padding: const EdgeInsets.all(24.0),
-                              child: ShutterButton(
-                                onPressed: () {
-                                  liveDetector.makeSnap();
-                                },
-                                autosnappingMode: autoSnappingEnabled,
-                                primaryColor: Colors.pink,
-                                accentColor: Colors.white,
-                                animatedLineStrokeWidth: 2,
+                                return SizedBox(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: Center(
+                                      child: Wrap(
+                                        children: [
+                                          DetectionStatusWidget(
+                                            status: snapshot.data ??
+                                                DetectionStatus
+                                                    .ERROR_NOTHING_DETECTED,
+                                          ),
+                                        ],
+                                      ),
+                                    ));
+                              }),
+                          SizedBox(
+                            width: double.infinity,
+                            height: double.infinity,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Padding(
+                                padding: const EdgeInsets.all(24.0),
+                                child: ShutterButton(
+                                  onPressed: () {
+                                    liveDetector.makeSnap();
+                                  },
+                                  autosnappingMode: autoSnappingEnabled,
+                                  primaryColor: Colors.pink,
+                                  accentColor: Colors.white,
+                                  animatedLineStrokeWidth: 2,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Permissions not granted',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    )
-              : Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'License is No more active',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-
-          //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
-          StreamBuilder<common.Page>(
-              stream: resultStream.stream,
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container();
-                }
-                return autoSnappingEnabled
-                    ? SizedBox(
+                        ],
+                      )
+                    : Container(
+                        color: Colors.white,
                         width: double.infinity,
                         height: double.infinity,
-                        child: Align(
-                          child: SizedBox(
-                              width: 100,
-                              height: 200,
-                              child: FadeOutView(
-                                  key: Key(snapshot.data?.pageId ?? ""),
-                                  fadeDelay: const Duration(milliseconds: 500),
-                                  child: PagePreview(page: snapshot.data!))),
-                          alignment: Alignment.bottomRight,
-                        ))
-                    : Container();
-              }),
-
-          showProgressBar
-              ? const Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 10,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Permissions not granted',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
+                : Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'License is No more active',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
-                )
-              : Container()
-        ],
+
+            //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
+            StreamBuilder<common.Page>(
+                stream: resultStream.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+                  return autoSnappingEnabled
+                      ? SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Align(
+                            child: SizedBox(
+                                width: 100,
+                                height: 200,
+                                child: FadeOutView(
+                                    key: Key(snapshot.data?.pageId ?? ""),
+                                    fadeDelay:
+                                        const Duration(milliseconds: 500),
+                                    child: PagePreview(page: snapshot.data!))),
+                            alignment: Alignment.bottomRight,
+                          ))
+                      : Container();
+                }),
+
+            showProgressBar
+                ? const Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 10,
+                      ),
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }

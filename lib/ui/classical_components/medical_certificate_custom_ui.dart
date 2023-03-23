@@ -66,7 +66,6 @@ class _MedicalCertificateScannerWidgetState
         .then((value) {
       ///resume camera when going back to camera from other screen
       mcCameraDetector.resumeDetection();
-      controller?.resumePreview();
     });
   }
 
@@ -112,127 +111,139 @@ class _MedicalCertificateScannerWidgetState
             IconButton(
                 onPressed: () {
                   controller?.setFlashEnabled(!flashEnabled).then((value) => {
-                        setState(() {
-                          flashEnabled = !flashEnabled;
-                        })
+                        if (mounted)
+                          {
+                            setState(() {
+                              flashEnabled = !flashEnabled;
+                            })
+                          }
                       });
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off))
         ],
       ),
-      body: Stack(
-        children: <Widget>[
-          // Check permission and show some placeholder if its not granted, or show camera otherwise
+      body: Container(
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            // Check permission and show some placeholder if its not granted, or show camera otherwise
 
-          licenseIsActive
-              ? permissionGranted
-                  ? MedicalCertificateScannerCamera(
-                      cameraDetector: mcCameraDetector,
-                      // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                      configuration: MedicalCertificateCameraConfiguration(
-                        flashEnabled: flashEnabled,
-                        //initial flash state
-                        // Initial configuration for the scanner itself
-                        scannerConfiguration:
-                            MedicalCertificateClassicScannerConfiguration(
-                                recognizePatientInfo: true,
-                                recognizeBarcode: true,
-                                captureHighResolutionImage: true),
-                        finder: FinderConfiguration(
-                          finderAspectRatio:
-                              const FinderAspectRatio(width: 3.0, height: 4.0),
-                          onFinderRectChange: (left, top, right, bottom) {
-                            // aligning some text view to the finder dynamically by calculating its position from finder changes
-                          },
-                          // widget that can be inserted in the region between finder hole and top of the camera
-                          topWidget: const Center(
-                              child: Text(
-                            'Top hint text in centre',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                          // widget that can be inserted in the region between finder hole and bottom of the camera
-                          bottomWidget: const Align(
-                              alignment: Alignment.topCenter,
-                              child: Text(
-                                'Bottom hint text in topCenter',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                          // widget that can be inserted inside finder window
-                          widget: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: AspectRatio(
-                                aspectRatio: 4 / 3.0,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 5,
-                                        color: Colors.lightBlue.withAlpha(155),
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20))),
+            licenseIsActive
+                ? permissionGranted
+                    ? MedicalCertificateScannerCamera(
+                        cameraDetector: mcCameraDetector,
+                        // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
+                        configuration: MedicalCertificateCameraConfiguration(
+                          flashEnabled: flashEnabled,
+                          //initial flash state
+                          // Initial configuration for the scanner itself
+                          scannerConfiguration:
+                              MedicalCertificateClassicScannerConfiguration(
+                                  recognizePatientInfo: true,
+                                  recognizeBarcode: true,
+                                  captureHighResolutionImage: true),
+                          finder: FinderConfiguration(
+                            finderAspectRatio: const FinderAspectRatio(
+                                width: 3.0, height: 4.0),
+                            onFinderRectChange: (left, top, right, bottom) {
+                              // aligning some text view to the finder dynamically by calculating its position from finder changes
+                            },
+                            // widget that can be inserted in the region between finder hole and top of the camera
+                            topWidget: const Center(
+                                child: Text(
+                              'Top hint text in centre',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                            // widget that can be inserted in the region between finder hole and bottom of the camera
+                            bottomWidget: const Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  'Bottom hint text in topCenter',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                            // widget that can be inserted inside finder window
+                            widget: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: AspectRatio(
+                                  aspectRatio: 4 / 3.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 5,
+                                          color:
+                                              Colors.lightBlue.withAlpha(155),
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20))),
+                                  ),
                                 ),
                               ),
                             ),
+                            // The shape by which background will be clipped and which will be presented as finder hole
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 5,
+                                  color: Colors.deepPurple,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                            backgroundColor: Colors.amber.withAlpha(150),
                           ),
-                          // The shape by which background will be clipped and which will be presented as finder hole
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 5,
-                                color: Colors.deepPurple,
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20))),
-                          backgroundColor: Colors.amber.withAlpha(150),
                         ),
-                      ),
-                      onWidgetReady: (controller) {
-                        // Once your camera initialized you are now able to control camera parameters
-                        this.controller = controller;
-                        // This option uses to check from platform whether flash is available and display control button
-                        controller.isFlashAvailable().then((value) => {
-                              setState(() {
-                                flashAvailable = value;
-                              })
-                            });
-                      },
-                      onHeavyOperationProcessing: (show) {
-                        setState(() {
-                          showProgressBar = show;
-                        });
-                      },
-                    )
-                  : Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Permissions not granted',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    )
-              : Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'License has expired',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-
-          showProgressBar
-              ? const Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 10,
+                        onWidgetReady: (controller) {
+                          // Once your camera initialized you are now able to control camera parameters
+                          this.controller = controller;
+                          // This option uses to check from platform whether flash is available and display control button
+                          controller.isFlashAvailable().then((value) => {
+                                if (mounted)
+                                  {
+                                    setState(() {
+                                      flashAvailable = value;
+                                    })
+                                  }
+                              });
+                        },
+                        onHeavyOperationProcessing: (show) {
+                          setState(() {
+                            showProgressBar = show;
+                          });
+                        },
+                      )
+                    : Container(
+                        color: Colors.white,
+                        width: double.infinity,
+                        height: double.infinity,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Permissions not granted',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
+                : Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'License has expired',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
-                )
-              : Container()
-        ],
+
+            showProgressBar
+                ? const Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 10,
+                      ),
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }
