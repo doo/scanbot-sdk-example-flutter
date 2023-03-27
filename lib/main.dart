@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -5,32 +6,35 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_image_picker/models/image_picker_response.dart';
 import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
-import 'package:scanbot_sdk/generic_document_recognizer.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
+import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/document_scan_data.dart';
 import 'package:scanbot_sdk/ehic_scanning_data.dart';
+import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
+import 'package:scanbot_sdk/mc_scanning_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_custom_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/classical_components/medical_certificate_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
-import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
+import 'package:scanbot_sdk_example_flutter/ui/mc_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
 import 'ui/utils.dart';
-import 'dart:async';
 
 /// true - if you need to enable encryption for example app
 bool shouldInitWithEncryption = false;
@@ -122,6 +126,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+
     super.initState();
   }
 
@@ -129,6 +134,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MainPageWidget(),
+      navigatorObservers: [ScanbotCamera.scanbotSdkRouteObserver],
     );
   }
 }
@@ -140,6 +146,7 @@ class MainPageWidget extends StatefulWidget {
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   final PageRepository _pageRepository = PageRepository();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,6 +225,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             'Detect Barcodes from Multiple Still Images',
             onTap: () {
               _detectBarcodesOnImages();
+            },
+          ),
+          MenuItemWidget(
+            'Scan Medical Certificate (Custom UI)',
+            onTap: () {
+              _startMedicalCertificateCustomUIScanner();
             },
           ),
           MenuItemWidget(
@@ -390,6 +403,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
     );
+
+    //handle result if it was returned
     if (result is BarcodeScanningResult) {
       await Navigator.of(context).push(
         MaterialPageRoute(
@@ -402,10 +417,27 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const DocumentScannerWidget()),
     );
+
+    //handle result if it was returned
     if (result is List<common.Page>) {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => DocumentPreview()),
+      );
+    }
+  }
+
+  Future<void> _startMedicalCertificateCustomUIScanner() async {
+    var result = await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => const MedicalCertificateScannerWidget()),
+    );
+
+    //handle result if it was returned
+    if (result is MedicalCertificateResult) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => MedicalCertificatePreviewWidget(result)),
       );
     }
   }

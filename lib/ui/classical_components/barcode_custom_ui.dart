@@ -12,6 +12,7 @@ import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 
 import '../../main.dart';
+import '../barcode_preview.dart';
 import '../pages_widget.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
@@ -38,15 +39,17 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
+        ///pause whole detection process if you are going to show result on other screen
+        barcodeCameraDetector.pauseDetection();
+
         /// Use update function to show result overlay on top of the camera or
         //resultStream.add(scanningResult);
 
-        /// this to return result to screen caller
-        barcodeCameraDetector
-            .pauseDetection(); //also we can pause detection after success immediately to prevent it from sending new sucсess results
-        Navigator.pop(context, scanningResult);
+        /// for returning scanning result back
+        // Navigator.pop(context, scanningResult);
 
-        print(scanningResult.toJson().toString());
+        /// for showing result in next screen in stack
+        showResult(scanningResult);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
@@ -56,6 +59,18 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         Logger.root.severe(error.toString());
       },
     );
+  }
+
+  Future<void> showResult(BarcodeScanningResult scanningResult) async {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(
+          builder: (context) => BarcodesResultPreviewWidget(scanningResult)),
+    )
+        .then((value) {
+      ///resume camera when going back to camera from other screen
+      barcodeCameraDetector.resumeDetection();
+    });
   }
 
   void checkPermission() async {
@@ -100,174 +115,186 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
             IconButton(
                 onPressed: () {
                   controller?.setFlashEnabled(!flashEnabled).then((value) => {
-                        setState(() {
-                          flashEnabled = !flashEnabled;
-                        })
+                        if (mounted)
+                          {
+                            setState(() {
+                              flashEnabled = !flashEnabled;
+                            })
+                          }
                       });
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off))
         ],
       ),
-      body: Stack(
-        children: <Widget>[
-          // Check permission and show some placeholder if its not granted, or show camera otherwise
-
-          licenseIsActive
-              ? permissionGranted
-                  ? BarcodeScannerCamera(
-                      cameraDetector: barcodeCameraDetector,
-                      // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                      configuration: BarcodeCameraConfiguration(
-                        flashEnabled: flashEnabled, //initial flash state
-                        // Initial configuration for the scanner itself
-                        scannerConfiguration:
-                            BarcodeClassicScannerConfiguration(
-                                barcodeFormats:
-                                    PredefinedBarcodes.allBarcodeTypes(),
-                                //[BarcodeFormat.QR_CODE] for ine barcode type
-                                engineMode: EngineMode.NextGen,
-                                additionalParameters:
-                                    BarcodeAdditionalParameters(
-                                        msiPlesseyChecksumAlgorithm:
-                                            MSIPlesseyChecksumAlgorithm
-                                                .Mod11NCR,
-                                        enableGS1Decoding: true)
-                                // get full size image of document with successfully scanned barcode
-                                // barcodeImageGenerationType:
-                                // BarcodeImageGenerationType.CAPTURED_IMAGE
+      body: Container(
+        color: Colors.black,
+        child: Stack(
+          children: <Widget>[
+            // Check permission and show some placeholder if its not granted, or show camera otherwise
+            licenseIsActive
+                ? permissionGranted
+                    ? BarcodeScannerCamera(
+                        cameraDetector: barcodeCameraDetector,
+                        // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
+                        configuration: BarcodeCameraConfiguration(
+                          flashEnabled: flashEnabled, //initial flash state
+                          // Initial configuration for the scanner itself
+                          scannerConfiguration:
+                              BarcodeClassicScannerConfiguration(
+                                  barcodeFormats:
+                                      PredefinedBarcodes.allBarcodeTypes(),
+                                  //[BarcodeFormat.QR_CODE] for ine barcode type
+                                  engineMode: EngineMode.NextGen,
+                                  additionalParameters:
+                                      BarcodeAdditionalParameters(
+                                          msiPlesseyChecksumAlgorithm:
+                                              MSIPlesseyChecksumAlgorithm
+                                                  .Mod11NCR,
+                                          enableGS1Decoding: true)
+                                  // get full size image of document with successfully scanned barcode
+                                  // barcodeImageGenerationType:
+                                  // BarcodeImageGenerationType.CAPTURED_IMAGE
+                                  ),
+                          finder: FinderConfiguration(
+                              onFinderRectChange: (left, top, right, bottom) {
+                                // aligning some text view to the finder dynamically by calculating its position from finder changes
+                              },
+                              // widget that can be inserted in the region between finder hole and top of the camera
+                              topWidget: const Center(
+                                  child: Text(
+                                'Top hint text in centre',
+                                style: TextStyle(color: Colors.white),
+                              )),
+                              // widget that can be inserted in the region between finder hole and bottom of the camera
+                              bottomWidget: const Align(
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    'This is text in finder bottom TopCenter  part',
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                              // widget that can be inserted inside finder window
+                              widget: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        width: 5,
+                                        color: Colors.lightBlue.withAlpha(155),
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(20))),
                                 ),
-                        finder: FinderConfiguration(
-                            onFinderRectChange: (left, top, right, bottom) {
-                              // aligning some text view to the finder dynamically by calculating its position from finder changes
-                            },
-                            // widget that can be inserted in the region between finder hole and top of the camera
-                            topWidget: const Center(
-                                child: Text(
-                              'Top hint text in centre',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                            // widget that can be inserted in the region between finder hole and bottom of the camera
-                            bottomWidget: const Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  'This is text in finder bottom TopCenter  part',
-                                  style: TextStyle(color: Colors.white),
-                                )),
-                            // widget that can be inserted inside finder window
-                            widget: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 5,
-                                      color: Colors.lightBlue.withAlpha(155),
-                                    ),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20))),
                               ),
-                            ),
-                            // The shape by which background will be clipped and which will be presented as finder hole
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 5,
-                                  color: Colors.deepPurple,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20))),
-                            backgroundColor: Colors.amber.withAlpha(150),
-                            finderAspectRatio:
-                                const FinderAspectRatio(width: 5, height: 2)),
-                      ),
-                      onWidgetReady: (controller) {
-                        // Once your camera initialized you are now able to control camera parameters
-                        this.controller = controller;
-                        // This option uses to check from platform whether flash is available and display control button
-                        controller.isFlashAvailable().then((value) => {
-                              setState(() {
-                                flashAvailable = value;
-                              })
-                            });
-                      },
-                      onHeavyOperationProcessing: (show) {
-                        showProgressBar = show;
-                      },
-                    )
-                  : Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Permissions not granted',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    )
-              : Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'License is No more active',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                ),
-
-          //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
-          StreamBuilder<BarcodeScanningResult>(
-              stream: resultStream.stream,
-              builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container();
-                }
-
-                Widget pageView;
-                if (snapshot.data?.barcodeImageURI != null) {
-                  if (shouldInitWithEncryption) {
-                    pageView =
-                        EncryptedPageWidget((snapshot.data?.barcodeImageURI)!);
-                  } else {
-                    pageView = PageWidget((snapshot.data?.barcodeImageURI)!);
-                  }
-                } else {
-                  pageView = Container();
-                }
-
-                return Stack(
-                  children: [
-                    ListView.builder(
-                        itemCount: snapshot.data?.barcodeItems.length ?? 0,
-                        itemBuilder: (context, index) {
-                          var barcode =
-                              snapshot.data?.barcodeItems[index].text ?? '';
-                          return Container(
-                              color: Colors.white60, child: Text(barcode));
-                        }),
-                    (snapshot.data?.barcodeImageURI != null)
-                        ? Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            alignment: Alignment.bottomRight,
-                            child: SizedBox(
-                              width: 100,
-                              height: 200,
-                              child: pageView,
-                            ),
-                          )
-                        : Container(),
-                  ],
-                );
-              }),
-          showProgressBar
-              ? const Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 10,
+                              // The shape by which background will be clipped and which will be presented as finder hole
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 5,
+                                    color: Colors.deepPurple,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20))),
+                              backgroundColor: Colors.amber.withAlpha(150),
+                              finderAspectRatio:
+                                  const FinderAspectRatio(width: 5, height: 2)),
+                        ),
+                        onWidgetReady: (controller) {
+                          // Once your camera initialized you are now able to control camera parameters
+                          this.controller = controller;
+                          // This option uses to check from platform whether flash is available and display control button
+                          controller.isFlashAvailable().then((value) => {
+                                if (mounted)
+                                  {
+                                    setState(() {
+                                      flashAvailable = value;
+                                    })
+                                  }
+                              });
+                        },
+                        onHeavyOperationProcessing: (show) {
+                          setState(() {
+                            showProgressBar = show;
+                          });
+                        },
+                      )
+                    : Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.white,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Permissions not granted',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      )
+                : Container(
+                    color: Colors.white,
+                    width: double.infinity,
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'License is No more active',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
-                )
-              : Container()
-        ],
+
+            //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
+            StreamBuilder<BarcodeScanningResult>(
+                stream: resultStream.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.data == null) {
+                    return Container();
+                  }
+
+                  Widget pageView;
+                  if (snapshot.data?.barcodeImageURI != null) {
+                    if (shouldInitWithEncryption) {
+                      pageView = EncryptedPageWidget(
+                          (snapshot.data?.barcodeImageURI)!);
+                    } else {
+                      pageView = PageWidget((snapshot.data?.barcodeImageURI)!);
+                    }
+                  } else {
+                    pageView = Container();
+                  }
+
+                  return Stack(
+                    children: [
+                      ListView.builder(
+                          itemCount: snapshot.data?.barcodeItems.length ?? 0,
+                          itemBuilder: (context, index) {
+                            var barcode =
+                                snapshot.data?.barcodeItems[index].text ?? '';
+                            return Container(
+                                color: Colors.white60, child: Text(barcode));
+                          }),
+                      (snapshot.data?.barcodeImageURI != null)
+                          ? Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              alignment: Alignment.bottomRight,
+                              child: SizedBox(
+                                width: 100,
+                                height: 200,
+                                child: pageView,
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  );
+                }),
+            showProgressBar
+                ? const Center(
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 10,
+                      ),
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       ),
     );
   }
