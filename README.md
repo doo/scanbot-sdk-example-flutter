@@ -1,6 +1,6 @@
 # Scanbot Barcode & Document Scanning Example App for Flutter
 
-This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/android-barcode-scanner/), [Scanbot Document Scanner SDK](https://scanbot.io/developer/android-document-scanner-sdk/), and [Scanbot Data Capture SDK](https://scanbot.io/developer/android-data-capture/) for Flutter.
+This example app shows how to integrate the [Scanbot Barcode Scanner SDK](https://scanbot.io/developer/flutter-barcode-scanner/), [Scanbot Document Scanner SDK](https://scanbot.io/developer/flutter-document-scanner/), and [Scanbot Data Capture SDK](https://scanbot.io/developer/flutter-data-capture/) for Flutter.
 
 ## What is the Scanbot SDK?
 
