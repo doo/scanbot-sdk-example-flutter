@@ -14,8 +14,10 @@ PODS:
     - GMImagePickerWithCloudMediaDownloading
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 2.0.0)
-  - ScanbotSDK/MRZ (2.0.0)
+    - ScanbotSDK (= 2.2.0)
+  - ScanbotSDK (2.2.0):
+    - ScanbotSDK/NONE (= 2.2.0)
+  - ScanbotSDK/NONE (2.2.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -60,8 +62,8 @@ SPEC CHECKSUMS:
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   scanbot_image_picker: 2b8d9d7aae8b46d5ae2476a09a9b66bd507de577
-  scanbot_sdk: 779a9b3e3136235bd01fb0936dcb8fb6be03af2f
-  ScanbotSDK: 2f69748df723f4af3254b880a26381583afbe13e
+  scanbot_sdk: 50c6b5e137459c8eb30aa9acc2a18939197e1d1c
+  ScanbotSDK: 88ea9100f2d6fe0c0fddc707bff470e7f71387d8
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
 
 PODFILE CHECKSUM: 5429ee8c498e8683698bc8efc991a9968dd47b1a

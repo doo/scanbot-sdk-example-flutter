@@ -208,7 +208,7 @@ version 1.7.10
 //-------------------------------------------------------------
 kotlinx.coroutines
 
-version 1.4.1
+version 1.6.1
 (https://github.com/Kotlin/kotlinx.coroutines/blob/1.3.2/LICENSE.txt)
 Copyright 2016-2019 JetBrains s.r.o.
 

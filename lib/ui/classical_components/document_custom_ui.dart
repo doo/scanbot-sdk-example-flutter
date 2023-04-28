@@ -50,15 +50,15 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         liveDetector.pauseDetection();
 
         /// Use update function to show result overlay on top of the camera or
-        // resultStream.add(page);
+        //resultStream.add(page);
+        //liveDetector.resumeDetection(); // resume detection for next snap
 
         var pages = [page];
-
         /// this to return result to screen caller
         // Navigator.pop(context, pages);
 
         /// for showing result in next screen in stack
-        showPageResult(pages);
+        //showPageResult(pages);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
@@ -82,7 +82,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       MaterialPageRoute(builder: (context) => DocumentPreview()),
     )
         .then((value) {
-      ///resume camera when going back to camera from other screen
+      ///resume detection when going back to camera from other screen
       liveDetector.resumeDetection();
     });
   }

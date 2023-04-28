@@ -19,7 +19,7 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
     for (var element in preview.checkboxes) {
       checkboxes.add(McInfoboxFieldItemWidget(element));
     }
-    for (var element in preview.patientInfoFields) {
+    for (var element in preview.patientInfoBox.fields) {
       patientInfos.add(McPatientInfoFieldItemWidget(element));
     }
     for (var element in preview.dates) {
@@ -91,7 +91,7 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
 }
 
 class McPatientInfoFieldItemWidget extends StatelessWidget {
-  final McPatientInfoField field;
+  final MedicalCertificatePatientInfoField field;
 
   McPatientInfoFieldItemWidget(this.field);
 
@@ -128,9 +128,9 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
 }
 
 class McInfoboxFieldItemWidget extends StatelessWidget {
-  final MedicalCertificateInfoBox field;
+  final MedicalCertificateCheckBox checkbox;
 
-  McInfoboxFieldItemWidget(this.field);
+  McInfoboxFieldItemWidget(this.checkbox);
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +141,7 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              field.subType.name,
+              checkbox.type.name,
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -151,7 +151,7 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (field.hasContents).toString(),
+              (checkbox.hasContents).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
