@@ -58,7 +58,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         // Navigator.pop(context, pages);
 
         /// for showing result in next screen in stack
-        //showPageResult(pages);
+        showPageResult(pages);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
       errorListener: (error) {
