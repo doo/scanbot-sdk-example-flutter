@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
+import 'package:scanbot_sdk/json/generic_document_configuration_json.dart';
 
 class GenericDocumentResultPreview extends StatefulWidget {
   final GenericDocumentRecognizerResult result;
@@ -46,13 +47,13 @@ class _GenericDocumentResultPreviewState
 }
 
 Widget genericDocumentResultView(
-    GenericDocumentType? genericDocumentType, dynamic fields) {
+    DocumentType? genericDocumentType, dynamic fields) {
   switch (genericDocumentType) {
-    case GenericDocumentType.DeIdCard:
+    case DocumentType.DeIdCard:
       return DeIdCardResultView(fields as DeIdCardResult);
-    case GenericDocumentType.DePassport:
+    case DocumentType.DePassport:
       return DePassportResultView(fields as DePassportResult);
-    case GenericDocumentType.DeDriverLicense:
+    case DocumentType.DeDriverLicense:
       return DeDriverLicenseResultView(fields as DeDriverLicenseResult);
     default:
       return Container();

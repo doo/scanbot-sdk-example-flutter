@@ -8,7 +8,7 @@ import 'package:scanbot_sdk/classical_components/classical_camera.dart';
 import 'package:scanbot_sdk/classical_components/medical_certificate_camera.dart';
 import 'package:scanbot_sdk/classical_components/medical_certificate_live_detection.dart';
 import 'package:scanbot_sdk/classical_components/medical_certificate_scanner_configuration.dart';
-import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_platform.dart' as platform;
 import 'package:scanbot_sdk/mc_scanning_data.dart';
 import 'package:scanbot_sdk_example_flutter/ui/mc_preview.dart';
 
@@ -143,8 +143,8 @@ class _MedicalCertificateScannerWidgetState
                                   recognizeBarcode: true,
                                   captureHighResolutionImage: true),
                           finder: FinderConfiguration(
-                            finderAspectRatio: const FinderAspectRatio(
-                                width: 3.0, height: 4.0),
+                            finderAspectRatio:
+                                platform.AspectRatio(width: 3.0, height: 4.0),
                             onFinderRectChange: (left, top, right, bottom) {
                               // aligning some text view to the finder dynamically by calculating its position from finder changes
                             },

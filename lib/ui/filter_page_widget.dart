@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as c;
+import 'package:scanbot_sdk/json/common_platform.dart';
 import 'package:scanbot_sdk/scanbot_encryption_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
@@ -64,11 +65,11 @@ class FilterPreviewWidget extends StatefulWidget {
 class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   c.Page page;
   Uri? filteredImageUri;
-  late c.ImageFilterType selectedFilter;
+  late ImageFilterType selectedFilter;
 
   FilterPreviewWidgetState(this.page) {
     filteredImageUri = page.documentImageFileUri;
-    selectedFilter = page.filter ?? c.ImageFilterType.NONE;
+    selectedFilter = page.filter ?? ImageFilterType.NONE;
   }
 
   @override
@@ -94,14 +95,14 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
                 inherit: true,
                 color: Colors.black,
                 fontStyle: FontStyle.normal)),
-        for (var filter in c.ImageFilterType.values)
+        for (var filter in ImageFilterType.values)
           RadioListTile(
             title: titleFromFilterType(filter),
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
               previewFilter(page,
-                  (value as c.ImageFilterType?) ?? c.ImageFilterType.NONE);
+                  (value as ImageFilterType?) ?? ImageFilterType.NONE);
             },
           ),
       ],
@@ -122,7 +123,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     );
   }
 
-  Text titleFromFilterType(c.ImageFilterType filterType) {
+  Text titleFromFilterType(ImageFilterType filterType) {
     return Text(
       filterType.toString().replaceAll('ImageFilterType.', ''),
       style: const TextStyle(
@@ -153,7 +154,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     }
   }
 
-  Future<void> previewFilter(c.Page page, c.ImageFilterType filterType) async {
+  Future<void> previewFilter(c.Page page, ImageFilterType filterType) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }

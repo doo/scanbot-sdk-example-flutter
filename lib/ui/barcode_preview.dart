@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_platform.dart';
 import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
 
 import '../main.dart';
@@ -114,6 +115,7 @@ class BarcodeItemWidget extends StatelessWidget {
 const barcodeFormatEnumMap = {
   BarcodeFormat.AZTEC: 'AZTEC',
   BarcodeFormat.CODABAR: 'CODABAR',
+  BarcodeFormat.CODE_25: 'CODE_25',
   BarcodeFormat.CODE_39: 'CODE_39',
   BarcodeFormat.CODE_93: 'CODE_93',
   BarcodeFormat.CODE_128: 'CODE_128',

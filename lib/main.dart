@@ -16,6 +16,9 @@ import 'package:scanbot_sdk/ehic_scanning_data.dart';
 import 'package:scanbot_sdk/generic_document_recognizer.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart' as common;
+import 'package:scanbot_sdk/json/common_platform.dart';
+import 'package:scanbot_sdk/json/common_platform.dart' as platform;
+import 'package:scanbot_sdk/json/generic_document_configuration_json.dart';
 import 'package:scanbot_sdk/license_plate_scan_data.dart';
 import 'package:scanbot_sdk/mc_scanning_data.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
@@ -126,7 +129,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -380,7 +382,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
-        finderAspectRatio: const FinderAspectRatio(width: 4, height: 2),
+        finderAspectRatio: platform.AspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -451,11 +453,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var config = GenericDocumentRecognizerConfiguration(
         acceptedDocumentTypes: [
-          RootDocumentType.DeDriverLicenseFront,
-          RootDocumentType.DeDriverLicenseBack,
-          RootDocumentType.DePassport,
-          RootDocumentType.DeIdCardBack,
-          RootDocumentType.DeIdCardFront,
+          GenericDocumentType.DeDriverLicenseFront,
+          GenericDocumentType.DeDriverLicenseBack,
+          GenericDocumentType.DeIdCardFront,
+          GenericDocumentType.DeIdCardBack,
+          GenericDocumentType.DePassport,
         ],
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
@@ -489,7 +491,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         barcodesCountText: '%d codes',
         fetchingStateText: 'might be not needed',
         noBarcodesTitle: 'nothing to see here',
-        finderAspectRatio: const FinderAspectRatio(width: 3, height: 2),
+        finderAspectRatio: platform.AspectRatio(width: 3, height: 2),
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
@@ -595,7 +597,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       var config = LicensePlateScannerConfiguration(
           topBarBackgroundColor: Colors.pink,
-          topBarButtonsColor: Colors.white70,
+          topBarButtonsActiveColor: Colors.white70,
           confirmationDialogAccentColor: Colors.green);
       requestResult = await ScanbotSdkUi.startLicensePlateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
@@ -711,7 +713,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       final config = HealthInsuranceScannerConfiguration(
         topBarBackgroundColor: ScanbotRedColor,
-        topBarButtonsColor: Colors.white70,
+        topBarButtonsActiveColor: Colors.white70,
         // ...
       );
       result = await ScanbotSdkUi.startEhicScanner(config);
@@ -743,7 +745,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
-        config.finderAspectRatio = const FinderAspectRatio(width: 7, height: 1);
+        config.finderAspectRatio = platform.AspectRatio(width: 7, height: 1);
       }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {

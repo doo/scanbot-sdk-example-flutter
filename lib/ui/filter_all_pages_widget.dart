@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_platform.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';

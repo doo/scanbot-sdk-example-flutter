@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_platform.dart';
 
 class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   final List<BarcodeScanningResult> previewItems;
@@ -143,5 +144,6 @@ const barcodeFormatEnumMap = {
   BarcodeFormat.UPC_A: 'UPC_A',
   BarcodeFormat.UPC_E: 'UPC_E',
   BarcodeFormat.MSI_PLESSEY: 'MSI_PLESSEY',
+  BarcodeFormat.CODE_25: 'CODE_25',
   BarcodeFormat.UNKNOWN: 'UNKNOWN',
 };
