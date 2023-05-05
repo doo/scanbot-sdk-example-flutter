@@ -26,7 +26,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   permission_handler: ^10.2.0
-  scanbot_image_picker: 1.0.1-alpha2
+  scanbot_image_picker: 1.0.1-alpha3
   logging: ^1.1.1
   shared_preferences: ^2.0.18
   path_provider: ^2.0.13

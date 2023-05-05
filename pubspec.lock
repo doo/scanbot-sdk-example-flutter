@@ -348,10 +348,10 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_image_picker
-      sha256: e13eb44644a0471484c2c882011affb392782a436df013984830c60496c77f51
+      sha256: b2467211db084f8eed8f5be60a5503465be7f07bd264b0d013102cc611a14770
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1-alpha2"
+    version: "1.0.1-alpha3"
   scanbot_sdk:
     dependency: "direct main"
     description:
