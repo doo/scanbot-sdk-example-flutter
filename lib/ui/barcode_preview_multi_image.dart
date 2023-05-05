@@ -143,5 +143,8 @@ const barcodeFormatEnumMap = {
   BarcodeFormat.UPC_A: 'UPC_A',
   BarcodeFormat.UPC_E: 'UPC_E',
   BarcodeFormat.MSI_PLESSEY: 'MSI_PLESSEY',
+  BarcodeFormat.IATA_2_OF_5: 'IATA_2_OF_5',
+  BarcodeFormat.INDUSTRIAL_2_OF_5: 'INDUSTRIAL_2_OF_5',
+  BarcodeFormat.CODE_25: 'CODE_25',
   BarcodeFormat.UNKNOWN: 'UNKNOWN',
 };
