@@ -1,7 +1,5 @@
 PODS:
   - Flutter (1.0.0)
-  - GMImagePicker (0.0.2)
-  - GMImagePickerWithCloudMediaDownloading (1.0.0)
   - image_picker_ios (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -9,31 +7,32 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.0.4):
     - Flutter
-  - scanbot_image_picker (1.0.0):
+  - scanbot_image_picker (1.0.1):
     - Flutter
-    - GMImagePickerWithCloudMediaDownloading
+    - scanbot_image_picker/Assets (= 1.0.1)
+  - scanbot_image_picker/Assets (1.0.1):
+    - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK/MRZ (= 2.0.0)
-  - ScanbotSDK/MRZ (2.0.0)
+    - ScanbotSDK (= 2.2.0)
+  - ScanbotSDK (2.2.0):
+    - ScanbotSDK/NONE (= 2.2.0)
+  - ScanbotSDK/NONE (2.2.0)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - GMImagePicker (~> 0.0.2)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - scanbot_image_picker (from `.symlinks/plugins/scanbot_image_picker/ios`)
   - scanbot_sdk (from `.symlinks/plugins/scanbot_sdk/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
-    - GMImagePicker
-    - GMImagePickerWithCloudMediaDownloading
     - ScanbotSDK
 
 EXTERNAL SOURCES:
@@ -42,7 +41,7 @@ EXTERNAL SOURCES:
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   scanbot_image_picker:
@@ -50,20 +49,18 @@ EXTERNAL SOURCES:
   scanbot_sdk:
     :path: ".symlinks/plugins/scanbot_sdk/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  GMImagePicker: 6438a6764d6280b1dbf19b59140313f5a73daeeb
-  GMImagePickerWithCloudMediaDownloading: 47bb09b84bd14e0fcff2c982841b2b6ef3b923c5
   image_picker_ios: 58b9c4269cb176f89acea5e5d043c9358f2d25f8
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  scanbot_image_picker: 2b8d9d7aae8b46d5ae2476a09a9b66bd507de577
-  scanbot_sdk: 779a9b3e3136235bd01fb0936dcb8fb6be03af2f
-  ScanbotSDK: 2f69748df723f4af3254b880a26381583afbe13e
+  scanbot_image_picker: 1c256c797d7a1c32a23efbb4acbf37b55d5e3ebc
+  scanbot_sdk: 50c6b5e137459c8eb30aa9acc2a18939197e1d1c
+  ScanbotSDK: 88ea9100f2d6fe0c0fddc707bff470e7f71387d8
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
 
-PODFILE CHECKSUM: 5429ee8c498e8683698bc8efc991a9968dd47b1a
+PODFILE CHECKSUM: 08b3263b008e9ac3809ff2bca1b9f415301c8044
 
 COCOAPODS: 1.11.3

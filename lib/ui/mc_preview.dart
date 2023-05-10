@@ -13,18 +13,17 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var checkboxes = <Widget>[];
-    var patientInfos = <Widget>[];
-    var dates = <Widget>[];
+    var widgets = <Widget>[];
     for (var element in preview.checkboxes) {
-      checkboxes.add(McInfoboxFieldItemWidget(element));
+      widgets.add(McInfoboxFieldItemWidget(element));
     }
-    for (var element in preview.patientInfoFields) {
-      patientInfos.add(McPatientInfoFieldItemWidget(element));
+    for (var element in preview.patientInfoBox.fields) {
+      widgets.add(McPatientInfoFieldItemWidget(element));
     }
     for (var element in preview.dates) {
-      dates.add(McDateRecordFieldItemWidget(element));
+      widgets.add(McDateRecordFieldItemWidget(element));
     }
+    widgets.add(getImageContainer(preview.croppedDocumentURI));
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -47,23 +46,11 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-            itemBuilder: (context, position) {
-              if (position == 0) {
-                return Column(children: checkboxes);
-              }
-              if (position == 1) {
-                return Column(children: dates);
-              }
-              if (position == 2) {
-                return Column(children: patientInfos);
-              }
-              if (position == 3) {
-                return   getImageContainer(preview.croppedDocumentURI);
-              }
-              return Container();
-            },
-            itemCount: 4,
-          ),
+        itemBuilder: (context, position) {
+          return widgets[position];
+        },
+        itemCount: widgets.length,
+      ),
     );
   }
 
@@ -91,14 +78,14 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
 }
 
 class McPatientInfoFieldItemWidget extends StatelessWidget {
-  final McPatientInfoField field;
+  final MedicalCertificatePatientInfoField field;
 
   McPatientInfoFieldItemWidget(this.field);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
@@ -121,6 +108,16 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              (field.confidenceValue).toString(),
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -128,20 +125,20 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
 }
 
 class McInfoboxFieldItemWidget extends StatelessWidget {
-  final MedicalCertificateInfoBox field;
+  final MedicalCertificateCheckBox checkbox;
 
-  McInfoboxFieldItemWidget(this.field);
+  McInfoboxFieldItemWidget(this.checkbox);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              field.subType.name,
+              checkbox.type.name,
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -151,7 +148,17 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (field.hasContents).toString(),
+              (checkbox.hasContents).toString(),
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              (checkbox.contentsValidationConfidenceValue).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -172,7 +179,7 @@ class McDateRecordFieldItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Padding(
@@ -189,6 +196,16 @@ class McDateRecordFieldItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               (field.dateString).toString(),
+              style: const TextStyle(
+                inherit: true,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              (field.recognitionConfidenceValue).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
