@@ -348,18 +348,18 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_image_picker
-      sha256: "195b1424872b45ae164a1102e3b7e44a4ab3730716b93f446759ce2b88f797d7"
+      sha256: b2467211db084f8eed8f5be60a5503465be7f07bd264b0d013102cc611a14770
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1-alpha3"
   scanbot_sdk:
     dependency: "direct main"
     description:
       name: scanbot_sdk
-      sha256: "74639a024facd8bb30a0375d10e7b9e2f46c5aecbf28f78acf3a4d10a6487748"
+      sha256: "50d7805afebcbe1171fd5784baea99e3df8129a149ec24e536a0e59ba32dd728"
       url: "https://pub.dev"
     source: hosted
-    version: "2.11.0"
+    version: "2.12.0"
   shared_preferences:
     dependency: "direct main"
     description:

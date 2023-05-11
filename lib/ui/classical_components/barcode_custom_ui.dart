@@ -44,6 +44,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
         /// Use update function to show result overlay on top of the camera or
         //resultStream.add(scanningResult);
+        //liveDetector.resumeDetection(); // resume detection for next snap
 
         /// for returning scanning result back
         // Navigator.pop(context, scanningResult);
@@ -150,7 +151,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                                           msiPlesseyChecksumAlgorithm:
                                               MSIPlesseyChecksumAlgorithm
                                                   .Mod11NCR,
-                                          enableGS1Decoding: true)
+                                          enableGS1Decoding: true),
                                   // get full size image of document with successfully scanned barcode
                                   // barcodeImageGenerationType:
                                   // BarcodeImageGenerationType.CAPTURED_IMAGE
