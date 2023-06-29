@@ -296,7 +296,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _getLicenseStatus() async {
     try {
       final result = await ScanbotSdk.getLicenseStatus();
-      await showAlertDialog(context, jsonEncode(result),
+
+      await showAlertDialog(context, "Status: ${result.status} expirationDate: ${result.expirationDate}",
           title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);
@@ -772,7 +773,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   /// Check for error message and display accordingly.
   void ValidateUriError(ImagePickerResponse response) {
-    String message = response.message ?? "";
+    var message = response.message ?? "";
+    if(message.isEmpty){
+      message = "RESULT IS EMPTY";
+    }
     showAlertDialog(context, message);
   }
 }

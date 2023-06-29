@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/barcode_scanning_data.dart';
 import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/json/common_platform.dart';
+import '../utility/barcode_helper.dart';
 
 class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   final List<BarcodeScanningResult> previewItems;
@@ -40,16 +41,22 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
           child: ListView.builder(
               itemCount: previewItems.length,
               itemBuilder: (context, positionImages) {
-                return Column(children: [
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                   const SizedBox(height: 35),
                   getResultTitle(positionImages),
                   const SizedBox(height: 10),
                   getImageContainer(
                       previewItems[positionImages].barcodeImageURI, context),
                   const SizedBox(height: 10),
-                  SizedBox(
-                      child: getBoldTextWidget("Detected Barcodes"),
-                      width: MediaQuery.of(context).size.width - 30),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: SizedBox(
+                        child: getBoldTextWidget("Detected Barcodes"),
+                        width: MediaQuery.of(context).size.width - 30),
+                  ),
+                  const SizedBox(height: 10),
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -114,36 +121,17 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   /// get barcode description cell
   Widget getBarcodeDescription(BarcodeItem item, BuildContext context) {
     var widget = SizedBox(
-        width: MediaQuery.of(context).size.width - 30,
-        child: Row(children: [
-          const SizedBox(width: 15),
-          getBoldTextWidget(
-              barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN'),
-          const SizedBox(width: 10),
-          Text(item.text ?? "", style: const TextStyle(fontSize: 14)),
-          const SizedBox(width: 15)
-        ]));
+       width: MediaQuery.of(context).size.width - 30,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                const SizedBox(width: 15),
+                getBoldTextWidget(
+                  BarcodeHelper.barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN'),
+                const SizedBox(width: 10),
+                Flexible(child: Text(item.text ?? "", style: const TextStyle(fontSize: 14))),
+          ]),
+        );
     return widget;
   }
 }
-
-const barcodeFormatEnumMap = {
-  BarcodeFormat.AZTEC: 'AZTEC',
-  BarcodeFormat.CODABAR: 'CODABAR',
-  BarcodeFormat.CODE_39: 'CODE_39',
-  BarcodeFormat.CODE_93: 'CODE_93',
-  BarcodeFormat.CODE_128: 'CODE_128',
-  BarcodeFormat.DATA_MATRIX: 'DATA_MATRIX',
-  BarcodeFormat.EAN_8: 'EAN_8',
-  BarcodeFormat.EAN_13: 'EAN_13',
-  BarcodeFormat.ITF: 'ITF',
-  BarcodeFormat.PDF_417: 'PDF_417',
-  BarcodeFormat.QR_CODE: 'QR_CODE',
-  BarcodeFormat.RSS_14: 'RSS_14',
-  BarcodeFormat.RSS_EXPANDED: 'RSS_EXPANDED',
-  BarcodeFormat.UPC_A: 'UPC_A',
-  BarcodeFormat.UPC_E: 'UPC_E',
-  BarcodeFormat.MSI_PLESSEY: 'MSI_PLESSEY',
-  BarcodeFormat.CODE_25: 'CODE_25',
-  BarcodeFormat.UNKNOWN: 'UNKNOWN',
-};
