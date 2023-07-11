@@ -9,22 +9,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_image_picker/models/image_picker_response.dart';
 import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
-import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/document_scan_data.dart';
-import 'package:scanbot_sdk/ehic_scanning_data.dart';
-import 'package:scanbot_sdk/generic_document_recognizer.dart';
-import 'package:scanbot_sdk/json/common_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
-import 'package:scanbot_sdk/json/common_platform.dart';
-import 'package:scanbot_sdk/json/common_platform.dart' as platform;
-import 'package:scanbot_sdk/json/generic_document_configuration_json.dart';
-import 'package:scanbot_sdk/license_plate_scan_data.dart';
-import 'package:scanbot_sdk/mc_scanning_data.dart';
-import 'package:scanbot_sdk/mrz_scanning_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_models.dart' hide Status;
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
@@ -32,6 +19,7 @@ import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_cus
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/medical_certificate_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/generic_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/mc_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/mrz_document_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview_document_widget.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
@@ -297,7 +285,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       final result = await ScanbotSdk.getLicenseStatus();
 
-      await showAlertDialog(context, "Status: ${result.status} expirationDate: ${result.expirationDate}",
+      await showAlertDialog(context,
+          "Status: ${result.status} expirationDate: ${result.expirationDate}",
           title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);
@@ -383,9 +372,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
-        finderAspectRatio: platform.AspectRatio(width: 4, height: 2),
+        finderAspectRatio: sdk.AspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
+        viewFinderEnabled: false,
         /*  additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
           minimumTextLength: 10,
@@ -422,7 +412,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     );
 
     //handle result if it was returned
-    if (result is List<common.Page>) {
+    if (result is List<sdk.Page>) {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => DocumentPreview()),
@@ -450,15 +440,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    GenericDocumentRecognizerResult? result;
+    GenericDocumentWrappedResults? result;
     try {
       var config = GenericDocumentRecognizerConfiguration(
         acceptedDocumentTypes: [
-          GenericDocumentType.DeDriverLicenseFront,
-          GenericDocumentType.DeDriverLicenseBack,
-          GenericDocumentType.DeIdCardFront,
-          GenericDocumentType.DeIdCardBack,
-          GenericDocumentType.DePassport,
+          GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
+          GenericDocumentType.DE_DRIVER_LICENSE_BACK,
+          GenericDocumentType.DE_ID_CARD_FRONT,
+          GenericDocumentType.DE_ID_CARD_BACK,
+          GenericDocumentType.DE_PASSPORT,
         ],
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
@@ -492,7 +482,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         barcodesCountText: '%d codes',
         fetchingStateText: 'might be not needed',
         noBarcodesTitle: 'nothing to see here',
-        finderAspectRatio: platform.AspectRatio(width: 3, height: 2),
+        finderAspectRatio: sdk.AspectRatio(width: 3, height: 2),
         finderLineWidth: 7,
         successBeepEnabled: true,
         // flashEnabled: true,
@@ -695,8 +685,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _showGenericDocumentRecognizerResult(
-      final GenericDocumentRecognizerResult result) async {
-    if (result.status == Status.OK) {
+      final GenericDocumentWrappedResults result) async {
+    if (isOperationSuccessful(result)) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => GenericDocumentResultPreview(result),
@@ -746,7 +736,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
       );
       if (Platform.isIOS) {
-        config.finderAspectRatio = platform.AspectRatio(width: 7, height: 1);
+        config.finderAspectRatio = sdk.AspectRatio(width: 7, height: 1);
       }
       result = await ScanbotSdkUi.startMrzScanner(config);
     } catch (e) {
@@ -754,14 +744,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     if (result != null && isOperationSuccessful(result)) {
-      final concatenate = StringBuffer();
-      result.fields
-          .map((field) =>
-              "${field.name.toString().replaceAll("MRZFieldName.", "")}:${field.value}\n")
-          .forEach((s) {
-        concatenate.write(s);
-      });
-      await showAlertDialog(context, concatenate.toString());
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => MrzDocumentResultPreview(result)),
+      );
     }
   }
 
@@ -774,7 +760,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   /// Check for error message and display accordingly.
   void ValidateUriError(ImagePickerResponse response) {
     var message = response.message ?? "";
-    if(message.isEmpty){
+    if (message.isEmpty) {
       message = "RESULT IS EMPTY";
     }
     showAlertDialog(context, message);

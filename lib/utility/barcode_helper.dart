@@ -1,10 +1,12 @@
 import 'package:scanbot_sdk/json/common_data.dart';
+import 'package:scanbot_sdk/json/common_platform.dart';
 
 class BarcodeHelper {
   static final barcodeFormatEnumMap = {
     BarcodeFormat.AZTEC: 'AZTEC',
     BarcodeFormat.CODABAR: 'CODABAR',
     BarcodeFormat.CODE_39: 'CODE_39',
+    BarcodeFormat.CODE_25: 'CODE_25',
     BarcodeFormat.CODE_93: 'CODE_93',
     BarcodeFormat.CODE_128: 'CODE_128',
     BarcodeFormat.DATA_MATRIX: 'DATA_MATRIX',
@@ -20,7 +22,6 @@ class BarcodeHelper {
     BarcodeFormat.MSI_PLESSEY: 'MSI_PLESSEY',
     BarcodeFormat.IATA_2_OF_5: 'IATA_2_OF_5',
     BarcodeFormat.INDUSTRIAL_2_OF_5: 'INDUSTRIAL_2_OF_5',
-    BarcodeFormat.CODE_25: 'CODE_25',
     BarcodeFormat.UNKNOWN: 'UNKNOWN',
   };
 }

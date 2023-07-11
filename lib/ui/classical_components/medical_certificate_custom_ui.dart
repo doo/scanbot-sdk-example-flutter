@@ -1,15 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
-import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/classical_components/medical_certificate_camera.dart';
-import 'package:scanbot_sdk/classical_components/medical_certificate_live_detection.dart';
-import 'package:scanbot_sdk/classical_components/medical_certificate_scanner_configuration.dart';
-import 'package:scanbot_sdk/json/common_platform.dart' as platform;
-import 'package:scanbot_sdk/mc_scanning_data.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+
 import 'package:scanbot_sdk_example_flutter/ui/mc_preview.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
@@ -144,7 +141,7 @@ class _MedicalCertificateScannerWidgetState
                                   captureHighResolutionImage: true),
                           finder: FinderConfiguration(
                             finderAspectRatio:
-                                platform.AspectRatio(width: 3.0, height: 4.0),
+                                sdk.AspectRatio(width: 3.0, height: 4.0),
                             onFinderRectChange: (left, top, right, bottom) {
                               // aligning some text view to the finder dynamically by calculating its position from finder changes
                             },
@@ -165,7 +162,7 @@ class _MedicalCertificateScannerWidgetState
                             widget: Center(
                               child: Padding(
                                 padding: const EdgeInsets.all(16),
-                                child: AspectRatio(
+                                child: material.AspectRatio(
                                   aspectRatio: 4 / 3.0,
                                   child: Container(
                                     decoration: BoxDecoration(

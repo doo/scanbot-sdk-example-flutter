@@ -3,14 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/barcode_scanning_data.dart';
-import 'package:scanbot_sdk/classical_components/barcode_camera.dart';
-import 'package:scanbot_sdk/classical_components/barcode_live_detection.dart';
-import 'package:scanbot_sdk/classical_components/barcode_scanner_configuration.dart';
 import 'package:scanbot_sdk/classical_components/camera_configuration.dart';
-import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/json/common_platform.dart';
-import 'package:scanbot_sdk/json/common_platform.dart' as platform;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 import '../../main.dart';
 import '../barcode_preview.dart';
@@ -197,7 +192,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                                       Radius.circular(20))),
                               backgroundColor: Colors.amber.withAlpha(150),
                               finderAspectRatio:
-                              platform.AspectRatio(width: 5, height: 2)),
+                              sdk.AspectRatio(width: 5, height: 2)),
                         ),
                         onWidgetReady: (controller) {
                           // Once your camera initialized you are now able to control camera parameters

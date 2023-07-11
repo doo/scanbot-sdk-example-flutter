@@ -4,14 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/classical_components/document_camera.dart';
-import 'package:scanbot_sdk/classical_components/document_live_detection.dart';
-import 'package:scanbot_sdk/classical_components/document_scanner_configuration.dart';
-import 'package:scanbot_sdk/classical_components/hint.dart';
-import 'package:scanbot_sdk/classical_components/shutter.dart';
-import 'package:scanbot_sdk/document_scan_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+
 
 import '../../main.dart';
 import '../../pages_repository.dart';
@@ -29,7 +24,7 @@ class DocumentScannerWidget extends StatefulWidget {
 class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
-  final resultStream = StreamController<common.Page>();
+  final resultStream = StreamController<sdk.Page>();
   final detectionStatusStream = StreamController<DetectionStatus>();
   ScanbotCameraController? controller;
   late DocumentCameraLiveDetector liveDetector;
@@ -75,7 +70,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     );
   }
 
-  void showPageResult(List<common.Page> pages) {
+  void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context)
         .push(
@@ -287,7 +282,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                   ),
 
             //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
-            StreamBuilder<common.Page>(
+            StreamBuilder<sdk.Page>(
                 stream: resultStream.stream,
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
@@ -360,7 +355,7 @@ class DetectionStatusWidget extends StatelessWidget {
 }
 
 class PagePreview extends StatelessWidget {
-  final common.Page page;
+  final sdk.Page page;
 
   const PagePreview({Key? key, required this.page}) : super(key: key);
 
