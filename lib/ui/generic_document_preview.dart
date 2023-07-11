@@ -44,6 +44,7 @@ class _GenericDocumentResultPreviewState
           ),
         ),
         body: ListView.builder(
+          itemCount: widgets.length,
           itemBuilder: (context, index) {
             return widgets[index];
           },
@@ -442,9 +443,13 @@ class CategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
+        Container(
+          color: Colors.grey[300],
+          child: Text(
+            title,
+          ),
         ),
         GenericDocumentFieldView(
           title: "Valid From",
@@ -478,9 +483,6 @@ class GenericDocumentFieldView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
       child: Column(
         children: [
-          const Divider(
-            thickness: 2,
-          ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
