@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:scanbot_sdk/json/common_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

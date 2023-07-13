@@ -1,15 +1,13 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as c;
-import 'package:scanbot_sdk/json/common_platform.dart';
-import 'package:scanbot_sdk/scanbot_encryption_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
 class PageFiltering extends StatelessWidget {
-  final c.Page _page;
+  final sdk.Page _page;
 
   PageFiltering(this._page);
 
@@ -45,7 +43,7 @@ class PageFiltering extends StatelessWidget {
 
 // ignore: must_be_immutable
 class FilterPreviewWidget extends StatefulWidget {
-  final c.Page page;
+  final sdk.Page page;
   late FilterPreviewWidgetState filterPreviewWidgetState;
 
   FilterPreviewWidget(this.page) {
@@ -63,7 +61,7 @@ class FilterPreviewWidget extends StatefulWidget {
 }
 
 class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
-  c.Page page;
+  sdk.Page page;
   Uri? filteredImageUri;
   late ImageFilterType selectedFilter;
 
@@ -77,7 +75,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     final imageData =
         ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri!);
     final image = FutureBuilder<Uint8List>(
-        future: imageData as Future<Uint8List>,
+        future: imageData,
         builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
           if (snapshot.data != null) {
             var image = Image.memory(snapshot.data!);
@@ -154,7 +152,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     }
   }
 
-  Future<void> previewFilter(c.Page page, ImageFilterType filterType) async {
+  Future<void> previewFilter(sdk.Page page, ImageFilterType filterType) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }

@@ -1,5 +1,4 @@
-import 'package:scanbot_sdk/json/common_data.dart';
-import 'package:scanbot_sdk/json/common_platform.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 class BarcodeHelper {
   static final barcodeFormatEnumMap = {
@@ -22,6 +21,6 @@ class BarcodeHelper {
     BarcodeFormat.MSI_PLESSEY: 'MSI_PLESSEY',
     BarcodeFormat.IATA_2_OF_5: 'IATA_2_OF_5',
     BarcodeFormat.INDUSTRIAL_2_OF_5: 'INDUSTRIAL_2_OF_5',
-    BarcodeFormat.UNKNOWN: 'UNKNOWN',
+    BarcodeFormat.MICRO_QR_CODE: 'MICRO_QR_CODE',
   };
 }

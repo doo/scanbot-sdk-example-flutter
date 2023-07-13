@@ -450,6 +450,27 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           GenericDocumentType.DE_ID_CARD_BACK,
           GenericDocumentType.DE_PASSPORT,
         ],
+        topBarBackgroundColor: Colors.red,
+        fieldConfidenceLowColor: Colors.blue,
+        fieldConfidenceHighColor: Colors.purpleAccent,
+        fieldsDisplayConfiguration: [
+          // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
+          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.GivenNames, "My GivenNames", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.BirthDate, "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.ExpiryDate, "Document Expiry Date", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.Address, "My address", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssueDate, "When issued", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssuingAuthority, "Who issued", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(MRZFieldsSignatures.DocumentNumber, "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
+          FieldsDisplayConfiguration(MRZFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+        ],
+        documentsDisplayConfiguration: [
+          DocumentsDisplayConfiguration(DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
+          DocumentsDisplayConfiguration(MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
+          DocumentsDisplayConfiguration(DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE, "Licence plate Front"),
+          DocumentsDisplayConfiguration(DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE, "Licence plate Back"),
+        ]
       );
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
