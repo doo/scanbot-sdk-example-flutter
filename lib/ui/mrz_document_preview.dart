@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/json/common_generic_document.dart';
-import 'package:scanbot_sdk/json/generic_document_wrappers.dart';
 import 'package:scanbot_sdk/mrz_scanning_data.dart';
 
 import 'generic_document_preview.dart';
