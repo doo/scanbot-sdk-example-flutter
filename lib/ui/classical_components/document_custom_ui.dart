@@ -101,6 +101,36 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var documentClassicScannerConfiguration = DocumentClassicScannerConfiguration(
+                                        // ignoreBadAspectRatio: false,
+                                        autoSnapEnabled: autoSnappingEnabled,
+                                        //initial autosnapping
+                                        //acceptedAngleScore: 35,
+                                        //acceptedSizeScore: 0.75,
+                                        /*  requiredAspectRatios: [
+                                      const PageAspectRatio(
+                                          width: 1.0, height: 1.0)
+                                    ],*/
+                                        detectDocumentAfterSnap: true,
+                                        autoSnapSensitivity: 0.5);
+    var documentCameraConfiguration = DocumentCameraConfiguration(
+                                flashEnabled:
+                                    flashEnabled, //initial flash state
+                                // Initial configuration for the scanner itself
+                                scannerConfiguration:
+                                    documentClassicScannerConfiguration,
+                                contourConfiguration: ContourConfiguration(
+                                  strokeOkColor: Colors.red,
+                                  fillOkColor: Colors.red.withAlpha(150),
+                                  strokeColor: Colors.blue,
+                                  fillColor: Colors.blue.withAlpha(150),
+                                  cornerRadius: 35,
+                                  strokeWidth: 10,
+                                  autoSnapProgressStrokeColor:
+                                      Colors.greenAccent,
+                                  autoSnapProgressEnabled: true,
+                                  autoSnapProgressStrokeWidth: 5,
+                                ));
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -166,35 +196,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                           DocumentScannerCamera(
                             cameraDetector: liveDetector,
                             // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                            configuration: DocumentCameraConfiguration(
-                                flashEnabled:
-                                    flashEnabled, //initial flash state
-                                // Initial configuration for the scanner itself
-                                scannerConfiguration:
-                                    DocumentClassicScannerConfiguration(
-                                        // ignoreBadAspectRatio: false,
-                                        autoSnapEnabled: autoSnappingEnabled,
-                                        //initial autosnapping
-                                        //acceptedAngleScore: 35,
-                                        //acceptedSizeScore: 0.75,
-                                        /*  requiredAspectRatios: [
-                                      const PageAspectRatio(
-                                          width: 1.0, height: 1.0)
-                                    ],*/
-                                        detectDocumentAfterSnap: true,
-                                        autoSnapSensitivity: 0.5),
-                                contourConfiguration: ContourConfiguration(
-                                  strokeOkColor: Colors.red,
-                                  fillOkColor: Colors.red.withAlpha(150),
-                                  strokeColor: Colors.blue,
-                                  fillColor: Colors.blue.withAlpha(150),
-                                  cornerRadius: 35,
-                                  strokeWidth: 10,
-                                  autoSnapProgressStrokeColor:
-                                      Colors.greenAccent,
-                                  autoSnapProgressEnabled: true,
-                                  autoSnapProgressStrokeWidth: 5,
-                                )),
+                            configuration: documentCameraConfiguration,
                             onWidgetReady: (controller) {
                               // Once your camera initialized you are now able to control camera parameters
                               this.controller = controller;
@@ -208,6 +210,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                       }
                                   });
                             },
+                            onCameraPreviewStarted: () {},
                             onHeavyOperationProcessing: (show) {
                               setState(() {
                                 showProgressBar = show;

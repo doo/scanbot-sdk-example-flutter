@@ -86,6 +86,63 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var finderConfiguration = FinderConfiguration(
+        onFinderRectChange: (left, top, right, bottom) {
+          // aligning some text view to the finder dynamically by calculating its position from finder changes
+        },
+        // widget that can be inserted in the region between finder hole and top of the camera
+        topWidget: const Center(
+            child: Text(
+          'Top hint text in centre',
+          style: TextStyle(color: Colors.white),
+        )),
+        // widget that can be inserted in the region between finder hole and bottom of the camera
+        bottomWidget: const Align(
+            alignment: Alignment.topCenter,
+            child: Text(
+              'This is text in finder bottom TopCenter  part',
+              style: TextStyle(color: Colors.white),
+            )),
+        // widget that can be inserted inside finder window
+        widget: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(
+                  width: 5,
+                  color: Colors.lightBlue.withAlpha(155),
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(20))),
+          ),
+        ),
+        // The shape by which background will be clipped and which will be presented as finder hole
+        decoration: BoxDecoration(
+            border: Border.all(
+              width: 5,
+              color: Colors.deepPurple,
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(20))),
+        backgroundColor: Colors.amber.withAlpha(150),
+        finderAspectRatio: sdk.AspectRatio(width: 5, height: 2));
+
+    var barcodeClassicScannerConfiguration = BarcodeClassicScannerConfiguration(
+        barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+        //[BarcodeFormat.QR_CODE] for one barcode type
+        engineMode: EngineMode.NEXT_GEN,
+        additionalParameters: BarcodeAdditionalParameters(
+            msiPlesseyChecksumAlgorithm: MSIPlesseyChecksumAlgorithm.MOD_11_NCR,
+            enableGS1Decoding: true),
+        // get full size image of document with successfully scanned barcode
+        // barcodeImageGenerationType:
+        // BarcodeImageGenerationType.CAPTURED_IMAGE
+      );
+
+    var barcodeCameraConfiguration = BarcodeCameraConfiguration(
+      flashEnabled: flashEnabled, //initial flash state
+      // Initial configuration for the scanner itself
+      scannerConfiguration: barcodeClassicScannerConfiguration,
+      finder: finderConfiguration,
+    );
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -132,67 +189,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                     ? BarcodeScannerCamera(
                         cameraDetector: barcodeCameraDetector,
                         // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                        configuration: BarcodeCameraConfiguration(
-                          flashEnabled: flashEnabled, //initial flash state
-                          // Initial configuration for the scanner itself
-                          scannerConfiguration:
-                              BarcodeClassicScannerConfiguration(
-                                  barcodeFormats:
-                                      PredefinedBarcodes.allBarcodeTypes(),
-                                  //[BarcodeFormat.QR_CODE] for ine barcode type
-                                  engineMode: EngineMode.NEXT_GEN,
-                                  additionalParameters:
-                                      BarcodeAdditionalParameters(
-                                          msiPlesseyChecksumAlgorithm:
-                                              MSIPlesseyChecksumAlgorithm
-                                                  .MOD_11_NCR,
-                                          enableGS1Decoding: true),
-                                  // get full size image of document with successfully scanned barcode
-                                  // barcodeImageGenerationType:
-                                  // BarcodeImageGenerationType.CAPTURED_IMAGE
-                                  ),
-                          finder: FinderConfiguration(
-                              onFinderRectChange: (left, top, right, bottom) {
-                                // aligning some text view to the finder dynamically by calculating its position from finder changes
-                              },
-                              // widget that can be inserted in the region between finder hole and top of the camera
-                              topWidget: const Center(
-                                  child: Text(
-                                'Top hint text in centre',
-                                style: TextStyle(color: Colors.white),
-                              )),
-                              // widget that can be inserted in the region between finder hole and bottom of the camera
-                              bottomWidget: const Align(
-                                  alignment: Alignment.topCenter,
-                                  child: Text(
-                                    'This is text in finder bottom TopCenter  part',
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                              // widget that can be inserted inside finder window
-                              widget: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                        width: 5,
-                                        color: Colors.lightBlue.withAlpha(155),
-                                      ),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20))),
-                                ),
-                              ),
-                              // The shape by which background will be clipped and which will be presented as finder hole
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 5,
-                                    color: Colors.deepPurple,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20))),
-                              backgroundColor: Colors.amber.withAlpha(150),
-                              finderAspectRatio:
-                              sdk.AspectRatio(width: 5, height: 2)),
-                        ),
+                        configuration: barcodeCameraConfiguration,
                         onWidgetReady: (controller) {
                           // Once your camera initialized you are now able to control camera parameters
                           this.controller = controller;
@@ -206,6 +203,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                                   }
                               });
                         },
+                        onCameraPreviewStarted: () {},
                         onHeavyOperationProcessing: (show) {
                           setState(() {
                             showProgressBar = show;

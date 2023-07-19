@@ -83,6 +83,66 @@ class _MedicalCertificateScannerWidgetState
 
   @override
   Widget build(BuildContext context) {
+    var medicalCertificateClassicScannerConfiguration = MedicalCertificateClassicScannerConfiguration(
+                                  recognizePatientInfo: true,
+                                  recognizeBarcode: true,
+                                  captureHighResolutionImage: true);
+    var finderConfiguration = FinderConfiguration(
+                            finderAspectRatio:
+                                sdk.AspectRatio(width: 3.0, height: 4.0),
+                            onFinderRectChange: (left, top, right, bottom) {
+                              // aligning some text view to the finder dynamically by calculating its position from finder changes
+                            },
+                            // widget that can be inserted in the region between finder hole and top of the camera
+                            topWidget: const Center(
+                                child: Text(
+                              'Top hint text in centre',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                            // widget that can be inserted in the region between finder hole and bottom of the camera
+                            bottomWidget: const Align(
+                                alignment: Alignment.topCenter,
+                                child: Text(
+                                  'Bottom hint text in topCenter',
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                            // widget that can be inserted inside finder window
+                            widget: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: material.AspectRatio(
+                                  aspectRatio: 4 / 3.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          width: 5,
+                                          color:
+                                              Colors.lightBlue.withAlpha(155),
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20))),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // The shape by which background will be clipped and which will be presented as finder hole
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 5,
+                                  color: Colors.deepPurple,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20))),
+                            backgroundColor: Colors.amber.withAlpha(150),
+                          );
+    var medicalCertificateCameraConfiguration = MedicalCertificateCameraConfiguration(
+                          flashEnabled: flashEnabled,
+                          //initial flash state
+                          // Initial configuration for the scanner itself
+                          scannerConfiguration:
+                              medicalCertificateClassicScannerConfiguration,
+                          finder: finderConfiguration,
+                        );
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -130,64 +190,7 @@ class _MedicalCertificateScannerWidgetState
                     ? MedicalCertificateScannerCamera(
                         cameraDetector: mcCameraDetector,
                         // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                        configuration: MedicalCertificateCameraConfiguration(
-                          flashEnabled: flashEnabled,
-                          //initial flash state
-                          // Initial configuration for the scanner itself
-                          scannerConfiguration:
-                              MedicalCertificateClassicScannerConfiguration(
-                                  recognizePatientInfo: true,
-                                  recognizeBarcode: true,
-                                  captureHighResolutionImage: true),
-                          finder: FinderConfiguration(
-                            finderAspectRatio:
-                                sdk.AspectRatio(width: 3.0, height: 4.0),
-                            onFinderRectChange: (left, top, right, bottom) {
-                              // aligning some text view to the finder dynamically by calculating its position from finder changes
-                            },
-                            // widget that can be inserted in the region between finder hole and top of the camera
-                            topWidget: const Center(
-                                child: Text(
-                              'Top hint text in centre',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                            // widget that can be inserted in the region between finder hole and bottom of the camera
-                            bottomWidget: const Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  'Bottom hint text in topCenter',
-                                  style: TextStyle(color: Colors.white),
-                                )),
-                            // widget that can be inserted inside finder window
-                            widget: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: material.AspectRatio(
-                                  aspectRatio: 4 / 3.0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: 5,
-                                          color:
-                                              Colors.lightBlue.withAlpha(155),
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20))),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // The shape by which background will be clipped and which will be presented as finder hole
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 5,
-                                  color: Colors.deepPurple,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(20))),
-                            backgroundColor: Colors.amber.withAlpha(150),
-                          ),
-                        ),
+                        configuration: medicalCertificateCameraConfiguration,
                         onWidgetReady: (controller) {
                           // Once your camera initialized you are now able to control camera parameters
                           this.controller = controller;
