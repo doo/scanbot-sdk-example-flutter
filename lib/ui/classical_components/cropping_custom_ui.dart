@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/classical_components/classical_cropping.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 /// This is an example screen of how to integrate new classical barcode scanner component
 class CroppingScreenWidget extends StatefulWidget {
   CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
-  final common.Page page;
+  final sdk.Page page;
 
   @override
   _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
@@ -71,7 +70,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
                 edgeColor: Colors.red,
                 edgeColorOnLine: Colors.blue,
                 anchorPointsColor: Colors.amberAccent,
-                borderInsets: common.Insets.all(16)),
+                borderInsets: sdk.Insets.all(16)),
 
             showProgressBar
                 ? const Center(
@@ -122,8 +121,8 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
         ));
   }
 
-  Future<common.Page> proceedImage(
-      common.Page page, CroppingResult croppingResult) async {
+  Future<sdk.Page> proceedImage(
+      sdk.Page page, CroppingPolygon croppingResult) async {
     //transform rotation degrees to rotation times (each time is 90degree) + direction
 
     return await ScanbotSdk.cropAndRotatePage(
