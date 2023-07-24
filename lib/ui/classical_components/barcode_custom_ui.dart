@@ -34,7 +34,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
     barcodeCameraDetector = BarcodeCameraLiveDetector(
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
-        ///pause whole detection process if you are going to show result on other screen
+        // pause whole detection process if you are going to show result on other screen
+        // comment this line if you want to show result on top of the camera (AR overlay mode)
         barcodeCameraDetector.pauseDetection();
 
         /// Use update function to show result overlay on top of the camera or
@@ -44,7 +45,8 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         /// for returning scanning result back
         // Navigator.pop(context, scanningResult);
 
-        /// for showing result in next screen in stack
+        // for showing result in next screen in stack
+        // comment this line if you want to show result on top of the camera (AR overlay mode)
         showResult(scanningResult);
       },
       //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
@@ -126,21 +128,41 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         finderAspectRatio: sdk.AspectRatio(width: 5, height: 2));
 
     var barcodeClassicScannerConfiguration = BarcodeClassicScannerConfiguration(
-        barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
-        //[BarcodeFormat.QR_CODE] for one barcode type
-        engineMode: EngineMode.NEXT_GEN,
-        additionalParameters: BarcodeAdditionalParameters(
-            msiPlesseyChecksumAlgorithm: MSIPlesseyChecksumAlgorithm.MOD_11_NCR,
-            enableGS1Decoding: true),
-        // get full size image of document with successfully scanned barcode
-        // barcodeImageGenerationType:
-        // BarcodeImageGenerationType.CAPTURED_IMAGE
-      );
+      barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+      //[BarcodeFormat.QR_CODE] for one barcode type
+      engineMode: EngineMode.NEXT_GEN,
+      additionalParameters: BarcodeAdditionalParameters(
+          msiPlesseyChecksumAlgorithm: MSIPlesseyChecksumAlgorithm.MOD_11_NCR,
+          enableGS1Decoding: true),
+      // get full size image of document with successfully scanned barcode
+      // barcodeImageGenerationType:
+      // BarcodeImageGenerationType.CAPTURED_IMAGE
+    );
 
+    var selectionOverlayScannerConfiguration =
+        SelectionOverlayScannerConfiguration(
+      overlayEnabled: true,
+      textFormat: BarcodeOverlayTextFormat.CODE,
+      polygonColor: Colors.green,
+      textColor: Colors.white,
+      textContainerColor: Colors.grey,
+      polygonStrokeWidth: 4,
+      polygonCornerRadius: 2,
+      onBarcodeClicked: (barcode) {
+        // pause detection if you want to show result on other screen
+        barcodeCameraDetector.pauseDetection();
+        showResult(BarcodeScanningResult([barcode]));
+      },
+    );
     var barcodeCameraConfiguration = BarcodeCameraConfiguration(
       flashEnabled: flashEnabled, //initial flash state
       // Initial configuration for the scanner itself
       scannerConfiguration: barcodeClassicScannerConfiguration,
+
+      // uncomment this line if you want to show result on top of the camera (AR overlay mode)
+      // (please also see other comments related to this mode above)
+      // overlayConfiguration: selectionOverlayScannerConfiguration,
+
       finder: finderConfiguration,
     );
     return Scaffold(
