@@ -37,6 +37,20 @@ class PageRepository {
     await _storePages();
   }
 
+  Future<Page> nextPage(Page page) async {
+    final index = _pages.indexOf(page);
+    if (index == -1) {
+      return page;
+    }
+    if (index + 1 < _pages.length) {
+      return _pages[index + 1];
+    }
+    if (index + 1 == _pages.length) {
+      return _pages[0];
+    }
+    return page;
+  }
+
   Future<void> addPage(Page page) async {
     _pages.add(page);
     await _storePages();
@@ -53,7 +67,8 @@ class PageRepository {
         pagesJson.map((p) => Page.fromJson(p as Map<String, dynamic>)).toList();
     _pages.clear();
     if (loadedPages.isNotEmpty) {
-      var refreshPages = await ScanbotSdk.refreshImageUris(loadedPages);
+      var refreshPages = await ScanbotSdk.refreshImageUris(
+          loadedPages.map((e) => Page(e.pageId)).toList());
       _pages.addAll(refreshPages);
     }
   }
