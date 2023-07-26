@@ -107,7 +107,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
             )),
         // widget that can be inserted inside finder window
         widget: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(
@@ -125,7 +125,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
             ),
             borderRadius: const BorderRadius.all(Radius.circular(20))),
         backgroundColor: Colors.amber.withAlpha(150),
-        finderAspectRatio: sdk.AspectRatio(width: 5, height: 2));
+        finderAspectRatio: sdk.AspectRatio(width: 3, height: 2));
 
     var barcodeClassicScannerConfiguration = BarcodeClassicScannerConfiguration(
       barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
