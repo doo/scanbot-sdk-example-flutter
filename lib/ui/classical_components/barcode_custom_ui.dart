@@ -35,7 +35,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       // Subscribe to the success result of the scanning end error handling
       barcodeListener: (scanningResult) {
         // pause whole detection process if you are going to show result on other screen
-        // comment this line if you want to show result on top of the camera (AR overlay mode)
+        // comment this line if you want to show result on top of the camera (AR overlay mode) if automaticSelectionEnabled == true
         barcodeCameraDetector.pauseDetection();
 
         /// Use update function to show result overlay on top of the camera or
@@ -142,12 +142,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
     var selectionOverlayScannerConfiguration =
         SelectionOverlayScannerConfiguration(
       overlayEnabled: true,
+      automaticSelectionEnabled: false,
       textFormat: BarcodeOverlayTextFormat.CODE,
       polygonColor: Colors.green,
       textColor: Colors.white,
       textContainerColor: Colors.grey,
-      polygonStrokeWidth: 4,
-      polygonCornerRadius: 2,
       onBarcodeClicked: (barcode) {
         // pause detection if you want to show result on other screen
         barcodeCameraDetector.pauseDetection();
@@ -161,7 +160,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
       // uncomment this line if you want to show result on top of the camera (AR overlay mode)
       // (please also see other comments related to this mode above)
-      // overlayConfiguration: selectionOverlayScannerConfiguration,
+      //overlayConfiguration: selectionOverlayScannerConfiguration,
 
       finder: finderConfiguration,
     );

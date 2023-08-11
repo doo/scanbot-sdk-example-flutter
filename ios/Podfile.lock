@@ -14,10 +14,10 @@ PODS:
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK (= 2.3.0)
-  - ScanbotSDK (2.3.0):
-    - ScanbotSDK/NONE (= 2.3.0)
-  - ScanbotSDK/NONE (2.3.0)
+    - ScanbotSDK (= 2.3.1-Beta2)
+  - ScanbotSDK (2.3.1-Beta2):
+    - ScanbotSDK/NONE (= 2.3.1-Beta2)
+  - ScanbotSDK/NONE (2.3.1-Beta2)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -57,10 +57,10 @@ SPEC CHECKSUMS:
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   scanbot_image_picker: 1c256c797d7a1c32a23efbb4acbf37b55d5e3ebc
-  scanbot_sdk: 5c08de0f80301c6fe96cdcaca67441785f734201
-  ScanbotSDK: 3635458d8378f94bed5ee79a2d2ec9bd378a2bb1
+  scanbot_sdk: cb03b0538c8614a193da924bc970ce5e2f59ac95
+  ScanbotSDK: af0599aa1e81604abea5ae03fdcf571548a17a10
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
 
 PODFILE CHECKSUM: de931284b2a18bb0f9cda1e80c79ad438da44b7e
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

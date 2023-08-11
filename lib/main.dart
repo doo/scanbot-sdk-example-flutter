@@ -468,6 +468,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         ],
         documentsDisplayConfiguration: [
           DocumentsDisplayConfiguration(DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
+          DocumentsDisplayConfiguration(DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
           DocumentsDisplayConfiguration(MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
           DocumentsDisplayConfiguration(DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE, "Licence plate Front"),
           DocumentsDisplayConfiguration(DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE, "Licence plate Back"),

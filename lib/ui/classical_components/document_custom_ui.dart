@@ -111,7 +111,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                       const PageAspectRatio(
                                           width: 1.0, height: 1.0)
                                     ],*/
-                                        detectDocumentAfterSnap: true,
+                                        detectDocumentAfterSnap: false,
                                         autoSnapSensitivity: 0.5);
     var documentCameraConfiguration = DocumentCameraConfiguration(
                                 flashEnabled:
