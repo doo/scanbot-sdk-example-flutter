@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as sdk;
-import 'package:scanbot_sdk/create_tiff_data.dart';
-import 'package:scanbot_sdk/document_scan_data.dart';
-import 'package:scanbot_sdk/ocr_data.dart';
-import 'package:scanbot_sdk/render_pdf_data.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
@@ -257,8 +252,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     DocumentScanningResult? result;
     try {
       var config = DocumentScannerConfiguration(
-        orientationLockMode: sdk.OrientationLockMode.PORTRAIT,
-        cameraPreviewMode: sdk.CameraPreviewMode.FIT_IN,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
+        cameraPreviewMode: CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
         multiPageButtonHidden: true,

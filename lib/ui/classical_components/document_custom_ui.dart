@@ -4,14 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/classical_components/classical_camera.dart';
-import 'package:scanbot_sdk/classical_components/document_camera.dart';
-import 'package:scanbot_sdk/classical_components/document_live_detection.dart';
-import 'package:scanbot_sdk/classical_components/document_scanner_configuration.dart';
-import 'package:scanbot_sdk/classical_components/hint.dart';
-import 'package:scanbot_sdk/classical_components/shutter.dart';
-import 'package:scanbot_sdk/document_scan_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+
 
 import '../../main.dart';
 import '../../pages_repository.dart';
@@ -29,7 +24,7 @@ class DocumentScannerWidget extends StatefulWidget {
 class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
-  final resultStream = StreamController<common.Page>();
+  final resultStream = StreamController<sdk.Page>();
   final detectionStatusStream = StreamController<DetectionStatus>();
   ScanbotCameraController? controller;
   late DocumentCameraLiveDetector liveDetector;
@@ -75,7 +70,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     );
   }
 
-  void showPageResult(List<common.Page> pages) {
+  void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context)
         .push(
@@ -106,6 +101,36 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var documentClassicScannerConfiguration = DocumentClassicScannerConfiguration(
+                                        // ignoreBadAspectRatio: false,
+                                        autoSnapEnabled: autoSnappingEnabled,
+                                        //initial autosnapping
+                                        //acceptedAngleScore: 35,
+                                        //acceptedSizeScore: 0.75,
+                                        /*  requiredAspectRatios: [
+                                      const PageAspectRatio(
+                                          width: 1.0, height: 1.0)
+                                    ],*/
+                                        detectDocumentAfterSnap: false,
+                                        autoSnapSensitivity: 0.5);
+    var documentCameraConfiguration = DocumentCameraConfiguration(
+                                flashEnabled:
+                                    flashEnabled, //initial flash state
+                                // Initial configuration for the scanner itself
+                                scannerConfiguration:
+                                    documentClassicScannerConfiguration,
+                                contourConfiguration: ContourConfiguration(
+                                  strokeOkColor: Colors.red,
+                                  fillOkColor: Colors.red.withAlpha(150),
+                                  strokeColor: Colors.blue,
+                                  fillColor: Colors.blue.withAlpha(150),
+                                  cornerRadius: 35,
+                                  strokeWidth: 10,
+                                  autoSnapProgressStrokeColor:
+                                      Colors.greenAccent,
+                                  autoSnapProgressEnabled: true,
+                                  autoSnapProgressStrokeWidth: 5,
+                                ));
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -171,35 +196,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                           DocumentScannerCamera(
                             cameraDetector: liveDetector,
                             // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
-                            configuration: DocumentCameraConfiguration(
-                                flashEnabled:
-                                    flashEnabled, //initial flash state
-                                // Initial configuration for the scanner itself
-                                scannerConfiguration:
-                                    DocumentClassicScannerConfiguration(
-                                        // ignoreBadAspectRatio: false,
-                                        autoSnapEnabled: autoSnappingEnabled,
-                                        //initial autosnapping
-                                        //acceptedAngleScore: 35,
-                                        //acceptedSizeScore: 0.75,
-                                        /*  requiredAspectRatios: [
-                                      const PageAspectRatio(
-                                          width: 1.0, height: 1.0)
-                                    ],*/
-                                        detectDocumentAfterSnap: true,
-                                        autoSnapSensitivity: 0.5),
-                                contourConfiguration: ContourConfiguration(
-                                  strokeOkColor: Colors.red,
-                                  fillOkColor: Colors.red.withAlpha(150),
-                                  strokeColor: Colors.blue,
-                                  fillColor: Colors.blue.withAlpha(150),
-                                  cornerRadius: 35,
-                                  strokeWidth: 10,
-                                  autoSnapProgressStrokeColor:
-                                      Colors.greenAccent,
-                                  autoSnapProgressEnabled: true,
-                                  autoSnapProgressStrokeWidth: 5,
-                                )),
+                            configuration: documentCameraConfiguration,
                             onWidgetReady: (controller) {
                               // Once your camera initialized you are now able to control camera parameters
                               this.controller = controller;
@@ -213,6 +210,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                       }
                                   });
                             },
+                            onCameraPreviewStarted: () {},
                             onHeavyOperationProcessing: (show) {
                               setState(() {
                                 showProgressBar = show;
@@ -287,7 +285,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                   ),
 
             //result content on the top of the scanner as a stream builder, to optimize rebuilding of the widget on each success
-            StreamBuilder<common.Page>(
+            StreamBuilder<sdk.Page>(
                 stream: resultStream.stream,
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
@@ -360,7 +358,7 @@ class DetectionStatusWidget extends StatelessWidget {
 }
 
 class PagePreview extends StatelessWidget {
-  final common.Page page;
+  final sdk.Page page;
 
   const PagePreview({Key? key, required this.page}) : super(key: key);
 

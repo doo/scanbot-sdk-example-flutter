@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:scanbot_sdk/cropping_screen_data.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as sdk;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/cropping_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
 
@@ -107,9 +105,9 @@ class _PageOperationsState extends State<PageOperations> {
               onPressed: () {
                 _startCroppingScreen(_page);
               },
-              child: Column(
+              child: const Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const <Widget>[
+                children: <Widget>[
                   Icon(Icons.crop),
                   Text(
                     'Crop & Rotate',
@@ -122,9 +120,9 @@ class _PageOperationsState extends State<PageOperations> {
               onPressed: () {
                 _startCustomUiCroppingScreen(_page);
               },
-              child: Column(
+              child: const Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const <Widget>[
+                children: <Widget>[
                   Icon(Icons.crop),
                   Text(
                     'Crop(custom ui)',

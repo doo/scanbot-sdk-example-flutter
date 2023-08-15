@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/classical_components/classical_cropping.dart';
-import 'package:scanbot_sdk/json/common_data.dart' as common;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+
+import '../../pages_repository.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
 class CroppingScreenWidget extends StatefulWidget {
   CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
-  final common.Page page;
+
+  final sdk.Page page;
 
   @override
-  _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
+  _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState(page);
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
+  final PageRepository _pageRepository = PageRepository();
+  sdk.Page currentPage;
+
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
   bool showProgressBar = false;
+  bool showNextPageButton = false;
   CroppingController? croppingController;
 
-  _CroppingScreenWidgetState() {}
+  _CroppingScreenWidgetState(this.currentPage) {}
 
   @override
   void initState() {
+    showNextPageButton = _pageRepository.pages.length > 1;
     super.initState();
   }
 
@@ -52,14 +59,24 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
                 onPressed: () {
                   cropAndPop();
                 },
-                icon: const Icon(Icons.done))
+                icon: const Icon(Icons.done)),
+            if (showNextPageButton)
+              IconButton(
+                  onPressed: () {
+                    _pageRepository.nextPage(currentPage).then((page) {
+                      setState(() {
+                        currentPage = page;
+                      });
+                    });
+                  },
+                  icon: const Icon(Icons.arrow_forward))
           ],
         ),
         body: Stack(
           children: <Widget>[
             // Check permission and show some placeholder if its not granted, or show camera otherwise
             ScanbotCroppingWidget(
-                page: widget.page,
+                page: currentPage,
                 onViewReady: (controller) {
                   croppingController = controller;
                 },
@@ -71,7 +88,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
                 edgeColor: Colors.red,
                 edgeColorOnLine: Colors.blue,
                 anchorPointsColor: Colors.amberAccent,
-                borderInsets: common.Insets.all(16)),
+                borderInsets: sdk.Insets.all(16)),
 
             showProgressBar
                 ? const Center(
@@ -122,8 +139,8 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
         ));
   }
 
-  Future<common.Page> proceedImage(
-      common.Page page, CroppingResult croppingResult) async {
+  Future<sdk.Page> proceedImage(
+      sdk.Page page, CroppingPolygon croppingResult) async {
     //transform rotation degrees to rotation times (each time is 90degree) + direction
 
     return await ScanbotSdk.cropAndRotatePage(
@@ -139,7 +156,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
       showProgressBar = false;
     });
     if (croppingResult != null) {
-      var newPage = proceedImage(widget.page, croppingResult);
+      var newPage = proceedImage(currentPage, croppingResult);
       Navigator.of(context).pop(newPage);
     }
   }

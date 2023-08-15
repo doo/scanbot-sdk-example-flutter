@@ -14,10 +14,10 @@ PODS:
     - Flutter
   - scanbot_sdk (1.0.0):
     - Flutter
-    - ScanbotSDK (= 2.2.0)
-  - ScanbotSDK (2.2.0):
-    - ScanbotSDK/NONE (= 2.2.0)
-  - ScanbotSDK/NONE (2.2.0)
+    - ScanbotSDK (= 2.3.1-Beta4)
+  - ScanbotSDK (2.3.1-Beta4):
+    - ScanbotSDK/NONE (= 2.3.1-Beta4)
+  - ScanbotSDK/NONE (2.3.1-Beta4)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -25,11 +25,11 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - scanbot_image_picker (from `.symlinks/plugins/scanbot_image_picker/ios`)
   - scanbot_sdk (from `.symlinks/plugins/scanbot_sdk/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
 SPEC REPOS:
   trunk:
@@ -41,7 +41,7 @@ EXTERNAL SOURCES:
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   scanbot_image_picker:
@@ -49,7 +49,7 @@ EXTERNAL SOURCES:
   scanbot_sdk:
     :path: ".symlinks/plugins/scanbot_sdk/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
@@ -57,10 +57,10 @@ SPEC CHECKSUMS:
   path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
   scanbot_image_picker: 1c256c797d7a1c32a23efbb4acbf37b55d5e3ebc
-  scanbot_sdk: 50c6b5e137459c8eb30aa9acc2a18939197e1d1c
-  ScanbotSDK: 88ea9100f2d6fe0c0fddc707bff470e7f71387d8
+  scanbot_sdk: ecd475f2abbacf00c95da0d0326da51b5019ef5d
+  ScanbotSDK: 49c984586efb19b92535bfbe209b771a020bdafc
   shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
 
-PODFILE CHECKSUM: 08b3263b008e9ac3809ff2bca1b9f415301c8044
+PODFILE CHECKSUM: de931284b2a18bb0f9cda1e80c79ad438da44b7e
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
