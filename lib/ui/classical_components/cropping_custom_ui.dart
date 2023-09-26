@@ -21,14 +21,14 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
   bool showProgressBar = false;
-  bool showNextPageButton = false;
+  bool doneButtonEnabled = true;
+
   CroppingController? croppingController;
 
   _CroppingScreenWidgetState(this.currentPage) {}
 
   @override
   void initState() {
-    showNextPageButton = _pageRepository.pages.length > 1;
     super.initState();
   }
 
@@ -55,21 +55,12 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
             ),
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-                  cropAndPop();
-                },
-                icon: const Icon(Icons.done)),
-            if (showNextPageButton)
+            if (doneButtonEnabled)
               IconButton(
                   onPressed: () {
-                    _pageRepository.nextPage(currentPage).then((page) {
-                      setState(() {
-                        currentPage = page;
-                      });
-                    });
+                    cropAndPop();
                   },
-                  icon: const Icon(Icons.arrow_forward))
+                  icon: const Icon(Icons.done)),
           ],
         ),
         body: Stack(
@@ -127,7 +118,16 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
               ),
               TextButton(
                 onPressed: () {
-                  croppingController?.rotateCw();
+                  if (!doneButtonEnabled) return;
+                  //disable done button while processing rotation animation with await
+                  setState(() {
+                    doneButtonEnabled = false;
+                  });
+                  croppingController?.rotateCw().then((value) => {
+                        setState(() {
+                          doneButtonEnabled = true;
+                        })
+                      });
                 },
                 child: const Text(
                   'Rotate Cw',

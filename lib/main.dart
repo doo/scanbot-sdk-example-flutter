@@ -373,10 +373,11 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
+        overlayConfiguration: SelectionOverlayConfiguration(overlayEnabled:true, polygonColor: Colors.red,automaticSelectionEnabled: false),
         finderAspectRatio: sdk.AspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
-        viewFinderEnabled: false,
+        viewFinderEnabled: true,
         /*  additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
           minimumTextLength: 10,

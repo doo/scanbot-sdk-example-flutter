@@ -106,7 +106,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                         autoSnapEnabled: autoSnappingEnabled,
                                         //initial autosnapping
                                         //acceptedAngleScore: 35,
-                                        //acceptedSizeScore: 0.75,
+                                        acceptedSizeScore: 75,
                                         /*  requiredAspectRatios: [
                                       const PageAspectRatio(
                                           width: 1.0, height: 1.0)
@@ -120,6 +120,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                 scannerConfiguration:
                                     documentClassicScannerConfiguration,
                                 contourConfiguration: ContourConfiguration(
+                                  showPolygonInManualMode: false,
                                   strokeOkColor: Colors.red,
                                   fillOkColor: Colors.red.withAlpha(150),
                                   strokeColor: Colors.blue,
@@ -222,8 +223,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                               builder: (context, snapshot) {
                                 if (snapshot.data == null ||
                                     !permissionGranted ||
-                                    !licenseIsActive ||
-                                    !autoSnappingEnabled) {
+                                    !licenseIsActive) {
                                   return Container();
                                 }
 
