@@ -5,7 +5,7 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - permission_handler_apple (9.0.4):
+  - permission_handler_apple (9.1.1):
     - Flutter
   - scanbot_image_picker (1.0.1):
     - Flutter
@@ -53,13 +53,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  image_picker_ios: 58b9c4269cb176f89acea5e5d043c9358f2d25f8
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
-  permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
+  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   scanbot_image_picker: 1c256c797d7a1c32a23efbb4acbf37b55d5e3ebc
   scanbot_sdk: 841f4029b4ef1a7582cfefa56ee5befe7fcba223
   ScanbotSDK: 423210c481b0d4563be7c1c0bb40d92255a4099b
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
 
 PODFILE CHECKSUM: de931284b2a18bb0f9cda1e80c79ad438da44b7e
 
