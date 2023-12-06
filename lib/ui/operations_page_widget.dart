@@ -236,11 +236,11 @@ class _PageOperationsState extends State<PageOperations> {
       return;
     }
     try {
-      final result = await ScanbotSdk.estimateBlurOnPage(page);
+      final result = await ScanbotSdk.estimateQualityOfPage(page);
 
       await showAlertDialog(
         context,
-        'Blur value is :${result.toStringAsFixed(2)} ',
+        'Document Quality value is :${result.documentQuality})} ',
         title: 'Result',
       );
     } catch (e) {

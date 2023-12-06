@@ -355,10 +355,9 @@ packages:
   scanbot_sdk:
     dependency: "direct main"
     description:
-      name: scanbot_sdk
-      sha256: "78a176ab46990aa196b16d60775cc6ce166425eb265601de9ef97922ba60e738"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../scanbot-sdk-flutter"
+      relative: true
+    source: path
     version: "2.13.6"
   shared_preferences:
     dependency: "direct main"
