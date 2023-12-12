@@ -642,7 +642,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
-        var result = await ScanbotSdk.estimateQualityOfPage(page);
+        var result = await ScanbotSdk.analyzeQualityOfPage(page);
         // set up the button
         showResultTextDialog('Blur value is :${result.documentQuality} ');
       }

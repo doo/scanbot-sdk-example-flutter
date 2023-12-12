@@ -236,7 +236,7 @@ class _PageOperationsState extends State<PageOperations> {
       return;
     }
     try {
-      final result = await ScanbotSdk.estimateQualityOfPage(page);
+      final result = await ScanbotSdk.analyzeQualityOfPage(page);
 
       await showAlertDialog(
         context,
