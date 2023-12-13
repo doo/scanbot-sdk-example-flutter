@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: ^4.1.0-alpha02
+  scanbot_sdk: ^4.1.0-alpha03
 
   cupertino_icons: ^1.0.2
 
@@ -48,7 +48,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this: d
+  # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
