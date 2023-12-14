@@ -623,34 +623,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  Future<void> estimateBlurriness() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-    try {
-      var response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isEmpty) {
-        ValidateUriError(response);
-        return;
-      }
-
-      ///before processing an image the SDK need storage read permission
-      var permissions = await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
-          permissions[Permission.photos] == PermissionStatus.granted) {
-        //ios
-        var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
-        var result = await ScanbotSdk.analyzeQualityOfDocument(page);
-        // set up the button
-        showResultTextDialog('Blur value is :${result.documentQuality} ');
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
   void showResultTextDialog(result) {
     Widget okButton = TextButton(
       onPressed: () => Navigator.pop(context),
