@@ -98,6 +98,7 @@ class _PageOperationsState extends State<PageOperations> {
             : Container()
       ]),
       bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsetsDirectional.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
