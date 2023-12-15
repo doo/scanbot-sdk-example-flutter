@@ -154,10 +154,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       },
     );
     var barcodeCameraConfiguration = BarcodeCameraConfiguration(
-      flashEnabled: flashEnabled, //initial flash state
+      // Initial flash state
+      flashEnabled: flashEnabled,
       // Initial configuration for the scanner itself
       scannerConfiguration: barcodeClassicScannerConfiguration,
-
+      cameraZoomFactor: 0.1,
       // uncomment this line if you want to show result on top of the camera (AR overlay mode)
       // (please also see other comments related to this mode above)
       //overlayConfiguration: selectionOverlayScannerConfiguration,

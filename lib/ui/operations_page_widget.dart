@@ -66,7 +66,7 @@ class _PageOperationsState extends State<PageOperations> {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                _estimateBlurriness(_page);
+                _analyzeQuality(_page);
               },
               child: const Icon(
                 Icons.image_search,
@@ -98,6 +98,7 @@ class _PageOperationsState extends State<PageOperations> {
             : Container()
       ]),
       bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsetsDirectional.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -110,7 +111,7 @@ class _PageOperationsState extends State<PageOperations> {
                 children: <Widget>[
                   Icon(Icons.crop),
                   Text(
-                    'Crop & Rotate',
+                    'RTU Crop',
                     style: TextStyle(inherit: true, color: Colors.black),
                   ),
                 ],
@@ -125,7 +126,7 @@ class _PageOperationsState extends State<PageOperations> {
                 children: <Widget>[
                   Icon(Icons.crop),
                   Text(
-                    'Crop(custom ui)',
+                    'Classic Crop',
                     style: TextStyle(inherit: true, color: Colors.black),
                   ),
                 ],
@@ -231,16 +232,16 @@ class _PageOperationsState extends State<PageOperations> {
     }
   }
 
-  Future<void> _estimateBlurriness(sdk.Page page) async {
+  Future<void> _analyzeQuality(sdk.Page page) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
     try {
-      final result = await ScanbotSdk.estimateBlurOnPage(page);
+      final result = await ScanbotSdk.analyzeQualityOfDocument(page);
 
       await showAlertDialog(
         context,
-        'Blur value is :${result.toStringAsFixed(2)} ',
+        'Document Quality value is: ${result.documentQuality}',
         title: 'Result',
       );
     } catch (e) {
