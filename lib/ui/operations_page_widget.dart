@@ -111,7 +111,7 @@ class _PageOperationsState extends State<PageOperations> {
                 children: <Widget>[
                   Icon(Icons.crop),
                   Text(
-                    'Crop & Rotate',
+                    'RTU Crop',
                     style: TextStyle(inherit: true, color: Colors.black),
                   ),
                 ],
@@ -126,7 +126,7 @@ class _PageOperationsState extends State<PageOperations> {
                 children: <Widget>[
                   Icon(Icons.crop),
                   Text(
-                    'Crop(custom ui)',
+                    'Classic Crop',
                     style: TextStyle(inherit: true, color: Colors.black),
                   ),
                 ],
