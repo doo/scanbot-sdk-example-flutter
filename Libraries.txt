@@ -261,7 +261,8 @@ limitations under the License.
 
 
 
-Open Source libraries used in the Scanbot SDK for Android version 4.1.0
+Open Source libraries used in the Scanbot SDK for Android version 4.1.1
+
 
 CWAC-Camera
 
