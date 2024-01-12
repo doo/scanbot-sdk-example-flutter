@@ -237,7 +237,8 @@ class _PageOperationsState extends State<PageOperations> {
       return;
     }
     try {
-      final result = await ScanbotSdk.analyzeQualityOfDocument(page);
+      final result = await ScanbotSdk.analyzeQualityOfDocument(page,
+          analyzerImageSizeLimit: sdk.Size(width: 2500, height: 2500));
 
       await showAlertDialog(
         context,
