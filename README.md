@@ -54,8 +54,8 @@ You can get the IDs of all connected devices via `flutter devices`.
 Install Pods dependencies:
 
 ```
-cd ios/
-pod install --repo-update
+chmod +x clean-ios.sh
+./clean-ios.sh
 ```
 
 Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings.
