@@ -32,16 +32,12 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        checkReleaseBuilds false
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         // Application ID - see https://developer.android.com/studio/build/application-id.html
         applicationId "io.scanbot.example.flutter"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -50,15 +46,13 @@ android {
             abiFilters "armeabi-v7a", "arm64-v8a"
         }
     }
-
     packagingOptions {
-        pickFirst 'META-INF/atomicfu.kotlin_module'
-        pickFirst 'META-INF/proguard/coroutines.pro'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
+        resources {
+            excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt', 'META-INF/LICENSE', 'META-INF/NOTICE']
+            pickFirsts += ['META-INF/atomicfu.kotlin_module', 'META-INF/proguard/coroutines.pro']
+        }
     }
+
 
     buildTypes {
         release {
@@ -69,6 +63,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
         }
+    }
+    namespace 'com.example.scanbot_sdk_example_flutter'
+    lint {
+        checkReleaseBuilds false
+        disable 'InvalidPackage'
     }
 }
 

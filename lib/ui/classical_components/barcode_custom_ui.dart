@@ -133,7 +133,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       engineMode: EngineMode.NEXT_GEN,
       additionalParameters: BarcodeAdditionalParameters(
           msiPlesseyChecksumAlgorithm: MSIPlesseyChecksumAlgorithm.MOD_11_NCR,
-          enableGS1Decoding: true),
+          gs1HandlingMode: Gs1HandlingMode.NONE),
       // get full size image of document with successfully scanned barcode
       // barcodeImageGenerationType:
       // BarcodeImageGenerationType.CAPTURED_IMAGE

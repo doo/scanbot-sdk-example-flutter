@@ -28,6 +28,7 @@ class BarcodeHelper {
     BarcodeFormat.ROYAL_TNT_POST: 'ROYAL_TNT_POST',
     BarcodeFormat.AUSTRALIA_POST: 'AUSTRALIA_POST',
     BarcodeFormat.DATABAR_LIMITED: 'DATABAR_LIMITED',
+    BarcodeFormat.GS1_COMPOSITE: 'GS1_COMPOSITE',
   };
 
 }
