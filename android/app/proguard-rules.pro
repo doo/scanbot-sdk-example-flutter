@@ -25,8 +25,8 @@
 
 -keeppackagenames io.scanbot.mrzscanner.**
 -keep public class io.scanbot.mrzscanner.**{ *; }
--keeppackagenames io.scanbot.sdk.mrzscanner.**
--keep public class io.scanbot.sdk.mrzscanner.**{ *; }
+-keeppackagenames io.scanbot.sdk.mcrecognizer.**
+-keep public class io.scanbot.sdk.mcrecognizer.**{ *; }
 
 -keeppackagenames io.scanbot.tiffwriter.**
 -keep public class io.scanbot.tiffwriter.**{ *; }
