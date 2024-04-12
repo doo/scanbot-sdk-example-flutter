@@ -247,19 +247,7 @@ packages:
       sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
       url: "https://pub.dev"
     source: hosted
-<<<<<<< Updated upstream
-    version: "1.10.0"
-=======
     version: "1.11.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.5"
->>>>>>> Stashed changes
   path:
     dependency: transitive
     description:
@@ -320,42 +308,22 @@ packages:
     dependency: "direct main"
     description:
       name: permission_handler
-<<<<<<< Updated upstream
-      sha256: "33c6a1253d1f95fd06fa74b65b7ba907ae9811f9d5c1d3150e51417d04b8d6a8"
+      sha256: "18bf33f7fefbd812f37e72091a15575e72d5318854877e0e4035a24ac1113ecb"
       url: "https://pub.dev"
     source: hosted
-    version: "10.2.0"
-=======
-      sha256: "74e962b7fad7ff75959161bb2c0ad8fe7f2568ee82621c9c2660b751146bfe44"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.3.0"
->>>>>>> Stashed changes
+    version: "11.3.1"
   permission_handler_android:
     dependency: transitive
     description:
       name: permission_handler_android
-<<<<<<< Updated upstream
-      sha256: "8028362b40c4a45298f1cbfccd227c8dd6caf0e27088a69f2ba2ab15464159e2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.2.0"
-=======
       sha256: "1acac6bae58144b442f11e66621c062aead9c99841093c38f5bcdcc24c1c3474"
       url: "https://pub.dev"
     source: hosted
     version: "12.0.5"
->>>>>>> Stashed changes
   permission_handler_apple:
     dependency: transitive
     description:
       name: permission_handler_apple
-<<<<<<< Updated upstream
-      sha256: "9c370ef6a18b1c4b2f7f35944d644a56aa23576f23abee654cf73968de93f163"
-      url: "https://pub.dev"
-    source: hosted
-    version: "9.0.7"
-=======
       sha256: e9ad66020b89ff1b63908f247c2c6f931c6e62699b756ef8b3c4569350cd8662
       url: "https://pub.dev"
     source: hosted
@@ -368,37 +336,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
->>>>>>> Stashed changes
   permission_handler_platform_interface:
     dependency: transitive
     description:
       name: permission_handler_platform_interface
-<<<<<<< Updated upstream
-      sha256: "68abbc472002b5e6dfce47fe9898c6b7d8328d58b5d2524f75e277c07a97eb84"
+      sha256: "48d4fcf201a1dad93ee869ab0d4101d084f49136ec82a8a06ed9cfeacab9fd20"
       url: "https://pub.dev"
     source: hosted
-    version: "3.9.0"
-=======
-      sha256: "23dfba8447c076ab5be3dee9ceb66aad345c4a648f0cac292c77b1eb0e800b78"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.0"
->>>>>>> Stashed changes
+    version: "4.2.1"
   permission_handler_windows:
     dependency: transitive
     description:
       name: permission_handler_windows
-<<<<<<< Updated upstream
-      sha256: f67cab14b4328574938ecea2db3475dad7af7ead6afab6338772c5f88963e38b
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.2"
-=======
       sha256: "1a790728016f79a41216d88672dbc5df30e686e811ad4e698bfc51f76ad91f1e"
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1"
->>>>>>> Stashed changes
   platform:
     dependency: transitive
     description:
@@ -435,17 +388,10 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_sdk
-<<<<<<< Updated upstream
-      sha256: afc5730b74854565e844f937369dedfda9cbcb81e9751e366b8bca6083577ba2
+      sha256: "473366a4e8e0275d4a5c1950f954e872c62099dd5c66e7ff9d3385b3fde46dda"
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.0"
-=======
-      sha256: "31df0d4bd781f98f0022d9806f40dfe1e1b4ed787b2523c5b48c87ca234fa156"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.2.1"
->>>>>>> Stashed changes
+    version: "4.2.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -579,14 +525,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
-  web:
-    dependency: transitive
-    description:
-      name: web
-      sha256: afe077240a270dcfd2aafe77602b4113645af95d0ad31128cc02bce5ac5d5152
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
   win32:
     dependency: transitive
     description:
@@ -604,5 +542,5 @@ packages:
     source: hosted
     version: "1.0.0"
 sdks:
-  dart: ">=3.2.0-194.0.dev <4.0.0"
-  flutter: ">=3.13.0"
+  dart: ">=3.2.0-0 <4.0.0"
+  flutter: ">=3.16.0"
