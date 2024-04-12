@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 4.2.1:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 4.2.2:
 
 //-------------------------------------------------------------
 collection 1.17.1
@@ -2625,7 +2625,7 @@ Version 1.1.0
 
 
 
-Open Source libraries used in ScanbotSDK for iOS version 4.2.0:
+Open Source libraries used in ScanbotSDK for iOS version 4.2.2:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
