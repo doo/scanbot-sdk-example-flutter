@@ -25,7 +25,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
 
   CroppingController? croppingController;
 
-  _CroppingScreenWidgetState(this.currentPage) {}
+  _CroppingScreenWidgetState(this.currentPage);
 
   @override
   void initState() {

@@ -167,7 +167,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 title: const Text('Save as PDF'),
                 onTap: () {
                   Navigator.pop(context);
-                  _createPdf();
+                  _createPDF();
                 },
               ),
               ListTile(
@@ -175,7 +175,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 title: const Text('Save as PDF with OCR'),
                 onTap: () {
                   Navigator.pop(context);
-                  _createOcrPdf();
+                  _createPdfWithOCR();
                 },
               ),
               ListTile(
@@ -330,34 +330,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createPdf() async {
-    if (!await _checkHasPages(context)) {
-      return;
-    }
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    final dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: 'Creating PDF ...');
-    try {
-      dialog.show();
-      var options = const PdfRenderingOptions(pageSize: PageSize.A4);
-      final pdfFileUri =
-          await ScanbotSdk.createPdf(_pageRepository.pages, options);
-      await dialog.hide();
-      await showAlertDialog(context, pdfFileUri.toString(),
-          title: 'PDF file URI');
-    } catch (e) {
-      print(e);
-      await dialog.hide();
-    }
-  }
-
   Future<void> _importImage() async {
     try {
-      final image = await ImagePicker().getImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       await _createPage(Uri.file(image?.path ?? ''));
     } catch (e) {
       print(e);
@@ -429,7 +404,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.show();
     try {
       final result = await ScanbotSdk.performOcr(_pages,
-          OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
+          OcrOptions(languages: ['en', 'de']));
       await dialog.hide();
       await showAlertDialog(
           context, 'Plain text:\n' + (result.plainText ?? ''));
@@ -439,7 +414,32 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createOcrPdf() async {
+  Future<void> _createPdfWithOCR() async {
+    if (!await _checkHasPages(context)) {
+      return;
+    }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    final dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    dialog.style(message: 'Creating PDF with OCR ...');
+    try {
+      dialog.show();
+      var options = const PdfRenderingOptions(pageSize: PageSize.A4);
+      final pdfFileUri =
+          await ScanbotSdk.createPdf(_pageRepository.pages, options, shouldGeneratePdfWithOcr: true);
+      await dialog.hide();
+      await showAlertDialog(context, pdfFileUri.toString(),
+          title: 'PDF with OCR file URI');
+    } catch (e) {
+      print(e);
+      await dialog.hide();
+    }
+  }
+
+  Future<void> _createPDF() async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -449,18 +449,14 @@ class _DocumentPreviewState extends State<DocumentPreview> {
 
     var dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: 'Performing OCR with PDF ...');
-    dialog.show();
+    dialog.style(message: 'Creating PDF ...');
     try {
-      var result = await ScanbotSdk.performOcr(
-          _pages, OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: true));
+       dialog.show();
+      var options = const PdfRenderingOptions(pageSize: PageSize.A4);
+      var result = await ScanbotSdk.createPdf(_pageRepository.pages, options, shouldGeneratePdfWithOcr: false);
       await dialog.hide();
-      await showAlertDialog(
-          context,
-          'PDF File URI:\n' +
-              (result.pdfFileUri ?? '') +
-              '\n\nPlain text:\n' +
-              (result.plainText ?? ''));
+      await showAlertDialog(context, result.toString(),
+          title: 'PDF File URI');
     } catch (e) {
       print(e);
       await dialog.hide();
