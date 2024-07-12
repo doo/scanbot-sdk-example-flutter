@@ -12,8 +12,9 @@ import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import 'package:scanbot_sdk/scanbot_sdk_v2.dart' as scanbotV2;
 
-import 'package:scanbot_sdk_example_flutter/ui/barcode_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/ready_to_use_ui/barcode_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/barcode_preview_multi_image.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/barcode_custom_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/document_custom_ui.dart';
@@ -26,7 +27,8 @@ import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 
 import 'pages_repository.dart';
 import 'ui/menu_items.dart';
-import 'ui/utils.dart';
+import 'ui/ready_to_use_ui_legacy/barcode_preview_v2.dart';
+import 'utility/utils.dart';
 
 /// true - if you need to enable encryption for example app
 bool shouldInitWithEncryption = false;
@@ -39,7 +41,7 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY = '';
+const SCANBOT_SDK_LICENSE_KEY =  "";
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
@@ -149,116 +151,171 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       ),
       body: ListView(
         children: <Widget>[
-          TitleItemWidget('Document Scanner'),
+          const TitleItemWidget(title: 'Document Scanner'),
           MenuItemWidget(
-            'Scan Documents',
+            title: 'Scan Documents',
             onTap: () {
               _startDocumentScanning();
             },
           ),
           MenuItemWidget(
-            'Scan Documents (Custom UI)',
+            title: 'Scan Documents (Custom UI)',
             onTap: () {
               _startDocumentsCustomUIScanner();
             },
           ),
           MenuItemWidget(
-            'Generic Document Scanner',
+            title: 'Generic Document Scanner',
             onTap: () {
               _startGenericDocumentScanner();
             },
           ),
           MenuItemWidget(
-            'Import Image',
+            title: 'Import Image',
             onTap: () {
               _importImage();
             },
           ),
           MenuItemWidget(
-            'View Image Results',
+            title: 'View Image Results',
             endIcon: Icons.keyboard_arrow_right,
             onTap: () {
               _gotoImagesView();
             },
           ),
-          TitleItemWidget('Data Detectors'),
+          const TitleItemWidget(title: 'Barcode Scanners (RTU v2.0)'),
           MenuItemWidget(
-            'Scan Barcode (all formats: 1D + 2D)',
+            title: "Single Scan with confirmation dialog (RTU v2.0)",
+            onTap: () {
+              startSingleScanV2();
+            },
+          ),
+          MenuItemWidget(
+            title: "Multiple Scan (RTU v2.0)",
+            onTap: () {
+              startMultipleScanV2();
+            },
+          ),
+          MenuItemWidget(
+            title: "Find and Pick (RTU v2.0)",
+            onTap: () {
+              startFindAndPickScanV2();
+            },
+          ),
+          MenuItemWidget(
+            title: "AROverlay (RTU v2.0)",
+            onTap: () {
+              startAROverlayScanV2();
+            },
+          ),
+          MenuItemWidget(
+            title: "Info Mapping (RTU v2.0)",
+            onTap: () {
+              startInfoMappingScanV2();
+            },
+          ),
+          const TitleItemWidget(title: 'Data Detectors'),
+          MenuItemWidget(
+            title: 'Scan Barcode (all formats: 1D + 2D)',
             onTap: () {
               _startBarcodeScanner();
             },
           ),
           MenuItemWidget(
-            'Scan QR code (QR format only)',
+            title: 'Scan QR code (QR format only)',
             onTap: () {
               _startQRScanner();
             },
           ),
           MenuItemWidget(
-            'Scan Multiple Barcodes (batch mode)',
+            title: 'Scan Multiple Barcodes (batch mode)',
             onTap: () {
               _startBatchBarcodeScanner();
             },
           ),
           MenuItemWidget(
-            'Detect Barcodes from Still Image',
+            title: 'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
             },
           ),
           MenuItemWidget(
-            'Scan Barcode (Custom UI)',
+            title: 'Scan Barcode (Custom UI)',
             onTap: () {
               _startBarcodeCustomUIScanner();
             },
           ),
           MenuItemWidget(
-            'Detect Barcodes from Multiple Still Images',
+            title: 'Detect Barcodes from Multiple Still Images',
             onTap: () {
               _detectBarcodesOnImages();
             },
           ),
           MenuItemWidget(
-            'Scan Medical Certificate (Custom UI)',
+            title: 'Scan Medical Certificate (Custom UI)',
             onTap: () {
               _startMedicalCertificateCustomUIScanner();
             },
           ),
           MenuItemWidget(
-            'Scan MRZ (Machine Readable Zone)',
+            title: 'Scan MRZ (Machine Readable Zone)',
             onTap: () {
               _startMRZScanner();
             },
           ),
           MenuItemWidget(
-            'Scan EHIC (European Health Insurance Card)',
+            title: 'Scan EHIC (European Health Insurance Card)',
             onTap: () {
               _startEhicScanner();
             },
           ),
           MenuItemWidget(
-            'Scan License Plate',
+            title: 'Scan License Plate',
             onTap: () {
               startLicensePlateScanner();
             },
           ),
-          TitleItemWidget('Test other SDK API methods'),
           MenuItemWidget(
-            'getLicenseStatus()',
+            title: 'Scan VIN',
+            onTap: () {
+              startVINScanner();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Scan Check',
+            onTap: () {
+              startCheckScanner();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Scan Text Data',
+            onTap: () {
+              startTextDataScanner();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Scan Medical Certificate',
+            onTap: () {
+              startMedicalCertificateScanner();
+            },
+          ),
+          const TitleItemWidget(title: 'Test other SDK API methods'),
+          MenuItemWidget(
+            title: 'getLicenseStatus()',
             startIcon: Icons.phonelink_lock,
             onTap: () {
               _getLicenseStatus();
             },
           ),
           MenuItemWidget(
-            'getOcrConfigs()',
+            title: 'getOcrConfigs()',
             startIcon: Icons.settings,
             onTap: () {
               _getOcrConfigs();
             },
           ),
           MenuItemWidget(
-            '3rd-party Libs & Licenses',
+            title: '3rd-party Libs & Licenses',
             startIcon: Icons.developer_mode,
             onTap: () {
               showLicensePage(
@@ -363,6 +420,311 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  startSingleScanV2() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      // Create the default configuration object.
+      var configuration = scanbotV2.BarcodeScannerConfiguration();
+
+      // Initialize the single-scan use case.
+      var singleUsecase = scanbotV2.SingleScanningMode();
+
+      // Enable and configure the confirmation sheet.
+      singleUsecase.confirmationSheetEnabled = true;
+      singleUsecase.sheetColor = ScanbotColor("#FFFFFF");
+
+      // Hide/unhide the barcode image.
+      singleUsecase.barcodeImageVisible = true;
+
+      // Configure the barcode title of the confirmation sheet.
+      singleUsecase.barcodeTitle.visible = true;
+      singleUsecase.barcodeTitle.color = ScanbotColor("#000000");
+
+      // Configure the barcode subtitle of the confirmation sheet.
+      singleUsecase.barcodeSubtitle.visible = true;
+      singleUsecase.barcodeSubtitle.color = ScanbotColor("#000000");
+
+      // Configure the cancel button of the confirmation sheet.
+      singleUsecase.cancelButton.text = "Close";
+      singleUsecase.cancelButton.foreground.color = ScanbotColor("#C8193C");
+      singleUsecase.cancelButton.background.fillColor =
+          ScanbotColor("#00000000");
+
+      // Configure the submit button of the confirmation sheet.
+      singleUsecase.submitButton.text = "Submit";
+      singleUsecase.submitButton.foreground.color = ScanbotColor("#FFFFFF");
+      singleUsecase.submitButton.background.fillColor = ScanbotColor("#C8193C");
+
+      // Set the configured use case.
+      configuration.useCase = singleUsecase;
+
+      // Create and set an array of accepted barcode formats.
+      // configuration.recognizerConfiguration.barcodeFormats = [
+      //   scanbotV2.BarcodeFormat.AZTEC,
+      //   scanbotV2.BarcodeFormat.PDF_417,
+      //   scanbotV2.BarcodeFormat.QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_PDF_417,
+      //   scanbotV2.BarcodeFormat.ROYAL_MAIL,
+      // ];
+
+      var result =
+          await scanbotV2.ScanbotSdkUi.startBarcodeScanner(configuration);
+
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidgetV2(result.value!)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  startMultipleScanV2() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      // Create the default configuration object.
+      var configuration = scanbotV2.BarcodeScannerConfiguration();
+
+      // Initialize the single-scan use case.
+      var multiUsecase = scanbotV2.MultipleScanningMode();
+
+      // Set the counting repeat delay.
+      multiUsecase.countingRepeatDelay = 1000;
+
+      // Set the counting mode.
+      multiUsecase.mode = scanbotV2.MultipleBarcodesScanningMode.COUNTING;
+
+      // Set the sheet mode of the barcodes preview.
+      multiUsecase.sheet.mode = scanbotV2.SheetMode.COLLAPSED_SHEET;
+
+      // Set the height of the collapsed sheet.
+      multiUsecase.sheet.collapsedVisibleHeight =
+          scanbotV2.CollapsedVisibleHeight.LARGE;
+
+      // Enable manual count change.
+      multiUsecase.sheetContent.manualCountChangeEnabled = true;
+
+      // Configure the submit button.
+      multiUsecase.sheetContent.submitButton.text = "Submit";
+      multiUsecase.sheetContent.submitButton.foreground.color =
+          ScanbotColor("#000000");
+
+      // Set the configured use case.
+      configuration.useCase = multiUsecase;
+
+      // Create and set an array of accepted barcode formats.
+      // configuration.recognizerConfiguration.barcodeFormats = [
+      //   scanbotV2.BarcodeFormat.AZTEC,
+      //   scanbotV2.BarcodeFormat.PDF_417,
+      //   scanbotV2.BarcodeFormat.QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_PDF_417,
+      //   scanbotV2.BarcodeFormat.ROYAL_MAIL,
+      // ];
+
+      var result =
+          await scanbotV2.ScanbotSdkUi.startBarcodeScanner(configuration);
+
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidgetV2(result.value!)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  startFindAndPickScanV2() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      // Create the default configuration object.
+      var configuration = scanbotV2.BarcodeScannerConfiguration();
+
+      // Initialize the single-scan use case.
+      var usecase = scanbotV2.FindAndPickScanningMode();
+
+      // Set the configured use case.
+      configuration.useCase = usecase;
+
+      // Configure AR Overlay.
+      usecase.arOverlay.visible = true;
+
+      // Enable/Disable the automatic selection.
+      usecase.arOverlay.automaticSelectionEnabled = false;
+
+      // Enable/Disable the swipe to delete.
+      usecase.sheetContent.swipeToDelete.enabled = true;
+
+      // Enable/Disable allow partial scan.
+      usecase.allowPartialScan = true;
+
+      // Set the expected barcodes.
+      usecase.expectedBarcodes = [
+        scanbotV2.ExpectedBarcode(
+            barcodeValue: "123456", title: "", image: "Image_URL", count: 4),
+        scanbotV2.ExpectedBarcode(
+            barcodeValue: "SCANBOT", title: "", image: "Image_URL", count: 3)
+      ];
+
+      // Set the configured usecase.
+      configuration.useCase = usecase;
+
+      var result =
+          await scanbotV2.ScanbotSdkUi.startBarcodeScanner(configuration);
+
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidgetV2(result.value!)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  startAROverlayScanV2() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      // Create the default configuration object.
+      var configuration = scanbotV2.BarcodeScannerConfiguration();
+
+      // Configure the usecase.
+      var usecase = scanbotV2.MultipleScanningMode();
+      usecase.mode = scanbotV2.MultipleBarcodesScanningMode.UNIQUE;
+      usecase.sheet.mode = scanbotV2.SheetMode.COLLAPSED_SHEET;
+      usecase.sheet.collapsedVisibleHeight =
+          scanbotV2.CollapsedVisibleHeight.SMALL;
+
+      // Configure AR Overlay.
+      usecase.arOverlay.visible = true;
+      usecase.arOverlay.automaticSelectionEnabled = false;
+
+      // Set the configured usecase.
+      configuration.useCase = usecase;
+
+      // Create and set an array of accepted barcode formats.
+      // configuration.recognizerConfiguration.barcodeFormats = [
+      //   scanbotV2.BarcodeFormat.AZTEC,
+      //   scanbotV2.BarcodeFormat.PDF_417,
+      //   scanbotV2.BarcodeFormat.QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_PDF_417,
+      //   scanbotV2.BarcodeFormat.ROYAL_MAIL,
+      // ];
+
+      // Set the configured usecase.
+      configuration.useCase = usecase;
+
+      var result =
+          await scanbotV2.ScanbotSdkUi.startBarcodeScanner(configuration);
+
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidgetV2(result.value!)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  startInfoMappingScanV2() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      var configuration = scanbotV2.BarcodeScannerConfiguration();
+      var singleScanningMode = scanbotV2.SingleScanningMode();
+
+      // Enable the confirmation sheet.
+      singleScanningMode.confirmationSheetEnabled = true;
+
+      // Set the item mapper.
+      singleScanningMode.barcodeInfoMapping.barcodeItemMapper =
+          (item, onResult, onError) async {
+        //return result
+        onResult(scanbotV2.BarcodeMappedData(
+            title: "Title", subtitle: "Subtitle", barcodeImage: "Image_URL"));
+
+        // if need to show error
+        // onError();
+      };
+
+      // Retrieve the instance of the error state from the use case object.
+      var errorState = singleScanningMode.barcodeInfoMapping.errorState;
+
+      // Configure the title.
+      errorState.title.text = "Error_Title";
+      errorState.title.color = ScanbotColor("#000000");
+
+      // Configure the subtitle.
+      errorState.subtitle.text = "Error_Subtitle";
+      errorState.subtitle.color = ScanbotColor("#000000");
+
+      // Configure the cancel button.
+      errorState.cancelButton.text = "Cancel";
+      errorState.cancelButton.foreground.color = ScanbotColor("#C8193C");
+
+      // Configure the retry button.
+      errorState.retryButton.text = "Retry";
+      errorState.retryButton.foreground.iconVisible = true;
+      errorState.retryButton.foreground.color = ScanbotColor("#FFFFFF");
+      errorState.retryButton.background.fillColor = ScanbotColor("#C8193C");
+
+      // Set the configured error state.
+      singleScanningMode.barcodeInfoMapping.errorState = errorState;
+
+      // Set the configured use case.
+      configuration.useCase = singleScanningMode;
+
+      // Create and set an array of accepted barcode formats.
+      // configuration.recognizerConfiguration.barcodeFormats = [
+      //   scanbotV2.BarcodeFormat.AZTEC,
+      //   scanbotV2.BarcodeFormat.PDF_417,
+      //   scanbotV2.BarcodeFormat.QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_QR_CODE,
+      //   scanbotV2.BarcodeFormat.MICRO_PDF_417,
+      //   scanbotV2.BarcodeFormat.ROYAL_MAIL,
+      // ];
+
+      var result =
+          await scanbotV2.ScanbotSdkUi.startBarcodeScanner(configuration);
+      if (result.operationResult == OperationResult.SUCCESS) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidgetV2(result.value!)),
+        );
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> _startBarcodeScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
@@ -373,7 +735,10 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
-        overlayConfiguration: SelectionOverlayConfiguration(overlayEnabled:true, polygonColor: Colors.red,automaticSelectionEnabled: false),
+        overlayConfiguration: SelectionOverlayConfiguration(
+            overlayEnabled: true,
+            polygonColor: Colors.red,
+            automaticSelectionEnabled: false),
         finderAspectRatio: sdk.AspectRatio(width: 4, height: 2),
         finderTextHint:
             'Please align any supported barcode in the frame to scan it.',
@@ -442,40 +807,66 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    GenericDocumentWrappedResults? result;
+    GenericDocumentResults? result;
     try {
       var config = GenericDocumentRecognizerConfiguration(
-        acceptedDocumentTypes: [
-          GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
-          GenericDocumentType.DE_DRIVER_LICENSE_BACK,
-          GenericDocumentType.DE_ID_CARD_FRONT,
-          GenericDocumentType.DE_ID_CARD_BACK,
-          GenericDocumentType.DE_PASSPORT,
-        ],
-        topBarBackgroundColor: Colors.red,
-        fieldConfidenceLowColor: Colors.blue,
-        fieldConfidenceHighColor: Colors.purpleAccent,
-        fieldsDisplayConfiguration: [
-          // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.GivenNames, "My GivenNames", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.BirthDate, "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.ExpiryDate, "Document Expiry Date", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.Address, "My address", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssueDate, "When issued", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssuingAuthority, "Who issued", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(MRZFieldsSignatures.DocumentNumber, "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(MRZFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
-        ],
-        documentsDisplayConfiguration: [
-          DocumentsDisplayConfiguration(DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
-          DocumentsDisplayConfiguration(DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
-          DocumentsDisplayConfiguration(MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
-          DocumentsDisplayConfiguration(DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE, "Licence plate Front"),
-          DocumentsDisplayConfiguration(DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE, "Licence plate Back"),
-        ]
-      );
+          acceptedDocumentTypes: [
+            GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
+            GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
+            GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
+            GenericDocumentType.DE_DRIVER_LICENSE_BACK,
+            GenericDocumentType.DE_ID_CARD_FRONT,
+            GenericDocumentType.DE_ID_CARD_BACK,
+            GenericDocumentType.DE_PASSPORT,
+          ],
+          topBarBackgroundColor: Colors.red,
+          fieldConfidenceLowColor: Colors.blue,
+          fieldConfidenceHighColor: Colors.purpleAccent,
+          fieldsDisplayConfiguration: [
+            // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
+            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.Surname,
+                "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeDriverLicenseFrontFieldNames.GivenNames,
+                "My GivenNames",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.BirthDate,
+                "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeDriverLicenseFrontFieldNames.ExpiryDate,
+                "Document Expiry Date",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeResidencePermitBackFieldNames.Address,
+                "My address", FieldDisplayState.ALWAYS_VISIBLE),
+            // FieldsDisplayConfiguration(
+            //     DeResidencePermitBackFieldNames.IssueDate,
+            //     "When issued",
+            //     FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeResidencePermitBackFieldNames.IssuingAuthority,
+                "Who issued",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldNames.DocumentNumber,
+                "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldNames.Surname, "My Surname",
+                FieldDisplayState.ALWAYS_VISIBLE),
+          ],
+          documentsDisplayConfiguration: [
+            DocumentsDisplayConfiguration(
+                DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
+            DocumentsDisplayConfiguration(
+                DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
+            DocumentsDisplayConfiguration(
+                MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
+            DocumentsDisplayConfiguration(
+                DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE,
+                "Licence plate Front"),
+            DocumentsDisplayConfiguration(
+                DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE,
+                "Licence plate Back"),
+          ]);
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
+      // result.documents.first.document.wrapDocument();
       _showGenericDocumentRecognizerResult(result);
     } catch (e) {
       Logger.root.severe(e);
@@ -553,8 +944,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(uriPath), PredefinedBarcodes.allBarcodeTypes());
+        var result = await ScanbotSdk.detectBarcodesOnImage(Uri.file(uriPath),
+            barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -591,8 +982,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodesOnImages(
-            uris, PredefinedBarcodes.allBarcodeTypes());
+        var result = await ScanbotSdk.detectBarcodesOnImages(uris,
+            barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => MultiImageBarcodesResultPreviewWidget(
@@ -617,6 +1008,70 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       requestResult = await ScanbotSdkUi.startLicensePlateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.rawText);
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> startVINScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    VinScanResult requestResult;
+    try {
+      var config = VinScannerConfiguration();
+      requestResult = await ScanbotSdkUi.startVinScanner(config);
+      if (requestResult.operationResult == OperationResult.SUCCESS) {
+        showResultTextDialog(requestResult.rawText);
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> startCheckScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    CheckScanResult requestResult;
+    try {
+      var config = CheckScannerConfiguration();
+      requestResult = await ScanbotSdkUi.startCheckScanner(config);
+      if (requestResult.operationResult == OperationResult.SUCCESS) {
+        showResultTextDialog(requestResult.check?.type.name);
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> startTextDataScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    TextDataScanResult requestResult;
+    try {
+      var config = TextDataScannerConfiguration();
+      requestResult = await ScanbotSdkUi.startTextDataScanner(config);
+      if (requestResult.operationResult == OperationResult.SUCCESS) {
+        showResultTextDialog(jsonEncode(requestResult));
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> startMedicalCertificateScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+    MedicalCertificateResult requestResult;
+    try {
+      var config = MedicalCertificateScannerConfiguration();
+      requestResult = await ScanbotSdkUi.startMedicalCertificateScanner(config);
+      if (requestResult.operationResult == OperationResult.SUCCESS) {
+        showResultTextDialog(requestResult.patientInfoBox.toString());
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -681,7 +1136,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _showGenericDocumentRecognizerResult(
-      final GenericDocumentWrappedResults result) async {
+      final GenericDocumentResults result) async {
     if (isOperationSuccessful(result)) {
       await Navigator.of(context).push(
         MaterialPageRoute(

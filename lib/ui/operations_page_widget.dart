@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/cropping_custom_ui.dart';
-import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
+import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';

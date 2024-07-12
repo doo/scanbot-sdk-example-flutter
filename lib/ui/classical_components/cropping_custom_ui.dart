@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
-import '../../pages_repository.dart';
-
 /// This is an example screen of how to integrate new classical barcode scanner component
 class CroppingScreenWidget extends StatefulWidget {
   CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
@@ -15,7 +13,6 @@ class CroppingScreenWidget extends StatefulWidget {
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
-  final PageRepository _pageRepository = PageRepository();
   sdk.Page currentPage;
 
   /// this stream only used if you need to show live scanned results on top of the camera
@@ -25,12 +22,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
 
   CroppingController? croppingController;
 
-  _CroppingScreenWidgetState(this.currentPage) {}
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  _CroppingScreenWidgetState(this.currentPage);
 
   @override
   Widget build(BuildContext context) {

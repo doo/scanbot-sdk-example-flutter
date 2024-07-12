@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/pages_repository.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
+import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 class MultiPageFiltering extends StatelessWidget {
   final PageRepository _pageRepository;
@@ -71,12 +71,10 @@ class MultiFilterPreviewWidget extends StatefulWidget {
 }
 
 class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
-  late ImageFilterType selectedFilter;
+  late ImageFilterType? selectedFilter;
   final PageRepository _pageRepository;
 
-  MultiFilterPreviewWidgetState(this._pageRepository) {
-    selectedFilter = ImageFilterType.NONE;
-  }
+  MultiFilterPreviewWidgetState(this._pageRepository) {}
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +95,8 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
             value: filter,
             groupValue: selectedFilter,
             onChanged: (value) {
-              changeSelectedFilter(
-                  (value as ImageFilterType?) ?? ImageFilterType.NONE);
+              // changeSelectedFilter(
+              //     (value as ImageFilterType?) ?? ImageFilterType.NONE);
             },
           ),
       ],
@@ -123,7 +121,7 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
   }
 
   void applyFilter() {
-    filterPages(selectedFilter);
+    filterPages(ImageFilterType.NONE);
   }
 
   Future<void> filterPages(ImageFilterType filterType) async {
@@ -135,8 +133,10 @@ class MultiFilterPreviewWidgetState extends State<MultiFilterPreviewWidget> {
         type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: 'Processing ...');
     dialog.show();
-    final futures = _pageRepository.pages
-        .map((page) => ScanbotSdk.applyImageFilter(page, filterType));
+
+    final futures = _pageRepository.pages.map((page) =>
+        ScanbotSdk.applyImageFilter(
+            page, [LegacyFilter(filterType: filterType.index)]));
 
     try {
       final pages = await Future.wait(futures);

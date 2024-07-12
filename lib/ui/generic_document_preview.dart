@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/json/common_generic_document.dart';
-import 'package:scanbot_sdk/json/generic_document_wrappers.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 class GenericDocumentResultPreview extends StatefulWidget {
-  final GenericDocumentWrappedResults result;
+  final GenericDocumentResults result;
 
   GenericDocumentResultPreview(
     this.result,
@@ -52,20 +51,22 @@ class _GenericDocumentResultPreviewState
   }
 }
 
-Widget genericDocumentResultView(GenericDocumentWrapper document) {
-  switch (document.documentType) {
-    case DocumentType.MRZ:
-      return MrzView(document as MRZ);
-    case DocumentType.DeIdCardFront:
-      return DeIdCardFrontView(document as DeIdCardFront);
-    case DocumentType.DeIdCardBack:
-      return DeIdCardBackView(document as DeIdCardBack);
-    case DocumentType.DePassport:
-      return DePassportView(document as DePassport);
-    case DocumentType.DeDriverLicenseFront:
-      return DeDriverLicenseFrontView(document as DeDriverLicenseFront);
-    case DocumentType.DeDriverLicenseBack:
-      return DeDriverLicenseBackView(document as DeDriverLicenseBack);
+Widget genericDocumentResultView(GenericDocument document) {
+  switch (document.type.name) {
+    case MRZ.DOCUMENT_TYPE:
+      return MrzView(MRZ(document));
+    case DeIdCardFront.DOCUMENT_TYPE:
+      return DeIdCardFrontView(DeIdCardFront(document));
+    case DeResidencePermitFront.DOCUMENT_TYPE:
+      return DeResidencePermitFrontView(DeResidencePermitFront(document));
+    case DeIdCardBack.DOCUMENT_TYPE:
+      return DeIdCardBackView(DeIdCardBack(document));
+    case DePassport.DOCUMENT_TYPE:
+      return DePassportView(DePassport(document));
+    case DeDriverLicenseFront.DOCUMENT_TYPE:
+      return DeDriverLicenseFrontView(DeDriverLicenseFront(document));
+    case DeDriverLicenseBack.DOCUMENT_TYPE:
+      return DeDriverLicenseBackView(DeDriverLicenseBack(document));
     default:
       return Container();
   }
@@ -177,7 +178,7 @@ class DeDriverLicenseBackView extends StatelessWidget {
         ),
         CategoryView(
           title: "Category C1e",
-          category: result.categories.c1e,
+          category: result.categories.c1E,
         ),
         CategoryView(
           title: "Category D",
@@ -193,15 +194,15 @@ class DeDriverLicenseBackView extends StatelessWidget {
         ),
         CategoryView(
           title: "Category D1e",
-          category: result.categories.d1e,
+          category: result.categories.d1E,
         ),
         CategoryView(
           title: "Category L",
           category: result.categories.l,
         ),
         CategoryView(
-          title: "Category M",
-          category: result.categories.m,
+          title: "Category AM",
+          category: result.categories.am,
         ),
         CategoryView(
           title: "Category T",
@@ -236,7 +237,7 @@ class MrzView extends StatelessWidget {
           genericDocumentField: result.givenNames,
         ),
         GenericDocumentFieldView(
-          title: "Id",
+          title: "TravelDocType",
           genericDocumentField: result.travelDocType,
         ),
         GenericDocumentFieldView(
@@ -249,7 +250,7 @@ class MrzView extends StatelessWidget {
         ),
         GenericDocumentFieldView(
           title: "Pin",
-          genericDocumentField: result.documentTypeCode,
+          genericDocumentField: result.pinCode,
         ),
         GenericDocumentFieldView(
           title: "Surname",
@@ -273,39 +274,87 @@ class DeIdCardFrontView extends StatelessWidget {
       children: [
         GenericDocumentFieldView(
           title: "Birth Date",
-          genericDocumentField: result.birthDate,
+          genericDocumentField: result.BirthDate,
         ),
         GenericDocumentFieldView(
           title: "Birth Place",
-          genericDocumentField: result.birthplace,
+          genericDocumentField: result.Birthplace,
         ),
         GenericDocumentFieldView(
           title: "Expiry Date",
-          genericDocumentField: result.expiryDate,
+          genericDocumentField: result.ExpiryDate,
         ),
         GenericDocumentFieldView(
           title: "Given Names",
-          genericDocumentField: result.givenNames,
+          genericDocumentField: result.GivenNames,
         ),
         GenericDocumentFieldView(
           title: "Id",
-          genericDocumentField: result.id,
+          genericDocumentField: result.ID,
         ),
         GenericDocumentFieldView(
           title: "Maiden Name",
-          genericDocumentField: result.maidenName,
+          genericDocumentField: result.MaidenName,
         ),
         GenericDocumentFieldView(
           title: "Nationality",
-          genericDocumentField: result.nationality,
+          genericDocumentField: result.Nationality,
         ),
         GenericDocumentFieldView(
           title: "Pin",
-          genericDocumentField: result.pin,
+          genericDocumentField: result.PIN,
         ),
         GenericDocumentFieldView(
           title: "Surname",
-          genericDocumentField: result.surname,
+          genericDocumentField: result.Surname,
+        ),
+      ],
+    );
+  }
+}
+
+class DeResidencePermitFrontView extends StatelessWidget {
+  final DeResidencePermitFront result;
+
+  DeResidencePermitFrontView(
+    this.result,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GenericDocumentFieldView(
+          title: "Birth Date",
+          genericDocumentField: result.BirthDate,
+        ),
+        GenericDocumentFieldView(
+          title: "Birth Place",
+          genericDocumentField: result.BirthDate,
+        ),
+        GenericDocumentFieldView(
+          title: "Expiry Date",
+          genericDocumentField: result.ExpiryDate,
+        ),
+        GenericDocumentFieldView(
+          title: "Given Names",
+          genericDocumentField: result.GivenNames,
+        ),
+        GenericDocumentFieldView(
+          title: "Id",
+          genericDocumentField: result.ID,
+        ),
+        GenericDocumentFieldView(
+          title: "Nationality",
+          genericDocumentField: result.Nationality,
+        ),
+        GenericDocumentFieldView(
+          title: "Pin",
+          genericDocumentField: result.PIN,
+        ),
+        GenericDocumentFieldView(
+          title: "Surname",
+          genericDocumentField: result.Surname,
         ),
       ],
     );
@@ -325,33 +374,33 @@ class DeIdCardBackView extends StatelessWidget {
       children: [
         GenericDocumentFieldView(
           title: "Address",
-          genericDocumentField: result.address,
+          genericDocumentField: result.Address,
         ),
         GenericDocumentFieldView(
           title: "EyeColor",
-          genericDocumentField: result.eyeColor,
+          genericDocumentField: result.EyeColor,
         ),
         GenericDocumentFieldView(
           title: "Height",
-          genericDocumentField: result.height,
+          genericDocumentField: result.Height,
         ),
         GenericDocumentFieldView(
           title: "Issue Date",
-          genericDocumentField: result.issueDate,
+          genericDocumentField: result.IssueDate,
         ),
         GenericDocumentFieldView(
           title: "Issuing Authority",
-          genericDocumentField: result.issuingAuthority,
+          genericDocumentField: result.IssuingAuthority,
         ),
         GenericDocumentFieldView(
           title: "Pseudonym",
-          genericDocumentField: result.pseudonym,
+          genericDocumentField: result.Pseudonym,
         ),
         GenericDocumentFieldView(
           title: "Raw Mrz",
-          genericDocumentField: result.rawMRZ,
+          genericDocumentField: result.RawMRZ,
         ),
-        MrzView(result.mrz),
+        MrzView(result.MRZ),
       ],
     );
   }
@@ -370,68 +419,68 @@ class DePassportView extends StatelessWidget {
       children: [
         GenericDocumentFieldView(
           title: "Birth Date",
-          genericDocumentField: result.birthDate,
+          genericDocumentField: result.BirthDate,
         ),
         GenericDocumentFieldView(
           title: "Birth Place",
-          genericDocumentField: result.birthplace,
+          genericDocumentField: result.Birthplace,
         ),
         GenericDocumentFieldView(
           title: "Country Code",
-          genericDocumentField: result.countryCode,
+          genericDocumentField: result.CountryCode,
         ),
         GenericDocumentFieldView(
           title: "Expiry Date",
-          genericDocumentField: result.expiryDate,
+          genericDocumentField: result.ExpiryDate,
         ),
         GenericDocumentFieldView(
           title: "Gender",
-          genericDocumentField: result.gender,
+          genericDocumentField: result.Gender,
         ),
         GenericDocumentFieldView(
           title: "Given Names",
-          genericDocumentField: result.givenNames,
+          genericDocumentField: result.GivenNames,
         ),
         GenericDocumentFieldView(
           title: "Id",
-          genericDocumentField: result.id,
+          genericDocumentField: result.ID,
         ),
         GenericDocumentFieldView(
           title: "Issue Date",
-          genericDocumentField: result.issueDate,
+          genericDocumentField: result.IssueDate,
         ),
         GenericDocumentFieldView(
           title: "Issuing Authority",
-          genericDocumentField: result.issuingAuthority,
+          genericDocumentField: result.IssuingAuthority,
         ),
         GenericDocumentFieldView(
           title: "Maiden Name",
-          genericDocumentField: result.maidenName,
+          genericDocumentField: result.MaidenName,
         ),
         GenericDocumentFieldView(
           title: "Nationality",
-          genericDocumentField: result.nationality,
+          genericDocumentField: result.Nationality,
         ),
         GenericDocumentFieldView(
           title: "Passport Type",
-          genericDocumentField: result.passportType,
+          genericDocumentField: result.PassportType,
         ),
         GenericDocumentFieldView(
           title: "Surname",
-          genericDocumentField: result.surname,
+          genericDocumentField: result.Surname,
         ),
         GenericDocumentFieldView(
           title: "Raw Mrz",
-          genericDocumentField: result.rawMRZ,
+          genericDocumentField: result.RawMRZ,
         ),
-        MrzView(result.mrz),
+        MrzView(result.MRZ),
       ],
     );
   }
 }
 
 class CategoryView extends StatelessWidget {
-  final Category category;
+  final DeDriverLicenseBackCategory category;
   final String title;
 
   CategoryView({
@@ -453,15 +502,15 @@ class CategoryView extends StatelessWidget {
         ),
         GenericDocumentFieldView(
           title: "Valid From",
-          genericDocumentField: category.validFrom,
+          genericDocumentField: category.ValidFrom,
         ),
         GenericDocumentFieldView(
           title: "ValidUntil",
-          genericDocumentField: category.validUntil,
+          genericDocumentField: category.ValidUntil,
         ),
         GenericDocumentFieldView(
           title: "Restriction",
-          genericDocumentField: category.restrictions,
+          genericDocumentField: category.Restrictions,
         ),
       ],
     );

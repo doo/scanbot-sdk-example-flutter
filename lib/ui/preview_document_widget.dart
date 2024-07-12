@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
+import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';

@@ -1,13 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 import '../../main.dart';
-import '../barcode_preview.dart';
+import '../ready_to_use_ui/barcode_preview.dart';
 import '../pages_widget.dart';
 
 /// This is an example screen of how to integrate new classical barcode scanner component
@@ -22,53 +21,22 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
   /// this stream only used if you need to show live scanned results on top of the camera
   /// otherwise we stop scanning and return first result out of the screen
   final resultStream = StreamController<BarcodeScanningResult>();
-  ScanbotCameraController? controller;
-  late BarcodeCameraLiveDetector barcodeCameraDetector;
+  // ScanbotCameraController? controller;
+  // late BarcodeCameraLiveDetector barcodeCameraDetector;
   bool permissionGranted = false;
   bool flashEnabled = false;
   bool flashAvailable = false;
   bool showProgressBar = false;
   bool licenseIsActive = true;
 
-  _BarcodeScannerWidgetState() {
-    barcodeCameraDetector = BarcodeCameraLiveDetector(
-      // Subscribe to the success result of the scanning end error handling
-      barcodeListener: (scanningResult) {
-        // pause whole detection process if you are going to show result on other screen
-        // comment this line if you want to show result on top of the camera (AR overlay mode) if automaticSelectionEnabled == true
-        barcodeCameraDetector.pauseDetection();
-
-        /// Use update function to show result overlay on top of the camera or
-        //resultStream.add(scanningResult);
-        //liveDetector.resumeDetection(); // resume detection for next snap
-
-        /// for returning scanning result back
-        // Navigator.pop(context, scanningResult);
-
-        // for showing result in next screen in stack
-        // comment this line if you want to show result on top of the camera (AR overlay mode)
-        showResult(scanningResult);
-      },
-      //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
-      errorListener: (error) {
-        setState(() {
-          licenseIsActive = false;
-        });
-        Logger.root.severe(error.toString());
-      },
-    );
-  }
-
   Future<void> showResult(BarcodeScanningResult scanningResult) async {
     Navigator.of(context)
         .push(
-      MaterialPageRoute(
-          builder: (context) => BarcodesResultPreviewWidget(scanningResult)),
-    )
-        .then((value) {
-      ///resume camera when going back to camera from other screen
-      barcodeCameraDetector.resumeDetection();
-    });
+          MaterialPageRoute(
+              builder: (context) =>
+                  BarcodesResultPreviewWidget(scanningResult)),
+        )
+        .then((value) {});
   }
 
   void checkPermission() async {
@@ -149,7 +117,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       textContainerColor: Colors.grey,
       onBarcodeClicked: (barcode) {
         // pause detection if you want to show result on other screen
-        barcodeCameraDetector.pauseDetection();
+        // barcodeCameraDetector.pauseDetection();
         showResult(BarcodeScanningResult([barcode]));
       },
     );
@@ -161,7 +129,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       cameraZoomFactor: 0.1,
       // uncomment this line if you want to show result on top of the camera (AR overlay mode)
       // (please also see other comments related to this mode above)
-      //overlayConfiguration: selectionOverlayScannerConfiguration,
+      overlayConfiguration: selectionOverlayScannerConfiguration,
 
       finder: finderConfiguration,
     );
@@ -189,14 +157,11 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
           if (flashAvailable)
             IconButton(
                 onPressed: () {
-                  controller?.setFlashEnabled(!flashEnabled).then((value) => {
-                        if (mounted)
-                          {
-                            setState(() {
-                              flashEnabled = !flashEnabled;
-                            })
-                          }
-                      });
+                  if (mounted) {
+                    setState(() {
+                      flashEnabled = !flashEnabled;
+                    });
+                  }
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off))
         ],
@@ -209,23 +174,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
             licenseIsActive
                 ? permissionGranted
                     ? BarcodeScannerCamera(
-                        cameraDetector: barcodeCameraDetector,
                         // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
                         configuration: barcodeCameraConfiguration,
-                        onWidgetReady: (controller) {
-                          // Once your camera initialized you are now able to control camera parameters
-                          this.controller = controller;
-                          // This option uses to check from platform whether flash is available and display control button
-                          controller.isFlashAvailable().then((value) => {
-                                if (mounted)
-                                  {
-                                    setState(() {
-                                      flashAvailable = value;
-                                    })
-                                  }
-                              });
-                        },
-                        onCameraPreviewStarted: () {},
+                        onCameraPreviewStarted: cameraPreviewStarted,
                         onHeavyOperationProcessing: (show) {
                           setState(() {
                             showProgressBar = show;
@@ -314,4 +265,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
       ),
     );
   }
+
+  cameraPreviewStarted(bool isFlashAvailable) {}
 }

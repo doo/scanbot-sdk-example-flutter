@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
-
 import '../../main.dart';
 import '../../pages_repository.dart';
 import '../pages_widget.dart';
@@ -26,8 +25,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   /// otherwise we stop scanning and return first result out of the screen
   final resultStream = StreamController<sdk.Page>();
   final detectionStatusStream = StreamController<DetectionStatus>();
-  ScanbotCameraController? controller;
-  late DocumentCameraLiveDetector liveDetector;
+
+  late DocumentSnapTrigger generalSnapTrigger;
   bool permissionGranted = false;
   bool flashEnabled = false;
   bool autoSnappingEnabled = true;
@@ -37,49 +36,13 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   final PageRepository _pageRepository = PageRepository();
 
-  _DocumentScannerWidgetState() {
-    liveDetector = DocumentCameraLiveDetector(
-      // Subscribe to the success result of the scanning end error handling
-      snapListener: (page) {
-        ///pause camera if you are going to show result on other screen
-        liveDetector.pauseDetection();
-
-        /// Use update function to show result overlay on top of the camera or
-        //resultStream.add(page);
-        //liveDetector.resumeDetection(); // resume detection for next snap
-
-        var pages = [page];
-        /// this to return result to screen caller
-        // Navigator.pop(context, pages);
-
-        /// for showing result in next screen in stack
-        showPageResult(pages);
-      },
-      //Error listener, will inform if there is problem with the license on opening of the screen // and license expiration on android, ios wil be enabled a bit later
-      errorListener: (error) {
-        if (mounted) {
-          setState(() {
-            licenseIsActive = false;
-          });
-        }
-        Logger.root.severe(error.toString());
-      },
-      documentContourListener: (DocumentContourScanningResult result) {
-        detectionStatusStream.add(result.detectionStatus);
-      },
-    );
-  }
-
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context)
         .push(
-      MaterialPageRoute(builder: (context) => DocumentPreview()),
-    )
-        .then((value) {
-      ///resume detection when going back to camera from other screen
-      liveDetector.resumeDetection();
-    });
+          MaterialPageRoute(builder: (context) => DocumentPreview()),
+        )
+        .then((value) {});
   }
 
   void checkPermission() async {
@@ -102,36 +65,33 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   @override
   Widget build(BuildContext context) {
     var documentClassicScannerConfiguration = DocumentClassicScannerConfiguration(
-                                        // ignoreBadAspectRatio: false,
-                                        autoSnapEnabled: autoSnappingEnabled,
-                                        //initial autosnapping
-                                        //acceptedAngleScore: 35,
-                                        acceptedSizeScore: 75,
-                                        /*  requiredAspectRatios: [
+        // ignoreBadAspectRatio: false,
+        autoSnapEnabled: autoSnappingEnabled,
+        //initial autosnapping
+        //acceptedAngleScore: 35,
+        acceptedSizeScore: 75,
+        /*  requiredAspectRatios: [
                                       const PageAspectRatio(
                                           width: 1.0, height: 1.0)
                                     ],*/
-                                        detectDocumentAfterSnap: false,
-                                        autoSnapSensitivity: 0.5);
+        detectDocumentAfterSnap: false,
+        autoSnapSensitivity: 0.5);
     var documentCameraConfiguration = DocumentCameraConfiguration(
-                                flashEnabled:
-                                    flashEnabled, //initial flash state
-                                // Initial configuration for the scanner itself
-                                scannerConfiguration:
-                                    documentClassicScannerConfiguration,
-                                contourConfiguration: ContourConfiguration(
-                                  showPolygonInManualMode: false,
-                                  strokeOkColor: Colors.red,
-                                  fillOkColor: Colors.red.withAlpha(150),
-                                  strokeColor: Colors.blue,
-                                  fillColor: Colors.blue.withAlpha(150),
-                                  cornerRadius: 35,
-                                  strokeWidth: 10,
-                                  autoSnapProgressStrokeColor:
-                                      Colors.greenAccent,
-                                  autoSnapProgressEnabled: true,
-                                  autoSnapProgressStrokeWidth: 5,
-                                ));
+        flashEnabled: flashEnabled, //initial flash state
+        // Initial configuration for the scanner itself
+        scannerConfiguration: documentClassicScannerConfiguration,
+        contourConfiguration: ContourConfiguration(
+          showPolygonInManualMode: false,
+          strokeOkColor: Colors.red,
+          fillOkColor: Colors.red.withAlpha(150),
+          strokeColor: Colors.blue,
+          fillColor: Colors.blue.withAlpha(150),
+          cornerRadius: 35,
+          strokeWidth: 10,
+          autoSnapProgressStrokeColor: Colors.greenAccent,
+          autoSnapProgressEnabled: true,
+          autoSnapProgressStrokeWidth: 5,
+        ));
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(),
@@ -156,16 +116,11 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           if (permissionGranted && licenseIsActive)
             IconButton(
                 onPressed: () {
-                  liveDetector
-                      .setAutoSnappingEnabled(!autoSnappingEnabled)
-                      .then((value) => {
-                            if (mounted)
-                              {
-                                setState(() {
-                                  autoSnappingEnabled = !autoSnappingEnabled;
-                                })
-                              }
-                          });
+                  if (mounted) {
+                    setState(() {
+                      autoSnappingEnabled = !autoSnappingEnabled;
+                    });
+                  }
                 },
                 icon: Icon(autoSnappingEnabled
                     ? Icons.auto_mode_outlined
@@ -173,14 +128,11 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           if (flashAvailable)
             IconButton(
                 onPressed: () {
-                  controller?.setFlashEnabled(!flashEnabled).then((value) => {
-                        if (mounted)
-                          {
-                            setState(() {
-                              flashEnabled = !flashEnabled;
-                            })
-                          }
-                      });
+                  if (mounted) {
+                    setState(() {
+                      flashEnabled = !flashEnabled;
+                    });
+                  }
                 },
                 icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off)),
         ],
@@ -195,23 +147,43 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                     ? Stack(
                         children: [
                           DocumentScannerCamera(
-                            cameraDetector: liveDetector,
+                            snapListener: (page) {
+                              /// Use update function to show result overlay on top of the camera or
+                              resultStream.add(page);
+
+                              var pages = [page];
+
+                              /// this to return result to screen caller
+                              // Navigator.pop(context, pages);
+
+                              /// for showing result in next screen in stack
+                              showPageResult(pages);
+                            },
+                            errorListener: (error) {
+                              if (mounted) {
+                                setState(() {
+                                  licenseIsActive = false;
+                                });
+                              }
+                              Logger.root.severe(error.toString());
+                            },
+                            documentContourListener:
+                                (DocumentContourScanningResult result) {
+                              detectionStatusStream.add(result.detectionStatus);
+                            },
                             // Camera on the bottom of the stack, should not be rebuild on each update of the stateful widget
                             configuration: documentCameraConfiguration,
-                            onWidgetReady: (controller) {
-                              // Once your camera initialized you are now able to control camera parameters
-                              this.controller = controller;
-                              // This option uses to check from platform whether flash is available and display control button
-                              controller.isFlashAvailable().then((value) => {
-                                    if (mounted)
-                                      {
-                                        setState(() {
-                                          flashAvailable = value;
-                                        })
-                                      }
-                                  });
+
+                            onCameraPreviewStarted:
+                                (snapTrigger, isFlashAvailable) => {
+                              if (mounted)
+                                {
+                                  setState(() {
+                                    generalSnapTrigger = snapTrigger;
+                                    flashAvailable = isFlashAvailable;
+                                  }),
+                                },
                             },
-                            onCameraPreviewStarted: () {},
                             onHeavyOperationProcessing: (show) {
                               setState(() {
                                 showProgressBar = show;
@@ -251,12 +223,12 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                 padding: const EdgeInsets.all(24.0),
                                 child: ShutterButton(
                                   onPressed: () {
-                                    liveDetector.makeSnap();
+                                    generalSnapTrigger();
                                   },
                                   autosnappingMode: autoSnappingEnabled,
                                   primaryColor: Colors.pink,
                                   accentColor: Colors.white,
-                                  animatedLineStrokeWidth: 2,
+                                  // animatedLineStrokeWidth: 2,
                                 ),
                               ),
                             ),
@@ -325,6 +297,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       ),
     );
   }
+
+  documentContour(DocumentContourScanningResult result) {}
 }
 
 class DetectionStatusWidget extends StatelessWidget {
