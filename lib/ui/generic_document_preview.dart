@@ -241,7 +241,7 @@ class MrzView extends StatelessWidget {
           genericDocumentField: result.travelDocType,
         ),
         GenericDocumentFieldView(
-          title: "Maiden Name",
+          title: "Document Number",
           genericDocumentField: result.documentNumber,
         ),
         GenericDocumentFieldView(
