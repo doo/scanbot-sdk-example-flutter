@@ -256,6 +256,18 @@ class MrzView extends StatelessWidget {
           title: "Surname",
           genericDocumentField: result.surname,
         ),
+        GenericDocumentFieldView(
+          title: "Optional 1",
+          genericDocumentField: result.optional1,
+        ),
+        GenericDocumentFieldView(
+          title: "Optional 2",
+          genericDocumentField: result.optional2,
+        ),
+        GenericDocumentFieldView(
+          title: "Visa Optional",
+          genericDocumentField: result.visaOptional,
+        ),
       ],
     );
   }
