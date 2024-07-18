@@ -18,7 +18,7 @@ class PageFiltering extends StatelessWidget {
           actions: <Widget>[
             GestureDetector(
               onTap: () {
-                filterPreviewWidget.applyFilter();
+                Navigator.of(context).pop(_page);
               },
               child: const Center(
                 child: Padding(
@@ -47,10 +47,6 @@ class FilterPreviewWidget extends StatefulWidget {
 
   FilterPreviewWidget(this.page) {
     filterPreviewWidgetState = FilterPreviewWidgetState(page);
-  }
-
-  void applyFilter() {
-    filterPreviewWidgetState.navigateBack();
   }
 
   @override
@@ -213,21 +209,6 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
         ),
       ),
     );
-  }
-
-  Text titleFromFilterType(ImageFilterType filterType) {
-    return Text(
-      filterType.toString().replaceAll('ImageFilterType.', ''),
-      style: const TextStyle(
-        inherit: true,
-        color: Colors.black,
-        fontStyle: FontStyle.normal,
-      ),
-    );
-  }
-
-  Future<void> navigateBack() async {
-    Navigator.of(context).pop(page);
   }
 
   Future<void> previewParametricFilters(

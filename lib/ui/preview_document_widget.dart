@@ -7,7 +7,6 @@ import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';
-import 'filter_all_pages_widget.dart';
 import 'operations_page_widget.dart';
 import 'pages_widget.dart';
 
@@ -183,7 +182,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 title: const Text('Save as TIFF'),
                 onTap: () {
                   Navigator.pop(context);
-                  _createTiff(false);
+                  _createTiff();
                 },
               ),
               ListTile(
@@ -191,15 +190,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 title: const Text('Save as TIFF 1-bit encoded'),
                 onTap: () {
                   Navigator.pop(context);
-                  _createTiff(true);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Apply Image Filter on ALL pages'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _filterAllPages();
+                  _createTiff();
                 },
               ),
               ListTile(
@@ -306,20 +297,6 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     );
   }
 
-  Future<void> _filterAllPages() async {
-    if (!await _checkHasPages(context)) {
-      return;
-    }
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => MultiPageFiltering(_pageRepository)),
-    );
-  }
-
   Future<void> _cleanupStorage() async {
     try {
       await ScanbotSdk.cleanupStorage();
@@ -385,7 +362,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createTiff(bool binarized) async {
+  Future<void> _createTiff() async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -399,11 +376,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.show();
     try {
       var options = TiffCreationOptions(
-          binarized: binarized,
+          binarizationFilter: CustomBinarizationFilter(),
           dpi: 200,
-          compression: (binarized
-              ? TiffCompression.CCITT_T6
-              : TiffCompression.ADOBE_DEFLATE));
+          compression: TiffCompression.CCITT_T6);
       final tiffFileUri =
           await ScanbotSdk.createTiff(_pageRepository.pages, options);
       await dialog.hide();

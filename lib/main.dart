@@ -41,7 +41,7 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY =  "";
+const SCANBOT_SDK_LICENSE_KEY = "";
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
