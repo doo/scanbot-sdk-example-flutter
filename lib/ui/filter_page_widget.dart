@@ -12,31 +12,33 @@ class PageFiltering extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterPreviewWidget = FilterPreviewWidget(_page);
     return Scaffold(
-        appBar: AppBar(
-          actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop(_page);
-              },
-              child: const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Back',
-                      style: TextStyle(inherit: true, color: Colors.black)),
+      appBar: AppBar(
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () => Navigator.of(context).pop(_page),
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Back',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
-          ],
-          iconTheme: const IconThemeData(
-            color: Colors.black, //change your color here
           ),
-          backgroundColor: Colors.white,
-          title: const Text('Filtering',
-              style: TextStyle(inherit: true, color: Colors.black)),
+        ],
+        iconTheme: const IconThemeData(
+          color: Colors.black, // Change your color here
         ),
-        body: filterPreviewWidget);
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Filtering',
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: FilterPreviewWidget(_page),
+    );
   }
 }
 
@@ -83,7 +85,10 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
       padding: const EdgeInsets.all(10.0),
       shrinkWrap: true,
       children: <Widget>[
-        buildContainer(image),
+        buildImageContainer(image),
+        buildFilterButton('Color Document Filter', () {
+          previewParametricFilters(page, [ColorDocumentFilter()]);
+        }),
         buildFilterButton('Scanbot Binarization Filter', () {
           previewParametricFilters(page, [ScanbotBinarizationFilter()]);
         }),
@@ -91,16 +96,17 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
           previewParametricFilters(page, [CustomBinarizationFilter()]);
         }),
         buildFilterButton('Brightness Filter', () {
-          previewParametricFilters(page, [BrightnessFilter()]);
+          previewParametricFilters(page, [BrightnessFilter(brightness: 0.5)]);
         }),
         buildFilterButton('Contrast Filter', () {
-          previewParametricFilters(page, [ContrastFilter()]);
+          previewParametricFilters(page, [ContrastFilter(contrast: 125.0)]);
         }),
         buildFilterButton('Grayscale Filter', () {
           previewParametricFilters(page, [GrayscaleFilter()]);
         }),
         buildFilterButton('White Black Point Filter', () {
-          previewParametricFilters(page, [WhiteBlackPointFilter()]);
+          previewParametricFilters(
+              page, [WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)]);
         }),
         buildFilterButton('Legacy Low Light Binarization Filter', () {
           previewParametricFilters(page, [
@@ -197,7 +203,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     );
   }
 
-  Container buildContainer(Widget image) {
+  Container buildImageContainer(Widget image) {
     return Container(
       height: 400,
       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),

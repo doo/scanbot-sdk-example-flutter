@@ -403,8 +403,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Performing OCR ...');
     dialog.show();
     try {
-      final result = await ScanbotSdk.performOcr(_pages,
-          OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
+      final result = await ScanbotSdk.performOcr(
+          _pages, OcrOptions(languages: ['en', 'de']));
       await dialog.hide();
       await showAlertDialog(
           context, 'Plain text:\n' + (result.plainText ?? ''));
@@ -427,15 +427,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Performing OCR with PDF ...');
     dialog.show();
     try {
-      var result = await ScanbotSdk.performOcr(
-          _pages, OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: true));
+      var result = await ScanbotSdk.createPdf(_pages, PdfRenderingOptions(),
+          shouldGeneratePdfWithOcr: true);
       await dialog.hide();
-      await showAlertDialog(
-          context,
-          'PDF File URI:\n' +
-              (result.pdfFileUri ?? '') +
-              '\n\nPlain text:\n' +
-              (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();

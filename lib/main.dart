@@ -159,12 +159,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            title: 'Scan Documents (Custom UI)',
-            onTap: () {
-              _startDocumentsCustomUIScanner();
-            },
-          ),
-          MenuItemWidget(
             title: 'Generic Document Scanner',
             onTap: () {
               _startGenericDocumentScanner();
@@ -214,7 +208,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               startInfoMappingScanV2();
             },
           ),
-          const TitleItemWidget(title: 'Data Detectors'),
+          const TitleItemWidget(title: 'Legacy Scanners'),
           MenuItemWidget(
             title: 'Scan Barcode (all formats: 1D + 2D)',
             onTap: () {
@@ -233,16 +227,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               _startBatchBarcodeScanner();
             },
           ),
+          const TitleItemWidget(title: 'From Image Detectors'),
+          MenuItemWidget(
+            title: 'Detect MRZ from Still Image',
+            onTap: () {
+              _recognizeMrzOnImage();
+            },
+          ),
           MenuItemWidget(
             title: 'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
-            },
-          ),
-          MenuItemWidget(
-            title: 'Scan Barcode (Custom UI)',
-            onTap: () {
-              _startBarcodeCustomUIScanner();
             },
           ),
           MenuItemWidget(
@@ -251,12 +246,26 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               _detectBarcodesOnImages();
             },
           ),
+          const TitleItemWidget(title: 'Custom UI'),
+          MenuItemWidget(
+            title: 'Scan Barcode (Custom UI)',
+            onTap: () {
+              _startBarcodeCustomUIScanner();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Scan Documents (Custom UI)',
+            onTap: () {
+              _startDocumentsCustomUIScanner();
+            },
+          ),
           MenuItemWidget(
             title: 'Scan Medical Certificate (Custom UI)',
             onTap: () {
               _startMedicalCertificateCustomUIScanner();
             },
           ),
+          const TitleItemWidget(title: 'Data Detectors'),
           MenuItemWidget(
             title: 'Scan MRZ (Machine Readable Zone)',
             onTap: () {
@@ -359,6 +368,23 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       if (uriPath.isNotEmpty) {
         await _createPage(Uri.file(uriPath));
         await _gotoImagesView();
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeMrzOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res = await ScanbotSdkUi.startRecognizeMrzOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context,
+              "Document: ${res.documentType}\nrawMrz:\n${res.rawMrz}\ndocumentNumber: ${res.document?.documentNumber}",
+              title: 'MRZ recognized');
+        }
       }
     } catch (e) {
       Logger.root.severe(e);
