@@ -235,6 +235,30 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            title: 'Detect Medical Certificate from Still Image',
+            onTap: () {
+              _recognizeMedicalCertificateOnImage();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Detect EHIC from Still Image',
+            onTap: () {
+              _recognizeHealthInsuranceCardOnImage();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Detect Generic Document from Still Image',
+            onTap: () {
+              _recognizeGenericDocumentOnImage();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Detect Check from Still Image',
+            onTap: () {
+              _recognizeCheckOnImage();
+            },
+          ),
+          MenuItemWidget(
             title: 'Detect Barcodes from Still Image',
             onTap: () {
               _detectBarcodeOnImage();
@@ -379,11 +403,81 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res = await ScanbotSdkUi.startRecognizeMrzOnImage(uriPath);
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(uriPath);
         if (res.operationResult == OperationResult.SUCCESS) {
           await showAlertDialog(context,
               "Document: ${res.documentType}\nrawMrz:\n${res.rawMrz}\ndocumentNumber: ${res.document?.documentNumber}",
               title: 'MRZ recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeMedicalCertificateOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res = await ScanbotSdkRecognizeOperations
+            .recognizeMedicalCertificateOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context,
+              "mcFormType: ${res.mcFormType}\ncroppedDocumentURI:\n${res.croppedDocumentURI}",
+              title: 'Medical Certificate recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeHealthInsuranceCardOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res = await ScanbotSdkRecognizeOperations
+            .recognizeHealthInsuranceCardOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "",
+              title: 'HealthInsuranceCard recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeGenericDocumentOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
+                uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "",
+              title: 'GenericDocument recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeCheckOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "", title: 'Check recognized');
         }
       }
     } catch (e) {

@@ -7,6 +7,7 @@ import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';
+import 'filter_page/filter_button_widget.dart';
 import 'operations_page_widget.dart';
 import 'pages_widget.dart';
 
@@ -174,7 +175,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 title: const Text('Save as PDF with OCR'),
                 onTap: () {
                   Navigator.pop(context);
-                  _createOcrPdf();
+                  _createPdfWithOcr();
                 },
               ),
               ListTile(
@@ -194,6 +195,14 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.filter),
+                title: const Text('Apply filter for all pages'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _settingModalFiltersSheet(context);
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.close),
                 title: const Text('Cancel'),
                 onTap: () => Navigator.pop(context),
@@ -201,6 +210,185 @@ class _DocumentPreviewState extends State<DocumentPreview> {
             ],
           );
         });
+  }
+
+  void _settingModalFiltersSheet(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return ListView(
+            padding: const EdgeInsets.all(10.0),
+            shrinkWrap: true,
+            children: <Widget>[
+              FilterButton(
+                  text: 'Color Document Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [ColorDocumentFilter()]);
+                  }),
+              FilterButton(
+                  text: 'Scanbot Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(
+                        _pages, [ScanbotBinarizationFilter()]);
+                  }),
+              FilterButton(
+                  text: 'Custom Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(
+                        _pages, [CustomBinarizationFilter()]);
+                  }),
+              FilterButton(
+                  text: 'Brightness Filter',
+                  onPressed: () {
+                    applyParametricFilters(
+                        _pages, [BrightnessFilter(brightness: 0.5)]);
+                  }),
+              FilterButton(
+                  text: 'Contrast Filter',
+                  onPressed: () {
+                    applyParametricFilters(
+                        _pages, [ContrastFilter(contrast: 125.0)]);
+                  }),
+              FilterButton(
+                  text: 'Grayscale Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [GrayscaleFilter()]);
+                  }),
+              FilterButton(
+                  text: 'White Black Point Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Low Light Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType:
+                              ImageFilterType.LOW_LIGHT_BINARIZATION.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Sensitive Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType:
+                              ImageFilterType.SENSITIVE_BINARIZATION.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Low Light Binarization Filter 2',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType:
+                              ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Edge Highlight Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.EDGE_HIGHLIGHT.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Deep Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType:
+                              ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Otsu Binarization Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.DEEP_BINARIZATION.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Clean Background Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.OTSU_BINARIZATION.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Color Document Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.COLOR_DOCUMENT.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Color Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(filterType: ImageFilterType.COLOR.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Grayscale Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(filterType: ImageFilterType.GRAYSCALE.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Binarized Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(filterType: ImageFilterType.BINARIZED.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Pure Binarized Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.PURE_BINARIZED.index)
+                    ]);
+                  }),
+              FilterButton(
+                  text: 'Legacy Black & White Filter',
+                  onPressed: () {
+                    applyParametricFilters(_pages, [
+                      LegacyFilter(
+                          filterType: ImageFilterType.BLACK_AND_WHITE.index)
+                    ]);
+                  }),
+            ],
+          );
+        });
+  }
+
+  Future<void> applyParametricFilters(
+      List<sdk.Page> pages, List<ParametricFilter> parametricFilters) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    try {
+      final filteredPages = await Future.wait(pages
+          .map((page) => ScanbotSdk.applyImageFilter(page, parametricFilters)));
+
+      setState(() {
+        _pages = filteredPages;
+      });
+
+      Navigator.pop(context);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void _addPageModalBottomSheet(context) {
@@ -414,7 +602,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createOcrPdf() async {
+  Future<void> _createPdfWithOcr() async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -427,8 +615,11 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Performing OCR with PDF ...');
     dialog.show();
     try {
-      var result = await ScanbotSdk.createPdf(_pages, PdfRenderingOptions(),
+      var pdfFileUri = await ScanbotSdk.createPdf(
+          _pages, const PdfRenderingOptions(),
           shouldGeneratePdfWithOcr: true);
+      await showAlertDialog(context, pdfFileUri.toString(),
+          title: 'PDF file URI');
       await dialog.hide();
     } catch (e) {
       print(e);

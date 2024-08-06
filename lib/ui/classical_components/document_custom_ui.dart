@@ -25,24 +25,23 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   /// otherwise we stop scanning and return first result out of the screen
   final resultStream = StreamController<sdk.Page>();
   final detectionStatusStream = StreamController<DetectionStatus>();
-
-  late DocumentSnapTrigger generalSnapTrigger;
   bool permissionGranted = false;
   bool flashEnabled = false;
   bool autoSnappingEnabled = true;
   bool flashAvailable = false;
   bool showProgressBar = false;
   bool licenseIsActive = true;
+  late DocumentSnapTrigger generalSnapTrigger;
 
   final PageRepository _pageRepository = PageRepository();
 
+  _DocumentScannerWidgetState() {}
+
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(builder: (context) => DocumentPreview()),
-        )
-        .then((value) {});
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => DocumentPreview()),
+    );
   }
 
   void checkPermission() async {
@@ -67,6 +66,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     var documentClassicScannerConfiguration = DocumentClassicScannerConfiguration(
         // ignoreBadAspectRatio: false,
         autoSnapEnabled: autoSnappingEnabled,
+
         //initial autosnapping
         //acceptedAngleScore: 35,
         acceptedSizeScore: 75,
@@ -228,7 +228,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
                                   autosnappingMode: autoSnappingEnabled,
                                   primaryColor: Colors.pink,
                                   accentColor: Colors.white,
-                                  // animatedLineStrokeWidth: 2,
+                                  animatedLineStrokeWidth: 2,
                                 ),
                               ),
                             ),
@@ -297,8 +297,6 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       ),
     );
   }
-
-  documentContour(DocumentContourScanningResult result) {}
 }
 
 class DetectionStatusWidget extends StatelessWidget {

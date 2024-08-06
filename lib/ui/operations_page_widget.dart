@@ -9,7 +9,7 @@ import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';
-import 'filter_page_widget.dart';
+import 'filter_page/filter_page_widget.dart';
 import 'pages_widget.dart';
 
 class PageOperations extends StatefulWidget {

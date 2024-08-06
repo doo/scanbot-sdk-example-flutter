@@ -201,8 +201,8 @@ class DeDriverLicenseBackView extends StatelessWidget {
           category: result.categories.l,
         ),
         CategoryView(
-          title: "Category AM",
-          category: result.categories.am,
+          title: "Category M",
+          category: result.categories.m,
         ),
         CategoryView(
           title: "Category T",

@@ -5,42 +5,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
-class PageFiltering extends StatelessWidget {
-  final sdk.Page _page;
-
-  PageFiltering(this._page);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(_page),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Back',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-          ),
-        ],
-        iconTheme: const IconThemeData(
-          color: Colors.black, // Change your color here
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Filtering',
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: FilterPreviewWidget(_page),
-    );
-  }
-}
+import 'filter_button_widget.dart';
 
 // ignore: must_be_immutable
 class FilterPreviewWidget extends StatefulWidget {
@@ -69,105 +34,112 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final imageData =
-        ScanbotEncryptionHandler.getDecryptedDataFromFile(filteredImageUri!);
-    final image = FutureBuilder<Uint8List>(
-        future: imageData,
-        builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
-          if (snapshot.data != null) {
-            var image = Image.memory(snapshot.data!);
-            return Center(child: image);
-          } else {
-            return Container();
-          }
-        });
+    final image = filteredImageUri != null
+        ? FutureBuilder<Uint8List>(
+            future: ScanbotEncryptionHandler.getDecryptedDataFromFile(
+                filteredImageUri!),
+            builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.data != null) {
+                return Center(child: Image.memory(snapshot.data!));
+              } else {
+                return Center(child: CircularProgressIndicator());
+              }
+            },
+          )
+        : Center(child: Text('No image available'));
+
     return ListView(
       padding: const EdgeInsets.all(10.0),
       shrinkWrap: true,
       children: <Widget>[
         buildImageContainer(image),
+        buildFilterButton('None', () {
+          applyParametricFilters(
+              page, [LegacyFilter(filterType: ImageFilterType.NONE.index)]);
+        }),
         buildFilterButton('Color Document Filter', () {
-          previewParametricFilters(page, [ColorDocumentFilter()]);
+          applyParametricFilters(page, [ColorDocumentFilter()]);
         }),
         buildFilterButton('Scanbot Binarization Filter', () {
-          previewParametricFilters(page, [ScanbotBinarizationFilter()]);
+          applyParametricFilters(page, [ScanbotBinarizationFilter()]);
         }),
         buildFilterButton('Custom Binarization Filter', () {
-          previewParametricFilters(page, [CustomBinarizationFilter()]);
+          applyParametricFilters(page, [CustomBinarizationFilter()]);
         }),
         buildFilterButton('Brightness Filter', () {
-          previewParametricFilters(page, [BrightnessFilter(brightness: 0.5)]);
+          applyParametricFilters(page, [BrightnessFilter(brightness: 0.5)]);
         }),
         buildFilterButton('Contrast Filter', () {
-          previewParametricFilters(page, [ContrastFilter(contrast: 125.0)]);
+          applyParametricFilters(page, [ContrastFilter(contrast: 125.0)]);
         }),
         buildFilterButton('Grayscale Filter', () {
-          previewParametricFilters(page, [GrayscaleFilter()]);
+          applyParametricFilters(page, [GrayscaleFilter()]);
         }),
         buildFilterButton('White Black Point Filter', () {
-          previewParametricFilters(
+          applyParametricFilters(
               page, [WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)]);
         }),
         buildFilterButton('Legacy Low Light Binarization Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(
                 filterType: ImageFilterType.LOW_LIGHT_BINARIZATION.index)
           ]);
         }),
         buildFilterButton('Legacy Sensitive Binarization Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(
                 filterType: ImageFilterType.SENSITIVE_BINARIZATION.index)
           ]);
         }),
         buildFilterButton('Legacy Low Light Binarization Filter 2', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(
                 filterType: ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
           ]);
         }),
         buildFilterButton('Legacy Edge Highlight Filter', () {
-          previewParametricFilters(page,
+          applyParametricFilters(page,
               [LegacyFilter(filterType: ImageFilterType.EDGE_HIGHLIGHT.index)]);
         }),
         buildFilterButton('Legacy Deep Binarization Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(
                 filterType: ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
           ]);
         }),
         buildFilterButton('Legacy Otsu Binarization Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(filterType: ImageFilterType.DEEP_BINARIZATION.index)
           ]);
         }),
         buildFilterButton('Legacy Clean Background Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(filterType: ImageFilterType.OTSU_BINARIZATION.index)
           ]);
         }),
         buildFilterButton('Legacy Color Document Filter', () {
-          previewParametricFilters(page,
+          applyParametricFilters(page,
               [LegacyFilter(filterType: ImageFilterType.COLOR_DOCUMENT.index)]);
         }),
         buildFilterButton('Legacy Color Filter', () {
-          previewParametricFilters(
+          applyParametricFilters(
               page, [LegacyFilter(filterType: ImageFilterType.COLOR.index)]);
         }),
         buildFilterButton('Legacy Grayscale Filter', () {
-          previewParametricFilters(page,
+          applyParametricFilters(page,
               [LegacyFilter(filterType: ImageFilterType.GRAYSCALE.index)]);
         }),
         buildFilterButton('Legacy Binarized Filter', () {
-          previewParametricFilters(page,
+          applyParametricFilters(page,
               [LegacyFilter(filterType: ImageFilterType.BINARIZED.index)]);
         }),
         buildFilterButton('Legacy Pure Binarized Filter', () {
-          previewParametricFilters(page,
+          applyParametricFilters(page,
               [LegacyFilter(filterType: ImageFilterType.PURE_BINARIZED.index)]);
         }),
         buildFilterButton('Legacy Black & White Filter', () {
-          previewParametricFilters(page, [
+          applyParametricFilters(page, [
             LegacyFilter(filterType: ImageFilterType.BLACK_AND_WHITE.index)
           ]);
         }),
@@ -176,31 +148,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
   }
 
   Widget buildFilterButton(String text, VoidCallback onPressed) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            padding: const EdgeInsets.all(20.0),
-            backgroundColor: Colors.grey[800], // Dark gray background
-            foregroundColor: Colors.white, // White text
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(0), // Straight quadratish shape
-            ),
-            textStyle: const TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(text),
-          ),
-        ),
-        const SizedBox(height: 8.0),
-      ],
-    );
+    return FilterButton(text: text, onPressed: onPressed);
   }
 
   Container buildImageContainer(Widget image) {
@@ -217,7 +165,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
     );
   }
 
-  Future<void> previewParametricFilters(
+  Future<void> applyParametricFilters(
       sdk.Page page, List<ParametricFilter> parametricFilters) async {
     if (!await checkLicenseStatus(context)) {
       return;

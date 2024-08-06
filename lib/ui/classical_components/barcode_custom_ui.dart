@@ -97,6 +97,7 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
 
     var barcodeClassicScannerConfiguration = BarcodeClassicScannerConfiguration(
       barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
+      // shouldReturnCroppedImage: true,
       //[BarcodeFormat.QR_CODE] for one barcode type
       engineMode: EngineMode.NEXT_GEN,
       additionalParameters: BarcodeAdditionalParameters(
@@ -181,6 +182,9 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
                           setState(() {
                             showProgressBar = show;
                           });
+                        },
+                        barcodeListener: (barcode) {
+                          showResult(barcode);
                         },
                       )
                     : Container(

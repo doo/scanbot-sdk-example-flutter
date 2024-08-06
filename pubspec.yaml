@@ -22,8 +22,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: ^5.0.0-alpha4
-
+  scanbot_sdk:
+    path: ../flutter/scanbot-sdk-flutter/bundle_sdk
 
   cupertino_icons: ^1.0.2
 
