@@ -51,7 +51,7 @@ Future<void> _initScanbotSdk() async {
 
   var config = ScanbotSdkConfig(
       loggingEnabled: true,
-      // Consider switching logging OFF in production builds for security and performance reasons.
+      // Consider switching logging OFF in production. builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
       imageFormat: ImageFormat.JPG,
       imageQuality: 80,

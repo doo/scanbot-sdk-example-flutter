@@ -12,20 +12,10 @@ class PageFiltering extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(_page),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Back',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ),
-          ),
-        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(_page),
+        ),
         iconTheme: const IconThemeData(
           color: Colors.black, // Change your color here
         ),
