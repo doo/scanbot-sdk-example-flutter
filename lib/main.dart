@@ -362,149 +362,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     );
   }
 
-  Future<void> _getOcrConfigs() async {
-    try {
-      final result = await ScanbotSdk.getOcrConfigs();
-      await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
-    } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting OCR configs');
-    }
-  }
-
-  Future<void> _getLicenseStatus() async {
-    try {
-      final result = await ScanbotSdk.getLicenseStatus();
-
-      await showAlertDialog(context,
-          "Status: ${result.status} expirationDate: ${result.expirationDate}",
-          title: 'License Status');
-    } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting license status');
-    }
-  }
-
-  Future<void> _importImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        await _createPage(Uri.file(uriPath));
-        await _gotoImagesView();
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _recognizeMrzOnImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        var res =
-            await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context,
-              "Document: ${res.documentType}\nrawMrz:\n${res.rawMrz}\ndocumentNumber: ${res.document?.documentNumber}",
-              title: 'MRZ recognized');
-        }
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _recognizeMedicalCertificateOnImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        var res = await ScanbotSdkRecognizeOperations
-            .recognizeMedicalCertificateOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context,
-              "mcFormType: ${res.mcFormType}\ncroppedDocumentURI:\n${res.croppedDocumentURI}",
-              title: 'Medical Certificate recognized');
-        }
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _recognizeHealthInsuranceCardOnImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        var res = await ScanbotSdkRecognizeOperations
-            .recognizeHealthInsuranceCardOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "",
-              title: 'HealthInsuranceCard recognized');
-        }
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _recognizeGenericDocumentOnImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        var res =
-            await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
-                uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "",
-              title: 'GenericDocument recognized');
-        }
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _recognizeCheckOnImage() async {
-    try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        var res =
-            await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "", title: 'Check recognized');
-        }
-      }
-    } catch (e) {
-      Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _createPage(Uri uri) async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    final dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
-    dialog.style(message: 'Processing');
-    dialog.show();
-    try {
-      var page = await ScanbotSdk.createPage(uri, false);
-      page = await ScanbotSdk.detectDocument(page);
-      await _pageRepository.addPage(page);
-    } catch (e) {
-      Logger.root.severe(e);
-    } finally {
-      await dialog.hide();
-    }
-  }
-
   Future<void> _startDocumentScanning() async {
     if (!await checkLicenseStatus(context)) {
       return;
@@ -538,6 +395,92 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         await _gotoImagesView();
       }
     }
+  }
+
+  Future<void> _startGenericDocumentScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    GenericDocumentResults? result;
+    try {
+      var config = GenericDocumentRecognizerConfiguration(
+          acceptedDocumentTypes: [
+            GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
+            GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
+            GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
+            GenericDocumentType.DE_DRIVER_LICENSE_BACK,
+            GenericDocumentType.DE_ID_CARD_FRONT,
+            GenericDocumentType.DE_ID_CARD_BACK,
+            GenericDocumentType.DE_PASSPORT,
+          ],
+          topBarBackgroundColor: Colors.red,
+          fieldConfidenceLowColor: Colors.blue,
+          fieldConfidenceHighColor: Colors.purpleAccent,
+          fieldsDisplayConfiguration: [
+            // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
+            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.Surname,
+                "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeDriverLicenseFrontFieldNames.GivenNames,
+                "My GivenNames",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.BirthDate,
+                "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeDriverLicenseFrontFieldNames.ExpiryDate,
+                "Document Expiry Date",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeResidencePermitBackFieldNames.Address,
+                "My address", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(
+                DeResidencePermitBackFieldNames.IssuingAuthority,
+                "Who issued",
+                FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldNames.DocumentNumber,
+                "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldNames.Surname, "My Surname",
+                FieldDisplayState.ALWAYS_VISIBLE),
+          ],
+          documentsDisplayConfiguration: [
+            DocumentsDisplayConfiguration(
+                DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
+            DocumentsDisplayConfiguration(
+                DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
+            DocumentsDisplayConfiguration(
+                MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
+            DocumentsDisplayConfiguration(
+                DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE,
+                "Licence plate Front"),
+            DocumentsDisplayConfiguration(
+                DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE,
+                "Licence plate Back"),
+          ]);
+      result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
+
+      _showGenericDocumentRecognizerResult(result);
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _importImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        await _createPage(Uri.file(uriPath));
+        await _gotoImagesView();
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<dynamic> _gotoImagesView() async {
+    return await Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => DocumentPreview()),
+    );
   }
 
   startSingleScanV2() async {
@@ -879,6 +822,113 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
+  Future<void> _recognizeMrzOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context,
+              "Document: ${res.documentType}\nrawMrz:\n${res.rawMrz}\ndocumentNumber: ${res.document?.documentNumber}",
+              title: 'MRZ recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeMedicalCertificateOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res = await ScanbotSdkRecognizeOperations
+            .recognizeMedicalCertificateOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context,
+              "mcFormType: ${res.mcFormType}\ncroppedDocumentURI:\n${res.croppedDocumentURI}",
+              title: 'Medical Certificate recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeHealthInsuranceCardOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res = await ScanbotSdkRecognizeOperations
+            .recognizeHealthInsuranceCardOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "",
+              title: 'HealthInsuranceCard recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeGenericDocumentOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
+                uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "",
+              title: 'GenericDocument recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _recognizeCheckOnImage() async {
+    try {
+      final response = await ScanbotImagePickerFlutter.pickImageAsync();
+      var uriPath = response.uri ?? "";
+      if (uriPath.isNotEmpty) {
+        var res =
+            await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
+        if (res.operationResult == OperationResult.SUCCESS) {
+          await showAlertDialog(context, "", title: 'Check recognized');
+        }
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _createPage(Uri uri) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    final dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false);
+    dialog.style(message: 'Processing');
+    dialog.show();
+    try {
+      var page = await ScanbotSdk.createPage(uri, false);
+      page = await ScanbotSdk.detectDocument(page);
+      await _pageRepository.addPage(page);
+    } catch (e) {
+      Logger.root.severe(e);
+    } finally {
+      await dialog.hide();
+    }
+  }
+
   Future<void> _startBarcodeCustomUIScanner() async {
     var result = await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
@@ -919,77 +969,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         MaterialPageRoute(
             builder: (context) => MedicalCertificatePreviewWidget(result)),
       );
-    }
-  }
-
-  Future<void> _startGenericDocumentScanner() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    GenericDocumentResults? result;
-    try {
-      var config = GenericDocumentRecognizerConfiguration(
-          acceptedDocumentTypes: [
-            GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
-            GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
-            GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
-            GenericDocumentType.DE_DRIVER_LICENSE_BACK,
-            GenericDocumentType.DE_ID_CARD_FRONT,
-            GenericDocumentType.DE_ID_CARD_BACK,
-            GenericDocumentType.DE_PASSPORT,
-          ],
-          topBarBackgroundColor: Colors.red,
-          fieldConfidenceLowColor: Colors.blue,
-          fieldConfidenceHighColor: Colors.purpleAccent,
-          fieldsDisplayConfiguration: [
-            // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
-            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.Surname,
-                "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(
-                DeDriverLicenseFrontFieldNames.GivenNames,
-                "My GivenNames",
-                FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(DeDriverLicenseFrontFieldNames.BirthDate,
-                "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(
-                DeDriverLicenseFrontFieldNames.ExpiryDate,
-                "Document Expiry Date",
-                FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(DeResidencePermitBackFieldNames.Address,
-                "My address", FieldDisplayState.ALWAYS_VISIBLE),
-            // FieldsDisplayConfiguration(
-            //     DeResidencePermitBackFieldNames.IssueDate,
-            //     "When issued",
-            //     FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(
-                DeResidencePermitBackFieldNames.IssuingAuthority,
-                "Who issued",
-                FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(MRZFieldNames.DocumentNumber,
-                "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
-            FieldsDisplayConfiguration(MRZFieldNames.Surname, "My Surname",
-                FieldDisplayState.ALWAYS_VISIBLE),
-          ],
-          documentsDisplayConfiguration: [
-            DocumentsDisplayConfiguration(
-                DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
-            DocumentsDisplayConfiguration(
-                DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
-            DocumentsDisplayConfiguration(
-                MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
-            DocumentsDisplayConfiguration(
-                DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE,
-                "Licence plate Front"),
-            DocumentsDisplayConfiguration(
-                DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE,
-                "Licence plate Back"),
-          ]);
-      result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
-      // result.documents.first.document.wrapDocument();
-      _showGenericDocumentRecognizerResult(result);
-    } catch (e) {
-      Logger.root.severe(e);
     }
   }
 
@@ -1121,10 +1100,22 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
     LicensePlateScanResult requestResult;
     try {
-      var config = LicensePlateScannerConfiguration(
-          topBarBackgroundColor: Colors.pink,
-          topBarButtonsActiveColor: Colors.white70,
-          confirmationDialogAccentColor: Colors.green);
+      var config = LicensePlateScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. set the maximum number of accumulated frames before starting recognition.
+      config.maximumNumberOfAccumulatedFrames = 5;
+
+      // UI configuration:
+      // e.g. configure various colors.
+      config.topBarBackgroundColor = Colors.red;
+      config.topBarButtonsActiveColor = Colors.white;
+      config.topBarButtonsInactiveColor = Colors.white.withAlpha(120);
+
+      // Text configuration:
+      // e.g. customize a UI element's text.
+      config.cancelButtonTitle = "Cancel";
+
       requestResult = await ScanbotSdkUi.startLicensePlateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.rawText);
@@ -1141,6 +1132,20 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     VinScanResult requestResult;
     try {
       var config = VinScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. set the maximum number of accumulated frames.
+      config.minimumNumberOfRequiredFramesWithEqualRecognitionResult = 4;
+
+      // UI configuration:
+      config.topBarBackgroundColor = Colors.red;
+      config.topBarButtonsActiveColor = Colors.white;
+      config.topBarButtonsInactiveColor = Colors.white.withAlpha(120);
+
+      // Text configuration:
+      config.guidanceText = "Scan Vin";
+      config.cancelButtonTitle = "Cancel";
+
       requestResult = await ScanbotSdkUi.startVinScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.rawText);
@@ -1157,6 +1162,20 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     CheckScanResult requestResult;
     try {
       var config = CheckScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. disable capturing the photo to recognize on live video stream
+      config.captureHighResolutionImage = false;
+
+      // UI configuration:
+      // e.g. configure various colors.
+      config.topBarBackgroundColor = Colors.red;
+      config.topBarButtonsActiveColor = Colors.white;
+
+      // Text configuration:
+      // e.g. customize UI element's text.
+      config.cancelButtonTitle = "Cancel";
+
       requestResult = await ScanbotSdkUi.startCheckScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.check?.type.name);
@@ -1173,6 +1192,43 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     TextDataScanResult requestResult;
     try {
       var config = TextDataScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. enable highlighting of the detected word boxes.
+      config.wordBoxHighlightEnabled = true;
+
+      // UI configuration:
+      // e.g. configure various colors.
+      config.topBarBackgroundColor = Colors.red;
+      config.topBarButtonsActiveColor = Colors.white;
+
+      // Text configuration:
+      // e.g. customize a UI element's text.
+      config.cancelButtonTitle = "Cancel";
+
+      // Create the data scanner step.
+      var step = TextDataScannerStep(
+        // Set the guidance text.
+        "Scan a document",
+
+        /// Validation pattern
+        null,
+
+        /// Set shouldMatchSubstring
+        null,
+        // Set the preferredZoom.
+        0,
+        // Set the aspect ratio.
+        sdk.AspectRatio(width: 4.0, height: 1.0),
+        // Set the finder's unzoomed height.
+        100,
+        null,
+        null,
+      );
+
+      // Set the guidance text.
+      config.textDataScannerStep = step;
+
       requestResult = await ScanbotSdkUi.startTextDataScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(jsonEncode(requestResult));
@@ -1189,6 +1245,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     MedicalCertificateResult requestResult;
     try {
       var config = MedicalCertificateScannerConfiguration();
+
+      // UI configuration:
+      // e.g. configure various colors.
+      config.topBarBackgroundColor = Colors.red;
+      config.topBarButtonsActiveColor = Colors.white;
+
+      // Text configuration:
+      // e.g. customize UI element's text.
+      config.cancelButtonTitle = "Cancel";
+
       requestResult = await ScanbotSdkUi.startMedicalCertificateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.patientInfoBox.toString());
@@ -1198,36 +1264,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  void showResultTextDialog(result) {
-    Widget okButton = TextButton(
-      onPressed: () => Navigator.pop(context),
-      child: const Text('OK'),
-    );
-    // set up the AlertDialog
-    var alert = AlertDialog(
-      title: const Text('Result'),
-      content: Text(result),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
   Future<void> _startQRScanner() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     try {
-      final config = BarcodeScannerConfiguration(
+      var config = BarcodeScannerConfiguration(
         barcodeFormats: [BarcodeFormat.QR_CODE],
         finderTextHint: 'Please align a QR code in the frame to scan it.',
         /*  additionalParameters: BarcodeAdditionalParameters(
@@ -1242,16 +1285,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       await _showBarcodeScanningResult(result);
     } catch (e) {
       Logger.root.severe(e);
-    }
-  }
-
-  Future<void> _showBarcodeScanningResult(
-      final BarcodeScanningResult result) async {
-    if (result.operationResult == OperationResult.SUCCESS) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => BarcodesResultPreviewWidget(result)),
-      );
     }
   }
 
@@ -1273,11 +1306,22 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     HealthInsuranceCardRecognitionResult? result;
     try {
-      final config = HealthInsuranceScannerConfiguration(
-        topBarBackgroundColor: ScanbotRedColor,
-        topBarButtonsActiveColor: Colors.white70,
-        // ...
-      );
+      var config = HealthInsuranceScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. turn on the flashlight.
+      config.flashEnabled = true;
+
+      // UI configuration:
+      // e.g. configure various colors.
+      config.topBarButtonsActiveColor = Colors.white;
+      config.topBarBackgroundColor = Colors.red;
+
+      // Text configuration:
+      // e.g. customize some UI elements' text.
+      config.flashButtonTitle = "Flash";
+      config.cancelButtonTitle = "Cancel";
+
       result = await ScanbotSdkUi.startEhicScanner(config);
     } catch (e) {
       Logger.root.severe(e);
@@ -1303,9 +1347,23 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     MrzScanningResult? result;
     try {
-      final config = MrzScannerConfiguration(
-        topBarBackgroundColor: ScanbotRedColor,
-      );
+      var config = MrzScannerConfiguration();
+
+      // Behavior configuration:
+      // e.g. enable a beep sound on successful detection.
+      config.successBeepEnabled = true;
+
+      // UI configuration:
+      // e.g. configure various colors and the finder's aspect ratio.
+      config.topBarButtonsActiveColor = Colors.white;
+      config.topBarBackgroundColor = Colors.red;
+      config.finderAspectRatio = sdk.AspectRatio(width: 1, height: 0.25);
+
+      // Text configuration:
+      // e.g. customize some UI elements' text.
+      config.cancelButtonTitle = "Cancel";
+      config.flashButtonTitle = "Flash";
+
       if (Platform.isIOS) {
         config.finderAspectRatio = sdk.AspectRatio(width: 7, height: 1);
       }
@@ -1322,9 +1380,59 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  Future<dynamic> _gotoImagesView() async {
-    return await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => DocumentPreview()),
+  Future<void> _getOcrConfigs() async {
+    try {
+      final result = await ScanbotSdk.getOcrConfigs();
+      await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
+    } catch (e) {
+      Logger.root.severe(e);
+      await showAlertDialog(context, 'Error getting OCR configs');
+    }
+  }
+
+  Future<void> _getLicenseStatus() async {
+    try {
+      final result = await ScanbotSdk.getLicenseStatus();
+
+      await showAlertDialog(context,
+          "Status: ${result.status} expirationDate: ${result.expirationDate}",
+          title: 'License Status');
+    } catch (e) {
+      Logger.root.severe(e);
+      await showAlertDialog(context, 'Error getting license status');
+    }
+  }
+
+  Future<void> _showBarcodeScanningResult(
+      final BarcodeScanningResult result) async {
+    if (result.operationResult == OperationResult.SUCCESS) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => BarcodesResultPreviewWidget(result)),
+      );
+    }
+  }
+
+  void showResultTextDialog(result) {
+    Widget okButton = TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text('OK'),
+    );
+    // set up the AlertDialog
+    var alert = AlertDialog(
+      title: const Text('Result'),
+      content: Text(result),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
