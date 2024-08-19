@@ -166,7 +166,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               title: 'Save as TIFF',
               onTap: () {
                 Navigator.pop(context);
-                _createTiff();
+                _createTiff(false);
               },
             ),
             _buildSettingsListTile(
@@ -174,7 +174,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               title: 'Save as TIFF 1-bit encoded',
               onTap: () {
                 Navigator.pop(context);
-                _createTiff();
+                _createTiff(true);
               },
             ),
             _buildSettingsListTile(
@@ -540,7 +540,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createTiff() async {
+  Future<void> _createTiff(bool isBinarized) async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -554,9 +554,10 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.show();
     try {
       var options = TiffCreationOptions(
-          binarizationFilter: CustomBinarizationFilter(),
+          binarizationFilter: null,
           dpi: 200,
-          compression: TiffCompression.CCITT_T6);
+          compression:
+              isBinarized ? TiffCompression.CCITT_T6 : TiffCompression.LZW);
       final tiffFileUri =
           await ScanbotSdk.createTiff(_pageRepository.pages, options);
       await dialog.hide();

@@ -5,6 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/classical_components/cropping_custom_ui.dart';
+import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
@@ -32,42 +33,30 @@ class _PageOperationsState extends State<PageOperations> {
     super.initState();
   }
 
-  Future<void> _updatePage(sdk.Page page) async {
-    setState(() {
-      showProgressBar = true;
-    });
-    await _pageRepository.updatePage(page);
-    setState(() {
-      showProgressBar = false;
-      _page = page;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    Widget pageView;
-    if (shouldInitWithEncryption) {
-      pageView = EncryptedPageWidget(_page.documentImageFileUri!);
-    } else {
-      pageView = PageWidget(_page.documentImageFileUri!);
-    }
+    // Determine which widget to display based on encryption requirement
+    Widget pageView = shouldInitWithEncryption
+        ? EncryptedPageWidget(_page.documentImageFileUri!)
+        : PageWidget(_page.documentImageFileUri!);
+
     return Scaffold(
       appBar: AppBar(
+        // Customize the icon theme and background color of the app bar
         iconTheme: const IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black, // Change icon color here
         ),
         backgroundColor: Colors.white,
         title: const Text(
           'Image Preview',
-          style: TextStyle(inherit: true, color: Colors.black),
+          style: TextStyle(color: Colors.black), // Title text color
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              onTap: () {
-                _analyzeQuality(_page);
-              },
+              onTap: () =>
+                  _analyzeQuality(_page), // Action for analyzing quality
               child: const Icon(
                 Icons.image_search,
                 size: 26.0,
@@ -76,96 +65,83 @@ class _PageOperationsState extends State<PageOperations> {
           ),
         ],
       ),
-      body: Stack(children: <Widget>[
-        Column(
-          children: <Widget>[
-            Expanded(
+      body: Stack(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Expanded(
                 child: Container(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: Center(child: pageView))),
-          ],
-        ),
-        showProgressBar
-            ? const Center(
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Center(child: pageView),
                 ),
-              )
-            : Container()
-      ]),
+              ),
+            ],
+          ),
+          // Show progress bar if `showProgressBar` is true
+          if (showProgressBar)
+            const Center(
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(
+                  strokeWidth: 10,
+                ),
+              ),
+            ),
+        ],
+      ),
       bottomNavigationBar: BottomAppBar(
-        padding: const EdgeInsetsDirectional.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            TextButton(
-              onPressed: () {
-                _startCroppingScreen(_page);
-              },
-              child: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.crop),
-                  Text(
-                    'RTU Crop',
-                    style: TextStyle(inherit: true, color: Colors.black),
-                  ),
-                ],
-              ),
+            _buildOptionButton(
+              icon: Icons.crop,
+              label: 'RTU Crop',
+              onPressed: () => _startCroppingScreen(_page),
             ),
-            TextButton(
-              onPressed: () {
-                _startCustomUiCroppingScreen(_page);
-              },
-              child: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Icon(Icons.crop),
-                  Text(
-                    'Classic Crop',
-                    style: TextStyle(inherit: true, color: Colors.black),
-                  ),
-                ],
-              ),
+            _buildOptionButton(
+              icon: Icons.crop,
+              label: 'Classic Crop',
+              onPressed: () => _startCustomUiCroppingScreen(_page),
             ),
-            TextButton(
-              onPressed: () {
-                _showFilterPage(_page);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Icon(Icons.filter),
-                  Container(height: 4),
-                  const Text(
-                    'Filter',
-                    style: TextStyle(inherit: true, color: Colors.black),
-                  ),
-                ],
-              ),
+            _buildOptionButton(
+              icon: Icons.filter,
+              label: 'Filter',
+              onPressed: () => _showFilterPage(_page),
             ),
-            TextButton(
-              onPressed: () {
-                _deletePage(_page);
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Icon(Icons.delete, color: Colors.red),
-                  Container(width: 4),
-                  const Text(
-                    'Delete',
-                    style: TextStyle(inherit: true, color: Colors.red),
-                  ),
-                ],
-              ),
+            _buildOptionButton(
+              icon: Icons.delete,
+              label: 'Delete',
+              iconColor: Colors.red,
+              labelColor: Colors.red,
+              onPressed: () => _deletePage(_page),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildOptionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    Color iconColor = Colors.black,
+    Color labelColor = Colors.black,
+  }) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Icon(icon, color: iconColor),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(color: labelColor),
+          ),
+        ],
       ),
     );
   }
@@ -191,6 +167,17 @@ class _PageOperationsState extends State<PageOperations> {
     if (resultPage != null) {
       await _updatePage(resultPage);
     }
+  }
+
+  Future<void> _updatePage(sdk.Page page) async {
+    setState(() {
+      showProgressBar = true;
+    });
+    await _pageRepository.updatePage(page);
+    setState(() {
+      showProgressBar = false;
+      _page = page;
+    });
   }
 
   Future<void> _startCroppingScreen(sdk.Page page) async {
@@ -236,6 +223,11 @@ class _PageOperationsState extends State<PageOperations> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
+    var dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: true);
+    dialog.style(message: 'Analysing ...');
+    dialog.show();
+
     try {
       final result = await ScanbotSdk.analyzeQualityOfDocument(page,
           analyzerImageSizeLimit: sdk.Size(width: 2500, height: 2500));
@@ -247,6 +239,8 @@ class _PageOperationsState extends State<PageOperations> {
       );
     } catch (e) {
       Logger.root.severe(e);
+    } finally {
+      dialog.hide();
     }
   }
 }
