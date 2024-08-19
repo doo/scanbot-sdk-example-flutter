@@ -23,9 +23,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: _startBarcodeScanner,
-        child: const Icon(Icons.camera),
+      body: Center(
+        child: MaterialButton(
+          height: 200,
+          minWidth: 200,
+          color: Colors.blue,
+          textColor: Colors.white,
+          child: const Text("Start Barcode Scanner"),
+          onPressed: _startBarcodeScanner,
+        ),
       ),
     );
   }
