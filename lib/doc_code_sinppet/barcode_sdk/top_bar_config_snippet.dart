@@ -1,6 +1,6 @@
 import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
 
-void topBarConfigSnippet() {
+Future<void> topBarConfigSnippet() async {
   // Create the default configuration object.
   var configuration = BarcodeScannerConfiguration();
 
@@ -20,4 +20,10 @@ void topBarConfigSnippet() {
   configuration.topBar.cancelButton.foreground.color = ScanbotColor("#FFFFFF");
 
   // Configure other parameters as needed.
+
+  var result = await ScanbotSdkUi.startBarcodeScanner(configuration);
+
+  if (result.operationResult == OperationResult.SUCCESS) {
+    // TODO: present barcode result as needed
+  }
 }
