@@ -159,6 +159,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
+            title: 'Scan Finder Documents',
+            onTap: () {
+              _startFinerDocumentScanner();
+            },
+          ),
+          MenuItemWidget(
             title: 'Generic Document Scanner',
             onTap: () {
               _startGenericDocumentScanner();
@@ -386,6 +392,38 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         // ...
       );
       result = await ScanbotSdkUi.startDocumentScanner(config);
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+    if (result != null) {
+      if (isOperationSuccessful(result)) {
+        await _pageRepository.addPages(result.pages);
+        await _gotoImagesView();
+      }
+    }
+  }
+
+  Future<void> _startFinerDocumentScanner() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    FinderDocumentScanningResult? result;
+    try {
+      var config = FinderDocumentScannerConfiguration(
+        ignoreBadAspectRatio: true,
+        //maxNumberOfPages: 3,
+        //flashEnabled: true,
+        //autoSnappingSensitivity: 0.7,
+        cameraPreviewMode: CameraPreviewMode.FIT_IN,
+        orientationLockMode: OrientationLockMode.PORTRAIT,
+        //documentImageSizeLimit: Size(2000, 3000),
+        cancelButtonTitle: 'Cancel',
+        textHintOK: "Perfect, don't move...",
+        //textHintNothingDetected: "Nothing",
+        // ...
+      );
+      result = await ScanbotSdkUi.startFinerDocumentScanner(config);
     } catch (e) {
       Logger.root.severe(e);
     }
