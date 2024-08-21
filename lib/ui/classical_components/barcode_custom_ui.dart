@@ -163,6 +163,10 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         finder: _buildFinderConfiguration(),
       ),
       barcodeListener: (scanningResult) =>
+          // Use update function to show result overlay on top of the camera or
+          //resultStream.add(scanningResult),
+
+          // this to return result to preview screen
           _showResult(scanningResult), // Handle barcode scanning results.
       errorListener: (error) {
         setState(() {
@@ -284,17 +288,6 @@ class _BarcodeScannerWidgetState extends State<BarcodeScannerWidget> {
         width: 100,
         height: 200,
         child: pageView,
-      ),
-    );
-  }
-
-  /// Builds a progress bar displayed during long-running operations.
-  Widget _buildProgressBar() {
-    return const Center(
-      child: SizedBox(
-        width: 100,
-        height: 100,
-        child: CircularProgressIndicator(strokeWidth: 10),
       ),
     );
   }
