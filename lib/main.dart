@@ -861,16 +861,22 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _recognizeMrzOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res =
+        var mrzRecognizerResult =
             await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
+        if (mrzRecognizerResult.operationResult == OperationResult.SUCCESS) {
           await showAlertDialog(context,
-              "Document: ${res.documentType}\nrawMrz:\n${res.rawMrz}\ndocumentNumber: ${res.document?.documentNumber}",
+              "Document: ${mrzRecognizerResult.documentType}\nrawMrz:\n${mrzRecognizerResult.rawMrz}\ndocumentNumber: ${mrzRecognizerResult.document?.documentNumber}",
               title: 'MRZ recognized');
+        } else {
+          await showAlertDialog(context, 'MRZ not recognized');
         }
       }
     } catch (e) {
@@ -879,16 +885,26 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _recognizeMedicalCertificateOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res = await ScanbotSdkRecognizeOperations
+        var medicalCertificateResult = await ScanbotSdkRecognizeOperations
             .recognizeMedicalCertificateOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context,
-              "mcFormType: ${res.mcFormType}\ncroppedDocumentURI:\n${res.croppedDocumentURI}",
+        if (medicalCertificateResult.operationResult ==
+                OperationResult.SUCCESS &&
+            medicalCertificateResult.recognitionSuccessful == true) {
+          await showAlertDialog(
+              context,
+              "mcFormType: ${medicalCertificateResult.mcFormType}\n"
+              "croppedDocumentURI:\n${medicalCertificateResult.croppedDocumentURI}",
               title: 'Medical Certificate recognized');
+        } else {
+          await showAlertDialog(context, 'Medical Certificate not recognized');
         }
       }
     } catch (e) {
@@ -897,15 +913,26 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _recognizeHealthInsuranceCardOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res = await ScanbotSdkRecognizeOperations
+        var ehicRecognitionResult = await ScanbotSdkRecognizeOperations
             .recognizeHealthInsuranceCardOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "",
+        if (ehicRecognitionResult.operationResult == OperationResult.SUCCESS &&
+            ehicRecognitionResult.status ==
+                HealthInsuranceCardDetectionStatus.SUCCESS) {
+          await showAlertDialog(
+              context,
+              "EHIC first field: ${ehicRecognitionResult.fields.first.type}\n"
+              "\nValue: ${ehicRecognitionResult.fields.first.value}\n",
               title: 'HealthInsuranceCard recognized');
+        } else {
+          await showAlertDialog(context, "HealthInsuranceCard not recognized");
         }
       }
     } catch (e) {
@@ -914,16 +941,26 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _recognizeGenericDocumentOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res =
+        var genericDocRecognizerResult =
             await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
                 uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "",
+        if (genericDocRecognizerResult.operationResult ==
+                OperationResult.SUCCESS &&
+            genericDocRecognizerResult.status ==
+                GenericDocumentRecognitionStatus.Success) {
+          await showAlertDialog(context,
+              "DocumentType: ${genericDocRecognizerResult.document?.type?.fullName}",
               title: 'GenericDocument recognized');
+        } else {
+          await showAlertDialog(context, "GenericDocument not recognized");
         }
       }
     } catch (e) {
@@ -932,14 +969,23 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _recognizeCheckOnImage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
       final response = await ScanbotImagePickerFlutter.pickImageAsync();
       var uriPath = response.uri ?? "";
       if (uriPath.isNotEmpty) {
-        var res =
+        var checkScanResult =
             await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
-        if (res.operationResult == OperationResult.SUCCESS) {
-          await showAlertDialog(context, "", title: 'Check recognized');
+        if (checkScanResult.operationResult == OperationResult.SUCCESS &&
+            checkScanResult.status == CheckRecognitionResultStatus.SUCCESS) {
+          await showAlertDialog(context,
+              "CheckType FullName: ${checkScanResult.check?.type.fullName}",
+              title: 'Check recognized');
+        } else {
+          await showAlertDialog(context, "", title: 'Check not recognized');
         }
       }
     } catch (e) {
@@ -1292,6 +1338,16 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       // Text configuration:
       // e.g. customize UI element's text.
       config.cancelButtonTitle = "Cancel";
+
+      // Configuration for the hint values:
+      // If you do not set your own values, the default ones will be used.
+      // config.userGuidanceStrings = MedicalCertificateUserGuidanceStrings(
+      //     "Start scanning",
+      //     "Scanning",
+      //     "Energy saving",
+      //     "Capturing",
+      //     "Processing",
+      //     "Paused");
 
       requestResult = await ScanbotSdkUi.startMedicalCertificateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
