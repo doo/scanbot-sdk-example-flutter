@@ -300,10 +300,10 @@ packages:
     dependency: transitive
     description:
       name: mime
-      sha256: "2e123074287cc9fd6c09de8336dae606d1ddb88d9ac47358826db698c176a1f2"
+      sha256: "801fd0b26f14a4a58ccb09d5892c3fbdeff209594300a542492cf13fba9d247a"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.5"
+    version: "1.0.6"
   path:
     dependency: transitive
     description:
@@ -436,10 +436,10 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_sdk
-      sha256: c576973c41f22afaa8d078388292d5132e21ccb9ec9a34b83454b9f2c8caf1d8
+      sha256: "3e4e6271da1cc74a611ee58b562bc10eb25c68f6c6f18d128422899dab0a5431"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0-alpha03"
+    version: "5.1.0-alpha04"
   shared_preferences:
     dependency: "direct main"
     description:
