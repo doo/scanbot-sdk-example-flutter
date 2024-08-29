@@ -57,8 +57,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
         FilterButton(
             text: 'None',
             onPressed: () {
-              applyParametricFilters(
-                  page, [LegacyFilter(filterType: ImageFilterType.NONE.index)]);
+              applyParametricFilters(page,
+                  [LegacyFilter(filterType: ImageFilterType.NONE.typeIndex)]);
             }),
         FilterButton(
             text: 'Color Document Filter',
@@ -101,7 +101,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.LOW_LIGHT_BINARIZATION.index)
+                    filterType:
+                        ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
               ]);
             }),
         FilterButton(
@@ -109,7 +110,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.SENSITIVE_BINARIZATION.index)
+                    filterType:
+                        ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
               ]);
             }),
         FilterButton(
@@ -117,14 +119,16 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                    filterType:
+                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
               ]);
             }),
         FilterButton(
             text: 'Legacy Edge Highlight Filter',
             onPressed: () {
               applyParametricFilters(page, [
-                LegacyFilter(filterType: ImageFilterType.EDGE_HIGHLIGHT.index)
+                LegacyFilter(
+                    filterType: ImageFilterType.EDGE_HIGHLIGHT.typeIndex)
               ]);
             }),
         FilterButton(
@@ -132,7 +136,8 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                    filterType:
+                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
               ]);
             }),
         FilterButton(
@@ -140,7 +145,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.DEEP_BINARIZATION.index)
+                    filterType: ImageFilterType.DEEP_BINARIZATION.typeIndex)
               ]);
             }),
         FilterButton(
@@ -148,46 +153,51 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
-                    filterType: ImageFilterType.OTSU_BINARIZATION.index)
+                    filterType: ImageFilterType.OTSU_BINARIZATION.typeIndex)
               ]);
             }),
         FilterButton(
             text: 'Legacy Color Document Filter',
             onPressed: () {
               applyParametricFilters(page, [
-                LegacyFilter(filterType: ImageFilterType.COLOR_DOCUMENT.index)
+                LegacyFilter(
+                    filterType: ImageFilterType.COLOR_DOCUMENT.typeIndex)
               ]);
             }),
         FilterButton(
             text: 'Legacy Color Filter',
             onPressed: () {
               applyParametricFilters(page,
-                  [LegacyFilter(filterType: ImageFilterType.COLOR.index)]);
+                  [LegacyFilter(filterType: ImageFilterType.COLOR.typeIndex)]);
             }),
         FilterButton(
             text: 'Legacy Grayscale Filter',
             onPressed: () {
-              applyParametricFilters(page,
-                  [LegacyFilter(filterType: ImageFilterType.GRAYSCALE.index)]);
+              applyParametricFilters(page, [
+                LegacyFilter(filterType: ImageFilterType.GRAYSCALE.typeIndex)
+              ]);
             }),
         FilterButton(
             text: 'Legacy Binarized Filter',
             onPressed: () {
-              applyParametricFilters(page,
-                  [LegacyFilter(filterType: ImageFilterType.BINARIZED.index)]);
+              applyParametricFilters(page, [
+                LegacyFilter(filterType: ImageFilterType.BINARIZED.typeIndex)
+              ]);
             }),
         FilterButton(
             text: 'Legacy Pure Binarized Filter',
             onPressed: () {
               applyParametricFilters(page, [
-                LegacyFilter(filterType: ImageFilterType.PURE_BINARIZED.index)
+                LegacyFilter(
+                    filterType: ImageFilterType.PURE_BINARIZED.typeIndex)
               ]);
             }),
         FilterButton(
             text: 'Legacy Black & White Filter',
             onPressed: () {
               applyParametricFilters(page, [
-                LegacyFilter(filterType: ImageFilterType.BLACK_AND_WHITE.index)
+                LegacyFilter(
+                    filterType: ImageFilterType.BLACK_AND_WHITE.typeIndex)
               ]);
             }),
       ],

@@ -31,19 +31,19 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.black, // Set the color of icons in the AppBar
+          color: Colors.black, //change your color here
         ),
         backgroundColor: Colors.white,
         title: const Text(
           'Image results',
           style: TextStyle(
+            inherit: true,
             color: Colors.black,
           ),
         ),
       ),
       body: Column(
         children: <Widget>[
-          // GridView to display images
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(8.0),
@@ -255,7 +255,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.LOW_LIGHT_BINARIZATION.index)
+                            ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -264,7 +264,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.SENSITIVE_BINARIZATION.index)
+                            ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -273,7 +273,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -281,7 +281,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.EDGE_HIGHLIGHT.index)
+                        filterType: ImageFilterType.EDGE_HIGHLIGHT.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -290,7 +290,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.index)
+                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -298,7 +298,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.DEEP_BINARIZATION.index)
+                        filterType: ImageFilterType.DEEP_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -306,7 +306,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.OTSU_BINARIZATION.index)
+                        filterType: ImageFilterType.OTSU_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -314,27 +314,30 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.COLOR_DOCUMENT.index)
+                        filterType: ImageFilterType.COLOR_DOCUMENT.typeIndex)
                   ]);
                 }),
             FilterButton(
                 text: 'Legacy Color Filter',
                 onPressed: () {
-                  applyParametricFilters(_pages,
-                      [LegacyFilter(filterType: ImageFilterType.COLOR.index)]);
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(filterType: ImageFilterType.COLOR.typeIndex)
+                  ]);
                 }),
             FilterButton(
                 text: 'Legacy Grayscale Filter',
                 onPressed: () {
                   applyParametricFilters(_pages, [
-                    LegacyFilter(filterType: ImageFilterType.GRAYSCALE.index)
+                    LegacyFilter(
+                        filterType: ImageFilterType.GRAYSCALE.typeIndex)
                   ]);
                 }),
             FilterButton(
                 text: 'Legacy Binarized Filter',
                 onPressed: () {
                   applyParametricFilters(_pages, [
-                    LegacyFilter(filterType: ImageFilterType.BINARIZED.index)
+                    LegacyFilter(
+                        filterType: ImageFilterType.BINARIZED.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -342,7 +345,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.PURE_BINARIZED.index)
+                        filterType: ImageFilterType.PURE_BINARIZED.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -350,7 +353,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
                 onPressed: () {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
-                        filterType: ImageFilterType.BLACK_AND_WHITE.index)
+                        filterType: ImageFilterType.BLACK_AND_WHITE.typeIndex)
                   ]);
                 }),
           ],

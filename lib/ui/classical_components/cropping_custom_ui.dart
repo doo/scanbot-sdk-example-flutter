@@ -4,9 +4,9 @@ import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
-  final sdk.Page page;
+  const CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
 
-  CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
+  final sdk.Page page;
 
   @override
   _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
@@ -14,9 +14,9 @@ class CroppingScreenWidget extends StatefulWidget {
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   late sdk.Page currentPage;
-  CroppingController? croppingController;
   bool showProgressBar = false;
   bool doneButtonEnabled = true;
+  CroppingController? croppingController;
 
   @override
   void initState() {
