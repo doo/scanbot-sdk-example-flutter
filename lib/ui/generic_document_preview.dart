@@ -59,6 +59,8 @@ Widget genericDocumentResultView(GenericDocument document) {
       return DeIdCardFrontView(DeIdCardFront(document));
     case DeResidencePermitFront.DOCUMENT_TYPE:
       return DeResidencePermitFrontView(DeResidencePermitFront(document));
+    case DeResidencePermitBack.DOCUMENT_TYPE:
+      return DeResidencePermitBackView(DeResidencePermitBack(document));
     case DeIdCardBack.DOCUMENT_TYPE:
       return DeIdCardBackView(DeIdCardBack(document));
     case DePassport.DOCUMENT_TYPE:
@@ -367,6 +369,62 @@ class DeResidencePermitFrontView extends StatelessWidget {
         GenericDocumentFieldView(
           title: "Surname",
           genericDocumentField: result.surname,
+        ),
+      ],
+    );
+  }
+}
+
+class DeResidencePermitBackView extends StatelessWidget {
+  final DeResidencePermitBack result;
+
+  DeResidencePermitBackView(
+    this.result,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        GenericDocumentFieldView(
+          title: "Address",
+          genericDocumentField: result.address,
+        ),
+        GenericDocumentFieldView(
+          title: "Birth Date",
+          genericDocumentField: result.birthDate,
+        ),
+        GenericDocumentFieldView(
+          title: "Birth Place",
+          genericDocumentField: result.birthDate,
+        ),
+        GenericDocumentFieldView(
+          title: "EyeColor",
+          genericDocumentField: result.eyeColor,
+        ),
+        GenericDocumentFieldView(
+          title: "Gender",
+          genericDocumentField: result.gender,
+        ),
+        GenericDocumentFieldView(
+          title: "Height",
+          genericDocumentField: result.height,
+        ),
+        GenericDocumentFieldView(
+          title: "IssuingAuthority",
+          genericDocumentField: result.issuingAuthority,
+        ),
+        GenericDocumentFieldView(
+          title: "Nationality",
+          genericDocumentField: result.nationality,
+        ),
+        GenericDocumentFieldView(
+          title: "RawMRZ",
+          genericDocumentField: result.rawMRZ,
+        ),
+        GenericDocumentFieldView(
+          title: "Remarks",
+          genericDocumentField: result.remarks,
         ),
       ],
     );
