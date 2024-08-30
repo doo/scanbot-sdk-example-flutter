@@ -97,74 +97,6 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
                   [WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)]);
             }),
         FilterButton(
-            text: 'Legacy Low Light Binarization Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType:
-                        ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Sensitive Binarization Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType:
-                        ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Low Light Binarization Filter 2',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType:
-                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Edge Highlight Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType: ImageFilterType.EDGE_HIGHLIGHT.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Deep Binarization Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType:
-                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Otsu Binarization Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType: ImageFilterType.DEEP_BINARIZATION.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Clean Background Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType: ImageFilterType.OTSU_BINARIZATION.typeIndex)
-              ]);
-            }),
-        FilterButton(
-            text: 'Legacy Color Document Filter',
-            onPressed: () {
-              applyParametricFilters(page, [
-                LegacyFilter(
-                    filterType: ImageFilterType.COLOR_DOCUMENT.typeIndex)
-              ]);
-            }),
-        FilterButton(
             text: 'Legacy Color Filter',
             onPressed: () {
               applyParametricFilters(page,
@@ -185,6 +117,14 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
               ]);
             }),
         FilterButton(
+            text: 'Legacy Color Document Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType: ImageFilterType.COLOR_DOCUMENT.typeIndex)
+              ]);
+            }),
+        FilterButton(
             text: 'Legacy Pure Binarized Filter',
             onPressed: () {
               applyParametricFilters(page, [
@@ -193,11 +133,77 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
               ]);
             }),
         FilterButton(
+            text: 'Legacy Background Clean Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType: ImageFilterType.BACKGROUND_CLEAN.typeIndex)
+              ]);
+            }),
+        FilterButton(
             text: 'Legacy Black & White Filter',
             onPressed: () {
               applyParametricFilters(page, [
                 LegacyFilter(
                     filterType: ImageFilterType.BLACK_AND_WHITE.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Otsu Binarization Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType: ImageFilterType.OTSU_BINARIZATION.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Deep Binarization Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType: ImageFilterType.DEEP_BINARIZATION.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Edge Highlight Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType: ImageFilterType.EDGE_HIGHLIGHT.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Low Light Binarization Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType:
+                        ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Low Light Binarization Filter 2',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType:
+                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Sensitive Binarization Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(
+                    filterType:
+                        ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
+              ]);
+            }),
+        FilterButton(
+            text: 'Legacy Pure Gray Filter',
+            onPressed: () {
+              applyParametricFilters(page, [
+                LegacyFilter(filterType: ImageFilterType.PURE_GRAY.typeIndex)
               ]);
             }),
       ],
