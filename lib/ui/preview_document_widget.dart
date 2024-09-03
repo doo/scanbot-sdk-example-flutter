@@ -422,12 +422,11 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) return;
 
     try {
-      final filteredPages = await Future.wait(
+      await Future.wait(
         pages.map(
             (page) => ScanbotSdk.applyImageFilter(page, parametricFilters)),
       );
-
-      setState(() => _pages = filteredPages);
+      _updatePagesList();
       Navigator.pop(context);
     } catch (e) {
       print(e);
