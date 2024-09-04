@@ -3,11 +3,15 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="true" />
-
+        android:required="false"
+        />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- If you are targeting Android 13 (API level 33) or higher, add the following permission -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.

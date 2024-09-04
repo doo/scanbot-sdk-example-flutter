@@ -1120,24 +1120,19 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         return;
       }
 
-      ///before processing image sdk need storage read permission
-      final permissions =
-          await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
-          permissions[Permission.photos] == PermissionStatus.granted) {
-        //ios
-        var result = await ScanbotSdk.detectBarcodesOnImage(Uri.file(uriPath),
-            barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
-        if (result.operationResult == OperationResult.SUCCESS) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => BarcodesResultPreviewWidget(result)),
-          );
-        }
+      var result = await ScanbotSdk.detectBarcodesOnImage(Uri.file(uriPath),
+          barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
+      if (result.operationResult == OperationResult.SUCCESS) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) => BarcodesResultPreviewWidget(result)),
+        );
       }
-    } catch (e) {
-      Logger.root.severe(e);
+    } catch (ex) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(ex.toString()),
+      ));
+      Logger.root.severe(ex);
     }
   }
 
@@ -1158,23 +1153,18 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         ValidateUriError(response);
       }
 
-      ///before processing image sdk need storage read permission
-      final permissions =
-          await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
-          permissions[Permission.photos] == PermissionStatus.granted) {
-        //ios
-        var result = await ScanbotSdk.detectBarcodesOnImages(uris,
-            barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
-        if (result.operationResult == OperationResult.SUCCESS) {
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => MultiImageBarcodesResultPreviewWidget(
-                  result.barcodeResults)));
-        }
+      var result = await ScanbotSdk.detectBarcodesOnImages(uris,
+          barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
+      if (result.operationResult == OperationResult.SUCCESS) {
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                MultiImageBarcodesResultPreviewWidget(result.barcodeResults)));
       }
-    } catch (e) {
-      Logger.root.severe(e);
+    } catch (ex) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(ex.toString()),
+      ));
+      Logger.root.severe(ex);
     }
   }
 
