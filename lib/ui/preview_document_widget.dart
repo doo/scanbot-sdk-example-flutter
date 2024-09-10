@@ -573,7 +573,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
           dpi: 200,
           // Please note that some compression types are only compatible for binarized images (1-bit encoded black & white images)!
           compression: isBinarized
-              ? TiffCompression.CCITTFAX4
+              ? TiffCompression.CCITT_T4
               : TiffCompression.ADOBE_DEFLATE);
       final tiffFileUri =
           await ScanbotSdk.createTiff(_pageRepository.pages, options);
