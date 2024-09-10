@@ -11,7 +11,22 @@ class _MyHomePageState extends State<MyHomePage> {
     // Create the default configuration object.
     var configuration = BarcodeScannerConfiguration();
 
-    // TODO: configure as needed
+    // Configure the usecase.
+    var useCase = MultipleScanningMode();
+    
+    useCase.mode = MultipleBarcodesScanningMode.UNIQUE;
+
+    // Set the sheet mode for the barcodes preview.
+    useCase.sheet.mode = SheetMode.COLLAPSED_SHEET;
+    
+    // Set the height for the collapsed sheet.
+    useCase.sheet.collapsedVisibleHeight = CollapsedVisibleHeight.SMALL;
+
+    // Configure AR Overlay.
+    useCase.arOverlay.visible = true;
+    useCase.arOverlay.automaticSelectionEnabled = false;
+
+    // Configure other parameters, pertaining to use case as needed.
 
     var result = await ScanbotSdkUi.startBarcodeScanner(configuration);
 
