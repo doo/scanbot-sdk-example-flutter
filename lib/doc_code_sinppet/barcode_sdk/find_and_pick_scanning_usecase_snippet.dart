@@ -10,6 +10,9 @@ void findAndPickModeUseCaseSnippet() {
   // Set the sheet mode for the barcodes preview.
   scanningMode.sheet.mode = SheetMode.COLLAPSED_SHEET;
 
+  // Enable the AR Overlay
+  scanningMode.arOverlay.visible = true;
+
   // Enable/Disable the automatic selection.
   scanningMode.arOverlay.automaticSelectionEnabled = false;
 

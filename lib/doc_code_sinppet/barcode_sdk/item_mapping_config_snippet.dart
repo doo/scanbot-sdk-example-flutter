@@ -17,7 +17,7 @@ void itemMappingConfigSnippet() {
     var title = "Some product ${item.textWithExtension}";
     var subtitle = item.type?.name ?? "Unknown";
     var image =
-        "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png";
+        "https://avatars.githubusercontent.com/u/1454920";
 
     /** TODO: call [onError()] in case of error during obtaining mapped data. */
     if (item.textWithExtension == "Error occurred!") {

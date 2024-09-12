@@ -138,7 +138,7 @@ class FilterPreviewWidgetState extends State<FilterPreviewWidget> {
         FilterButton(
             text: 'Custom Binarization Filter',
             onPressed: () {
-              applyParametricFilters(page, [CustomBinarizationFilter()]);
+              applyParametricFilters(page, [CustomBinarizationFilter(preset: BinarizationFilterPreset.PRESET_1)]);
             }),
         FilterButton(
             text: 'Brightness Filter',
