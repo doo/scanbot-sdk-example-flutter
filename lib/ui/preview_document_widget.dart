@@ -163,18 +163,26 @@ class _DocumentPreviewState extends State<DocumentPreview> {
             ),
             _buildSettingsListTile(
               icon: Icons.image,
-              title: 'Save as TIFF',
+              title: 'Save as TIFF with ScanbotBinarization',
               onTap: () {
                 Navigator.pop(context);
-                _createTiff(false);
+                _createTiffWithScanbotBinarization();
               },
             ),
             _buildSettingsListTile(
               icon: Icons.image,
-              title: 'Save as TIFF 1-bit encoded',
+              title: 'Save as TIFF with LegacyBinarization',
               onTap: () {
                 Navigator.pop(context);
-                _createTiff(true);
+                _createTiffWithLegacyBinarization();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.image,
+              title: 'Save as TIFF',
+              onTap: () {
+                Navigator.pop(context);
+                _createTiffWithoutBinarization();
               },
             ),
             _buildSettingsListTile(
@@ -552,7 +560,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createTiff(bool isBinarized) async {
+  Future<void> _createTiff(
+      TiffCreationOptions Function() optionsProvider) async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -564,17 +573,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
         type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: 'Creating TIFF ...');
     dialog.show();
+
     try {
-      var options = TiffCreationOptions(
-          binarizationFilter: isBinarized
-              ? LegacyFilter(
-                  filterType: ImageFilterType.PURE_BINARIZED.typeIndex)
-              : null,
-          dpi: 200,
-          // Please note that some compression types are only compatible for binarized images (1-bit encoded black & white images)!
-          compression: isBinarized
-              ? TiffCompression.CCITT_T4
-              : TiffCompression.ADOBE_DEFLATE);
+      var options = optionsProvider();
       final tiffFileUri =
           await ScanbotSdk.createTiff(_pageRepository.pages, options);
       await dialog.hide();
@@ -582,8 +583,28 @@ class _DocumentPreviewState extends State<DocumentPreview> {
           title: 'TIFF file URI');
     } catch (e) {
       print(e);
+    } finally {
       await dialog.hide();
     }
+  }
+
+  Future<void> _createTiffWithScanbotBinarization() async {
+    await _createTiff(() => TiffCreationOptions.withScanbotBinarizationFilter(
+        ScanbotBinarizationFilter(),
+        dpi: 200,
+        compression: TiffCompression.CCITT_T4));
+  }
+
+  Future<void> _createTiffWithLegacyBinarization() async {
+    await _createTiff(() => TiffCreationOptions.withLegacyImageFilterType(
+        LegacyBinarizationFilter.BINARIZED,
+        dpi: 200,
+        compression: TiffCompression.CCITT_T4));
+  }
+
+  Future<void> _createTiffWithoutBinarization() async {
+    await _createTiff(
+        () => TiffCreationOptions(dpi: 200, compression: TiffCompression.LZW));
   }
 
   Future<void> _performOcr() async {
