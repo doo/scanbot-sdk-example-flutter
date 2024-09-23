@@ -161,13 +161,13 @@ packages:
     source: hosted
     version: "4.0.2"
   image_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image_picker
-      sha256: b6951e25b795d053a6ba03af5f710069c99349de9341af95155d52665cb4607c
+      sha256: "021834d9c0c3de46bf0fe40341fa07168407f694d9b2bb18d532dc1261867f7a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.9"
+    version: "1.1.2"
   image_picker_android:
     dependency: transitive
     description:
@@ -180,10 +180,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_for_web
-      sha256: "869fe8a64771b7afbc99fc433a5f7be2fea4d1cb3d7c11a48b6b579eb9c797f0"
+      sha256: "65d94623e15372c5c51bebbcb820848d7bcb323836e12dfdba60b5d3a8b39e50"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "3.0.5"
   image_picker_ios:
     dependency: transitive
     description:
@@ -424,14 +424,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  scanbot_image_picker:
-    dependency: "direct main"
-    description:
-      name: scanbot_image_picker
-      sha256: "11e78ea558c5a8f75c2e11c605d0f8ab9d1759bff34f8fd0349320abcc91e0f7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
   scanbot_sdk:
     dependency: "direct main"
     description:
