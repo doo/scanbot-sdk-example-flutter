@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/mrz_scanning_data.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import 'generic_document_preview.dart';
 
@@ -15,8 +15,7 @@ class MrzDocumentResultPreview extends StatefulWidget {
       _MrzDocumentResultPreviewState();
 }
 
-class _MrzDocumentResultPreviewState
-    extends State<MrzDocumentResultPreview> {
+class _MrzDocumentResultPreviewState extends State<MrzDocumentResultPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -3,11 +3,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/ui/utils.dart';
+import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../main.dart';
 import '../pages_repository.dart';
-import 'filter_all_pages_widget.dart';
+import 'filter_page/filter_button_widget.dart';
 import 'operations_page_widget.dart';
 import 'pages_widget.dart';
 
@@ -46,95 +46,78 @@ class _DocumentPreviewState extends State<DocumentPreview> {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+              padding: const EdgeInsets.all(8.0),
               child: GridView.builder(
-                  scrollDirection: Axis.vertical,
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200),
-                  itemBuilder: (context, position) {
-                    Widget pageView;
-                    if (shouldInitWithEncryption) {
-                      pageView = EncryptedPageWidget(
-                          _pages[position].documentPreviewImageFileUri!);
-                    } else {
-                      pageView = PageWidget(
-                          _pages[position].documentPreviewImageFileUri!);
-                    }
-                    return GridTile(
-                      child: GestureDetector(
-                          onTap: () {
-                            _showOperationsPage(_pages[position]);
-                          },
-                          child: pageView),
-                    );
-                  },
-                  itemCount: _pages.length),
+                scrollDirection: Axis.vertical,
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 200,
+                ),
+                itemBuilder: (context, position) {
+                  final imageUri =
+                      _pages[position].documentPreviewImageFileUri!;
+                  final pageView = shouldInitWithEncryption
+                      ? EncryptedPageWidget(imageUri)
+                      : PageWidget(imageUri);
+
+                  return GridTile(
+                    child: GestureDetector(
+                      onTap: () => _showOperationsPage(_pages[position]),
+                      child: pageView,
+                    ),
+                  );
+                },
+                itemCount: _pages.length,
+              ),
             ),
           ),
+          // BottomAppBar for action buttons
           BottomAppBar(
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    _addPageModalBottomSheet(context);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(Icons.add_circle),
-                      Container(width: 4),
-                      const Text(
-                        'Add',
-                        style: TextStyle(
-                          inherit: true,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
+                _buildButton(
+                  icon: Icons.add_circle,
+                  label: 'Add',
+                  onPressed: () => _addPageModalBottomSheet(context),
                 ),
-                TextButton(
-                  onPressed: () {
-                    _settingModalBottomSheet(context);
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(Icons.more_vert),
-                      Container(width: 4),
-                      const Text(
-                        'More',
-                        style: TextStyle(
-                          inherit: true,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
+                _buildButton(
+                  icon: Icons.more_vert,
+                  label: 'More',
+                  onPressed: () => _settingModalBottomSheet(context),
                 ),
-                TextButton(
-                  onPressed: () {
-                    _showCleanupStorageDialog();
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.delete,
-                        color: Colors.red,
-                      ),
-                      Container(width: 4),
-                      const Text(
-                        'Delete All',
-                        style: TextStyle(
-                          inherit: true,
-                          color: Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
+                _buildButton(
+                  icon: Icons.delete,
+                  label: 'Delete All',
+                  iconColor: Colors.red,
+                  textColor: Colors.red,
+                  onPressed: () => _showCleanupStorageDialog(),
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+// Helper method to build a button with an icon and text
+  Widget _buildButton({
+    required IconData icon,
+    required String label,
+    Color iconColor = Colors.black,
+    Color textColor = Colors.black,
+    required VoidCallback onPressed,
+  }) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Row(
+        children: <Widget>[
+          Icon(icon, color: iconColor),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: TextStyle(color: textColor),
           ),
         ],
       ),
@@ -148,175 +131,364 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     _updatePagesList();
   }
 
-  void _settingModalBottomSheet(context) {
+  void _settingModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.text_fields),
-                title: const Text('Perform OCR'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _performOcr();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.picture_as_pdf),
-                title: const Text('Save as PDF'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _createPdf();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.picture_as_pdf),
-                title: const Text('Save as PDF with OCR'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _createOcrPdf();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Save as TIFF'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _createTiff(false);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Save as TIFF 1-bit encoded'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _createTiff(true);
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text('Apply Image Filter on ALL pages'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _filterAllPages();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.close),
-                title: const Text('Cancel'),
-                onTap: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext bc) {
+        return Wrap(
+          children: <Widget>[
+            _buildSettingsListTile(
+              icon: Icons.text_fields,
+              title: 'Perform OCR',
+              onTap: () {
+                Navigator.pop(context);
+                _performOcr();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.picture_as_pdf,
+              title: 'Save as PDF',
+              onTap: () {
+                Navigator.pop(context);
+                _createPdf();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.picture_as_pdf,
+              title: 'Save as PDF with OCR',
+              onTap: () {
+                Navigator.pop(context);
+                _createPdfWithOcr();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.image,
+              title: 'Save as TIFF with ScanbotBinarization',
+              onTap: () {
+                Navigator.pop(context);
+                _createTiffWithScanbotBinarization();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.image,
+              title: 'Save as TIFF with LegacyBinarization',
+              onTap: () {
+                Navigator.pop(context);
+                _createTiffWithLegacyBinarization();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.image,
+              title: 'Save as TIFF',
+              onTap: () {
+                Navigator.pop(context);
+                _createTiffWithoutBinarization();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.filter,
+              title: 'Apply filter for all pages',
+              onTap: () {
+                Navigator.pop(context);
+                _settingModalFiltersSheet(context);
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.close,
+              title: 'Cancel',
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  void _addPageModalBottomSheet(context) {
+  void _settingModalFiltersSheet(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.scanner),
-                title: const Text('Scan Page'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _startDocumentScanning();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_size_select_actual),
-                title: const Text('Import Page'),
-                onTap: () {
-                  Navigator.pop(context);
-                  _importImage();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.close),
-                title: const Text('Cancel'),
-                onTap: () => Navigator.pop(context),
-              ),
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext bc) {
+        return ListView(
+          padding: const EdgeInsets.all(10.0),
+          shrinkWrap: true,
+          children: <Widget>[
+            FilterButton(
+                text: 'None',
+                onPressed: () {
+                  applyParametricFilters(_pages,
+                      [LegacyFilter(filterType: ImageFilterType.NONE.index)]);
+                }),
+            FilterButton(
+                text: 'Color Document Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [ColorDocumentFilter()]);
+                }),
+            FilterButton(
+                text: 'Scanbot Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [ScanbotBinarizationFilter()]);
+                }),
+            FilterButton(
+                text: 'Custom Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [CustomBinarizationFilter()]);
+                }),
+            FilterButton(
+                text: 'Brightness Filter',
+                onPressed: () {
+                  applyParametricFilters(
+                      _pages, [BrightnessFilter(brightness: 0.5)]);
+                }),
+            FilterButton(
+                text: 'Contrast Filter',
+                onPressed: () {
+                  applyParametricFilters(
+                      _pages, [ContrastFilter(contrast: 125.0)]);
+                }),
+            FilterButton(
+                text: 'Grayscale Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [GrayscaleFilter()]);
+                }),
+            FilterButton(
+                text: 'White Black Point Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Color Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(filterType: ImageFilterType.COLOR.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Grayscale Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.GRAYSCALE.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Binarized Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.BINARIZED.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Color Document Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.COLOR_DOCUMENT.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Pure Binarized Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.PURE_BINARIZED.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Background Clean Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.BACKGROUND_CLEAN.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Black & White Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.BLACK_AND_WHITE.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Otsu Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.OTSU_BINARIZATION.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Deep Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.DEEP_BINARIZATION.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Edge Highlight Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.EDGE_HIGHLIGHT.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Low Light Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType:
+                            ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Low Light Binarization Filter 2',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType:
+                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Sensitive Binarization Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType:
+                            ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
+                  ]);
+                }),
+            FilterButton(
+                text: 'Legacy Pure Gray Filter',
+                onPressed: () {
+                  applyParametricFilters(_pages, [
+                    LegacyFilter(
+                        filterType: ImageFilterType.PURE_GRAY.typeIndex)
+                  ]);
+                }),
+          ],
+        );
+      },
+    );
   }
 
-  Future<void> _startDocumentScanning() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
+  // Shows a modal bottom sheet for adding pages.
+  void _addPageModalBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            _buildSettingsListTile(
+              icon: Icons.scanner,
+              title: 'Scan Page',
+              onTap: () {
+                Navigator.pop(context);
+                _startDocumentScanning();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.photo_size_select_actual,
+              title: 'Import Page',
+              onTap: () {
+                Navigator.pop(context);
+                _importImage();
+              },
+            ),
+            _buildSettingsListTile(
+              icon: Icons.close,
+              title: 'Cancel',
+              onTap: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-    DocumentScanningResult? result;
+  // Helper method to build ListTile for actions
+  Widget _buildSettingsListTile({
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      onTap: onTap,
+    );
+  }
+
+  // Applies a list of parametric filters to a list of pages.
+  Future<void> applyParametricFilters(
+      List<sdk.Page> pages, List<ParametricFilter> parametricFilters) async {
+    if (!await checkLicenseStatus(context)) return;
+
     try {
-      var config = DocumentScannerConfiguration(
+      await Future.wait(
+        pages.map(
+            (page) => ScanbotSdk.applyImageFilter(page, parametricFilters)),
+      );
+      _updatePagesList();
+      Navigator.pop(context);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+// Starts document scanning and adds the pages to the repository.
+  Future<void> _startDocumentScanning() async {
+    if (!await checkLicenseStatus(context)) return;
+
+    try {
+      final config = DocumentScannerConfiguration(
         orientationLockMode: OrientationLockMode.PORTRAIT,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
         ignoreBadAspectRatio: true,
         multiPageEnabled: false,
         multiPageButtonHidden: true,
       );
-      result = await ScanbotSdkUi.startDocumentScanner(config);
-    } catch (e) {
-      print(e);
-    }
-    if (result != null) {
+      final result = await ScanbotSdkUi.startDocumentScanner(config);
+
       if (isOperationSuccessful(result)) {
         await _pageRepository.addPages(result.pages);
         _updatePagesList();
       }
+    } catch (e) {
+      print(e);
     }
   }
 
+// Shows a dialog for confirming storage cleanup.
   void _showCleanupStorageDialog() {
-    Widget text = const SimpleDialogOption(
-      child: Text('Delete all images and generated files (PDF, TIFF, etc)?'),
-    );
-
-    // set up the SimpleDialog
-    final dialog = AlertDialog(
-      title: const Text('Delete all'),
-      content: text,
-      contentPadding: const EdgeInsets.all(0),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            _cleanupStorage();
-            Navigator.of(context).pop();
-          },
-          child: const Text('OK'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('CANCEL'),
-        ),
-      ],
-    );
-
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return dialog;
+        return AlertDialog(
+          title: const Text('Delete all'),
+          content: const Text(
+              'Delete all images and generated files (PDF, TIFF, etc)?'),
+          contentPadding: const EdgeInsets.all(16.0),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                _cleanupStorage();
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('CANCEL'),
+            ),
+          ],
+        );
       },
-    );
-  }
-
-  Future<void> _filterAllPages() async {
-    if (!await _checkHasPages(context)) {
-      return;
-    }
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => MultiPageFiltering(_pageRepository)),
     );
   }
 
@@ -358,7 +530,10 @@ class _DocumentPreviewState extends State<DocumentPreview> {
   Future<void> _importImage() async {
     try {
       final image = await ImagePicker().getImage(source: ImageSource.gallery);
-      await _createPage(Uri.file(image?.path ?? ''));
+
+      if (image?.path != null) {
+        await _createPage(Uri.file(image!.path));
+      }
     } catch (e) {
       print(e);
     }
@@ -385,7 +560,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createTiff(bool binarized) async {
+  Future<void> _createTiff(
+      TiffCreationOptions Function() optionsProvider) async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -397,13 +573,9 @@ class _DocumentPreviewState extends State<DocumentPreview> {
         type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: 'Creating TIFF ...');
     dialog.show();
+
     try {
-      var options = TiffCreationOptions(
-          binarized: binarized,
-          dpi: 200,
-          compression: (binarized
-              ? TiffCompression.CCITT_T6
-              : TiffCompression.ADOBE_DEFLATE));
+      var options = optionsProvider();
       final tiffFileUri =
           await ScanbotSdk.createTiff(_pageRepository.pages, options);
       await dialog.hide();
@@ -411,8 +583,28 @@ class _DocumentPreviewState extends State<DocumentPreview> {
           title: 'TIFF file URI');
     } catch (e) {
       print(e);
+    } finally {
       await dialog.hide();
     }
+  }
+
+  Future<void> _createTiffWithScanbotBinarization() async {
+    await _createTiff(() => TiffCreationOptions.withScanbotBinarizationFilter(
+        ScanbotBinarizationFilter(),
+        dpi: 200,
+        compression: TiffCompression.CCITT_T4));
+  }
+
+  Future<void> _createTiffWithLegacyBinarization() async {
+    await _createTiff(() => TiffCreationOptions.withLegacyImageFilterType(
+        LegacyBinarizationFilter.BINARIZED,
+        dpi: 200,
+        compression: TiffCompression.CCITT_T4));
+  }
+
+  Future<void> _createTiffWithoutBinarization() async {
+    await _createTiff(
+        () => TiffCreationOptions(dpi: 200, compression: TiffCompression.LZW));
   }
 
   Future<void> _performOcr() async {
@@ -428,8 +620,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Performing OCR ...');
     dialog.show();
     try {
-      final result = await ScanbotSdk.performOcr(_pages,
-          OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: false));
+      final result = await ScanbotSdk.performOcr(
+          _pages, OcrOptions(languages: ['en', 'de']));
       await dialog.hide();
       await showAlertDialog(
           context, 'Plain text:\n' + (result.plainText ?? ''));
@@ -439,7 +631,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     }
   }
 
-  Future<void> _createOcrPdf() async {
+  Future<void> _createPdfWithOcr() async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -452,15 +644,12 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     dialog.style(message: 'Performing OCR with PDF ...');
     dialog.show();
     try {
-      var result = await ScanbotSdk.performOcr(
-          _pages, OcrOptions(languages: ['en', 'de'], shouldGeneratePdf: true));
+      var pdfFileUri = await ScanbotSdk.createPdf(
+          _pages, const PdfRenderingOptions(),
+          shouldGeneratePdfWithOcr: true);
+      await showAlertDialog(context, pdfFileUri.toString(),
+          title: 'PDF file URI');
       await dialog.hide();
-      await showAlertDialog(
-          context,
-          'PDF File URI:\n' +
-              (result.pdfFileUri ?? '') +
-              '\n\nPlain text:\n' +
-              (result.plainText ?? ''));
     } catch (e) {
       print(e);
       await dialog.hide();
