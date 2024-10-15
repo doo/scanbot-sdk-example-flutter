@@ -4,11 +4,9 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_image_picker/models/image_picker_response.dart';
-import 'package:scanbot_image_picker/scanbot_image_picker_flutter.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
@@ -504,10 +502,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _importImage() async {
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
-        await _createPage(Uri.file(uriPath));
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
+        final uriPath = Uri.file(response.path);
+
+        await _createPage(uriPath);
         await _gotoImagesView();
       }
     } catch (e) {
@@ -866,11 +867,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
         var mrzRecognizerResult =
-            await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(uriPath);
+            await ScanbotSdkRecognizeOperations.recognizeMrzOnImage(
+                response.path);
         if (mrzRecognizerResult.operationResult == OperationResult.SUCCESS) {
           await showAlertDialog(context,
               "Document: ${mrzRecognizerResult.documentType}\nrawMrz:\n${mrzRecognizerResult.rawMrz}\ndocumentNumber: ${mrzRecognizerResult.document?.documentNumber}",
@@ -890,11 +893,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
         var medicalCertificateResult = await ScanbotSdkRecognizeOperations
-            .recognizeMedicalCertificateOnImage(uriPath);
+            .recognizeMedicalCertificateOnImage(response.path);
         if (medicalCertificateResult.operationResult ==
                 OperationResult.SUCCESS &&
             medicalCertificateResult.recognitionSuccessful == true) {
@@ -918,11 +922,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
         var ehicRecognitionResult = await ScanbotSdkRecognizeOperations
-            .recognizeHealthInsuranceCardOnImage(uriPath);
+            .recognizeHealthInsuranceCardOnImage(response.path);
         if (ehicRecognitionResult.operationResult == OperationResult.SUCCESS &&
             ehicRecognitionResult.status ==
                 HealthInsuranceCardDetectionStatus.SUCCESS) {
@@ -946,12 +951,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
         var genericDocRecognizerResult =
             await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
-                uriPath);
+                response.path);
         if (genericDocRecognizerResult.operationResult ==
                 OperationResult.SUCCESS &&
             genericDocRecognizerResult.status ==
@@ -974,11 +980,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
 
     try {
-      final response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isNotEmpty) {
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response != null && response.path.isNotEmpty) {
         var checkScanResult =
-            await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
+            await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(
+                response.path);
         if (checkScanResult.operationResult == OperationResult.SUCCESS &&
             checkScanResult.status == CheckRecognitionResultStatus.SUCCESS) {
           await showAlertDialog(context,
@@ -1113,14 +1121,17 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
     try {
-      var response = await ScanbotImagePickerFlutter.pickImageAsync();
-      var uriPath = response.uri ?? "";
-      if (uriPath.isEmpty) {
-        ValidateUriError(response);
+      final response =
+          await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (response == null || response.path.isEmpty) {
+        showAlertDialog(context, "RESULT IS EMPTY");
         return;
       }
 
-      var result = await ScanbotSdk.detectBarcodesOnImage(Uri.file(uriPath),
+      final uriPath = Uri.file(response.path);
+
+      var result = await ScanbotSdk.detectBarcodesOnImage(uriPath,
           barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
       if (result.operationResult == OperationResult.SUCCESS) {
         await Navigator.of(context).push(
@@ -1144,14 +1155,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     try {
       List<Uri> uris = List.empty(growable: true);
-      var response = await ScanbotImagePickerFlutter.pickImagesAsync();
-      if (response.uris?.isNotEmpty == true) {
-        uris = response.PathsToUris(response.uris);
+
+      final response = await ImagePicker().pickMultiImage();
+      if (response.isEmpty) {
+        showAlertDialog(context, "RESULT IS EMPTY");
+        return;
       }
 
-      if (response.message?.isNotEmpty == true) {
-        ValidateUriError(response);
-      }
+      uris = response.map((image) => Uri.file(image.path)).toList();
 
       var result = await ScanbotSdk.detectBarcodesOnImages(uris,
           barcodeFormats: PredefinedBarcodes.allBarcodeTypes());
@@ -1518,14 +1529,5 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         return alert;
       },
     );
-  }
-
-  /// Check for error message and display accordingly.
-  void ValidateUriError(ImagePickerResponse response) {
-    var message = response.message ?? "";
-    if (message.isEmpty) {
-      message = "RESULT IS EMPTY";
-    }
-    showAlertDialog(context, message);
   }
 }
