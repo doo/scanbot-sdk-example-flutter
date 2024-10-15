@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import '../utility/barcode_helper.dart';
 
 class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   final List<BarcodeScanningResult> previewItems;
@@ -40,35 +39,37 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
               itemCount: previewItems.length,
               itemBuilder: (context, positionImages) {
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                  const SizedBox(height: 35),
-                  getResultTitle(positionImages),
-                  const SizedBox(height: 10),
-                  getImageContainer(
-                      previewItems[positionImages].barcodeImageURI, context),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: SizedBox(
-                        child: getBoldTextWidget("Detected Barcodes"),
-                        width: MediaQuery.of(context).size.width - 30),
-                  ),
-                  const SizedBox(height: 10),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    //Optional
-                    itemCount: previewItems[positionImages].barcodeItems.length,
-                    itemBuilder: (context, positionBarcodes) {
-                      return getBarcodeDescription(
-                          previewItems[positionImages]
-                              .barcodeItems[positionBarcodes],
-                          context);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                ]);
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 35),
+                      getResultTitle(positionImages),
+                      const SizedBox(height: 10),
+                      getImageContainer(
+                          previewItems[positionImages].barcodeImageURI,
+                          context),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15),
+                        child: SizedBox(
+                            child: getBoldTextWidget("Detected Barcodes"),
+                            width: MediaQuery.of(context).size.width - 30),
+                      ),
+                      const SizedBox(height: 10),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        //Optional
+                        itemCount:
+                            previewItems[positionImages].barcodeItems.length,
+                        itemBuilder: (context, positionBarcodes) {
+                          return getBarcodeDescription(
+                              previewItems[positionImages]
+                                  .barcodeItems[positionBarcodes],
+                              context);
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                    ]);
               }),
         ));
   }
@@ -119,17 +120,16 @@ class MultiImageBarcodesResultPreviewWidget extends StatelessWidget {
   /// get barcode description cell
   Widget getBarcodeDescription(BarcodeItem item, BuildContext context) {
     var widget = SizedBox(
-       width: MediaQuery.of(context).size.width - 30,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-                const SizedBox(width: 15),
-                getBoldTextWidget(
-                  BarcodeHelper.barcodeFormatEnumMap[item.barcodeFormat] ?? 'UNKNOWN'),
-                const SizedBox(width: 10),
-                Flexible(child: Text(item.text ?? "", style: const TextStyle(fontSize: 14))),
-          ]),
-        );
+      width: MediaQuery.of(context).size.width - 30,
+      child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(width: 15),
+        getBoldTextWidget(
+            item.barcodeFormat?.runtimeType.toString() ?? 'UNKNOWN'),
+        const SizedBox(width: 10),
+        Flexible(
+            child: Text(item.text ?? "", style: const TextStyle(fontSize: 14))),
+      ]),
+    );
     return widget;
   }
 }

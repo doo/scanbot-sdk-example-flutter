@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/mc_scanning_data.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
 
 import '../main.dart';
@@ -14,13 +14,13 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var widgets = <Widget>[];
-    for (var element in preview.checkboxes) {
+    for (var element in preview.checkboxes!) {
       widgets.add(McInfoboxFieldItemWidget(element));
     }
-    for (var element in preview.patientInfoBox.fields) {
+    for (var element in preview.patientInfoBox!.fields) {
       widgets.add(McPatientInfoFieldItemWidget(element));
     }
-    for (var element in preview.dates) {
+    for (var element in preview.dates!) {
       widgets.add(McDateRecordFieldItemWidget(element));
     }
     widgets.add(getImageContainer(preview.croppedDocumentURI));
