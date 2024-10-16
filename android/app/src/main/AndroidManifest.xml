@@ -23,7 +23,7 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true">
         <activity
-            android:name="com.example.scanbot_sdk_example_flutter.MainActivity"
+            android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:exported="true"
             android:hardwareAccelerated="true"

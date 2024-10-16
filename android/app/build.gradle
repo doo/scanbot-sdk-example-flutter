@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "io.scanbot.example.flutter"
+    namespace = "com.example.scanbot_sdk_example_flutter"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
