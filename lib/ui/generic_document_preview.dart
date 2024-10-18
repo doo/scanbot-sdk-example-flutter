@@ -218,59 +218,63 @@ class DeDriverLicenseBackView extends StatelessWidget {
 class MrzView extends StatelessWidget {
   final MRZ result;
 
-  MrzView(
-    this.result,
-  );
+  const MrzView(this.result, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        GenericDocumentFieldView(
-          title: "Birth Date",
-          genericDocumentField: result.birthDate,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            GenericDocumentFieldView(
+              title: "Birth Date",
+              genericDocumentField: result.birthDate,
+            ),
+            GenericDocumentFieldView(
+              title: "Expiry Date",
+              genericDocumentField: result.expiryDate,
+            ),
+            GenericDocumentFieldView(
+              title: "Given Names",
+              genericDocumentField: result.givenNames,
+            ),
+            GenericDocumentFieldView(
+              title: "TravelDocType",
+              genericDocumentField: result.travelDocType,
+            ),
+            GenericDocumentFieldView(
+              title: "Document Number",
+              genericDocumentField: result.documentNumber,
+            ),
+            GenericDocumentFieldView(
+              title: "Nationality",
+              genericDocumentField: result.nationality,
+            ),
+            GenericDocumentFieldView(
+              title: "Pin",
+              genericDocumentField: result.pinCode,
+            ),
+            GenericDocumentFieldView(
+              title: "Surname",
+              genericDocumentField: result.surname,
+            ),
+            GenericDocumentFieldView(
+              title: "Optional 1",
+              genericDocumentField: result.optional1,
+            ),
+            GenericDocumentFieldView(
+              title: "Optional 2",
+              genericDocumentField: result.optional2,
+            ),
+            GenericDocumentFieldView(
+              title: "Visa Optional",
+              genericDocumentField: result.visaOptional,
+            ),
+          ],
         ),
-        GenericDocumentFieldView(
-          title: "Expiry Date",
-          genericDocumentField: result.expiryDate,
-        ),
-        GenericDocumentFieldView(
-          title: "Given Names",
-          genericDocumentField: result.givenNames,
-        ),
-        GenericDocumentFieldView(
-          title: "TravelDocType",
-          genericDocumentField: result.travelDocType,
-        ),
-        GenericDocumentFieldView(
-          title: "Document Number",
-          genericDocumentField: result.documentNumber,
-        ),
-        GenericDocumentFieldView(
-          title: "Nationality",
-          genericDocumentField: result.nationality,
-        ),
-        GenericDocumentFieldView(
-          title: "Pin",
-          genericDocumentField: result.pinCode,
-        ),
-        GenericDocumentFieldView(
-          title: "Surname",
-          genericDocumentField: result.surname,
-        ),
-        GenericDocumentFieldView(
-          title: "Optional 1",
-          genericDocumentField: result.optional1,
-        ),
-        GenericDocumentFieldView(
-          title: "Optional 2",
-          genericDocumentField: result.optional2,
-        ),
-        GenericDocumentFieldView(
-          title: "Visa Optional",
-          genericDocumentField: result.visaOptional,
-        ),
-      ],
+      ),
     );
   }
 }
@@ -591,45 +595,54 @@ class GenericDocumentFieldView extends StatelessWidget {
   final TextFieldWrapper? genericDocumentField;
   final String title;
 
-  GenericDocumentFieldView({
+  const GenericDocumentFieldView({
     required this.title,
     required this.genericDocumentField,
-  });
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      genericDocumentField?.value?.text ?? "",
-                    ),
-                    Text(
-                      "(Confidence: ${((genericDocumentField?.value?.confidence ?? 1) * 100).toInt()}% )",
-                    ),
-                    if (genericDocumentField is ValidatedTextFieldWrapper)
-                      Text((genericDocumentField as ValidatedTextFieldWrapper)
-                              .validated
-                          ? "Validated"
-                          : "Not Validated")
-                  ],
-                ),
-              ),
-            ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
+          const SizedBox(height: 4),
+          Text(
+            genericDocumentField?.value?.text ?? "Not available",
+            style: const TextStyle(fontSize: 14),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            "(Confidence: ${((genericDocumentField?.value?.confidence ?? 1) * 100).toInt()}%)",
+            style: TextStyle(color: Colors.grey.shade600),
+          ),
+          if (genericDocumentField is ValidatedTextFieldWrapper)
+            Text(
+              (genericDocumentField as ValidatedTextFieldWrapper).validated
+                  ? "Validated"
+                  : "Not Validated",
+              style: TextStyle(
+                color: (genericDocumentField as ValidatedTextFieldWrapper)
+                    .validated
+                    ? Colors.green
+                    : Colors.red,
+                fontSize: 14,
+              ),
+            ),
         ],
       ),
     );
