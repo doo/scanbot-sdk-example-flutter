@@ -8,7 +8,6 @@ plugins {
 android {
     namespace = "com.example.scanbot_sdk_example_flutter"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -26,7 +25,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        ndkVersion = flutter.ndkVersion
     }
 
     buildTypes {
