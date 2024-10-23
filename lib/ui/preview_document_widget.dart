@@ -667,7 +667,8 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     return false;
   }
 
-  void _updatePagesList() {
+  Future<void> _updatePagesList() async {
+    await _pageRepository.loadPages();
     setState(() {
       _pages = _pageRepository.pages;
     });
