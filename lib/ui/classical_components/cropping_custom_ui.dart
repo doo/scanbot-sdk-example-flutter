@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import '../../pages_repository.dart';
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
   const CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
-
   final sdk.Page page;
 
   @override
@@ -13,6 +13,7 @@ class CroppingScreenWidget extends StatefulWidget {
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
+  final PageRepository _pageRepository = PageRepository();
   late sdk.Page currentPage;
   bool showProgressBar = false;
   bool doneButtonEnabled = true;
@@ -34,8 +35,29 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
           if (showProgressBar) _buildProgressBar(),
         ],
       ),
+      floatingActionButton: _buildFloatingActionButton(),
       bottomNavigationBar: _buildBottomAppBar(),
     );
+  }
+
+  Widget _buildFloatingActionButton() {
+    return FloatingActionButton(
+      onPressed: _handleNextPage,
+      child: const Icon(Icons.navigate_next),
+    );
+  }
+
+  Future<void> _handleNextPage() async {
+    setState(() {
+      showProgressBar = true;
+    });
+
+    final nextPage = await _pageRepository.nextPage(currentPage);
+
+    setState(() {
+      showProgressBar = false;
+      currentPage = nextPage;
+    });
   }
 
   AppBar _buildAppBar() {
@@ -140,6 +162,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
 
     var croppingResult = await croppingController?.getPolygon();
+
     setState(() {
       showProgressBar = false;
     });

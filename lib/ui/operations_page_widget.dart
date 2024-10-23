@@ -215,10 +215,6 @@ class _PageOperationsState extends State<PageOperations> {
             builder: (context) => CroppingScreenWidget(page: _page)),
       );
       await _updatePage(newPage!);
-
-      setState(() {
-        _page = newPage!;
-      });
     } catch (e) {
       print(e);
     }
