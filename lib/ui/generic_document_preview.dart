@@ -203,8 +203,8 @@ class DeDriverLicenseBackView extends StatelessWidget {
           category: result.categories.l,
         ),
         CategoryView(
-          title: "Category M",
-          category: result.categories.m,
+          title: "Category AM",
+          category: result.categories.am,
         ),
         CategoryView(
           title: "Category T",
@@ -318,10 +318,10 @@ class DeIdCardFrontView extends StatelessWidget {
           title: "Nationality",
           genericDocumentField: result.nationality,
         ),
-        GenericDocumentFieldView(
-          title: "Pin",
-          genericDocumentField: result.pin,
-        ),
+        // GenericDocumentFieldView(
+        //   title: "Pin",
+        //   genericDocumentField: result,
+        // ),
         GenericDocumentFieldView(
           title: "Surname",
           genericDocumentField: result.surname,
@@ -366,10 +366,10 @@ class DeResidencePermitFrontView extends StatelessWidget {
           title: "Nationality",
           genericDocumentField: result.nationality,
         ),
-        GenericDocumentFieldView(
-          title: "Pin",
-          genericDocumentField: result.pin,
-        ),
+        // GenericDocumentFieldView(
+        //   title: "Pin",
+        //   genericDocumentField: result.pin,
+        // ),
         GenericDocumentFieldView(
           title: "Surname",
           genericDocumentField: result.surname,

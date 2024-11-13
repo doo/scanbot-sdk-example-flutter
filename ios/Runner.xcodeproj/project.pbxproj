@@ -265,6 +265,7 @@
 				"${BUILT_PRODUCTS_DIR}/scanbot_sdk/scanbot_sdk.framework",
 				"${BUILT_PRODUCTS_DIR}/shared_preferences_foundation/shared_preferences_foundation.framework",
 				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ScanbotSDK/NONE/ScanbotSDK.framework/ScanbotSDK",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/ScanbotSDKNativeWrapper/NONE/ScanbotSDKNativeWrapper.framework/ScanbotSDKNativeWrapper",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -273,6 +274,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scanbot_sdk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/shared_preferences_foundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScanbotSDK.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScanbotSDKNativeWrapper.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
