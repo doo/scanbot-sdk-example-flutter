@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-// Colors
 const Color ScanbotRedColor = Color(0xFFc8193c);
 
-// Alert Dialog
 Future<void> showAlertDialog(BuildContext context, String textToShow,
     {String? title}) async {
   Widget text = SimpleDialogOption(
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(textToShow),
-    ),
+    child: Text(textToShow),
   );
 
-  // set up the SimpleDialog
   final dialog = AlertDialog(
     title: title != null ? Text(title) : null,
     content: text,
@@ -34,6 +28,28 @@ Future<void> showAlertDialog(BuildContext context, String textToShow,
     context: context,
     builder: (BuildContext context) {
       return dialog;
+    },
+  );
+}
+
+void showResultTextDialog(BuildContext context, result) {
+  Widget okButton = TextButton(
+    onPressed: () => Navigator.pop(context),
+    child: const Text('OK'),
+  );
+  // set up the AlertDialog
+  var alert = AlertDialog(
+    title: const Text('Result'),
+    content: Text(result),
+    actions: [
+      okButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
     },
   );
 }

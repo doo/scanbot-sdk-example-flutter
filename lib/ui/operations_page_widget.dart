@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
-import 'package:scanbot_sdk_example_flutter/ui/classical_components/cropping_custom_ui.dart';
+
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
+import '../classic_components/cropping_custom_ui.dart';
 import '../main.dart';
-import '../pages_repository.dart';
+import '../storage/pages_repository.dart';
 import 'filter_page/filter_page_widget.dart';
 import 'pages_widget.dart';
 
