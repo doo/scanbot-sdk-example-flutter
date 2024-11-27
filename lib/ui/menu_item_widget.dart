@@ -32,10 +32,10 @@ class MenuItemWidget extends StatelessWidget {
       children: <Widget>[
         ListTile(
           leading: startIcon != null
-              ? Icon(startIcon, color: Colors.blueAccent)
+              ? Icon(startIcon, color: Colors.black)
               : null,
           trailing:
-              endIcon != null ? Icon(endIcon, color: Colors.blueAccent) : null,
+              endIcon != null ? Icon(endIcon, color: Colors.black) : null,
           title: Text(
             title,
             style: const TextStyle(

@@ -27,8 +27,7 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
 
   // Configure the submit button.
   scanningMode.sheetContent.submitButton.text = "Submit";
-  scanningMode.sheetContent.submitButton.foreground.color =
-      ScanbotColor("#000000");
+  scanningMode.sheetContent.submitButton.foreground.color = ScanbotColor("#000000");
 
   // Configure other parameters, pertaining to findAndPick-scanning mode as needed.
   // Set the expected barcodes.
@@ -57,7 +56,7 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
 Future<void> runBarcodeScanner() async {
   var configuration = findAndPickModeUseCaseSnippet();
   var result = await ScanbotSdkUi.startBarcodeScanner(configuration);
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     // TODO: present barcode result as needed
   }
 }

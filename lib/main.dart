@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'storage/pages_repository.dart';
+import 'storage/_legacy_pages_repository.dart';
 import 'ui/menu_item_widget.dart';
 import 'utility/utils.dart';
 import 'barcode/barcode_sdk_menu.dart';
@@ -46,7 +46,7 @@ Future<void> _initScanbotSdk() async {
       encryptionParameters: encryptionParams);
   try {
     await ScanbotSdk.initScanbotSdk(config);
-    await PageRepository().loadPages();
+    await LegacyPageRepository().loadPages();
   } catch (e) {
     Logger.root.severe(e);
   }
@@ -127,10 +127,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ScanbotRedColor,
-        title: const Text('Scanbot SDK Flutter Example'),
-      ),
+      appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
       body: ListView(
         children: [
           const TitleItemWidget(title: 'Document SDK API'),
@@ -174,7 +171,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               );
             },
           ),
-          const TitleItemWidget(title: 'Test other SDK API methods'),
+          const TitleItemWidget(title: 'Other SDK API'),
           MenuItemWidget(
             title: 'getLicenseStatus()',
             startIcon: Icons.phonelink_lock,
@@ -201,6 +198,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           ),
         ],
       ),
+      bottomNavigationBar: buildBottomNavigationBar(context)
     );
   }
 

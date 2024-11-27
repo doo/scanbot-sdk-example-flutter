@@ -1,31 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
+import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
 
-import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
-import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
-
-import '../classic_components/cropping_custom_ui.dart';
 import '../main.dart';
-import '../storage/pages_repository.dart';
-import 'filter_page/filter_page_widget.dart';
+import '../utility/utils.dart';
+import 'filter_page/filter_button_widget.dart';
 import 'pages_widget.dart';
 
 class PageOperations extends StatefulWidget {
-  final sdk.Page initialPage;
+  final PageData initialPage;
+  final String documentID;
 
-  PageOperations(this.initialPage);
+  PageOperations(this.documentID, this.initialPage);
 
   @override
   _PageOperationsState createState() => _PageOperationsState();
 }
 
 class _PageOperationsState extends State<PageOperations> {
-  final PageRepository _pageRepository = PageRepository();
-  late sdk.Page _page;
+  late PageData _page;
   bool showProgressBar = false;
 
   @override
@@ -34,49 +29,16 @@ class _PageOperationsState extends State<PageOperations> {
     _page = widget.initialPage;
   }
 
-  Future<void> _updatePage(sdk.Page pageUpdated) async {
-    setState(() {
-      showProgressBar = true;
-    });
-    await _pageRepository.updatePage(pageUpdated);
-    setState(() {
-      showProgressBar = false;
-      _page = pageUpdated;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Determine which widget to display based on encryption requirement
-    final imageUri = _page.documentPreviewImageFileUri!;
+    final imageUri = Uri(path: _page.documentImagePreviewURI?.replaceFirst('file://', ''));
     final pageView = shouldInitWithEncryption
         ? EncryptedPageWidget(imageUri)
         : PageWidget(imageUri);
 
     return Scaffold(
-      appBar: AppBar(
-        // Customize the icon theme and background color of the app bar
-        iconTheme: const IconThemeData(
-          color: Colors.black, // Change icon color here
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Image Preview',
-          style: TextStyle(color: Colors.black), // Title text color
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () => _analyzeQuality(), // Action for analyzing quality
-              child: const Icon(
-                Icons.image_search,
-                size: 26.0,
-              ),
-            ),
-          ),
-        ],
-      ),
+      appBar: ScanbotAppBar('Page Preview'),
       body: Stack(
         children: <Widget>[
           Column(
@@ -89,7 +51,6 @@ class _PageOperationsState extends State<PageOperations> {
               ),
             ],
           ),
-          // Show progress bar if `showProgressBar` is true
           if (showProgressBar)
             const Center(
               child: SizedBox(
@@ -103,30 +64,24 @@ class _PageOperationsState extends State<PageOperations> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
+        color: ScanbotRedColor,
         padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             _buildOptionButton(
               icon: Icons.crop,
-              label: 'RTU Crop',
-              onPressed: () => _startCroppingScreen(),
-            ),
-            _buildOptionButton(
-              icon: Icons.crop,
-              label: 'Classic Crop',
-              onPressed: () => _startCustomUiCroppingScreen(),
+              label: 'Crop',
+              onPressed: () => _cropPage(),
             ),
             _buildOptionButton(
               icon: Icons.filter,
               label: 'Filter',
-              onPressed: () => _showFilterPage(),
+              onPressed: () => _settingModalFiltersSheet(),
             ),
             _buildOptionButton(
               icon: Icons.delete,
               label: 'Delete',
-              iconColor: Colors.red,
-              labelColor: Colors.red,
               onPressed: () => _deletePage(),
             ),
           ],
@@ -139,110 +94,127 @@ class _PageOperationsState extends State<PageOperations> {
     required IconData icon,
     required String label,
     required VoidCallback onPressed,
-    Color iconColor = Colors.black,
-    Color labelColor = Colors.black,
   }) {
     return TextButton(
       onPressed: onPressed,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Icon(icon, color: iconColor),
+          Icon(icon, color: Colors.white),
           const SizedBox(height: 4),
           Text(
             label,
-            style: TextStyle(color: labelColor),
+            style: const TextStyle(color: Colors.white),
           ),
         ],
       ),
     );
   }
 
+  void _settingModalFiltersSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return ListView(
+          padding: const EdgeInsets.all(10.0),
+          children: <Widget>[
+            FilterButton(
+                text: 'None',
+                onPressed: () => applyParametricFilters([LegacyFilter(filterType: scanbot_sdk.ImageFilterType.NONE.index)])),
+            FilterButton(
+                text: 'Color Document Filter',
+                onPressed: () => applyParametricFilters([ColorDocumentFilter()])),
+            FilterButton(
+                text: 'Scanbot Binarization Filter',
+                onPressed: () => applyParametricFilters([ScanbotBinarizationFilter()])),
+            FilterButton(
+                text: 'Custom Binarization Filter',
+                onPressed: () => applyParametricFilters([CustomBinarizationFilter()])),
+            FilterButton(
+                text: 'Brightness Filter',
+                onPressed: () {
+                  applyParametricFilters([BrightnessFilter(brightness: 0.5)]);
+                }),
+            FilterButton(
+                text: 'Contrast Filter',
+                onPressed: () {
+                  applyParametricFilters([ContrastFilter(contrast: 125.0)]);
+                }),
+            FilterButton(
+                text: 'Grayscale Filter',
+                onPressed: () {
+                  applyParametricFilters([GrayscaleFilter()]);
+                }),
+            FilterButton(
+                text: 'White Black Point Filter',
+                onPressed: () {
+                  applyParametricFilters([
+                    WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)
+                  ]);
+                }),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _deletePage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     try {
-      await ScanbotSdk.deletePage(_page);
-      await _pageRepository.removePage(_page);
+      await ScanbotSdkUi.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> _showFilterPage() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-
-    var resultPage = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PageFiltering(_page)),
-    );
-
-    if (resultPage != null) {
-      await _updatePage(resultPage);
-    }
-  }
-
-  Future<void> _startCroppingScreen() async {
+  Future<void> applyParametricFilters(List<ParametricFilter> list) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
     try {
-      final config = CroppingScreenConfiguration(
-        bottomBarBackgroundColor: Colors.blue,
-        // polygonColor: Colors.yellow,
-        // polygonLineWidth: 10,
-        cancelButtonTitle: 'Cancel',
-        doneButtonTitle: 'Save',
-        // See further configs ...
-      );
-      final result = await ScanbotSdkUi.startCroppingScreen(_page, config);
-      if (isOperationSuccessful(result) && result.page != null) {
-        await _updatePage(result.page!);
+      var updatedDocument = await ScanbotSdkUi.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
+      if(updatedDocument.value != null) {
+        setState(() {
+          _page = updatedDocument.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
+        });
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> _startCustomUiCroppingScreen() async {
+  Future<void> _cropPage() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
 
+    /** Create a new configuration with the document and the document's first page. */
+    var configuration = CroppingConfiguration(
+      documentUuid: widget.documentID,
+      pageUuid: _page.uuid,
+    );
+
+    /* Customize the configuration. */
+    configuration.cropping.bottomBar.rotateButton.visible = false;
+    configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
+    configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor('#ffffff');
+    configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
+
     try {
-      var newPage = await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => CroppingScreenWidget(page: _page)),
-      );
-      await _updatePage(newPage!);
+      var result = await ScanbotSdkUi.startCroppingScreen(configuration);
+      if (result.status == OperationStatus.OK &&
+          result.value != null) {
+        setState(() {
+          _page = result.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
+        });
+      }
     } catch (e) {
       print(e);
-    }
-  }
-
-  Future<void> _analyzeQuality() async {
-    if (!await checkLicenseStatus(context)) {
-      return;
-    }
-    var dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true);
-    dialog.style(message: 'Analysing ...');
-    dialog.show();
-
-    try {
-      final result = await ScanbotSdk.analyzeQualityOfDocument(_page,
-          analyzerImageSizeLimit: sdk.Size(width: 2500, height: 2500));
-
-      await showAlertDialog(
-        context,
-        'Document Quality value is: ${result.documentQuality}',
-        title: 'Result',
-      );
-    } catch (e) {
-      Logger.root.severe(e);
-    } finally {
-      dialog.hide();
     }
   }
 }

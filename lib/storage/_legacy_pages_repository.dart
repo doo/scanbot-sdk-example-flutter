@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PageRepository {
-  static final PageRepository _instance = PageRepository._internal();
+class LegacyPageRepository {
+  static final LegacyPageRepository _instance = LegacyPageRepository._internal();
 
-  factory PageRepository() => _instance;
+  factory LegacyPageRepository() => _instance;
 
-  PageRepository._internal() {
+  LegacyPageRepository._internal() {
     // init some stuff here
   }
 

@@ -6,18 +6,18 @@ import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../../main.dart';
-import '../../storage/pages_repository.dart';
+import '../../storage/_legacy_pages_repository.dart';
 import '../filter_page/filter_button_widget.dart';
-import '../operations_page_widget.dart';
+import '../_legacy_operations_page_widget.dart';
 import '../pages_widget.dart';
 
-class DocumentPreview extends StatefulWidget {
+class LegacyDocumentPreview extends StatefulWidget {
   @override
-  _DocumentPreviewState createState() => _DocumentPreviewState();
+  _LegacyDocumentPreviewState createState() => _LegacyDocumentPreviewState();
 }
 
-class _DocumentPreviewState extends State<DocumentPreview> {
-  final PageRepository _pageRepository = PageRepository();
+class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
+  final LegacyPageRepository _pageRepository = LegacyPageRepository();
   late List<sdk.Page> _pages;
 
   @override
@@ -31,7 +31,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
-          color: Colors.black, //change your color here
+          color: Colors.black,
         ),
         backgroundColor: Colors.white,
         title: const Text(
@@ -70,7 +70,6 @@ class _DocumentPreviewState extends State<DocumentPreview> {
               ),
             ),
           ),
-          // BottomAppBar for action buttons
           BottomAppBar(
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -126,7 +125,7 @@ class _DocumentPreviewState extends State<DocumentPreview> {
 
   Future<void> _showOperationsPage(sdk.Page page) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PageOperations(page)),
+      MaterialPageRoute(builder: (context) => LegacyPageOperations(page)),
     );
     _updatePagesList();
   }
@@ -137,65 +136,65 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       builder: (BuildContext bc) {
         return Wrap(
           children: <Widget>[
-            _buildSettingsListTile(
-              icon: Icons.text_fields,
-              title: 'Perform OCR',
+            ListTile(
+              leading: const Icon(Icons.text_fields),
+              title: const Text('Perform OCR'),
               onTap: () {
                 Navigator.pop(context);
                 _performOcr();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.picture_as_pdf,
-              title: 'Save as PDF',
+            ListTile(
+              leading: const Icon(Icons.text_fields),
+              title: const Text('Save as PDF'),
               onTap: () {
                 Navigator.pop(context);
                 _createPdf();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.picture_as_pdf,
-              title: 'Save as PDF with OCR',
+            ListTile(
+              leading: const Icon(Icons.picture_as_pdf),
+              title: const Text('Save as PDF with OCR'),
               onTap: () {
                 Navigator.pop(context);
                 _createPdfWithOcr();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.image,
-              title: 'Save as TIFF with ScanbotBinarization',
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Save as TIFF with ScanbotBinarization'),
               onTap: () {
                 Navigator.pop(context);
                 _createTiffWithScanbotBinarization();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.image,
-              title: 'Save as TIFF with LegacyBinarization',
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Save as TIFF with LegacyBinarization'),
               onTap: () {
                 Navigator.pop(context);
                 _createTiffWithLegacyBinarization();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.image,
-              title: 'Save as TIFF',
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Save as TIFF'),
               onTap: () {
                 Navigator.pop(context);
                 _createTiffWithoutBinarization();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.filter,
-              title: 'Apply filter for all pages',
+            ListTile(
+              leading: const Icon(Icons.filter),
+              title: const Text('Apply filter for all pages'),
               onTap: () {
                 Navigator.pop(context);
                 _settingModalFiltersSheet(context);
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.close,
-              title: 'Cancel',
+            ListTile(
+              leading: const Icon(Icons.close),
+              title: const Text('Cancel'),
               onTap: () => Navigator.pop(context),
             ),
           ],
@@ -375,43 +374,32 @@ class _DocumentPreviewState extends State<DocumentPreview> {
       builder: (BuildContext context) {
         return Wrap(
           children: <Widget>[
-            _buildSettingsListTile(
-              icon: Icons.scanner,
-              title: 'Scan Page',
+            ListTile(
+              leading: const Icon(Icons.scanner),
+              title: const Text('Scan Page'),
               onTap: () {
                 Navigator.pop(context);
                 _startDocumentScanning();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.photo_size_select_actual,
-              title: 'Import Page',
+            ListTile(
+              leading: const Icon(Icons.photo_size_select_actual),
+              title: const Text('Import Page'),
               onTap: () {
                 Navigator.pop(context);
                 _importImage();
               },
             ),
-            _buildSettingsListTile(
-              icon: Icons.close,
-              title: 'Cancel',
-              onTap: () => Navigator.pop(context),
+            ListTile(
+              leading: const Icon(Icons.close),
+              title: const Text('Cancel'),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
           ],
         );
       },
-    );
-  }
-
-  // Helper method to build ListTile for actions
-  Widget _buildSettingsListTile({
-    required IconData icon,
-    required String title,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      onTap: onTap,
     );
   }
 

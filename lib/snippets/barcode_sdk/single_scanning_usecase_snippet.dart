@@ -55,7 +55,7 @@ BarcodeScannerConfiguration singleScanningUseCaseSnippet() {
 Future<void> runBarcodeScanner() async {
   var configuration = singleScanningUseCaseSnippet();
   var result = await ScanbotSdkUi.startBarcodeScanner(configuration);
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     // TODO: present barcode result as needed
   }
 }

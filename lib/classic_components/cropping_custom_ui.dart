@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
-import '../storage/pages_repository.dart';
+import '../storage/_legacy_pages_repository.dart';
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
@@ -13,7 +13,7 @@ class CroppingScreenWidget extends StatefulWidget {
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
-  final PageRepository _pageRepository = PageRepository();
+  final LegacyPageRepository _pageRepository = LegacyPageRepository();
   late sdk.Page currentPage;
   bool showProgressBar = false;
   bool doneButtonEnabled = true;

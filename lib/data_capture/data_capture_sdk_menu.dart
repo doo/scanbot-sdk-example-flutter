@@ -9,10 +9,7 @@ class DataCaptureSdkMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ScanbotRedColor,
-        title: const Text('Scanbot Data Capture SDK Menu'),
-      ),
+      appBar: ScanbotAppBar('Scanbot Data Capture SDK Menu'),
       body: ListView(
         children: const <Widget>[
           DataCaptureUseCases(),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:logging/logging.dart';
+import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
 import 'package:scanbot_sdk_example_flutter/document/_legacy_document_use_cases.dart';
 
+import '../ui/menu_item_widget.dart';
 import '../utility/utils.dart';
 import 'document_use_cases.dart';
 
@@ -10,17 +14,41 @@ class DocumentSdkMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ScanbotRedColor,
-        title: const Text('Scanbot Document SDK Menu'),
-      ),
+      appBar: ScanbotAppBar('Scanbot Document SDK Menu'),
       body: ListView(
         children: <Widget>[
           const DocumentUseCasesWidget(),
           DocumentUseCasesLegacyWidget(),
+          const TitleItemWidget(title: 'Other API'),
+          BuildMenuItem(context, 'Analyze document quality ', _analyzeDocumentQuality),
+          BuildMenuItem(context, 'PerformOCR ', _performOCR),
         ],
       ),
     );
+  }
+
+  Future<void> _analyzeDocumentQuality(BuildContext context) async {
+    try {
+      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (response?.path.isNotEmpty ?? false) {
+        var result = await ScanbotSdkUi.analyzeDocumentQuality(response!.path);
+        await showAlertDialog(context, 'Document Quality: ${result.value?.result}');
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
+  }
+
+  Future<void> _performOCR(BuildContext context) async {
+    try {
+      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (response?.path.isNotEmpty ?? false) {
+        var result = await ScanbotSdkUi.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
+        await showAlertDialog(context, 'OCR Result: ${result.value?.plainText}');
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
   }
 }
 

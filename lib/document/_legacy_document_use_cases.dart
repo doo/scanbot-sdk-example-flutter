@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 
-import '../storage/pages_repository.dart';
+import '../storage/_legacy_pages_repository.dart';
 import '../ui/menu_item_widget.dart';
-import '../ui/preview/legacy_document_preview.dart';
+import '../ui/preview/_legacy_document_preview.dart';
 import '../ui/progress_dialog.dart';
 import '../utility/utils.dart';
 
@@ -16,7 +16,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 class DocumentUseCasesLegacyWidget extends StatelessWidget {
   DocumentUseCasesLegacyWidget({Key? key}) : super(key: key);
 
-  final PageRepository _pageRepository = PageRepository();
+  final LegacyPageRepository _pageRepository = LegacyPageRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
           title: 'View Image Results',
           endIcon: Icons.keyboard_arrow_right,
           onTap: () => Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => DocumentPreview()),
+            MaterialPageRoute(builder: (context) => LegacyDocumentPreview()),
           )
         ),
       ],
@@ -57,7 +57,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
     if (result.operationResult == OperationResult.SUCCESS) {
       _pageRepository.addPages(result.pages);
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => DocumentPreview()),
+        MaterialPageRoute(builder: (_) => LegacyDocumentPreview()),
       );
     }
   }
@@ -90,7 +90,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
         final uriPath = Uri.file(response!.path);
         await _createPage(uriPath, context);
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => DocumentPreview()),
+          MaterialPageRoute(builder: (_) => LegacyDocumentPreview()),
         );
       }
     } catch (e) {

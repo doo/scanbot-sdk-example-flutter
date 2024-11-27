@@ -21,11 +21,11 @@ class BarcodeUseCasesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const TitleItemWidget(title: 'Barcode Scanners (RTU v2.0)'),
-        BuildMenuItem(context, "Single Scan with confirmation dialog (RTU v2.0)", startSingleScanV2),
-        BuildMenuItem(context, "Multiple Scan (RTU v2.0)", startMultipleScanV2),
-        BuildMenuItem(context, "Find and Pick (RTU v2.0)", startFindAndPickScanV2),
-        BuildMenuItem(context, "AROverlay (RTU v2.0)", startAROverlayScanV2),
-        BuildMenuItem(context, "Info Mapping (RTU v2.0)", startItemMappingScanV2),
+        BuildMenuItem(context, "Single Scan with confirmation dialog", startSingleScanV2),
+        BuildMenuItem(context, "Multiple Scan", startMultipleScanV2),
+        BuildMenuItem(context, "Find and Pick", startFindAndPickScanV2),
+        BuildMenuItem(context, "AROverlay", startAROverlayScanV2),
+        BuildMenuItem(context, "Info Mapping", startItemMappingScanV2),
       ],
     );
   }
@@ -39,9 +39,9 @@ class BarcodeUseCasesWidget extends StatelessWidget {
     }
     try {
       var result = await scannerFunction();
-      if (result.operationResult == OperationResult.SUCCESS &&
+      if (result.status == OperationStatus.OK &&
           result.value != null) {
-        Navigator.of(context).push(
+        await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => BarcodesResultPreviewWidgetV2(result.value!),
           ),

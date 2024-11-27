@@ -20,7 +20,6 @@ class FilterButton extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           backgroundColor: Colors.grey[800],
           foregroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(),
           textStyle: const TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,

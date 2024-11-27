@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logging/logging.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
@@ -18,10 +17,7 @@ class BarcodeSdkMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: ScanbotRedColor,
-        title: const Text('Scanbot Barcode SDK Menu'),
-      ),
+      appBar: ScanbotAppBar('Scanbot Barcode SDK Menu'),
       body: ListView(
         children: <Widget>[
           const BarcodeUseCasesWidget(),
@@ -61,7 +57,6 @@ class BarcodeSdkMenu extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ex.toString()),
       ));
-      Logger.root.severe(ex);
     }
   }
 
@@ -93,7 +88,6 @@ class BarcodeSdkMenu extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(ex.toString()),
       ));
-      Logger.root.severe(ex);
     }
   }
 }

@@ -8,9 +8,9 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 import '../../main.dart';
-import '../storage/pages_repository.dart';
+import '../storage/_legacy_pages_repository.dart';
 import '../ui/pages_widget.dart';
-import '../ui/preview/legacy_document_preview.dart';
+import '../ui/preview/_legacy_document_preview.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
 class DocumentScannerWidget extends StatefulWidget {
@@ -37,13 +37,13 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool licenseIsActive = true;
 
   late DocumentSnapTrigger generalSnapTrigger;
-  final PageRepository _pageRepository = PageRepository();
+  final LegacyPageRepository _pageRepository = LegacyPageRepository();
 
   /// Adds scanned pages to the repository and navigates to the preview screen.
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => DocumentPreview()),
+      MaterialPageRoute(builder: (context) => LegacyDocumentPreview()),
     );
   }
 

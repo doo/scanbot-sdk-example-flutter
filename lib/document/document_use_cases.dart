@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/multi_page_scanning_snippet.dart';
+import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_finder_snippet.dart';
+import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_snippet.dart';
 
 import '../ui/menu_item_widget.dart';
+import '../ui/preview/document_preview.dart';
 import '../utility/utils.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
@@ -14,12 +18,11 @@ class DocumentUseCasesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const TitleItemWidget(title: 'Document Scanners (RTU v2.0)'),
-        BuildMenuItem(context, 'Scan Documents (RTU v2.0)', _startDocumentScanningV2),
-        // BuildMenuItem(context, "Single Scan with confirmation dialog (RTU v2.0)",
-          // onTap: () {
-            // startSingleScanV2(context);
-          // },
-        // ),
+        BuildMenuItem(context, 'Single Page Scanning', _startSinglePageScanning),
+        BuildMenuItem(context, 'Single Page Scanning with Finder', _startSinglePageWithFinderScanning),
+        BuildMenuItem(context, 'Multi Page Scanning with Finder', _startMultiPageScanning),
+        BuildMenuItem(context, 'Clean stored documents', _cleanStoredDocuments),
+        // BuildMenuItem(context, 'Pick From Gallery', _startDocumentScanningV2),
       ],
     );
   }
@@ -33,23 +36,44 @@ class DocumentUseCasesWidget extends StatelessWidget {
     }
     try {
       var result = await scannerFunction();
-      if (result.operationResult == OperationResult.SUCCESS) {
-        // Navigator.of(context).push(
-        //   MaterialPageRoute(
-        //     builder: (context) => BarcodesResultPreviewWidgetV2(result.value!),
-        //   ),
-        // );
+      if (result.status == OperationStatus.OK &&
+          result.value != null) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DocumentPreview(result.value!),
+          ),
+        );
       }
     } catch (e) {
       print(e);
     }
   }
 
-  Future<void> _startDocumentScanningV2(BuildContext context) async {
+  Future<void> _startSinglePageScanning(BuildContext context) async {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUi.startDocumentScannerV2(DocumentScanningFlow()),
+          ScanbotSdkUi.startDocumentScanner(singlePageScanningFlow()),
     );
+  }
+
+  Future<void> _startSinglePageWithFinderScanning(BuildContext context) async {
+    await startScan(
+      context: context,
+      scannerFunction: () =>
+          ScanbotSdkUi.startDocumentScanner(singlePageWithFinderScanningFlow()),
+    );
+  }
+
+  Future<void> _startMultiPageScanning(BuildContext context) async {
+    await startScan(
+      context: context,
+      scannerFunction: () =>
+          ScanbotSdkUi.startDocumentScanner(multiPageScanningFlow()),
+    );
+  }
+
+  Future<void> _cleanStoredDocuments(BuildContext context) async {
+    await ScanbotSdkUi.deleteAllDocuments();
   }
 }
