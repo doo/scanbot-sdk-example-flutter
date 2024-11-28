@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
-import 'package:scanbot_sdk_example_flutter/document/_legacy_document_use_cases.dart';
 
 import '../ui/menu_item_widget.dart';
 import '../utility/utils.dart';
+import '_legacy_document_use_cases.dart';
 import 'document_use_cases.dart';
 
 class DocumentSdkMenu extends StatelessWidget {

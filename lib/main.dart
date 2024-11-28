@@ -33,34 +33,27 @@ Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
   final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
-  final encryptionParams = _getEncryptionParams();
-
   var config = ScanbotSdkConfig(
       loggingEnabled: true,
       // Consider switching logging OFF in production. builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
-      imageFormat: ImageFormat.JPG,
-      imageQuality: 80,
+      storageImageFormat: ImageFormat.JPG,
+      storageImageQuality: 80,
       storageBaseDirectory: customStorageBaseDirectory,
       documentDetectorMode: DocumentDetectorMode.ML_BASED,
-      encryptionParameters: encryptionParams);
+  );
+
+  if(shouldInitWithEncryption) {
+    config.fileEncryptionPassword = 'SomeSecretPa\$\$w0rdForFileEncryption';
+    config.fileEncryptionMode = FileEncryptionMode.AES256;
+  }
+
   try {
     await ScanbotSdk.initScanbotSdk(config);
     await LegacyPageRepository().loadPages();
   } catch (e) {
     Logger.root.severe(e);
   }
-}
-
-EncryptionParameters? _getEncryptionParams() {
-  EncryptionParameters? encryptionParams;
-  if (shouldInitWithEncryption) {
-    encryptionParams = EncryptionParameters(
-      password: 'SomeSecretPa\$\$w0rdForFileEncryption',
-      mode: FileEncryptionMode.AES256,
-    );
-  }
-  return encryptionParams;
 }
 
 Future<String> getDemoStorageBaseDirectory() async {
