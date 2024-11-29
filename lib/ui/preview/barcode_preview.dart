@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 import '../../utility/generic_document_helper.dart';
 

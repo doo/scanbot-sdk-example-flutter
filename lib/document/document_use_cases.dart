@@ -7,7 +7,8 @@ import '../ui/menu_item_widget.dart';
 import '../ui/preview/document_preview.dart';
 import '../utility/utils.dart';
 
-import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 class DocumentUseCasesWidget extends StatelessWidget {
   const DocumentUseCasesWidget({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUi.startDocumentScanner(singlePageScanningFlow()),
+          ScanbotSdkUiV2.startDocumentScanner(singlePageScanningFlow()),
     );
   }
 
@@ -61,7 +62,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUi.startDocumentScanner(singlePageWithFinderScanningFlow()),
+          ScanbotSdkUiV2.startDocumentScanner(singlePageWithFinderScanningFlow()),
     );
   }
 
@@ -69,11 +70,11 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUi.startDocumentScanner(multiPageScanningFlow()),
+          ScanbotSdkUiV2.startDocumentScanner(multiPageScanningFlow()),
     );
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
-    await ScanbotSdkUi.deleteAllDocuments();
+    await ScanbotSdk.Document.deleteAllDocuments();
   }
 }

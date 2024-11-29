@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 DocumentScanningFlow introductionConfigurationScanningFlow() {
   // Create the default configuration object.
@@ -33,5 +33,5 @@ DocumentScanningFlow introductionConfigurationScanningFlow() {
 
 void runDocumentScanner() async {
   var configuration = introductionConfigurationScanningFlow();
-  await ScanbotSdkUi.startDocumentScanner(configuration);
+  await ScanbotSdkUiV2.startDocumentScanner(configuration);
 }

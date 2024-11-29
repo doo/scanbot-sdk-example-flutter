@@ -10,7 +10,8 @@ import '../snippets/barcode_sdk/ar_overlay_usecase_snippet.dart';
 import '../snippets/barcode_sdk/find_and_pick_scanning_usecase_snippet.dart';
 import '../snippets/barcode_sdk/item_mapping_config_snippet.dart';
 
-import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 class BarcodeUseCasesWidget extends StatelessWidget {
   const BarcodeUseCasesWidget({Key? key}) : super(key: key);
@@ -55,35 +56,35 @@ class BarcodeUseCasesWidget extends StatelessWidget {
   Future<void> startSingleScanV2(BuildContext context) async {
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startBarcodeScanner(singleScanningUseCaseSnippet()),
+      scannerFunction: () => ScanbotSdkUiV2.startBarcodeScanner(singleScanningUseCaseSnippet()),
     );
   }
 
   Future<void> startMultipleScanV2(BuildContext context) async {
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startBarcodeScanner(multipleScanningUseCaseSnippet()),
+      scannerFunction: () => ScanbotSdkUiV2.startBarcodeScanner(multipleScanningUseCaseSnippet()),
     );
   }
 
   Future<void> startFindAndPickScanV2(BuildContext context) async {
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startBarcodeScanner(findAndPickModeUseCaseSnippet()),
+      scannerFunction: () => ScanbotSdkUiV2.startBarcodeScanner(findAndPickModeUseCaseSnippet()),
     );
   }
 
   Future<void> startAROverlayScanV2(BuildContext context) async {
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startBarcodeScanner(AROverlayUsecaseSnippet()),
+      scannerFunction: () => ScanbotSdkUiV2.startBarcodeScanner(AROverlayUsecaseSnippet()),
     );
   }
 
   Future<void> startItemMappingScanV2(BuildContext context) async {
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startBarcodeScanner(itemMappingConfigSnippet()),
+      scannerFunction: () => ScanbotSdkUiV2.startBarcodeScanner(itemMappingConfigSnippet()),
     );
   }
 }

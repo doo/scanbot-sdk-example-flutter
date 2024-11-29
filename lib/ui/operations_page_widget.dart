@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
-import 'package:scanbot_sdk/scanbot_sdk_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 import '../main.dart';
 import '../utility/utils.dart';
@@ -120,7 +120,7 @@ class _PageOperationsState extends State<PageOperations> {
           children: <Widget>[
             FilterButton(
                 text: 'None',
-                onPressed: () => applyParametricFilters([LegacyFilter(filterType: scanbot_sdk.ImageFilterType.NONE.index)])),
+                onPressed: () => applyParametricFilters([LegacyFilter(filterType: ImageFilterType.NONE.index)])),
             FilterButton(
                 text: 'Color Document Filter',
                 onPressed: () => applyParametricFilters([ColorDocumentFilter()])),
@@ -164,7 +164,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      await ScanbotSdkUi.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
+      await ScanbotSdk.Document.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
@@ -177,7 +177,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      var updatedDocument = await ScanbotSdkUi.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
+      var updatedDocument = await ScanbotSdk.Document.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
       if(updatedDocument.value != null) {
         setState(() {
           _page = updatedDocument.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
@@ -206,7 +206,7 @@ class _PageOperationsState extends State<PageOperations> {
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
     try {
-      var result = await ScanbotSdkUi.startCroppingScreen(configuration);
+      var result = await ScanbotSdkUiV2.startCroppingScreen(configuration);
       if (result.status == OperationStatus.OK &&
           result.value != null) {
         setState(() {
