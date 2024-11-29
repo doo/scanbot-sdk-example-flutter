@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:logging/logging.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/multi_page_scanning_snippet.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_finder_snippet.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_snippet.dart';
@@ -23,7 +25,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
         BuildMenuItem(context, 'Single Page Scanning with Finder', _startSinglePageWithFinderScanning),
         BuildMenuItem(context, 'Multi Page Scanning with Finder', _startMultiPageScanning),
         BuildMenuItem(context, 'Clean stored documents', _cleanStoredDocuments),
-        // BuildMenuItem(context, 'Pick From Gallery', _startDocumentScanningV2),
+        BuildMenuItem(context, 'Pick From Gallery', _createDocumentFromImage),
       ],
     );
   }
@@ -72,6 +74,22 @@ class DocumentUseCasesWidget extends StatelessWidget {
       scannerFunction: () =>
           ScanbotSdkUiV2.startDocumentScanner(multiPageScanningFlow()),
     );
+  }
+
+  Future<void> _createDocumentFromImage(BuildContext context) async {
+    try {
+      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (response?.path.isNotEmpty ?? false) {
+        var result = await ScanbotSdk.Document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DocumentPreview(result.value!),
+          ),
+        );
+      }
+    } catch (e) {
+      Logger.root.severe(e);
+    }
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
