@@ -430,7 +430,7 @@ packages:
       path: "../flutter/scanbot-sdk-flutter/bundle_sdk"
       relative: true
     source: path
-    version: "5.0.0-alpha3"
+    version: "6.1.0-alpha.1"
   shared_preferences:
     dependency: "direct main"
     description:

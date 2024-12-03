@@ -39,7 +39,8 @@ Future<void> _initScanbotSdk() async {
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
       storageImageFormat: ImageFormat.JPG,
       storageImageQuality: 80,
-      storageBaseDirectory: customStorageBaseDirectory,
+      // Uncomment to use custom storage directory
+      // storageBaseDirectory: customStorageBaseDirectory,
       documentDetectorMode: DocumentDetectorMode.ML_BASED,
   );
 
