@@ -228,10 +228,10 @@ packages:
     dependency: transitive
     description:
       name: json_annotation
-      sha256: "1ce844379ca14835a50d2f019a3099f419082cfdd231cd86a142af94dd5c6bb1"
+      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
       url: "https://pub.dev"
     source: hosted
-    version: "4.9.0"
+    version: "4.8.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -427,10 +427,11 @@ packages:
   scanbot_sdk:
     dependency: "direct main"
     description:
-      path: "../flutter/scanbot-sdk-flutter/bundle_sdk"
-      relative: true
-    source: path
-    version: "6.1.0-alpha.1"
+      name: scanbot_sdk
+      sha256: dfd4df899dfc3ed632d1bd17c4809bbeedeadbd1a8c4b6837e874738073d2106
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.1.0-alpha01"
   shared_preferences:
     dependency: "direct main"
     description:

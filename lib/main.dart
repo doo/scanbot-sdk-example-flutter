@@ -210,7 +210,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       final result = await ScanbotSdk.getLicenseStatus();
       await showAlertDialog(context,
-          "Status: ${result.status} expirationDate: ${result.expirationDate}",
+          "${result.status} expirationDate: ${result.expirationDate}",
           title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);

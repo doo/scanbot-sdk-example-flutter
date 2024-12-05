@@ -153,7 +153,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       MaterialPageRoute(builder: (context) => PageOperations(documentData.uuid, page)),
     );
 
-    var loadedData = await ScanbotSdk.Document.loadDocument(documentData.uuid);
+    var loadedData = await ScanbotSdk.document.loadDocument(documentData.uuid);
     if(loadedData.value == null) {
       Navigator.of(context).pop();
     } else {
@@ -175,7 +175,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     final response = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.Document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));
+      var result = await ScanbotSdk.document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));
       if (result.status == OperationStatus.OK &&
           result.value != null) {
         setState(() {
@@ -186,7 +186,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _deleteAllPages() async {
-    var result = await ScanbotSdk.Document.removeAllPages(documentData.uuid);
+    var result = await ScanbotSdk.document.removeAllPages(documentData.uuid);
     if (result.status == OperationStatus.OK &&
         result.value != null) {
       setState(() {
@@ -196,7 +196,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _saveDocumentAsPDF() async {
-    var result = await ScanbotSdk.Document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid));
+    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid));
     if (result.status == OperationStatus.OK &&
         result.value != null) {
       await showAlertDialog(context, 'Pdf File created: ${result.value?.pdfFileUri}', title: 'Result');
@@ -211,7 +211,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       ocrConfiguration: scanbot_sdk.OcrOptions(engineMode: scanbot_sdk.OcrEngine.SCANBOT_OCR)
     );
 
-    var result = await ScanbotSdk.Document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, options: pdfOptions));
+    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, options: pdfOptions));
     if (result.status == OperationStatus.OK &&
         result.value != null) {
       await showAlertDialog(context, 'Pdf File created: ${result.value?.pdfFileUri}', title: 'Result');
@@ -221,7 +221,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
     var options = scanbot_sdk.TiffCreationOptions.withScanbotBinarizationFilter(ScanbotBinarizationFilter(), dpi: 300, compression: scanbot_sdk.TiffCompression.CCITT_T6);
-    var result = await ScanbotSdk.Document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, options: options));
+    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, options: options));
     if (result.status == OperationStatus.OK &&
         result.value != null) {
       await showAlertDialog(context, 'Tiff Binarized File created: ${result.value?.tiffFileUri}', title: 'Result');
@@ -230,7 +230,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _saveDocumentAsTIFF() async {
-    var result = await ScanbotSdk.Document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid));
+    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid));
     if (result.status == OperationStatus.OK &&
         result.value != null) {
       await showAlertDialog(context, 'Tiff File created: ${result.value?.tiffFileUri}', title: 'Result');

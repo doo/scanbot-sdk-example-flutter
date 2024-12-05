@@ -80,7 +80,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     try {
       final response = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.Document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
+        var result = await ScanbotSdk.document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => DocumentPreview(result.value!),
@@ -93,6 +93,6 @@ class DocumentUseCasesWidget extends StatelessWidget {
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
-    await ScanbotSdk.Document.deleteAllDocuments();
+    await ScanbotSdk.document.deleteAllDocuments();
   }
 }

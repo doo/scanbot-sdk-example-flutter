@@ -164,7 +164,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      await ScanbotSdk.Document.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
+      await ScanbotSdk.document.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
@@ -177,7 +177,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      var updatedDocument = await ScanbotSdk.Document.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
+      var updatedDocument = await ScanbotSdk.document.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
       if(updatedDocument.value != null) {
         setState(() {
           _page = updatedDocument.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
