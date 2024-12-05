@@ -23,5 +23,8 @@ DocumentScanningFlow palleteConfigurationFlowSnippet() {
 
 void runDocumentScanner() async {
   var configuration = palleteConfigurationFlowSnippet();
-  await ScanbotSdkUiV2.startDocumentScanner(configuration);
+  var documentResult = await ScanbotSdkUiV2.startDocumentScanner(configuration);
+  // Handle the document if the status is 'OK'
+  if(documentResult.status == OperationStatus.OK) {
+  }
 }
