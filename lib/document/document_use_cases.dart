@@ -76,8 +76,16 @@ class DocumentUseCasesWidget extends StatelessWidget {
     );
   }
 
+  Future<void> _cleanStoredDocuments(BuildContext context) async {
+    await ScanbotSdk.document.deleteAllDocuments();
+  }
+
   Future<void> _createDocumentFromImage(BuildContext context) async {
     try {
+      if (!await checkLicenseStatus(context)) {
+        return;
+      }
+
       final response = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
@@ -90,9 +98,5 @@ class DocumentUseCasesWidget extends StatelessWidget {
     } catch (e) {
       Logger.root.severe(e);
     }
-  }
-
-  Future<void> _cleanStoredDocuments(BuildContext context) async {
-    await ScanbotSdk.document.deleteAllDocuments();
   }
 }
