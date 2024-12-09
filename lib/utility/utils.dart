@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
@@ -133,4 +134,8 @@ Future<void> _launchScanbotSDKURL() async {
 
 bool isOperationSuccessful(Result result) {
   return result.operationResult == OperationResult.SUCCESS;
+}
+
+Future<XFile?> selectImageFromLibrary() async {
+  return await ImagePicker().pickImage(source: ImageSource.gallery);
 }
