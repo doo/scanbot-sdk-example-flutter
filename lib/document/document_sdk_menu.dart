@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
@@ -29,7 +28,7 @@ class DocumentSdkMenu extends StatelessWidget {
 
   Future<void> _analyzeDocumentQuality(BuildContext context) async {
     try {
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.analyzeDocumentQuality(response!.path);
         await showAlertDialog(context, 'Document Quality: ${result.value?.result}');
@@ -41,7 +40,7 @@ class DocumentSdkMenu extends StatelessWidget {
 
   Future<void> _performOCR(BuildContext context) async {
     try {
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
         await showAlertDialog(context, 'OCR Result: ${result.value?.plainText}');

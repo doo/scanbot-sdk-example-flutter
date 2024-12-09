@@ -60,7 +60,7 @@ class DataCaptureUseCases extends StatelessWidget {
     if (!await checkLicenseStatus(context)) return;
 
     try {
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
       if (response != null && response.path.isNotEmpty) {
         final result = await scannerFunction(response.path);
         handleResult(result);

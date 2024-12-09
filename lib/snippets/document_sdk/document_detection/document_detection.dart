@@ -1,4 +1,4 @@
-import '../../../utility/utils.dart';
+import '../../../utility/utils.dart' show selectImageFromLibrary;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> detectDocumentDetection() async {
@@ -11,7 +11,5 @@ Future<void> detectDocumentDetection() async {
     return;
   }
   /** Detect the document */
-  // var documentDetectionResult = await ScanbotSdk.document.detectDocument(
-  //   selectedImageResult,
-  // );
+  var documentDetectionResult = await ScanbotSdk.document.detectDocument(imageFile.path);
 }

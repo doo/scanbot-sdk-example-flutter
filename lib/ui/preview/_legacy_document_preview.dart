@@ -506,7 +506,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
 
   Future<void> _importImage() async {
     try {
-      final XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final XFile? image = await selectImageFromLibrary();
       if (image?.path != null) {
         await _createPage(Uri.file(image!.path));
       }

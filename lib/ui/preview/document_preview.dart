@@ -172,7 +172,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _addPage() async {
-    final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final response = await selectImageFromLibrary();
 
     if (response?.path.isNotEmpty ?? false) {
       var result = await ScanbotSdk.document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));

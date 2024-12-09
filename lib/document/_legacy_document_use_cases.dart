@@ -84,7 +84,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
 
   Future<void> _importImage(BuildContext context) async {
     try {
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
 
       if (response?.path.isNotEmpty ?? false) {
         final uriPath = Uri.file(response!.path);

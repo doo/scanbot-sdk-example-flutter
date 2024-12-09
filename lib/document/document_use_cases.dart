@@ -86,7 +86,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
         return;
       }
 
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
         await Navigator.of(context).push(

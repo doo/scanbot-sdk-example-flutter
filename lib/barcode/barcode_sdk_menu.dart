@@ -36,7 +36,7 @@ class BarcodeSdkMenu extends StatelessWidget {
       return;
     }
     try {
-      final response = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final response = await selectImageFromLibrary();
 
       if (response == null || response.path.isEmpty) {
         showAlertDialog(context, "RESULT IS EMPTY");

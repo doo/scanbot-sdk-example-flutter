@@ -13,7 +13,7 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
       ..acknowledgementMode = AcknowledgementMode.ALWAYS
 
       // Set the minimum acceptable document quality.
-      // Options: excellent, good, reasonable, poor, veryPoor, or noDocument.
+      // Options: EXCELLENT, GOOD, REASONABLE, POOR, VERY_POOR, or NO_DOCUMENT.
       ..minimumQuality = DocumentQuality.REASONABLE
 
       // Set the background color for the acknowledgment screen.
