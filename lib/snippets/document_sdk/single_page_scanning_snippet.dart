@@ -15,7 +15,7 @@ DocumentScanningFlow singlePageScanningFlow() {
    * Configure the animation
    * You can choose between genie animation or checkmark animation
    * Note: Both modes can be further configured to your liking
-   * e.g for genie animation
+   * E.g., for genie animation
    */
   configuration.screens.camera.captureFeedback.snapFeedbackMode = PageSnapFunnelAnimation();
   // or for checkmark animation

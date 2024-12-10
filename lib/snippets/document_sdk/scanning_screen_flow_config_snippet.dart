@@ -47,10 +47,10 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
     ..userGuidance.statesTitles.readyToCapture = "Ready to capture"
     ..userGuidance.statesTitles.capturing = "Capturing the document"
 
-    // The title of the user guidance when the document ready to be captured in manual mode.
+    // The title of the user guidance when the document is ready to be captured in manual mode.
     ..userGuidance.statesTitles.captureManual = "The document is ready to be captured"
 
-    // Import button is used to import image from the gallery.
+    // Import button is used to import an image from the gallery.
     ..bottomBar.importButton.visible = true
     ..bottomBar.importButton.title.visible = true
     ..bottomBar.importButton.title.text = "Import"
