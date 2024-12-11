@@ -10,6 +10,6 @@ Future<void> createDocumentWithLegacyPages(List<Page> pages) async {
   var documentData = await ScanbotSdk.document.createDocumentFromLegacyPages(params);
   /**
    * Now you may delete the files corresponding to the Page to free up storage.
-   * Use ScanbotSdk.deletePage(page) to remove the old pages
+   * Use ScanbotSDK.removePage(page) to remove the old pages
    */
 }
