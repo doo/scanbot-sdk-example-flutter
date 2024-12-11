@@ -12,5 +12,5 @@ Future<void> createPDFFromImages(String imageFileUri) async {
       )
     )
   );
-  var pdfCreationResult = await ScanbotSdk.imageOperations.createPDFForImages(params);
+  var pdfCreationResult = await ScanbotSdk.imageOperations.createPDFFromImages(params);
 }

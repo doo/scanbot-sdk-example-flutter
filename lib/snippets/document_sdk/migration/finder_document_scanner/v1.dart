@@ -8,5 +8,5 @@ Future<void> finderDocumentScanner() async {
     // finderAspectRatio: AspectRatio(width: 3, height: 4),
   );
 
-  var pageResult = await ScanbotSdkUi.startFinerDocumentScanner(configuration);
+  var pageResult = await ScanbotSdkUi.startFinderDocumentScanner(configuration);
 }

@@ -75,7 +75,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
   Future<void> _startFinerDocumentScanner(BuildContext context) async {
     await startScan<FinderDocumentScanningResult>(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startFinerDocumentScanner(
+      scannerFunction: () => ScanbotSdkUi.startFinderDocumentScanner(
         finderDocumentConfigurationSnippet(),
       ),
       handleResult: (result) => handleScanResult(context, result),
