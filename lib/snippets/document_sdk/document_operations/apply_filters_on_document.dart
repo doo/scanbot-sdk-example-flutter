@@ -15,7 +15,8 @@ Future<void> applyFiltersAndRotateScannedPage() async {
   var params = ModifyPageParams(
     documentID: document.value!.uuid,
     pageID: page.uuid,
-    filters: [ScanbotBinarizationFilter()]
+    filters: [ScanbotBinarizationFilter()],
+    rotation: PageRotation.CLOCKWISE_90
   );
   var documentResultWithModifiedPage = await ScanbotSdk.document.modifyPage(params);
   /** Handle the document */
