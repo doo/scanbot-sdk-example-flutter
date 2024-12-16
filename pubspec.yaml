@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  scanbot_sdk: 6.1.1-alpha01
+  scanbot_sdk: ^6.1.1
 
   image_picker: ^1.1.2
   cupertino_icons: ^1.0.2
