@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget BuildMenuItem(
-    BuildContext context,
-    String title,
-    Future<void> Function(BuildContext) onTap,
-    ) {
-  return MenuItemWidget(
-    title: title,
-    onTap: () => onTap(context),
-  );
-}
+import '../utility/utils.dart';
 
 class MenuItemWidget extends StatelessWidget {
   final String title;
@@ -35,7 +26,7 @@ class MenuItemWidget extends StatelessWidget {
               ? Icon(startIcon, color: Colors.black)
               : null,
           trailing:
-              endIcon != null ? Icon(endIcon, color: Colors.black) : null,
+          endIcon != null ? Icon(endIcon, color: Colors.black) : null,
           title: Text(
             title,
             style: const TextStyle(
@@ -90,3 +81,4 @@ class TitleItemWidget extends StatelessWidget {
     );
   }
 }
+

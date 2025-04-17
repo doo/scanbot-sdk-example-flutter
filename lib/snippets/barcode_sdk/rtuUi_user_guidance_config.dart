@@ -1,8 +1,9 @@
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
-BarcodeScannerConfiguration userGuidanceConfigSnippet() {
+BarcodeScannerScreenConfiguration rtuUiUserGuidanceConfigSnippet() {
   // Create the default configuration object.
-  var configuration = BarcodeScannerConfiguration();
+  var configuration = BarcodeScannerScreenConfiguration();
 
   // Hide/unhide the user guidance.
   configuration.userGuidance.visible = true;
@@ -12,7 +13,7 @@ BarcodeScannerConfiguration userGuidanceConfigSnippet() {
   configuration.userGuidance.title.color = ScanbotColor("#FFFFFF");
 
   // Configure the background.
-  configuration.userGuidance.background.fillColor = ScanbotColor("#7A000000");
+  configuration.userGuidance.background.fillColor = ScanbotColor("#0000007A");
 
   // Configure other parameters as needed.
 
@@ -20,9 +21,9 @@ BarcodeScannerConfiguration userGuidanceConfigSnippet() {
 }
 
 Future<void> runBarcodeScanner() async {
-  var configuration = userGuidanceConfigSnippet();
-  var result = await ScanbotSdkUiV2.startBarcodeScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // TODO: present barcode result as needed
-  }
+  var configuration = rtuUiUserGuidanceConfigSnippet();
+  // var result = await ScanbotSdkUiV2.startBarcodeScanner(configuration);
+  // if (result.status == OperationStatus.OK) {
+  //   // TODO: present barcode result as needed
+  // }
 }

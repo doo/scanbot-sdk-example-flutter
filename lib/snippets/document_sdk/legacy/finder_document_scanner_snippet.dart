@@ -1,8 +1,8 @@
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 FinderDocumentScannerConfiguration finderDocumentConfigurationSnippet() {
   return FinderDocumentScannerConfiguration(
-    ignoreBadAspectRatio: true,
+    ignoreOrientationMismatch: true,
     // allow only documents with at least 75% of finder to be scanned
     acceptedSizeScore: 0.75,
     //maxNumberOfPages: 3,

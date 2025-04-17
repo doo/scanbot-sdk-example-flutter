@@ -19,8 +19,8 @@ class DocumentSdkMenu extends StatelessWidget {
           const DocumentUseCasesWidget(),
           DocumentUseCasesLegacyWidget(),
           const TitleItemWidget(title: 'Other API'),
-          BuildMenuItem(context, 'Analyze document quality ', _analyzeDocumentQuality),
-          BuildMenuItem(context, 'PerformOCR ', _performOCR),
+          MenuItemWidget(title: 'Analyze document quality ', onTap: () => _analyzeDocumentQuality(context)),
+          MenuItemWidget(title: 'PerformOCR ', onTap: () => _performOCR(context)),
         ],
       ),
     );
@@ -30,8 +30,8 @@ class DocumentSdkMenu extends StatelessWidget {
     try {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.analyzeDocumentQuality(response!.path);
-        await showAlertDialog(context, 'Document Quality: ${result.value?.result}');
+        var result = await ScanbotSdk.analyzeDocumentQuality(response!.path, DocumentQualityAnalyzerConfiguration());
+        await showAlertDialog(context, 'Document Quality: ${result.quality}');
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -43,7 +43,7 @@ class DocumentSdkMenu extends StatelessWidget {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
-        await showAlertDialog(context, 'OCR Result: ${result.value?.plainText}');
+        await showAlertDialog(context, 'OCR Result: ${result?.plainText}');
       }
     } catch (e) {
       Logger.root.severe(e);

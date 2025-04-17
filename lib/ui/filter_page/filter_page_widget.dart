@@ -28,15 +28,7 @@ class _PageFilteringState extends State<PageFiltering> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(_page),
-        ),
-        backgroundColor: Colors.white,
-        title: const Text('Filtering', style: TextStyle(color: Colors.black)),
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+      appBar: ScanbotAppBar('Filtering', context: context, showBackButton: true),
       body: FilterPreviewWidget(_page, _updatePage),
     );
   }

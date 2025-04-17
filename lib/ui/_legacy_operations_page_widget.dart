@@ -1,15 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
-
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 import '../classic_components/cropping_custom_ui.dart';
-import '../main.dart';
 import '../storage/_legacy_pages_repository.dart';
 import 'filter_page/filter_page_widget.dart';
 import 'pages_widget.dart';
@@ -54,29 +54,18 @@ class _LegacyPageOperationsState extends State<LegacyPageOperations> {
         : PageWidget(imageUri);
 
     return Scaffold(
-      appBar: AppBar(
-        // Customize the icon theme and background color of the app bar
-        iconTheme: const IconThemeData(
-          color: Colors.black, // Change icon color here
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Image Preview',
-          style: TextStyle(color: Colors.black), // Title text color
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () => _analyzeQuality(), // Action for analyzing quality
-              child: const Icon(
-                Icons.image_search,
-                size: 26.0,
-              ),
+      appBar: ScanbotAppBar('Image Preview', showBackButton: true, context: context, actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () => _analyzeQuality(), // Action for analyzing quality
+            child: const Icon(
+              Icons.image_search,
+              size: 26.0,
             ),
           ),
-        ],
-      ),
+        ),
+      ]),
       body: Stack(
         children: <Widget>[
           Column(
@@ -232,11 +221,11 @@ class _LegacyPageOperationsState extends State<LegacyPageOperations> {
 
     try {
       final result = await ScanbotSdk.analyzeQualityOfDocument(_page,
-          analyzerImageSizeLimit: sdk.Size(width: 2500, height: 2500));
+          analyzerImageSizeLimit: Size(width: 2500, height: 2500));
 
       await showAlertDialog(
         context,
-        'Document Quality value is: ${result.documentQuality}',
+        'Document Quality value is: ${result.quality?.name}',
         title: 'Result',
       );
     } catch (e) {

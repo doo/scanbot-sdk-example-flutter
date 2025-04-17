@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
-import '../main.dart';
 import '../utility/utils.dart';
 import 'filter_page/filter_button_widget.dart';
 import 'pages_widget.dart';
@@ -45,7 +45,7 @@ class _PageOperationsState extends State<PageOperations> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  padding: const material.EdgeInsets.symmetric(vertical: 8.0),
                   child: Center(child: pageView),
                 ),
               ),
@@ -65,7 +65,7 @@ class _PageOperationsState extends State<PageOperations> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: ScanbotRedColor,
-        padding: const EdgeInsets.all(8.0),
+        padding: const material.EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -116,7 +116,7 @@ class _PageOperationsState extends State<PageOperations> {
       context: context,
       builder: (BuildContext bc) {
         return ListView(
-          padding: const EdgeInsets.all(10.0),
+          padding: const material.EdgeInsets.all(10.0),
           children: <Widget>[
             FilterButton(
                 text: 'None',
@@ -164,7 +164,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      await ScanbotSdk.document.removePageFromDocument(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
+      await ScanbotSdk.document.removePage(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
@@ -178,11 +178,9 @@ class _PageOperationsState extends State<PageOperations> {
 
     try {
       var updatedDocument = await ScanbotSdk.document.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
-      if(updatedDocument.value != null) {
-        setState(() {
-          _page = updatedDocument.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
-        });
-      }
+      setState(() {
+        _page = updatedDocument.pages.firstWhere((x) => x.uuid == _page.uuid);
+      });
     } catch (e) {
       print(e);
     }
@@ -207,10 +205,9 @@ class _PageOperationsState extends State<PageOperations> {
 
     try {
       var result = await ScanbotSdkUiV2.startCroppingScreen(configuration);
-      if (result.status == OperationStatus.OK &&
-          result.value != null) {
+      if (result.status == OperationStatus.OK && result.data != null) {
         setState(() {
-          _page = result.value!.pages.firstWhere((x) => x.uuid == _page.uuid);
+          _page = result.data!.pages.firstWhere((x) => x.uuid == _page.uuid);
         });
       }
     } catch (e) {

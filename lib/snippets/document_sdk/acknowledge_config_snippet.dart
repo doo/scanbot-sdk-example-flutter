@@ -14,7 +14,7 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
 
       // Set the minimum acceptable document quality.
       // Options: EXCELLENT, GOOD, REASONABLE, POOR, VERY_POOR, or NO_DOCUMENT.
-      ..minimumQuality = DocumentQuality.REASONABLE
+      // ..minimumQuality = DocumentQuality.REASONABLE
 
       // Set the background color for the acknowledgment screen.
       ..backgroundColor = ScanbotColor("#EFEFEF")

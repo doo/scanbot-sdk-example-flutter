@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-CheckScannerConfiguration checkScannerConfigurationSnippet() {
-  return CheckScannerConfiguration(
+CheckScannerJsonConfiguration checkScannerConfigurationSnippet() {
+  return CheckScannerJsonConfiguration(
       // Behavior configuration:
       // e.g. disable capturing the photo to recognize on live video stream
       captureHighResolutionImage: false,
@@ -21,7 +22,7 @@ CheckScannerConfiguration checkScannerConfigurationSnippet() {
 Future<void> runCheckScanner() async {
   var config = checkScannerConfigurationSnippet();
   var result = await ScanbotSdkUi.startCheckScanner(config);
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     // ...
   }
 }

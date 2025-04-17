@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
+import '../../utility/utils.dart';
+
 class GenericDocumentResultPreview extends StatefulWidget {
-  final GenericDocumentResults result;
+  final DocumentDataExtractionResult result;
 
   GenericDocumentResultPreview(
     this.result,
@@ -18,30 +20,10 @@ class _GenericDocumentResultPreviewState
   @override
   Widget build(BuildContext context) {
     var widgets = <Widget>[];
-    for (var document in widget.result.documents) {
-      widgets.add(genericDocumentResultView(document));
-    }
+    widgets.add(genericDocumentResultView(widget.result.document));
+
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Generic Document Recognizer Result',
-            style: TextStyle(
-              inherit: true,
-              color: Colors.black,
-            ),
-          ),
-        ),
+        appBar: ScanbotAppBar('Generic Document Recognizer Result', showBackButton: true, context: context),
         body: ListView.builder(
           itemCount: widgets.length,
           itemBuilder: (context, index) {
@@ -51,24 +33,24 @@ class _GenericDocumentResultPreviewState
   }
 }
 
-Widget genericDocumentResultView(GenericDocument document) {
-  switch (document.type.name) {
+Widget genericDocumentResultView(GenericDocument? document) {
+  switch (document?.type.name) {
     case MRZ.DOCUMENT_TYPE:
-      return MrzView(MRZ(document));
+      return MrzView(MRZ(document!));
     case DeIdCardFront.DOCUMENT_TYPE:
-      return DeIdCardFrontView(DeIdCardFront(document));
+      return DeIdCardFrontView(DeIdCardFront(document!));
     case DeResidencePermitFront.DOCUMENT_TYPE:
-      return DeResidencePermitFrontView(DeResidencePermitFront(document));
+      return DeResidencePermitFrontView(DeResidencePermitFront(document!));
     case DeResidencePermitBack.DOCUMENT_TYPE:
-      return DeResidencePermitBackView(DeResidencePermitBack(document));
+      return DeResidencePermitBackView(DeResidencePermitBack(document!));
     case DeIdCardBack.DOCUMENT_TYPE:
-      return DeIdCardBackView(DeIdCardBack(document));
+      return DeIdCardBackView(DeIdCardBack(document!));
     case DePassport.DOCUMENT_TYPE:
-      return DePassportView(DePassport(document));
+      return DePassportView(DePassport(document!));
     case DeDriverLicenseFront.DOCUMENT_TYPE:
-      return DeDriverLicenseFrontView(DeDriverLicenseFront(document));
+      return DeDriverLicenseFrontView(DeDriverLicenseFront(document!));
     case DeDriverLicenseBack.DOCUMENT_TYPE:
-      return DeDriverLicenseBackView(DeDriverLicenseBack(document));
+      return DeDriverLicenseBackView(DeDriverLicenseBack(document!));
     default:
       return Container();
   }
@@ -474,7 +456,7 @@ class DeIdCardBackView extends StatelessWidget {
           title: "Raw Mrz",
           genericDocumentField: result.rawMRZ,
         ),
-        MrzView(result.mrz),
+        // MrzView(result.mrz),
       ],
     );
   }
@@ -547,7 +529,7 @@ class DePassportView extends StatelessWidget {
           title: "Raw Mrz",
           genericDocumentField: result.rawMRZ,
         ),
-        MrzView(result.mrz),
+        // MrzView(result.mrz),
       ],
     );
   }

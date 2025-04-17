@@ -1,12 +1,12 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeCheckOnImage(String uriPath) async {
-    CheckScanResult result = await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
-    if (result.operationResult == OperationResult.SUCCESS) {
+  CheckScanningResult result = await ScanbotSdkRecognizeOperations.recognizeCheckOnImage(uriPath);
+    if (result.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
       //  ...
     }
 }
 
-String formatCheckResult(CheckScanResult result) {
+String formatCheckResult(CheckScanningResult result) {
     return "CheckType FullName: ${result.check?.type.fullName}";
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-VinScannerConfiguration vinScannerConfigurationSnippet() {
-  return VinScannerConfiguration()
+VinScannerJsonConfiguration vinScannerConfigurationSnippet() {
+  return VinScannerJsonConfiguration()
   // Behavior configuration:
   // e.g. set the maximum number of accumulated frames.
-  ..minimumNumberOfRequiredFramesWithEqualRecognitionResult = 4
+  // ..minimumNumberOfRequiredFramesWithEqualRecognitionResult = 4
 
   // UI configuration:
   ..topBarBackgroundColor = Colors.red
@@ -20,7 +21,7 @@ VinScannerConfiguration vinScannerConfigurationSnippet() {
 Future<void> runVinScanner() async {
   var config = vinScannerConfigurationSnippet();
   var result = await ScanbotSdkUi.startVinScanner(config);
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     // ...
   }
 }

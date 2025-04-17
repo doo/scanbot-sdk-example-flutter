@@ -1,8 +1,9 @@
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
-BarcodeScannerConfiguration topBarConfigSnippet() {
+BarcodeScannerScreenConfiguration rtuUiTopBarConfiguration() {
   // Create the default configuration object.
-  var configuration = BarcodeScannerConfiguration();
+  var configuration = BarcodeScannerScreenConfiguration();
 
   // Configure the top bar.
 
@@ -21,11 +22,11 @@ BarcodeScannerConfiguration topBarConfigSnippet() {
 
   // Configure other parameters as needed.
 
-  return BarcodeScannerConfiguration();
+  return configuration;
 }
 
 Future<void> runBarcodeScanner() async {
-  var configuration = topBarConfigSnippet();
+  var configuration = rtuUiTopBarConfiguration();
   var result = await ScanbotSdkUiV2.startBarcodeScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // TODO: present barcode result as needed

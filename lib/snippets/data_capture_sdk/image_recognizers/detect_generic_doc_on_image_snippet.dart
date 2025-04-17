@@ -1,12 +1,12 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeGenericDocumentOnImage(String uriPath) async {
-    GenericDocumentRecognizerResult result = await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(uriPath);
-    if (result.operationResult == OperationResult.SUCCESS && result.status == GenericDocumentRecognitionStatus.Success) {
+  DocumentDataExtractionResult result = await ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(uriPath);
+    if (result.status == DocumentDataExtractionStatus.SUCCESS) {
       //  ...
     }
 }
 
-String formatGenericDocumentResult(GenericDocumentRecognizerResult result) {
+String formatGenericDocumentResult(DocumentDataExtractionResult result) {
     return "DocumentType: ${result.document?.type.fullName}";
 }

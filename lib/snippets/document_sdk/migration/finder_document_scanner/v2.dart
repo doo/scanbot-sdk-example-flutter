@@ -13,7 +13,7 @@ Future<void> finderDocumentScanner() async {
 
   var viewFinder = cameraScreenConfiguration.viewFinder;
   viewFinder.visible = true;
-  viewFinder.aspectRatio = AspectRatio(width: 3, height: 4);
+  // viewFinder.aspectRatio = AspectRatio(width: 3, height: 4);
 
   var bottomBar = cameraScreenConfiguration.bottomBar;
   bottomBar.previewButton = NoButtonMode();
