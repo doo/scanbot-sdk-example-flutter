@@ -5,10 +5,9 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 DocumentScannerConfiguration documentConfigurationSnippet() {
   return DocumentScannerConfiguration(
     bottomBarBackgroundColor: const Color(0xFFc8193c),
-    ignoreBadAspectRatio: true,
+    ignoreOrientationMismatch: true,
     multiPageEnabled: true,
     maxNumberOfPages: 3,
-    flashEnabled: true,
     autoSnappingSensitivity: 0.7,
     cameraPreviewMode: CameraPreviewMode.FIT_IN,
     orientationLockMode: OrientationLockMode.PORTRAIT,

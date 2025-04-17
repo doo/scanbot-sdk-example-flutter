@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material;
 import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
 
@@ -37,7 +38,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
         children: <Widget>[
           Expanded(
             child: Container(
-              padding: const EdgeInsets.all(8.0),
+              padding: const material.EdgeInsets.all(8.0),
               child: GridView.builder(
                 scrollDirection: Axis.vertical,
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -138,9 +139,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     try {
       var result = await scannerFunction();
       if (result.status == OperationStatus.OK &&
-          result.value != null) {
+          result.data != null) {
         setState(() {
-          documentData = result.value!;
+          documentData = result.data!;
         });
       }
     } catch (e) {
@@ -154,13 +155,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     );
 
     var loadedData = await ScanbotSdk.document.loadDocument(documentData.uuid);
-    if(loadedData.value == null) {
-      Navigator.of(context).pop();
-    } else {
-      setState(() {
-        documentData = loadedData.value!;
-      });
-    }
+    setState(() {
+      documentData = loadedData;
+    });
   }
 
   Future<void> _continueScanning() async {
@@ -176,65 +173,42 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
 
     if (response?.path.isNotEmpty ?? false) {
       var result = await ScanbotSdk.document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));
-      if (result.status == OperationStatus.OK &&
-          result.value != null) {
-        setState(() {
-          documentData = result.value!;
-        });
-      }
+      setState(() {
+        documentData = result;
+      });
     }
   }
 
   Future<void> _deleteAllPages() async {
     var result = await ScanbotSdk.document.removeAllPages(documentData.uuid);
-    if (result.status == OperationStatus.OK &&
-        result.value != null) {
-      setState(() {
-        documentData = result.value!;
-      });
-    }
+    setState(() {
+      documentData = result;
+    });
   }
 
   Future<void> _saveDocumentAsPDF() async {
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid));
-    if (result.status == OperationStatus.OK &&
-        result.value != null) {
-      await showAlertDialog(context, 'Pdf File created: ${result.value?.pdfFileUri}', title: 'Result');
-    }
-    Navigator.pop(context);
+    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: PdfConfiguration()));
+    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
-    var pdfOptions = scanbot_sdk.PdfRenderingOptions(
-      pageSize: scanbot_sdk.PageSize.A4,
-      pageDirection: scanbot_sdk.PageDirection.PORTRAIT,
-      ocrConfiguration: scanbot_sdk.OcrOptions(engineMode: scanbot_sdk.OcrEngine.SCANBOT_OCR)
+    var pdfOptions = PdfConfiguration(
+      pageSize: PageSize.A4,
+      pageDirection: PageDirection.PORTRAIT,
     );
 
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, options: pdfOptions));
-    if (result.status == OperationStatus.OK &&
-        result.value != null) {
-      await showAlertDialog(context, 'Pdf File created: ${result.value?.pdfFileUri}', title: 'Result');
-    }
-    Navigator.pop(context);
+    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: pdfOptions, ocrConfiguration: scanbot_sdk.OcrOptions(engineMode: scanbot_sdk.OcrEngine.SCANBOT_OCR)));
+    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
-    var options = scanbot_sdk.TiffCreationOptions.withScanbotBinarizationFilter(ScanbotBinarizationFilter(), dpi: 300, compression: scanbot_sdk.TiffCompression.CCITT_T6);
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, options: options));
-    if (result.status == OperationStatus.OK &&
-        result.value != null) {
-      await showAlertDialog(context, 'Tiff Binarized File created: ${result.value?.tiffFileUri}', title: 'Result');
-    }
-    Navigator.pop(context);
+    var options = TiffGeneratorParameters(binarizationFilter: ScanbotBinarizationFilter(), dpi: 300, compression: CompressionMode.CCITT_T6);
+    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: options));
+    await showAlertDialog(context, 'Tiff Binarized File created: ${result.tiffFileUri}', title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFF() async {
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid));
-    if (result.status == OperationStatus.OK &&
-        result.value != null) {
-      await showAlertDialog(context, 'Tiff File created: ${result.value?.tiffFileUri}', title: 'Result');
-    }
-    Navigator.pop(context);
+    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: TiffGeneratorParameters()));
+    await showAlertDialog(context, 'Tiff File created: ${result.tiffFileUri}', title: 'Result');
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
+import '../../utility/utils.dart';
 import 'generic_document_preview.dart';
 
 class MrzDocumentResultPreview extends StatefulWidget {
-  final MrzScanningResult? result;
+  final MrzScannerUiResult result;
 
   MrzDocumentResultPreview(
     this.result,
@@ -19,28 +20,9 @@ class _MrzDocumentResultPreviewState extends State<MrzDocumentResultPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(),
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: const Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-          ),
-          backgroundColor: Colors.white,
-          title: const Text(
-            'Mrz Result',
-            style: TextStyle(
-              inherit: true,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        body: widget.result?.document != null
-            ? MrzView(widget.result!.document!)
+        appBar: ScanbotAppBar('Mrz Result', showBackButton: true, context: context),
+        body: widget.result.mrzDocument != null
+            ? MrzView(MRZ(widget.result.mrzDocument!))
             : Container());
   }
 }

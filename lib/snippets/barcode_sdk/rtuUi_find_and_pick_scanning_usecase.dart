@@ -1,8 +1,9 @@
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
-BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
+BarcodeScannerScreenConfiguration rtuUiFindAndPickModeUseCase() {
   // Create the default configuration object.
-  var configuration = BarcodeScannerConfiguration();
+  var configuration = BarcodeScannerScreenConfiguration();
 
   // Initialize the use case for find and pick scanning.
   var scanningMode = FindAndPickScanningMode();
@@ -10,7 +11,7 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
   // Set the sheet mode for the barcodes preview.
   scanningMode.sheet.mode = SheetMode.COLLAPSED_SHEET;
 
-  // Enable the AR Overlay
+  // Enable AR Overlay
   scanningMode.arOverlay.visible = true;
 
   // Enable/Disable the automatic selection.
@@ -27,7 +28,8 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
 
   // Configure the submit button.
   scanningMode.sheetContent.submitButton.text = "Submit";
-  scanningMode.sheetContent.submitButton.foreground.color = ScanbotColor("#000000");
+  scanningMode.sheetContent.submitButton.foreground.color =
+      ScanbotColor("#000000");
 
   // Configure other parameters, pertaining to findAndPick-scanning mode as needed.
   // Set the expected barcodes.
@@ -36,13 +38,13 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
         barcodeValue: "123456",
         title: "numeric barcode",
         image:
-            "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+        "https://avatars.githubusercontent.com/u/1454920",
         count: 4),
     ExpectedBarcode(
         barcodeValue: "SCANBOT",
         title: "value barcode",
         image:
-            "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+        "https://avatars.githubusercontent.com/u/1454920",
         count: 3)
   ];
 
@@ -54,7 +56,7 @@ BarcodeScannerConfiguration findAndPickModeUseCaseSnippet() {
 }
 
 Future<void> runBarcodeScanner() async {
-  var configuration = findAndPickModeUseCaseSnippet();
+  var configuration = rtuUiFindAndPickModeUseCase();
   var result = await ScanbotSdkUiV2.startBarcodeScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // TODO: present barcode result as needed

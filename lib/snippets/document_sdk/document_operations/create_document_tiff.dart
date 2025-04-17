@@ -7,10 +7,8 @@ Future<void> createDocumentTIFF() async {
   );
   /** Create a TIFF file with the provided options */
   var params = TIFFFromDocumentParams(
-    documentID: document.value!.uuid,
-    options: TiffCreationOptions(
-      dpi: 300,
-    )
+    documentID: document.uuid,
+    configuration: TiffGeneratorParameters()
   );
   var tiffUriResult = await ScanbotSdk.document.createTIFFForDocument(params);
 }

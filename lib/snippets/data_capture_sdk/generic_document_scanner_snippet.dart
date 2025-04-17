@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-GenericDocumentRecognizerConfiguration genericDocumentRecognizerConfigurationSnippet() {
-  var config = GenericDocumentRecognizerConfiguration(
+DocumentDataExtractorScreenJsonConfiguration genericDocumentRecognizerConfigurationSnippet() {
+  var config = DocumentDataExtractorScreenJsonConfiguration(
       acceptedDocumentTypes: [
-        GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
-        GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
-        GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
-        GenericDocumentType.DE_DRIVER_LICENSE_BACK,
-        GenericDocumentType.DE_ID_CARD_FRONT,
-        GenericDocumentType.DE_ID_CARD_BACK,
-        GenericDocumentType.DE_PASSPORT,
+        // GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
+        // GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
+        // GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
+        // GenericDocumentType.DE_DRIVER_LICENSE_BACK,
+        // GenericDocumentType.DE_ID_CARD_FRONT,
+        // GenericDocumentType.DE_ID_CARD_BACK,
+        // GenericDocumentType.DE_PASSPORT,
       ],
       topBarBackgroundColor: Colors.red,
       fieldConfidenceLowColor: Colors.blue,
@@ -61,21 +62,17 @@ GenericDocumentRecognizerConfiguration genericDocumentRecognizerConfigurationSni
   return config;
 }
 
-
 Future<void> runDocumentPageScanner() async {
   var config = genericDocumentRecognizerConfigurationSnippet();
-  var result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
+  var result = await ScanbotSdkUi.showDocumentDataExtractor(config);
 
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     GenericDocumentWrapper? wrappedDocument;
-
-    for (var document in result.documents) {
-      wrappedDocument = _wrapDocument(document);
+      wrappedDocument = _wrapDocument(result.data!.document!);
       if (wrappedDocument != null) {
         // Perform operations with `wrappedDocument` if needed
-        break; // Exit loop if the document is successfully wrapped
+        // Exit loop if the document is successfully wrapped
       }
-    }
   }
 }
 

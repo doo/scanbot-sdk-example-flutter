@@ -1,20 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
 
-import '../../main.dart';
+import '../../utility/utils.dart';
 
 class MedicalCertificatePreviewWidget extends StatelessWidget {
-  final MedicalCertificateResult preview;
+  final MedicalCertificateScanningResult preview;
 
   MedicalCertificatePreviewWidget(this.preview);
 
   @override
   Widget build(BuildContext context) {
     var widgets = <Widget>[];
-    for (var element in preview.checkboxes!) {
+    for (var element in preview.checkBoxes!) {
       widgets.add(McInfoboxFieldItemWidget(element));
     }
     for (var element in preview.patientInfoBox!.fields) {
@@ -23,28 +23,9 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
     for (var element in preview.dates!) {
       widgets.add(McDateRecordFieldItemWidget(element));
     }
-    widgets.add(getImageContainer(preview.croppedDocumentURI));
+    // widgets.add(getImageContainer(preview.croppedImage));
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Scanned Certificate',
-          style: TextStyle(
-            inherit: true,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      appBar: ScanbotAppBar('Scanned Certificate', showBackButton: true, context: context),
       body: ListView.builder(
         itemBuilder: (context, position) {
           return widgets[position];
@@ -91,7 +72,7 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              field.patientInfoFieldType.name,
+              field.type.name,
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -111,7 +92,7 @@ class McPatientInfoFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (field.confidenceValue).toString(),
+              (field.recognitionConfidence).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -148,7 +129,7 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (checkbox.hasContents).toString(),
+              (checkbox.type).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -158,7 +139,7 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (checkbox.contentsValidationConfidenceValue).toString(),
+              (checkbox.checkedConfidence).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -172,7 +153,7 @@ class McInfoboxFieldItemWidget extends StatelessWidget {
 }
 
 class McDateRecordFieldItemWidget extends StatelessWidget {
-  final DateRecord field;
+  final MedicalCertificateDateRecord field;
 
   McDateRecordFieldItemWidget(this.field);
 
@@ -195,7 +176,7 @@ class McDateRecordFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (field.dateString).toString(),
+              (field.type).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,
@@ -205,7 +186,7 @@ class McDateRecordFieldItemWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              (field.recognitionConfidenceValue).toString(),
+              (field.recognitionConfidence).toString(),
               style: const TextStyle(
                 inherit: true,
                 color: Colors.black,

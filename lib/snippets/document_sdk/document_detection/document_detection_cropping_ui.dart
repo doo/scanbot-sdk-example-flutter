@@ -20,8 +20,8 @@ Future<void> startDocumentDetectionWithCroppingScreen(String imageFilePath) asyn
   var document = await ScanbotSdk.document.createDocument(params);
   /** Create a new configuration with the document and the document's first page. */
   var configuration = CroppingConfiguration(
-    documentUuid: document.value!.uuid,
-    pageUuid: document.value!.pages[0].uuid,
+    documentUuid: document.uuid,
+    pageUuid: document.pages[0].uuid,
   );
   /* Customize the configuration. */
   configuration.cropping.bottomBar.rotateButton.visible = false;

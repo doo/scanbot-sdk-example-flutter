@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-HealthInsuranceScannerConfiguration healthInsuranceScannerConfigurationSnippet() {
-  return HealthInsuranceScannerConfiguration()
+HealthInsuranceCardScannerJsonConfiguration healthInsuranceScannerConfigurationSnippet() {
+  return HealthInsuranceCardScannerJsonConfiguration()
   // Behavior configuration:
   // e.g. turn on the flashlight.
   ..flashEnabled = true
@@ -21,7 +22,7 @@ HealthInsuranceScannerConfiguration healthInsuranceScannerConfigurationSnippet()
 Future<void> runEhicScanner() async {
   var config = healthInsuranceScannerConfigurationSnippet();
   var result = await ScanbotSdkUi.startEhicScanner(config);
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.status == OperationStatus.OK) {
     // ...
   }
 }

@@ -7,13 +7,13 @@ Future<void> applyFiltersAndRotateScannedPage() async {
   );
 
   /** Get the first page of the document */
-  var page = document.value!.pages[0];
+  var page = document.pages[0];
   /**
    * Apply ScanbotBinarizationFilter to the page
    * Rotate the page clockwise by 90 degrees
    */
   var params = ModifyPageParams(
-    documentID: document.value!.uuid,
+    documentID: document.uuid,
     pageID: page.uuid,
     filters: [ScanbotBinarizationFilter()],
     rotation: PageRotation.CLOCKWISE_90

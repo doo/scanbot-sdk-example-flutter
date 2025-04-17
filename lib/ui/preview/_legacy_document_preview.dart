@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:scanbot_sdk/core.dart';
+
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+
 import 'package:scanbot_sdk_example_flutter/ui/progress_dialog.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
-import '../../main.dart';
 import '../../storage/_legacy_pages_repository.dart';
 import '../filter_page/filter_button_widget.dart';
 import '../_legacy_operations_page_widget.dart';
@@ -29,19 +32,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Image results',
-          style: TextStyle(
-            inherit: true,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      appBar: ScanbotAppBar('Image results', showBackButton: true, context: context),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -54,7 +45,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
                 ),
                 itemBuilder: (context, position) {
                   final imageUri =
-                      _pages[position].documentPreviewImageFileUri!;
+                  _pages[position].documentPreviewImageFileUri!;
                   final pageView = shouldInitWithEncryption
                       ? EncryptedPageWidget(imageUri)
                       : PageWidget(imageUri);
@@ -332,7 +323,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
+                        ImageFilterType.LOW_LIGHT_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -341,7 +332,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
+                        ImageFilterType.LOW_LIGHT_BINARIZATION_2.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -350,7 +341,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
                   applyParametricFilters(_pages, [
                     LegacyFilter(
                         filterType:
-                            ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
+                        ImageFilterType.SENSITIVE_BINARIZATION.typeIndex)
                   ]);
                 }),
             FilterButton(
@@ -411,7 +402,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     try {
       await Future.wait(
         pages.map(
-            (page) => ScanbotSdk.applyImageFilter(page, parametricFilters)),
+                (page) => ScanbotSdk.applyImageFilter(page, parametricFilters)),
       );
       _updatePagesList();
       Navigator.pop(context);
@@ -428,7 +419,6 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
       final config = DocumentScannerConfiguration(
         orientationLockMode: OrientationLockMode.PORTRAIT,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
-        ignoreBadAspectRatio: true,
         multiPageEnabled: false,
         multiPageButtonHidden: true,
       );
@@ -494,7 +484,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
       dialog.show();
       var options = const PdfRenderingOptions(pageSize: PageSize.A4);
       final pdfFileUri =
-          await ScanbotSdk.createPdf(_pageRepository.pages, options);
+      await ScanbotSdk.createPdf(_pageRepository.pages, options);
       await dialog.hide();
       await showAlertDialog(context, pdfFileUri.toString(),
           title: 'PDF file URI');
@@ -551,7 +541,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     try {
       var options = optionsProvider();
       final tiffFileUri =
-          await ScanbotSdk.createTiff(_pageRepository.pages, options);
+      await ScanbotSdk.createTiff(_pageRepository.pages, options);
       await dialog.hide();
       await showAlertDialog(context, tiffFileUri.toString(),
           title: 'TIFF file URI');
@@ -578,7 +568,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
 
   Future<void> _createTiffWithoutBinarization() async {
     await _createTiff(
-        () => TiffCreationOptions(dpi: 200, compression: TiffCompression.LZW));
+            () => TiffCreationOptions(dpi: 200, compression: TiffCompression.LZW));
   }
 
   Future<void> _performOcr() async {
@@ -619,8 +609,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     dialog.show();
     try {
       var pdfFileUri = await ScanbotSdk.createPdf(
-          _pages, const PdfRenderingOptions(),
-          shouldGeneratePdfWithOcr: true);
+          _pages, PdfRenderingOptions(ocrConfiguration: OcrOptions(engineMode: OcrEngine.SCANBOT_OCR)));
       await showAlertDialog(context, pdfFileUri.toString(),
           title: 'PDF file URI');
       await dialog.hide();

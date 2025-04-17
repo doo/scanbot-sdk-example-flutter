@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/menu_item_widget.dart';
@@ -24,9 +25,9 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const TitleItemWidget(title: 'Legacy Scanners'),
-        BuildMenuItem(context, 'Scan Documents', _startDocumentScanning),
-        BuildMenuItem(context, 'Scan Finder Documents', _startFinerDocumentScanner),
-        BuildMenuItem(context, 'Import Image', _importImage),
+        MenuItemWidget(title: 'Scan Documents', onTap: () => _startDocumentScanning(context)),
+        MenuItemWidget(title: 'Scan Finder Documents', onTap: () => _startFinerDocumentScanner(context)),
+        MenuItemWidget(title: 'Import Image', onTap: () => _importImage(context)),
         MenuItemWidget(
           title: 'View Image Results',
           endIcon: Icons.keyboard_arrow_right,
@@ -54,7 +55,7 @@ class DocumentUseCasesLegacyWidget extends StatelessWidget {
   }
 
   void handleScanResult(BuildContext context, dynamic result) {
-    if (result.operationResult == OperationResult.SUCCESS) {
+    if (result.operationResult == OperationStatus.OK) {
       _pageRepository.addPages(result.pages);
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => LegacyDocumentPreview()),
