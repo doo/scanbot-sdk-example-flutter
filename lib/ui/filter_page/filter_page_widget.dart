@@ -28,7 +28,7 @@ class _PageFilteringState extends State<PageFiltering> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Filtering', context: context, showBackButton: true),
+      appBar: ScanbotAppBar('Filtering', context: context, showBackButton: true, onBack: () => Navigator.of(context).pop(_page)),
       body: FilterPreviewWidget(_page, _updatePage),
     );
   }

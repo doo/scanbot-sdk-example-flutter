@@ -95,7 +95,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
         },
         child: const Icon(
           Icons.arrow_back,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
       title: const Text(

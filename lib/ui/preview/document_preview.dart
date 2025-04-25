@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:image_picker/image_picker.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
 
-import '../../main.dart';
 import '../../utility/utils.dart';
 import '../operations_page_widget.dart';
 import '../pages_widget.dart';

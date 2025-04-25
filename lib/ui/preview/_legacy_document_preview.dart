@@ -400,10 +400,10 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     if (!await checkLicenseStatus(context)) return;
 
     try {
-      await Future.wait(
-        pages.map(
-                (page) => ScanbotSdk.applyImageFilter(page, parametricFilters)),
-      );
+        for (final page in pages) {
+          final filteredPage = await ScanbotSdk.applyImageFilter(page, parametricFilters);
+          await _pageRepository.updatePage(filteredPage);
+        }
       _updatePagesList();
       Navigator.pop(context);
     } catch (e) {
@@ -630,7 +630,6 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
   }
 
   Future<void> _updatePagesList() async {
-    await _pageRepository.loadPages();
     setState(() {
       _pages = _pageRepository.pages;
     });

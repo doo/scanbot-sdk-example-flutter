@@ -54,7 +54,7 @@ class _LegacyPageOperationsState extends State<LegacyPageOperations> {
         : PageWidget(imageUri);
 
     return Scaffold(
-      appBar: ScanbotAppBar('Image Preview', showBackButton: true, context: context, actions: [
+      appBar: ScanbotAppBar('Image Preview', context: context, showBackButton: true, onBack: () => Navigator.of(context).pop(_page), actions: [
         Padding(
           padding: const EdgeInsets.only(right: 20.0),
           child: GestureDetector(

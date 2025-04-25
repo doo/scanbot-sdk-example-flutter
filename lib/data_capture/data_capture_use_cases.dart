@@ -90,7 +90,7 @@ class DataCaptureUseCases extends StatelessWidget {
       await startRecognizer<MrzScannerResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdkRecognizeOperations.recognizeMrzOnImage(path),
+            ScanbotSdk.recognizeOperations.recognizeMrzOnImage(path),
         handleResult: (result) => handleRecognizedResult(
           context: context,
           isOperationSucceed: result.success,
@@ -103,7 +103,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<MedicalCertificateScanningResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdkRecognizeOperations.recognizeMedicalCertificateOnImage(path),
+            ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(path),
         handleResult: (result) => handleRecognizedResult(
             context: context,
             isOperationSucceed: result.scanningSuccessful,
@@ -116,7 +116,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<EuropeanHealthInsuranceCardRecognitionResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdkRecognizeOperations.recognizeHealthInsuranceCardOnImage(
+            ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(
                 path),
         handleResult: (result) =>
             handleRecognizedResult(
@@ -131,7 +131,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<DocumentDataExtractionResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdkRecognizeOperations.recognizeGenericDocumentOnImage(
+            ScanbotSdk.recognizeOperations.recognizeGenericDocumentOnImage(
                 path),
         handleResult: (result) =>
             handleRecognizedResult(
@@ -146,7 +146,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<CheckScanningResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdkRecognizeOperations.recognizeCheckOnImage(
+            ScanbotSdk.recognizeOperations.recognizeCheckOnImage(
                 path),
         handleResult: (result) =>
             handleRecognizedResult(
@@ -162,7 +162,10 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () =>
           ScanbotSdkUi.showDocumentDataExtractor(
-            DocumentDataExtractorScreenJsonConfiguration(),
+            DocumentDataExtractorScreenJsonConfiguration(
+                topBarBackgroundColor: ScanbotRedColor,
+                topBarButtonsActiveColor: Colors.white
+            ),
           ),
       handleResult: (result) =>  {
         if (result.status == OperationStatus.OK) {
@@ -181,7 +184,10 @@ class DataCaptureUseCases extends StatelessWidget {
         context: context,
         scannerFunction: () =>
             ScanbotSdkUi.startVinScanner(
-              VinScannerJsonConfiguration(),
+              VinScannerJsonConfiguration(
+                  topBarBackgroundColor: ScanbotRedColor,
+                  topBarButtonsActiveColor: Colors.white
+              ),
             ),
         handleResult: (result) =>  {
           if (result.status == OperationStatus.OK) {
@@ -196,7 +202,10 @@ class DataCaptureUseCases extends StatelessWidget {
         context: context,
         scannerFunction: () =>
             ScanbotSdkUi.startCheckScanner(
-              CheckScannerJsonConfiguration(),
+              CheckScannerJsonConfiguration(
+                  topBarBackgroundColor: ScanbotRedColor,
+                  topBarButtonsActiveColor: Colors.white
+              ),
             ),
         handleResult: (result) =>  {
           if (result.status == OperationStatus.OK) {
@@ -226,7 +235,11 @@ class DataCaptureUseCases extends StatelessWidget {
         context: context,
         scannerFunction: () =>
             ScanbotSdkUi.startMedicalCertificateScanner(
-              MedicalCertificateScannerJsonConfiguration(returnCroppedDocumentImage: false),
+              MedicalCertificateScannerJsonConfiguration(
+                  returnCroppedDocumentImage: false,
+                  topBarBackgroundColor: ScanbotRedColor,
+                  topBarButtonsActiveColor: Colors.white
+              ),
             ),
         handleResult: (result) =>  {
           if (result.status == OperationStatus.OK) {
@@ -255,7 +268,10 @@ class DataCaptureUseCases extends StatelessWidget {
     await startDetector<ResultWrapper<EuropeanHealthInsuranceCardRecognitionResult>>(
       context: context,
       scannerFunction: () => ScanbotSdkUi.startEhicScanner(
-          HealthInsuranceCardScannerJsonConfiguration()
+          HealthInsuranceCardScannerJsonConfiguration(
+              topBarBackgroundColor: ScanbotRedColor,
+              topBarButtonsActiveColor: Colors.white
+          )
       ),
       handleResult: (result)  {
         if (result.status == OperationStatus.OK) {

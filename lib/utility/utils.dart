@@ -21,7 +21,13 @@ const AppBarTitleTextStyle = TextStyle(
   fontFamily: 'Roboto',
 );
 
-AppBar ScanbotAppBar(String title, {bool showBackButton = false, BuildContext? context, List<Widget>? actions}) {
+AppBar ScanbotAppBar(
+    String title, {
+      bool showBackButton = false,
+      BuildContext? context,
+      VoidCallback? onBack,
+      List<Widget>? actions,
+    }) {
   return AppBar(
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -29,13 +35,13 @@ AppBar ScanbotAppBar(String title, {bool showBackButton = false, BuildContext? c
     backgroundColor: ScanbotRedColor,
     leading: showBackButton && context != null
         ? GestureDetector(
-      onTap: () => Navigator.of(context).pop(),
+      onTap: onBack ?? () => Navigator.of(context).pop(),
       child: const Icon(Icons.arrow_back, color: Colors.white),
     )
         : null,
     title: Text(
       title,
-      style: AppBarTitleTextStyle
+      style: AppBarTitleTextStyle,
     ),
     actions: actions,
   );
