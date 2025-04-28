@@ -27,6 +27,7 @@ class DataCaptureUseCases extends StatelessWidget {
         MenuItemWidget(title: "Recognize EHIC from Still Image", onTap: () => _recognizeHealthInsuranceCardOnImage(context)),
         MenuItemWidget(title: "Recognize Generic Document from Still Image", onTap: () => _recognizeGenericDocumentOnImage(context)),
         MenuItemWidget(title: "Recognize Check from Still Image", onTap: () => _recognizeCheckOnImage(context)),
+        MenuItemWidget(title: "Recognize Credit Card from Still Image", onTap: () => _recognizeCreditCardOnImage(context)),
         const TitleItemWidget(title: 'Data Detectors'),
         MenuItemWidget(title: "Scan Generic Document", onTap: () => _startDocumentDataExtractorScanner(context)),
         MenuItemWidget(title: "Scan MRZ (Machine Readable Zone)", onTap: () => startMRZScanner(context)),
@@ -157,6 +158,21 @@ class DataCaptureUseCases extends StatelessWidget {
             ));
   }
 
+  Future<void> _recognizeCreditCardOnImage(BuildContext context) async {
+    await startRecognizer<CreditCardScanningResult>(
+        context: context,
+        scannerFunction: (path) =>
+            ScanbotSdk.recognizeOperations.recognizeCreditCardOnImage(
+                path),
+        handleResult: (result) =>
+            handleRecognizedResult(
+              context: context,
+              isOperationSucceed: result.scanningStatus == CreditCardScanningStatus.SUCCESS,
+              dataTitle:  "Credit Card",
+              resultTextToShow: "Success",
+            ));
+  }
+
   Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
     await startDetector<ResultWrapper<DocumentDataExtractionResult>>(
       context: context,
@@ -253,7 +269,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
         context: context,
         scannerFunction: () =>
-            ScanbotSdkUi.startCreditScanner(
+            ScanbotSdkUi.startCreditCardScanner(
               CreditCardScannerScreenConfiguration(),
             ),
         handleResult: (result) =>  {

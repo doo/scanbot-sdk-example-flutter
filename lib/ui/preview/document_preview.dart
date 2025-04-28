@@ -152,6 +152,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       MaterialPageRoute(builder: (context) => PageOperations(documentData.uuid, page)),
     );
 
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     var loadedData = await ScanbotSdk.document.loadDocument(documentData.uuid);
     setState(() {
       documentData = loadedData;
@@ -159,6 +162,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _continueScanning() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     await startScan(
       context: context,
       scannerFunction: () =>
@@ -167,6 +173,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _addPage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     final response = await selectImageFromLibrary();
 
     if (response?.path.isNotEmpty ?? false) {
@@ -178,6 +187,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _deleteAllPages() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     var result = await ScanbotSdk.document.removeAllPages(documentData.uuid);
     setState(() {
       documentData = result;
@@ -185,11 +197,17 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _saveDocumentAsPDF() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: PdfConfiguration()));
     await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     var pdfOptions = PdfConfiguration(
       pageSize: PageSize.A4,
       pageDirection: PageDirection.PORTRAIT,
@@ -200,12 +218,19 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
     var options = TiffGeneratorParameters(binarizationFilter: ScanbotBinarizationFilter(), dpi: 300, compression: CompressionMode.CCITT_T6);
     var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: options));
     await showAlertDialog(context, 'Tiff Binarized File created: ${result.tiffFileUri}', title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFF() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
     var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: TiffGeneratorParameters()));
     await showAlertDialog(context, 'Tiff File created: ${result.tiffFileUri}', title: 'Result');
   }

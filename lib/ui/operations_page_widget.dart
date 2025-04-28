@@ -199,7 +199,7 @@ class _PageOperationsState extends State<PageOperations> {
 
     /* Customize the configuration. */
     configuration.cropping.bottomBar.rotateButton.visible = false;
-    configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
+    configuration.appearance.topBarBackgroundColor = ScanbotColor("#C8193C");
     configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor('#ffffff');
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
