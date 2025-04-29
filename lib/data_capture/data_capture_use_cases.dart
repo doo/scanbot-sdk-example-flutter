@@ -25,7 +25,7 @@ class DataCaptureUseCases extends StatelessWidget {
         MenuItemWidget(title: "Recognize MRZ from Still Image", onTap: () => _recognizeMrzOnImage(context)),
         MenuItemWidget(title: "Recognize Medical Certificate from Still Image", onTap: () => _recognizeMedicalCertificateOnImage(context)),
         MenuItemWidget(title: "Recognize EHIC from Still Image", onTap: () => _recognizeHealthInsuranceCardOnImage(context)),
-        MenuItemWidget(title: "Recognize Generic Document from Still Image", onTap: () => _recognizeGenericDocumentOnImage(context)),
+        MenuItemWidget(title: "Recognize Generic Document from Still Image", onTap: () => _extractDocumentDataOnImage(context)),
         MenuItemWidget(title: "Recognize Check from Still Image", onTap: () => _recognizeCheckOnImage(context)),
         MenuItemWidget(title: "Recognize Credit Card from Still Image", onTap: () => _recognizeCreditCardOnImage(context)),
         const TitleItemWidget(title: 'Data Detectors'),
@@ -91,7 +91,7 @@ class DataCaptureUseCases extends StatelessWidget {
       await startRecognizer<MrzScannerResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeMrzOnImage(path),
+            ScanbotSdk.recognizeOperations.recognizeMrzOnImage(path, MrzScannerConfiguration(frameAccumulationConfiguration: AccumulatedResultsVerifierConfiguration(minimumNumberOfRequiredFramesWithEqualScanningResult: 1))),
         handleResult: (result) => handleRecognizedResult(
           context: context,
           isOperationSucceed: result.success,
@@ -104,7 +104,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<MedicalCertificateScanningResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(path),
+            ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(path, MedicalCertificateScanningParameters()),
         handleResult: (result) => handleRecognizedResult(
             context: context,
             isOperationSucceed: result.scanningSuccessful,
@@ -117,8 +117,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<EuropeanHealthInsuranceCardRecognitionResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(
-                path),
+            ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(path, EuropeanHealthInsuranceCardRecognizerConfiguration()),
         handleResult: (result) =>
             handleRecognizedResult(
                 context: context,
@@ -128,12 +127,11 @@ class DataCaptureUseCases extends StatelessWidget {
             ));
   }
 
-  Future<void> _recognizeGenericDocumentOnImage(BuildContext context) async {
+  Future<void> _extractDocumentDataOnImage(BuildContext context) async {
     await startRecognizer<DocumentDataExtractionResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeGenericDocumentOnImage(
-                path),
+            ScanbotSdk.recognizeOperations.extractDocumentDataOnImage(path, DocumentDataExtractorConfiguration(configurations: [])),
         handleResult: (result) =>
             handleRecognizedResult(
                 context: context,
@@ -147,8 +145,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<CheckScanningResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeCheckOnImage(
-                path),
+            ScanbotSdk.recognizeOperations.recognizeCheckOnImage(path, CheckScannerConfiguration()),
         handleResult: (result) =>
             handleRecognizedResult(
               context: context,
@@ -162,8 +159,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startRecognizer<CreditCardScanningResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeCreditCardOnImage(
-                path),
+            ScanbotSdk.recognizeOperations.recognizeCreditCardOnImage(path, CreditCardScannerConfiguration()),
         handleResult: (result) =>
             handleRecognizedResult(
               context: context,
@@ -269,7 +265,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
         context: context,
         scannerFunction: () =>
-            ScanbotSdkUi.startCreditCardScanner(
+            ScanbotSdkUiV2.startCreditCardScanner(
               CreditCardScannerScreenConfiguration(),
             ),
         handleResult: (result) =>  {

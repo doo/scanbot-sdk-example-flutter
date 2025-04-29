@@ -1,7 +1,7 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> _recognizeEhicOnImage(String uriPath) async {
-  EuropeanHealthInsuranceCardRecognitionResult result = await ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(uriPath);
+  EuropeanHealthInsuranceCardRecognitionResult result = await ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(uriPath, EuropeanHealthInsuranceCardRecognizerConfiguration());
     if (result.status == EuropeanHealthInsuranceCardRecognitionResultRecognitionStatus.SUCCESS) {
       //  ...
     }

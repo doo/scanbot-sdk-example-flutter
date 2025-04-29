@@ -482,9 +482,9 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     dialog.style(message: 'Creating PDF ...');
     try {
       dialog.show();
-      var options = const PdfRenderingOptions(pageSize: PageSize.A4);
+      var options = PdfConfiguration(pageSize: PageSize.A4);
       final pdfFileUri =
-      await ScanbotSdk.createPdf(_pageRepository.pages, options);
+      await ScanbotSdk.createPdf(_pageRepository.pages, options, null);
       await dialog.hide();
       await showAlertDialog(context, pdfFileUri.toString(),
           title: 'PDF file URI');
@@ -525,7 +525,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     }
   }
 
-  Future<void> _createTiff(TiffCreationOptions Function() optionsProvider) async {
+  Future<void> _createTiff(TiffGeneratorParameters Function() optionsProvider) async {
     if (!await _checkHasPages(context)) {
       return;
     }
@@ -553,22 +553,23 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
   }
 
   Future<void> _createTiffWithScanbotBinarization() async {
-    await _createTiff(() => TiffCreationOptions.withScanbotBinarizationFilter(
-        ScanbotBinarizationFilter(),
+    await _createTiff(() => TiffGeneratorParameters(
+        binarizationFilter: ScanbotBinarizationFilter(),
         dpi: 200,
-        compression: TiffCompression.CCITT_T4));
+        compression: CompressionMode.CCITT_T4));
   }
 
   Future<void> _createTiffWithLegacyBinarization() async {
-    await _createTiff(() => TiffCreationOptions.withLegacyImageFilterType(
-        LegacyBinarizationFilter.BINARIZED,
+    await _createTiff(() => TiffGeneratorParameters(
+        binarizationFilter: LegacyFilter(
+            filterType: ImageFilterType.BINARIZED.typeIndex),
         dpi: 200,
-        compression: TiffCompression.CCITT_T4));
+        compression: CompressionMode.CCITT_T4));
   }
 
   Future<void> _createTiffWithoutBinarization() async {
     await _createTiff(
-            () => TiffCreationOptions(dpi: 200, compression: TiffCompression.LZW));
+            () => TiffGeneratorParameters(dpi: 200, compression: CompressionMode.LZW));
   }
 
   Future<void> _performOcr() async {
@@ -608,8 +609,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     dialog.style(message: 'Performing OCR with PDF ...');
     dialog.show();
     try {
-      var pdfFileUri = await ScanbotSdk.createPdf(
-          _pages, PdfRenderingOptions(ocrConfiguration: OcrOptions(engineMode: OcrEngine.SCANBOT_OCR)));
+      var pdfFileUri = await ScanbotSdk.createPdf(_pages, PdfConfiguration(), OcrOptions(engineMode: OcrEngine.SCANBOT_OCR));
       await showAlertDialog(context, pdfFileUri.toString(),
           title: 'PDF file URI');
       await dialog.hide();
