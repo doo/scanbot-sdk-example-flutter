@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart' as scanbot_sdk;
 
 Future<void> runCroppingScreen(scanbot_sdk.Page page) async {
   var config = CroppingScreenConfiguration();
@@ -22,7 +22,7 @@ Future<void> runCroppingScreen(scanbot_sdk.Page page) async {
 
   var result = await ScanbotSdkUi.startCroppingScreen(page, config);
 
-  if (result.operationResult == OperationResult.SUCCESS) {
+  if (result.operationResult == OperationStatus.OK) {
     // ...
   }
 }

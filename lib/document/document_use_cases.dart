@@ -21,11 +21,11 @@ class DocumentUseCasesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const TitleItemWidget(title: 'Document Scanners (RTU v2.0)'),
-        BuildMenuItem(context, 'Single Page Scanning', _startSinglePageScanning),
-        BuildMenuItem(context, 'Single Page Scanning with Finder', _startSinglePageWithFinderScanning),
-        BuildMenuItem(context, 'Multi Page Scanning with Finder', _startMultiPageScanning),
-        BuildMenuItem(context, 'Clean stored documents', _cleanStoredDocuments),
-        BuildMenuItem(context, 'Pick From Gallery', _createDocumentFromImage),
+        MenuItemWidget(title: 'Single Page Scanning', onTap: () => _startSinglePageScanning(context)),
+        MenuItemWidget(title: 'Single Page Scanning with Finder', onTap: () => _startSinglePageWithFinderScanning(context)),
+        MenuItemWidget(title: 'Multi Page Scanning with Finder', onTap: () => _startMultiPageScanning(context)),
+        MenuItemWidget(title: 'Clean stored documents', onTap: () => _cleanStoredDocuments(context)),
+        MenuItemWidget(title: 'Pick From Gallery', onTap: () => _createDocumentFromImage(context)),
       ],
     );
   }
@@ -40,10 +40,10 @@ class DocumentUseCasesWidget extends StatelessWidget {
     try {
       var result = await scannerFunction();
       if (result.status == OperationStatus.OK &&
-          result.value != null) {
+          result.data != null) {
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DocumentPreview(result.value!),
+            builder: (context) => DocumentPreview(result.data!),
           ),
         );
       }
@@ -91,7 +91,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
         var result = await ScanbotSdk.document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DocumentPreview(result.value!),
+            builder: (context) => DocumentPreview(result),
           ),
         );
       }

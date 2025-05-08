@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/menu_item_widget.dart';
+import '../ui/preview/barcodes_result_preview.dart';
 import '../utility/utils.dart';
 
-import '../ui/preview/_legacy_barcode_preview.dart';
 import '../ui/preview/_legacy_document_preview.dart';
 import '../ui/preview/medical_certificate_preview.dart';
 
@@ -26,9 +27,9 @@ class CustomUiMenu extends StatelessWidget {
       appBar: ScanbotAppBar('Scanbot Custom UI Menu'),
       body: ListView(
         children: <Widget>[
-          BuildMenuItem(context, 'Scan Barcode', _startBarcodeCustomUIScanner),
-          BuildMenuItem(context, 'Scan Documents', _startDocumentsCustomUIScanner),
-          BuildMenuItem(context, 'Scan Medical Certificate', _startMedicalCertificateCustomUIScanner),
+          MenuItemWidget(title: 'Scan Barcode', onTap: () => _startBarcodeCustomUIScanner(context)),
+          MenuItemWidget(title: 'Scan Documents', onTap: () => _startDocumentsCustomUIScanner(context)),
+          MenuItemWidget(title: 'Scan Medical Certificate', onTap: () => _startMedicalCertificateCustomUIScanner(context)),
         ],
       ),
     );
@@ -39,10 +40,10 @@ class CustomUiMenu extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const BarcodeScannerWidget()),
     );
 
-    if (result is BarcodeScanningResult) {
+    if (result is BarcodeScannerResult) {
       await Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (context) => BarcodesResultPreviewWidget(result)),
+            builder: (context) => BarcodesResultPreviewWidget(result.barcodes)),
       );
     }
   }
@@ -65,7 +66,7 @@ class CustomUiMenu extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const MedicalCertificateScannerWidget()),
     );
 
-    if (result is MedicalCertificateResult) {
+    if (result is MedicalCertificateScanningResult) {
       await Navigator.of(context).push(
       MaterialPageRoute(
             builder: (context) => MedicalCertificatePreviewWidget(result)),

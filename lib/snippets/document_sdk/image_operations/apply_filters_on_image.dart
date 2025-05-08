@@ -8,7 +8,7 @@ Future<void> applyFiltersOnImage(String imageFileUri) async {
   );
   /** Rotate the page counterclockwise by 90 degrees */
   var rotatedImage = await ScanbotSdk.imageOperations.rotateImage(
-    imageWithFilters.value!.imageFileUri,
+    imageWithFilters.imageFileUri,
     90,
   );
 }

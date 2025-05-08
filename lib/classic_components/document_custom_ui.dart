@@ -7,10 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
-import '../../main.dart';
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/pages_widget.dart';
 import '../ui/preview/_legacy_document_preview.dart';
+import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
 class DocumentScannerWidget extends StatefulWidget {
@@ -85,21 +85,26 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(),
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
+      backgroundColor: ScanbotRedColor,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
         child: const Icon(
           Icons.arrow_back,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
-      backgroundColor: Colors.white,
       title: const Text(
         'Scan Documents',
         style: TextStyle(
-          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+          fontFamily: 'Roboto',
         ),
       ),
       actions: _buildAppBarActions(),

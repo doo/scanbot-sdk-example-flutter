@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import '../storage/_legacy_pages_repository.dart';
+import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
@@ -62,11 +63,18 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(color: Colors.black),
-      backgroundColor: Colors.white,
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
+      backgroundColor: ScanbotRedColor,
       title: const Text(
         'Crop document',
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+          fontFamily: 'Roboto',
+        ),
       ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),

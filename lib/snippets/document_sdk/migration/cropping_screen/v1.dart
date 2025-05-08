@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart' show Colors;
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> croppingScreen(Page page) async{
   var configuration = CroppingScreenConfiguration(

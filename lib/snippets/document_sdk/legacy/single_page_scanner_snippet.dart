@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> runSinglePageScanner() async {
   var config = DocumentScannerConfiguration();
