@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 CheckScannerJsonConfiguration checkScannerConfigurationSnippet() {

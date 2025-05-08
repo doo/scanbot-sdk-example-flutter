@@ -5,13 +5,13 @@ import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 DocumentDataExtractorScreenJsonConfiguration genericDocumentRecognizerConfigurationSnippet() {
   var config = DocumentDataExtractorScreenJsonConfiguration(
       acceptedDocumentTypes: [
-        // GenericDocumentType.DE_RESIDENCE_PERMIT_FRONT,
-        // GenericDocumentType.DE_RESIDENCE_PERMIT_BACK,
-        // GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
-        // GenericDocumentType.DE_DRIVER_LICENSE_BACK,
-        // GenericDocumentType.DE_ID_CARD_FRONT,
-        // GenericDocumentType.DE_ID_CARD_BACK,
-        // GenericDocumentType.DE_PASSPORT,
+        DocumentDataType.DE_RESIDENCE_PERMIT_FRONT,
+        DocumentDataType.DE_RESIDENCE_PERMIT_BACK,
+        DocumentDataType.DE_DRIVER_LICENSE_FRONT,
+        DocumentDataType.DE_DRIVER_LICENSE_BACK,
+        DocumentDataType.DE_ID_CARD_FRONT,
+        DocumentDataType.DE_ID_CARD_BACK,
+        DocumentDataType.DE_PASSPORT,
       ],
       topBarBackgroundColor: Colors.red,
       fieldConfidenceLowColor: Colors.blue,
