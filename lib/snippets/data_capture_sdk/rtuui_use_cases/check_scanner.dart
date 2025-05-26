@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-CheckScannerJsonConfiguration checkScannerConfigurationSnippet() {
-  return CheckScannerJsonConfiguration(
+CheckScannerScreenConfiguration checkScannerConfigurationSnippet() {
+  return CheckScannerScreenConfiguration(
       // Behavior configuration:
       // e.g. disable capturing the photo to recognize on live video stream
       captureHighResolutionImage: false,

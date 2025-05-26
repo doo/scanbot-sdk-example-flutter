@@ -1,7 +1,7 @@
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> runSinglePageAutoSnap() async {
-  var config = DocumentScannerConfiguration();
+  var config = DocumentScannerScreenConfiguration();
 
   config.autoSnappingButtonTitle = "Auto-Snap";
   config.autoSnappingButtonHidden = false;

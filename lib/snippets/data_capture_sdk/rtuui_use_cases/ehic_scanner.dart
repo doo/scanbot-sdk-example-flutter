@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-HealthInsuranceCardScannerJsonConfiguration healthInsuranceScannerConfigurationSnippet() {
-  return HealthInsuranceCardScannerJsonConfiguration()
+HealthInsuranceCardScannerConfiguration healthInsuranceScannerConfigurationSnippet() {
+  return HealthInsuranceCardScannerConfiguration()
   // Behavior configuration:
   // e.g. turn on the flashlight.
   ..flashEnabled = true

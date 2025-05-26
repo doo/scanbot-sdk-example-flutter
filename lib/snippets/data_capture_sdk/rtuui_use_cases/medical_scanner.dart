@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-MedicalCertificateScannerJsonConfiguration medicalCertificateScannerConfigurationSnippet() {
-  return MedicalCertificateScannerJsonConfiguration()
+MedicalCertificateScannerConfiguration medicalCertificateScannerConfigurationSnippet() {
+  return MedicalCertificateScannerConfiguration()
     // Behavior configuration:
     // e.g. disable recognition of patient's personal information.
     // ..recognizePatientInfo = false

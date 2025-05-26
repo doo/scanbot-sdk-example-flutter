@@ -1,7 +1,7 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeGenericDocumentOnImage(String uriPath) async {
-  DocumentDataExtractionResult result = await ScanbotSdk.recognizeOperations.extractDocumentDataOnImage(uriPath, DocumentDataExtractorConfiguration(configurations: []));
+  DocumentDataExtractionResult result = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(uriPath, DocumentDataExtractorConfiguration(configurations: []));
     if (result.status == DocumentDataExtractionStatus.SUCCESS) {
       //  ...
     }

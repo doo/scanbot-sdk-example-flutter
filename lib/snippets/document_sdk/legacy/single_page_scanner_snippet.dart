@@ -1,7 +1,7 @@
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> runSinglePageScanner() async {
-  var config = DocumentScannerConfiguration();
+  var config = DocumentScannerScreenConfiguration();
   config.multiPageEnabled = false;
   config.multiPageButtonHidden = true;
 

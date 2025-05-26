@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> runMultiPageScanner() async {
-  var config = DocumentScannerConfiguration();
+  var config = DocumentScannerScreenConfiguration();
   config.multiPageEnabled = true;
   config.multiPageButtonHidden = false;
   config.shutterButtonAutoInnerColor = Colors.red;

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-DocumentScannerConfiguration documentConfigurationSnippet() {
-  return DocumentScannerConfiguration(
+DocumentScannerScreenConfiguration documentConfigurationSnippet() {
+  return DocumentScannerScreenConfiguration(
     bottomBarBackgroundColor: const Color(0xFFc8193c),
     ignoreOrientationMismatch: true,
     multiPageEnabled: true,

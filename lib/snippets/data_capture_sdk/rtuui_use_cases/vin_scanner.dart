@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-VinScannerJsonConfiguration vinScannerConfigurationSnippet() {
-  return VinScannerJsonConfiguration()
+VinScannerConfiguration vinScannerConfigurationSnippet() {
+  return VinScannerConfiguration()
   // Behavior configuration:
   // e.g. set the maximum number of accumulated frames.
   // ..minimumNumberOfRequiredFramesWithEqualRecognitionResult = 4

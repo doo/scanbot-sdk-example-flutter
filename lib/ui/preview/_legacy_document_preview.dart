@@ -416,7 +416,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
     if (!await checkLicenseStatus(context)) return;
 
     try {
-      final config = DocumentScannerConfiguration(
+      final config = DocumentScannerScreenConfiguration(
         orientationLockMode: OrientationLockMode.PORTRAIT,
         cameraPreviewMode: CameraPreviewMode.FIT_IN,
         multiPageEnabled: false,

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-DocumentDataExtractorScreenJsonConfiguration genericDocumentRecognizerConfigurationSnippet() {
-  var config = DocumentDataExtractorScreenJsonConfiguration(
+DocumentDataExtractorScreenConfiguration genericDocumentRecognizerConfigurationSnippet() {
+  var config = DocumentDataExtractorScreenConfiguration(
       acceptedDocumentTypes: [
         DocumentDataType.DE_RESIDENCE_PERMIT_FRONT,
         DocumentDataType.DE_RESIDENCE_PERMIT_BACK,
@@ -64,7 +64,7 @@ DocumentDataExtractorScreenJsonConfiguration genericDocumentRecognizerConfigurat
 
 Future<void> runDocumentPageScanner() async {
   var config = genericDocumentRecognizerConfigurationSnippet();
-  var result = await ScanbotSdkUi.showDocumentDataExtractor(config);
+  var result = await ScanbotSdkUi.startDocumentDataExtractor(config);
 
   if (result.status == OperationStatus.OK) {
     GenericDocumentWrapper? wrappedDocument;
