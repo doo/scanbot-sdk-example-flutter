@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 import '../../utility/utils.dart';
 
-class MedicalCertificatePreviewWidget extends StatelessWidget {
-  final MedicalCertificateScanningResult preview;
+class TextPatternScannerUiResultPreview extends StatelessWidget {
+  final TextPatternScannerUiResult result;
 
-  const MedicalCertificatePreviewWidget(this.preview, {super.key});
+  const TextPatternScannerUiResultPreview(this.result, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final checkBoxes = preview.checkBoxes;
-    final patientFields = preview.patientInfoBox.fields;
-    final dateFields = preview.dates;
-
     List<Widget> children = [];
 
     void addField(String title, String? value, double? confidence, {bool largeGap = false}) {
@@ -28,22 +25,23 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
       children.add(SizedBox(height: largeGap ? 16 : 12));
     }
 
-    for (var cb in checkBoxes) {
-      addField(cb.type.name, cb.type.toString(), cb.checkedConfidence);
+    // Header
+    addField('Raw Text', result.rawText, result.confidence, largeGap: true);
+
+    // Words
+    for (final word in result.wordBoxes) {
+      addField('Word', word.text, word.recognitionConfidence);
     }
 
-    for (var pf in patientFields) {
-      addField(pf.type.name, pf.value, pf.recognitionConfidence);
-    }
-
-    for (var df in dateFields) {
-      addField(df.type.name, df.type.toString(), df.recognitionConfidence);
+    // Symbols
+    for (final symbol in result.symbolBoxes) {
+      addField('Symbol', symbol.symbol, symbol.recognitionConfidence);
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar('Scanned Certificate', showBackButton: true, context: context),
+      appBar: ScanbotAppBar('Text Pattern Result', showBackButton: true, context: context),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const material.EdgeInsets.all(16),
         children: children,
       ),
     );

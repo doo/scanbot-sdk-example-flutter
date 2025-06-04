@@ -22,7 +22,7 @@ TextPatternScannerScreenConfiguration textPatternScannerConfigurationSnippet() {
 
 Future<void> runTextDataScanner() async {
   var config = textPatternScannerConfigurationSnippet();
-  var result = await ScanbotSdkUiV2.startTextDataScanner(config);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(config);
   if (result.status == OperationStatus.OK) {
     // ...
   }

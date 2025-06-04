@@ -11,7 +11,7 @@ Future<void> startScanning() async {
   configuration.topBar.cancelButton.text = 'Cancel';
   configuration.topBar.cancelButton.foreground.color = ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextDataScanner(configuration);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

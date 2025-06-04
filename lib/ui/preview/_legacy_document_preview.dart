@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:scanbot_sdk/core.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
@@ -424,7 +423,7 @@ class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
       );
       final result = await ScanbotSdkUi.startDocumentScanner(config);
 
-      if (isOperationSuccessful(result)) {
+      if (result.operationResult == OperationStatus.OK) {
         await _pageRepository.addPages(result.pages);
         _updatePagesList();
       }

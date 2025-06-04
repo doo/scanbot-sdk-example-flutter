@@ -43,7 +43,7 @@ class DocumentSdkMenu extends StatelessWidget {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
-        await showAlertDialog(context, 'OCR Result: ${result?.plainText}');
+        await showAlertDialog(context, 'OCR Result: ${result.plainText}');
       }
     } catch (e) {
       Logger.root.severe(e);

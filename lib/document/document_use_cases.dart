@@ -24,8 +24,8 @@ class DocumentUseCasesWidget extends StatelessWidget {
         MenuItemWidget(title: 'Single Page Scanning', onTap: () => _startSinglePageScanning(context)),
         MenuItemWidget(title: 'Single Page Scanning with Finder', onTap: () => _startSinglePageWithFinderScanning(context)),
         MenuItemWidget(title: 'Multi Page Scanning with Finder', onTap: () => _startMultiPageScanning(context)),
+        MenuItemWidget(title: 'Create Document from Image', onTap: () => _createDocumentFromImage(context)),
         MenuItemWidget(title: 'Clean stored documents', onTap: () => _cleanStoredDocuments(context)),
-        MenuItemWidget(title: 'Pick From Gallery', onTap: () => _createDocumentFromImage(context)),
       ],
     );
   }
@@ -77,6 +77,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
+    // This is crashing
     await ScanbotSdk.document.deleteAllDocuments();
   }
 

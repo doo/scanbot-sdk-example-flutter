@@ -4,8 +4,6 @@ import 'package:flutter/material.dart' as material;
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/medical_certificate_preview.dart';
 import '../utility/utils.dart';
 
@@ -194,7 +192,7 @@ class _MedicalCertificateScannerWidgetState
                           }
                         },
                         mcListener: (scanningResult) {
-                          if (scanningResult.scanningSuccessful!) {
+                          if (scanningResult.scanningSuccessful) {
                             _showResult(scanningResult);
                           }
                         },

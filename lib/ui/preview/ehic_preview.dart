@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
+import 'package:flutter/material.dart' as material;
+import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 import '../../utility/utils.dart';
 
-class MedicalCertificatePreviewWidget extends StatelessWidget {
-  final MedicalCertificateScanningResult preview;
+class EuropeanHealthInsuranceCardResultPreview extends StatelessWidget {
+  final EuropeanHealthInsuranceCardRecognitionResult result;
 
-  const MedicalCertificatePreviewWidget(this.preview, {super.key});
+  const EuropeanHealthInsuranceCardResultPreview(this.result, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final checkBoxes = preview.checkBoxes;
-    final patientFields = preview.patientInfoBox.fields;
-    final dateFields = preview.dates;
+    final fields = result.fields;
 
     List<Widget> children = [];
 
@@ -28,22 +27,16 @@ class MedicalCertificatePreviewWidget extends StatelessWidget {
       children.add(SizedBox(height: largeGap ? 16 : 12));
     }
 
-    for (var cb in checkBoxes) {
-      addField(cb.type.name, cb.type.toString(), cb.checkedConfidence);
-    }
+    addField('Recognition Status', result.status.name, null, largeGap: true);
 
-    for (var pf in patientFields) {
-      addField(pf.type.name, pf.value, pf.recognitionConfidence);
-    }
-
-    for (var df in dateFields) {
-      addField(df.type.name, df.type.toString(), df.recognitionConfidence);
+    for (final field in fields) {
+      addField(field.type.name, field.value, field.confidence);
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar('Scanned Certificate', showBackButton: true, context: context),
+      appBar: ScanbotAppBar('Health Insurance Card Result', showBackButton: true, context: context),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const material.EdgeInsets.all(16),
         children: children,
       ),
     );

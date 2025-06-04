@@ -22,7 +22,7 @@ Future<void> startScanning() async {
   /** Customize the finder user guidance background */
   finderUserGuidance.background.fillColor = ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextDataScanner(configuration);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

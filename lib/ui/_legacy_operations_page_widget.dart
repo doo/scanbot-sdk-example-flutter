@@ -186,7 +186,7 @@ class _LegacyPageOperationsState extends State<LegacyPageOperations> {
         // See further configs ...
       );
       final result = await ScanbotSdkUi.startCroppingScreen(_page, config);
-      if (isOperationSuccessful(result) && result.page != null) {
+      if (result.operationResult == OperationStatus.OK && result.page != null) {
         await _updatePage(result.page!);
       }
     } catch (e) {
