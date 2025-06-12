@@ -77,7 +77,6 @@ class DocumentUseCasesWidget extends StatelessWidget {
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
-    // This is crashing
     await ScanbotSdk.document.deleteAllDocuments();
   }
 

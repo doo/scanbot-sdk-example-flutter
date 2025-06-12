@@ -34,11 +34,6 @@ class VinScannerResultPreview extends StatelessWidget {
     for (final word in textResult.wordBoxes) {
       addField('Word', word.text, word.recognitionConfidence);
     }
-
-    for (final symbol in textResult.symbolBoxes) {
-      addField('Symbol', symbol.symbol, symbol.recognitionConfidence);
-    }
-
     addField('Barcode VIN', barcodeResult.extractedVIN, null, true);
     addField('Barcode Extraction Status', barcodeResult.status.name);
 

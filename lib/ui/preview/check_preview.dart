@@ -11,103 +11,117 @@ class CheckDocumentResultPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final genericDocument = result.check;
-    if (genericDocument == null) {
-      return Scaffold(
-        appBar: ScanbotAppBar('Check Document Preview', showBackButton: true, context: context),
-        body: const Center(child: Text('No check data available')),
-      );
+    final croppedImage = result.croppedImage;
+
+    return Scaffold(
+      appBar: ScanbotAppBar('Check Document Preview', showBackButton: true, context: context),
+      body: genericDocument == null
+          ? const Center(child: Text('No check data available'))
+          : ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildImagePreview(croppedImage),
+                const SizedBox(height: 24),
+                ..._buildDocumentFields(context, genericDocument),
+              ],
+            ),
+    );
+  }
+
+  Widget _buildImagePreview(ImageRef? image) {
+    if (image?.buffer != null) {
+      return Image.memory(image!.buffer!, fit: BoxFit.contain);
+    } else {
+      return const Text('No image available');
+    }
+  }
+
+  List<Widget> _buildDocumentFields(BuildContext context, GenericDocument doc) {
+    final List<Widget> fields = [];
+
+    void add(String title, String? value, {bool large = false}) {
+      fields.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
+      fields.add(
+          Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium));
+      fields.add(SizedBox(height: large ? 16 : 12));
     }
 
-    List<Widget> children = [];
-
-    void addField(String title, String? value, {bool largeGap = false}) {
-      children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
-      children.add(Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium));
-      children.add(SizedBox(height: largeGap ? 16 : 12));
-    }
-
-    switch (genericDocument.type.name) {
+    switch (doc.type.name) {
       case USACheck.DOCUMENT_TYPE:
-        final doc = USACheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Transit Number', doc.transitNumber.value?.text);
-        addField('Auxiliary On-Us', doc.auxiliaryOnUs?.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = USACheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Transit Number', d.transitNumber.value?.text);
+        add('Auxiliary On-Us', d.auxiliaryOnUs?.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case UAECheck.DOCUMENT_TYPE:
-        final doc = UAECheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Cheque Number', doc.chequeNumber.value?.text);
-        addField('Routing Number', doc.routingNumber.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = UAECheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Cheque Number', d.chequeNumber.value?.text);
+        add('Routing Number', d.routingNumber.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case FRACheck.DOCUMENT_TYPE:
-        final doc = FRACheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Cheque Number', doc.chequeNumber.value?.text);
-        addField('Routing Number', doc.routingNumber.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = FRACheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Cheque Number', d.chequeNumber.value?.text);
+        add('Routing Number', d.routingNumber.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case ISRCheck.DOCUMENT_TYPE:
-        final doc = ISRCheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Bank Number', doc.bankNumber.value?.text);
-        addField('Branch Number', doc.branchNumber.value?.text);
-        addField('Cheque Number', doc.chequeNumber.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = ISRCheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Bank Number', d.bankNumber.value?.text);
+        add('Branch Number', d.branchNumber.value?.text);
+        add('Cheque Number', d.chequeNumber.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case KWTCheck.DOCUMENT_TYPE:
-        final doc = KWTCheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Cheque Number', doc.chequeNumber.value?.text);
-        addField('Sort Code', doc.sortCode.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = KWTCheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Cheque Number', d.chequeNumber.value?.text);
+        add('Sort Code', d.sortCode.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case AUSCheck.DOCUMENT_TYPE:
-        final doc = AUSCheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('BSB', doc.bsb.value?.text);
-        addField('Transaction Code', doc.transactionCode.value?.text);
-        addField('Aux Domestic', doc.auxDomestic?.value?.text);
-        addField('Extra Aux Domestic', doc.extraAuxDomestic?.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = AUSCheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('BSB', d.bsb.value?.text);
+        add('Transaction Code', d.transactionCode.value?.text);
+        add('Aux Domestic', d.auxDomestic?.value?.text);
+        add('Extra Aux Domestic', d.extraAuxDomestic?.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case INDCheck.DOCUMENT_TYPE:
-        final doc = INDCheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Serial Number', doc.serialNumber.value?.text);
-        addField('Transaction Code', doc.transactionCode.value?.text);
-        addField('Sort Number', doc.sortNumber?.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = INDCheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Serial Number', d.serialNumber.value?.text);
+        add('Transaction Code', d.transactionCode.value?.text);
+        add('Sort Number', d.sortNumber?.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       case CANCheck.DOCUMENT_TYPE:
-        final doc = CANCheck(genericDocument);
-        addField('Account Number', doc.accountNumber.value?.text);
-        addField('Bank Number', doc.bankNumber.value?.text);
-        addField('Cheque Number', doc.chequeNumber.value?.text);
-        addField('Transit Number', doc.transitNumber.value?.text);
-        addField('Designation Number', doc.designationNumber?.value?.text);
-        addField('Transaction Code', doc.transactionCode?.value?.text);
-        addField('Raw String', doc.rawString.value?.text, largeGap: true);
-        addField('Font Type', doc.fontType?.value?.text);
+        final d = CANCheck(doc);
+        add('Account Number', d.accountNumber.value?.text);
+        add('Bank Number', d.bankNumber.value?.text);
+        add('Cheque Number', d.chequeNumber.value?.text);
+        add('Transit Number', d.transitNumber.value?.text);
+        add('Designation Number', d.designationNumber?.value?.text);
+        add('Transaction Code', d.transactionCode?.value?.text);
+        add('Raw String', d.rawString.value?.text, large: true);
+        add('Font Type', d.fontType?.value?.text);
         break;
       default:
         break;
     }
 
-    return Scaffold(
-      appBar: ScanbotAppBar('Check Document Preview', showBackButton: true, context: context),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: children,
-      ),
-    );
+    return fields;
   }
 }

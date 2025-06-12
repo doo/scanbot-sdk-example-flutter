@@ -4,48 +4,73 @@ import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import '../../utility/utils.dart';
 
 class MedicalCertificatePreviewWidget extends StatelessWidget {
-  final MedicalCertificateScanningResult preview;
+  final MedicalCertificateScanningResult result;
 
-  const MedicalCertificatePreviewWidget(this.preview, {super.key});
+  const MedicalCertificatePreviewWidget(this.result, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final checkBoxes = preview.checkBoxes;
-    final patientFields = preview.patientInfoBox.fields;
-    final dateFields = preview.dates;
-
-    List<Widget> children = [];
-
-    void addField(String title, String? value, double? confidence, {bool largeGap = false}) {
-      children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
-      if (value != null && value.isNotEmpty) {
-        children.add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
-      }
-      if (confidence != null && confidence.isFinite) {
-        children.add(Text('Confidence: ${confidence.toStringAsFixed(2)}',
-            style: Theme.of(context).textTheme.labelSmall));
-      }
-      children.add(SizedBox(height: largeGap ? 16 : 12));
-    }
-
-    for (var cb in checkBoxes) {
-      addField(cb.type.name, cb.type.toString(), cb.checkedConfidence);
-    }
-
-    for (var pf in patientFields) {
-      addField(pf.type.name, pf.value, pf.recognitionConfidence);
-    }
-
-    for (var df in dateFields) {
-      addField(df.type.name, df.type.toString(), df.recognitionConfidence);
-    }
+    final checkBoxes = result.checkBoxes;
+    final patientFields = result.patientInfoBox.fields;
+    final dateFields = result.dates;
 
     return Scaffold(
       appBar: ScanbotAppBar('Scanned Certificate', showBackButton: true, context: context),
       body: ListView(
         padding: const EdgeInsets.all(16),
-        children: children,
+        children: [
+          _buildImagePreview(result.croppedImage),
+          const SizedBox(height: 24),
+          ..._buildFields(context, checkBoxes, patientFields, dateFields),
+        ],
       ),
     );
+  }
+
+  Widget _buildImagePreview(ImageRef? image) {
+    if (image?.buffer != null) {
+      return Image.memory(image!.buffer!, fit: BoxFit.contain);
+    } else {
+      return const Text('No image available');
+    }
+  }
+
+  List<Widget> _buildFields(
+    BuildContext context,
+    List<MedicalCertificateCheckBox> checkBoxes,
+    List<MedicalCertificatePatientInfoField> patientFields,
+    List<MedicalCertificateDateRecord> dateFields,
+  ) {
+    final List<Widget> children = [];
+
+    void add(String title, String? value, double? confidence,
+        {bool large = false}) {
+      children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
+      if (value != null && value.isNotEmpty) {
+        children
+            .add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
+      }
+      if (confidence != null && confidence.isFinite) {
+        children.add(Text(
+          'Confidence: ${confidence.toStringAsFixed(2)}',
+          style: Theme.of(context).textTheme.labelSmall,
+        ));
+      }
+      children.add(SizedBox(height: large ? 16 : 12));
+    }
+
+    for (var cb in checkBoxes) {
+      add(cb.type.name, cb.checked.toString(), cb.checkedConfidence);
+    }
+
+    for (var pf in patientFields) {
+      add(pf.type.name, pf.value, pf.recognitionConfidence);
+    }
+
+    for (var df in dateFields) {
+      add(df.type.name, df.value, df.recognitionConfidence);
+    }
+
+    return children;
   }
 }

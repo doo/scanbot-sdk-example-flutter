@@ -33,11 +33,6 @@ class TextPatternScannerUiResultPreview extends StatelessWidget {
       addField('Word', word.text, word.recognitionConfidence);
     }
 
-    // Symbols
-    for (final symbol in result.symbolBoxes) {
-      addField('Symbol', symbol.symbol, symbol.recognitionConfidence);
-    }
-
     return Scaffold(
       appBar: ScanbotAppBar('Text Pattern Result', showBackButton: true, context: context),
       body: ListView(

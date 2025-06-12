@@ -1,10 +1,14 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeMedicalDocumentOnImage(String uriPath) async {
-  MedicalCertificateScanningResult result = await ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(uriPath, MedicalCertificateScanningParameters());
-    if (result.scanningSuccessful) {
-      //  ...
-    }
+  var configuration = MedicalCertificateScanningParameters();
+  configuration.recognizePatientInfoBox = true;
+  // Configure other parameters as needed.
+
+  MedicalCertificateScanningResult result = await ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(uriPath, configuration);
+  if (result.scanningSuccessful) {
+    //  ...
+  }
 }
 
 String formatMedicalCertificateResult(MedicalCertificateScanningResult result) {
