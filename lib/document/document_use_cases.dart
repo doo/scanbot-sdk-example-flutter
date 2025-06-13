@@ -77,7 +77,13 @@ class DocumentUseCasesWidget extends StatelessWidget {
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
-    await ScanbotSdk.document.deleteAllDocuments();
+    try {
+      await ScanbotSdk.document.deleteAllDocuments();
+      await showAlertDialog(context, "Operation status: Success");
+    } catch (e) {
+      Logger.root.severe(e);
+      await showAlertDialog(context, "Operation status: Error\n${e.toString()}");
+    }
   }
 
   Future<void> _createDocumentFromImage(BuildContext context) async {
