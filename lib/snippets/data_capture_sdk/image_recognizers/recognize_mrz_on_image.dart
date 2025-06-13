@@ -2,8 +2,6 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> _recognizeMrzDocumentOnImage(String uriPath) async {
   var configuration = MrzScannerConfiguration(); 
-  configuration.frameAccumulationConfiguration = AccumulatedResultsVerifierConfiguration(
-            minimumNumberOfRequiredFramesWithEqualScanningResult: 1);
   configuration.incompleteResultHandling = MrzIncompleteResultHandling.REJECT;
   // Configure other parameters as needed.
 

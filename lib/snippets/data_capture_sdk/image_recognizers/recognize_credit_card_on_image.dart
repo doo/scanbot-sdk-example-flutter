@@ -2,7 +2,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeCreditCardOnImage(String uriPath) async {
   var configuration = CreditCardScannerConfiguration();
-  configuration.scanningMode = CreditCardScanningMode.SINGLE_SHOT;
+  configuration.requireCardholderName = true;
   // Configure other parameters as needed.
 
   CreditCardScanningResult result = await ScanbotSdk.recognizeOperations.recognizeCreditCardOnImage(uriPath, configuration);

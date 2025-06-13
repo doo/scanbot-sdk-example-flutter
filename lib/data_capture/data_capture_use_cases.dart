@@ -79,13 +79,17 @@ class DataCaptureUseCases extends StatelessWidget {
 
     final dialog = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: true);
-    dialog.style(message: 'Start Recognize...');
+    dialog.style(message: 'Please wait...');
 
     try {
       final response = await selectImageFromLibrary();
-      dialog.show();
+
       if (response != null && response.path.isNotEmpty) {
+        dialog.show();
+
         final result = await scannerFunction(response.path);
+
+        await dialog.hide();
         await handleResult(context, result);
       }
     } catch (e) {
@@ -112,9 +116,6 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> _recognizeMrzOnImage(BuildContext context) async {
     var configuration = MrzScannerConfiguration();
-    configuration.frameAccumulationConfiguration =
-        AccumulatedResultsVerifierConfiguration(
-            minimumNumberOfRequiredFramesWithEqualScanningResult: 1);
     configuration.incompleteResultHandling = MrzIncompleteResultHandling.REJECT;
     // Configure other parameters as needed.
 
@@ -274,7 +275,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> _recognizeCreditCardOnImage(BuildContext context) async {
     var configuration = CreditCardScannerConfiguration();
-    configuration.scanningMode = CreditCardScanningMode.SINGLE_SHOT;
+    configuration.requireExpiryDate = true;
     // Configure other parameters as needed.
 
     await startRecognizer<CreditCardScanningResult>(
@@ -396,7 +397,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startTextDataScanner(BuildContext context) async {
     var configuration = TextPatternScannerScreenConfiguration();
-    // Configure other parameters as needed.
+    // Configure parameters as needed.
 
     await startDetector<ResultWrapper<TextPatternScannerUiResult>>(
       context: context,
@@ -445,7 +446,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startCreditCardScanner(BuildContext context) async {
     var configuration = CreditCardScannerScreenConfiguration();
-    // Configure other parameters as needed.
+    // Configure parameters as needed.
 
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
       context: context,
@@ -468,7 +469,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startEhicScanner(BuildContext context) async {
     var configuration = HealthInsuranceCardScannerConfiguration();
-    // Configure other parameters as needed.
+    // Configure parameters as needed.
 
     await startDetector<
         ResultWrapper<EuropeanHealthInsuranceCardRecognitionResult>>(
@@ -491,7 +492,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startMRZScanner(BuildContext context) async {
     var configuration = MrzScannerScreenConfiguration();
-    // Configure other parameters as needed.
+    // Configure parameters as needed.
 
     await startDetector<ResultWrapper<MrzScannerUiResult>>(
       context: context,
