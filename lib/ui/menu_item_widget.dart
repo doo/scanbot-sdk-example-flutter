@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../utility/utils.dart';
-
 class MenuItemWidget extends StatelessWidget {
   final String title;
   final GestureTapCallback onTap;

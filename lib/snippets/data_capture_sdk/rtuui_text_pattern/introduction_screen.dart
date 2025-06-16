@@ -24,7 +24,7 @@ Future<void> startScanning() async {
   configuration.introScreen.doneButton.text = 'Start Scanning';
   configuration.introScreen.doneButton.background.fillColor = ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextDataScanner(configuration);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

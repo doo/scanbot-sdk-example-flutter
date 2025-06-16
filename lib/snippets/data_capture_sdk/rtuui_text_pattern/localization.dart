@@ -13,7 +13,7 @@ Future<void> startScanning() async {
   localization.finderViewUserGuidance = 'Localized finderViewUserGuidance';
   localization.introScreenTitle = 'Localized introScreenTitle';
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextDataScanner(configuration);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

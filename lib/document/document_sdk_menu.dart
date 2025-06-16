@@ -31,7 +31,7 @@ class DocumentSdkMenu extends StatelessWidget {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.analyzeDocumentQuality(response!.path, DocumentQualityAnalyzerConfiguration());
-        await showAlertDialog(context, 'Document Quality: ${result.quality}');
+        await showAlertDialog(context, title: 'Document Quality', result.quality?.name ?? 'Unknown');
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -43,7 +43,7 @@ class DocumentSdkMenu extends StatelessWidget {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
         var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
-        await showAlertDialog(context, 'OCR Result: ${result?.plainText}');
+        await showAlertDialog(context, title: 'OCR Result', result.plainText);
       }
     } catch (e) {
       Logger.root.severe(e);

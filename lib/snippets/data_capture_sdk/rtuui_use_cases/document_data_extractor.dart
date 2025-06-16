@@ -64,17 +64,27 @@ DocumentDataExtractorScreenConfiguration genericDocumentRecognizerConfigurationS
 
 Future<void> runDocumentPageScanner() async {
   var config = genericDocumentRecognizerConfigurationSnippet();
-  var result = await ScanbotSdkUi.startDocumentDataExtractor(config);
 
-  if (result.status == OperationStatus.OK) {
-    GenericDocumentWrapper? wrappedDocument;
-      wrappedDocument = _wrapDocument(result.data!.document!);
+  var result = await autorelease(() async {
+    return await ScanbotSdkUi.startDocumentDataExtractor(config);
+  });
+
+  if (result.status == OperationStatus.OK && result.data != null) {
+    for (var documentResult in result.data!) {
+      final wrappedDocument = _wrapDocument(documentResult.document!);
       if (wrappedDocument != null) {
-        // Perform operations with `wrappedDocument` if needed
-        // Exit loop if the document is successfully wrapped
+        print('Document Type: ${wrappedDocument.document.type}');
+        print('Fields:');
+        for (var field in wrappedDocument.document.fields) {
+          print(' - ${field.type}: ${field.value}');
+        }
       }
+    }
+  } else {
+    print('Document recognition cancelled or failed. Status: ${result.status}');
   }
 }
+
 
 GenericDocumentWrapper? _wrapDocument(GenericDocument document) {
   switch (document.type.name) {

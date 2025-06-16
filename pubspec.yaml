@@ -29,7 +29,7 @@ dependencies:
   url_launcher: ^6.1.8
   permission_handler: ^11.4.0
   logging: ^1.1.1
-  shared_preferences: ^2.0.18
+  shared_preferences: ^2.5.3
   path_provider: ^2.1.5
   file_picker: ^10.1.2
 

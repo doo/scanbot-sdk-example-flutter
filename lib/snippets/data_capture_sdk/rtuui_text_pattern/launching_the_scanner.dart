@@ -4,7 +4,7 @@ Future<void> startScanning() async {
   /** Create an instance of the default configuration */
   var configuration = TextPatternScannerScreenConfiguration();
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextDataScanner(configuration);
+  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

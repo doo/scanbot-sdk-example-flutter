@@ -1,17 +1,20 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk_example_flutter/ui/preview/check_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/preview/credit_card_preview.dart';
 
 import '../ui/menu_item_widget.dart';
-import '../ui/preview/generic_document_preview.dart';
+import '../ui/preview/ehic_preview.dart';
+import '../ui/preview/extracted_document_data_preview.dart';
+import '../ui/preview/medical_certificate_preview.dart';
 import '../ui/preview/mrz_document_preview.dart';
+import '../ui/preview/text_pattern_preview.dart';
+import '../ui/preview/vin_preview.dart';
+import '../ui/progress_dialog.dart';
 import '../utility/utils.dart';
-
-
 
 class DataCaptureUseCases extends StatelessWidget {
   const DataCaptureUseCases({Key? key}) : super(key: key);
@@ -22,21 +25,47 @@ class DataCaptureUseCases extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const TitleItemWidget(title: 'Recognizers'),
-        MenuItemWidget(title: "Recognize MRZ from Still Image", onTap: () => _recognizeMrzOnImage(context)),
-        MenuItemWidget(title: "Recognize Medical Certificate from Still Image", onTap: () => _recognizeMedicalCertificateOnImage(context)),
-        MenuItemWidget(title: "Recognize EHIC from Still Image", onTap: () => _recognizeHealthInsuranceCardOnImage(context)),
-        MenuItemWidget(title: "Recognize Generic Document from Still Image", onTap: () => _extractDocumentDataOnImage(context)),
-        MenuItemWidget(title: "Recognize Check from Still Image", onTap: () => _recognizeCheckOnImage(context)),
-        MenuItemWidget(title: "Recognize Credit Card from Still Image", onTap: () => _recognizeCreditCardOnImage(context)),
+        MenuItemWidget(
+            title: "Recognize MRZ from Still Image",
+            onTap: () => _recognizeMrzOnImage(context)),
+        MenuItemWidget(
+            title: "Recognize Medical Certificate from Still Image",
+            onTap: () => _recognizeMedicalCertificateOnImage(context)),
+        MenuItemWidget(
+            title: "Recognize EHIC from Still Image",
+            onTap: () => _recognizeHealthInsuranceCardOnImage(context)),
+        MenuItemWidget(
+            title: "Extract Document Data from Still Image",
+            onTap: () => _extractDocumentDataFromImage(context)),
+        MenuItemWidget(
+            title: "Recognize Check from Still Image",
+            onTap: () => _recognizeCheckOnImage(context)),
+        MenuItemWidget(
+            title: "Recognize Credit Card from Still Image",
+            onTap: () => _recognizeCreditCardOnImage(context)),
         const TitleItemWidget(title: 'Data Detectors'),
-        MenuItemWidget(title: "Scan Generic Document", onTap: () => _startDocumentDataExtractorScanner(context)),
-        MenuItemWidget(title: "Scan MRZ (Machine Readable Zone)", onTap: () => startMRZScanner(context)),
-        MenuItemWidget(title: "Scan EHIC (European Health Insurance Card)", onTap: () => startEhicScanner(context)),
-        MenuItemWidget(title: "Scan VIN", onTap: () => startVINScanner(context)),
-        MenuItemWidget(title: "Scan Check", onTap: () => startCheckScanner(context)),
-        MenuItemWidget(title: "Scan Text Data", onTap: () => startTextDataScanner(context)),
-        MenuItemWidget(title: "Scan Medical Certificate", onTap: () => startMedicalCertificateScanner(context)),
-        MenuItemWidget(title: "Scan Credit Scanner", onTap: () => startCreditCardScanner(context)),
+        MenuItemWidget(
+            title: "Extract Document Data",
+            onTap: () => _startDocumentDataExtractorScanner(context)),
+        MenuItemWidget(
+            title: "Scan MRZ (Machine Readable Zone)",
+            onTap: () => startMRZScanner(context)),
+        MenuItemWidget(
+            title: "Scan EHIC (European Health Insurance Card)",
+            onTap: () => startEhicScanner(context)),
+        MenuItemWidget(
+            title: "Scan VIN", onTap: () => startVINScanner(context)),
+        MenuItemWidget(
+            title: "Scan Check", onTap: () => startCheckScanner(context)),
+        MenuItemWidget(
+            title: "Scan Text Data",
+            onTap: () => startTextDataScanner(context)),
+        MenuItemWidget(
+            title: "Scan Medical Certificate",
+            onTap: () => startMedicalCertificateScanner(context)),
+        MenuItemWidget(
+            title: "Scan Credit Scanner",
+            onTap: () => startCreditCardScanner(context)),
       ],
     );
   }
@@ -44,274 +73,442 @@ class DataCaptureUseCases extends StatelessWidget {
   Future<void> startRecognizer<T>({
     required BuildContext context,
     required Future<T> Function(String path) scannerFunction,
-    required void Function(T result) handleResult,
+    required Future<void> Function(BuildContext, T result) handleResult,
   }) async {
     if (!await checkLicenseStatus(context)) return;
 
+    final dialog = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: true);
+    dialog.style(message: 'Please wait...');
+
     try {
       final response = await selectImageFromLibrary();
+
       if (response != null && response.path.isNotEmpty) {
+        dialog.show();
+
         final result = await scannerFunction(response.path);
-        handleResult(result);
+
+        await dialog.hide();
+        await handleResult(context, result);
       }
     } catch (e) {
       Logger.root.severe(e);
-    }
-  }
-
-  Future<void> handleRecognizedResult({
-    required BuildContext context,
-    required bool isOperationSucceed,
-    required String dataTitle,
-    required String resultTextToShow,
-  }) async {
-    if (isOperationSucceed) {
-      await showAlertDialog(context, resultTextToShow, title: "$dataTitle recognized");
-    } else {
-      await showAlertDialog(context, '$dataTitle not recognized');
+    } finally {
+      await dialog.hide();
     }
   }
 
   Future<void> startDetector<T>({
     required BuildContext context,
     required Future<T> Function() scannerFunction,
-    required void Function(T result) handleResult,
+    required Future<void> Function(BuildContext, T result) handleResult,
   }) async {
     if (!await checkLicenseStatus(context)) return;
 
     try {
       final result = await scannerFunction();
-      handleResult(result);
+      await handleResult(context, result);
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 
   Future<void> _recognizeMrzOnImage(BuildContext context) async {
-      await startRecognizer<MrzScannerResult>(
-        context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeMrzOnImage(path, MrzScannerConfiguration(frameAccumulationConfiguration: AccumulatedResultsVerifierConfiguration(minimumNumberOfRequiredFramesWithEqualScanningResult: 1))),
-        handleResult: (result) => handleRecognizedResult(
-          context: context,
-          isOperationSucceed: result.success,
-          dataTitle: "Mrz",
-          resultTextToShow: "Success",
-      ));
+    var configuration = MrzScannerConfiguration();
+    configuration.incompleteResultHandling = MrzIncompleteResultHandling.REJECT;
+    // Configure other parameters as needed.
+
+    await startRecognizer<MrzScannerResult>(
+      context: context,
+      scannerFunction: (path) => ScanbotSdk.recognizeOperations
+          .recognizeMrzOnImage(path, configuration),
+      handleResult: (context, result) async {
+        if (result.success) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    MrzDocumentResultPreview(scannerResult: result)),
+          );
+        } else {
+          await showAlertDialog(context, "Operation Status: ${result.success}");
+        }
+      },
+    );
   }
 
   Future<void> _recognizeMedicalCertificateOnImage(BuildContext context) async {
+    var configuration = MedicalCertificateScanningParameters();
+    configuration.recognizePatientInfoBox = true;
+    // Configure other parameters as needed.
+
     await startRecognizer<MedicalCertificateScanningResult>(
-        context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeMedicalCertificateOnImage(path, MedicalCertificateScanningParameters()),
-        handleResult: (result) => handleRecognizedResult(
-            context: context,
-            isOperationSucceed: result.scanningSuccessful,
-            dataTitle: "Medical Certificate",
-            resultTextToShow: "Success",
-        ));
+      context: context,
+      scannerFunction: (path) => ScanbotSdk.recognizeOperations
+          .recognizeMedicalCertificateOnImage(path, configuration),
+      handleResult: (context, result) async {
+        if (result.scanningSuccessful) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => MedicalCertificatePreviewWidget(result)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.scanningSuccessful}");
+        }
+      },
+    );
   }
 
-  Future<void> _recognizeHealthInsuranceCardOnImage(BuildContext context) async {
+  Future<void> _recognizeHealthInsuranceCardOnImage(
+      BuildContext context) async {
+    var configuration = EuropeanHealthInsuranceCardRecognizerConfiguration();
+    configuration.maxExpirationYear = 2100;
+    // Configure other parameters as needed.
+
     await startRecognizer<EuropeanHealthInsuranceCardRecognitionResult>(
-        context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeHealthInsuranceCardOnImage(path, EuropeanHealthInsuranceCardRecognizerConfiguration()),
-        handleResult: (result) =>
-            handleRecognizedResult(
-                context: context,
-                isOperationSucceed: result.status == EuropeanHealthInsuranceCardRecognitionResultRecognitionStatus.SUCCESS,
-                dataTitle: "HealthInsuranceCard",
-                resultTextToShow: "Success",
-            ));
+      context: context,
+      scannerFunction: (path) => ScanbotSdk.recognizeOperations
+          .recognizeHealthInsuranceCardOnImage(path, configuration),
+      handleResult: (context, result) async {
+        if (result.status ==
+            EuropeanHealthInsuranceCardRecognitionResultRecognitionStatus
+                .SUCCESS) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    EuropeanHealthInsuranceCardResultPreview(result)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
+        }
+      },
+    );
   }
 
-  Future<void> _extractDocumentDataOnImage(BuildContext context) async {
+  Future<void> _extractDocumentDataFromImage(BuildContext context) async {
+    var commonConfig =
+        DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
+      MRZ.DOCUMENT_TYPE,
+      DeIdCardFront.DOCUMENT_TYPE,
+      DeIdCardBack.DOCUMENT_TYPE,
+      DePassport.DOCUMENT_TYPE,
+      DeDriverLicenseFront.DOCUMENT_TYPE,
+      DeDriverLicenseBack.DOCUMENT_TYPE,
+      DeResidencePermitFront.DOCUMENT_TYPE,
+      DeResidencePermitBack.DOCUMENT_TYPE,
+      EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
+      DeHealthInsuranceCardFront.DOCUMENT_TYPE,
+    ]);
+
+    var configuration = DocumentDataExtractorConfiguration(
+      configurations: [commonConfig],
+    );
+    // Configure other parameters as needed.
+
     await startRecognizer<DocumentDataExtractionResult>(
         context: context,
         scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(path, DocumentDataExtractorConfiguration(configurations: [])),
-        handleResult: (result) =>
-            handleRecognizedResult(
-                context: context,
-                isOperationSucceed: result.status == DocumentDataExtractionStatus.SUCCESS,
-                dataTitle:  "GenericDocument",
-                resultTextToShow: "Success",
-            ));
+            _runDocumentDataRecognizer(configuration, path),
+        handleResult: (context, result) async {
+          if (result.document != null) {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => ExtractedDocumentDataPreview([result])),
+            );
+          } else {
+            await showAlertDialog(
+                context, "Operation Status: ${result.status.name}");
+          }
+        });
+  }
+
+  Future<DocumentDataExtractionResult> _runDocumentDataRecognizer(
+      DocumentDataExtractorConfiguration configuration, String path) async {
+    /// You must use autorelease for result object
+    /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
+
+    return await autorelease(() async {
+      var extractedData = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(path, configuration);
+      /// if you want to use image later, call encodeImages() to save in buffer
+      //  extractedData.encodeImages();
+      return extractedData;
+    });
   }
 
   Future<void> _recognizeCheckOnImage(BuildContext context) async {
+    var configuration = CheckScannerConfiguration();
+    configuration.documentDetectionMode =
+        CheckDocumentDetectionMode.DETECT_AND_CROP_DOCUMENT;
+    // Configure other parameters as needed.
+
     await startRecognizer<CheckScanningResult>(
-        context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeCheckOnImage(path, CheckScannerConfiguration()),
-        handleResult: (result) =>
-            handleRecognizedResult(
-              context: context,
-              isOperationSucceed: result.status == CheckMagneticInkStripScanningStatus.SUCCESS,
-              dataTitle:  "Check",
-              resultTextToShow: "Success",
-            ));
+      context: context,
+      scannerFunction: (path) => _runCheckRecognize(configuration, path),
+      handleResult: (context, result) async {
+        if (result.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => CheckDocumentResultPreview(result)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
+        }
+      },
+    );
+  }
+
+  Future<CheckScanningResult> _runCheckRecognize(
+      CheckScannerConfiguration configuration, String path) async {
+    /// You must use autorelease for result object
+    /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
+
+    return await autorelease(() async {
+      var checkScanningResult = await ScanbotSdk.recognizeOperations.recognizeCheckOnImage(path, configuration);
+      /// if you want to use image later, call encodeImages() to save in buffer
+      //  checkScanningResult.encodeImages();
+      return checkScanningResult;
+    });
   }
 
   Future<void> _recognizeCreditCardOnImage(BuildContext context) async {
+    var configuration = CreditCardScannerConfiguration();
+    configuration.requireExpiryDate = true;
+    // Configure other parameters as needed.
+
     await startRecognizer<CreditCardScanningResult>(
         context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.recognizeOperations.recognizeCreditCardOnImage(path, CreditCardScannerConfiguration()),
-        handleResult: (result) =>
-            handleRecognizedResult(
-              context: context,
-              isOperationSucceed: result.scanningStatus == CreditCardScanningStatus.SUCCESS,
-              dataTitle:  "Credit Card",
-              resultTextToShow: "Success",
-            ));
-  }
-
-  Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
-    await startDetector<ResultWrapper<DocumentDataExtractionResult>>(
-      context: context,
-      scannerFunction: () =>
-          ScanbotSdkUi.startDocumentDataExtractor(
-            DocumentDataExtractorScreenConfiguration(
-                topBarBackgroundColor: ScanbotRedColor,
-                topBarButtonsActiveColor: Colors.white
-            ),
-          ),
-      handleResult: (result) =>  {
-        if (result.status == OperationStatus.OK) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => GenericDocumentResultPreview(result.data!!),
-            ),
-          )
-        }
-      }
-    );
+        scannerFunction: (path) => ScanbotSdk.recognizeOperations
+            .recognizeCreditCardOnImage(path, configuration),
+        handleResult: (context, result) async {
+          if (result.scanningStatus !=
+              CreditCardScanningStatus.ERROR_NOTHING_FOUND) {
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CreditCardResultPreview(scanningResult: result)),
+            );
+          } else {
+            await showAlertDialog(
+                context, "Operation Status: ${result.scanningStatus.name}");
+          }
+        });
   }
 
   Future<void> startVINScanner(BuildContext context) async {
+    var configuration = VinScannerConfiguration();
+    configuration.topBarBackgroundColor = ScanbotRedColor;
+    configuration.topBarButtonsActiveColor = Colors.white;
+    // Configure other parameters as needed.
+
     await startDetector<ResultWrapper<VinScannerResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUi.startVinScanner(
-              VinScannerConfiguration(
-                  topBarBackgroundColor: ScanbotRedColor,
-                  topBarButtonsActiveColor: Colors.white
-              ),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-            showResultTextDialog(context, result.data?.textResult)
-          }
+      context: context,
+      scannerFunction: () => ScanbotSdkUi.startVinScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => VinScannerResultPreview(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
+  }
+
+  Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
+    var configuration = DocumentDataExtractorScreenConfiguration();
+    configuration.finderLineColor = ScanbotRedColor;
+    configuration.topBarBackgroundColor = ScanbotRedColor;
+    configuration.topBarButtonsActiveColor = Colors.white;
+    // Configure other parameters as needed.
+
+    await startDetector<ResultWrapper<List<DocumentDataExtractionResult>>>(
+      context: context,
+      scannerFunction: () => _runDocumentDataExtractor(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    ExtractedDocumentDataPreview(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
+        }
+      },
+    );
+  }
+
+  Future<ResultWrapper<List<DocumentDataExtractionResult>>>
+      _runDocumentDataExtractor(
+          DocumentDataExtractorScreenConfiguration configuration) async {
+    /// You must use autorelease for result object
+    /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
+
+    return await autorelease(() async {
+      var extractedData = await ScanbotSdkUi.startDocumentDataExtractor(configuration);
+      /// if you want to use image later, call encodeImages() to save in buffer
+      //  extractedData.encodeImages();
+      return extractedData;
+    });
   }
 
   Future<void> startCheckScanner(BuildContext context) async {
+    var configuration = CheckScannerScreenConfiguration();
+    configuration.topBarBackgroundColor = ScanbotRedColor;
+    configuration.topBarButtonsActiveColor = Colors.white;
+    // Configure other parameters as needed.
+
     await startDetector<ResultWrapper<CheckScanningResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUi.startCheckScanner(
-              CheckScannerScreenConfiguration(
-                  topBarBackgroundColor: ScanbotRedColor,
-                  topBarButtonsActiveColor: Colors.white
-              ),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-            showResultTextDialog(context, result.data?.status)
-          }
+      context: context,
+      scannerFunction: () => _runCheckScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => CheckDocumentResultPreview(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
   }
 
+  Future<ResultWrapper<CheckScanningResult>> _runCheckScanner(
+      CheckScannerScreenConfiguration configuration) async {
+    /// You must use autorelease for result object
+    /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
+
+    return await autorelease(() async {
+      var checkScanningResult = await ScanbotSdkUi.startCheckScanner(configuration);
+      /// if you want to use image later, call encodeImages() to save in buffer
+      //  checkScanningResult.data?.encodeImages();
+      return checkScanningResult;
+    });
+  }
+
   Future<void> startTextDataScanner(BuildContext context) async {
+    var configuration = TextPatternScannerScreenConfiguration();
+    // Configure parameters as needed.
+
     await startDetector<ResultWrapper<TextPatternScannerUiResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUiV2.startTextDataScanner(
-              TextPatternScannerScreenConfiguration(),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-            showResultTextDialog(context, jsonEncode(result.data))
-          }
+      context: context,
+      scannerFunction: () =>
+          ScanbotSdkUiV2.startTextPatternScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    TextPatternScannerUiResultPreview(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
   }
 
   Future<void> startMedicalCertificateScanner(BuildContext context) async {
+    var configuration = MedicalCertificateScannerConfiguration();
+    configuration.returnCroppedDocumentImage = false;
+    configuration.topBarBackgroundColor = ScanbotRedColor;
+    configuration.topBarButtonsActiveColor = Colors.white;
+    // Configure other parameters as needed.
+
     await startDetector<ResultWrapper<MedicalCertificateScanningResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUi.startMedicalCertificateScanner(
-              MedicalCertificateScannerConfiguration(
-                  returnCroppedDocumentImage: false,
-                  topBarBackgroundColor: ScanbotRedColor,
-                  topBarButtonsActiveColor: Colors.white
-              ),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-              showResultTextDialog(context, result.data?.patientInfoBox.toString())
-          }
+      context: context,
+      scannerFunction: () =>
+          ScanbotSdkUi.startMedicalCertificateScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    MedicalCertificatePreviewWidget(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
   }
 
   Future<void> startCreditCardScanner(BuildContext context) async {
+    var configuration = CreditCardScannerScreenConfiguration();
+    // Configure parameters as needed.
+
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUiV2.startCreditCardScanner(
-              CreditCardScannerScreenConfiguration(),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-            showResultTextDialog(context, result.data?.toString())
-          }
+      context: context,
+      scannerFunction: () =>
+          ScanbotSdkUiV2.startCreditCardScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    CreditCardResultPreview(uiResult: result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
   }
 
   Future<void> startEhicScanner(BuildContext context) async {
-    await startDetector<ResultWrapper<EuropeanHealthInsuranceCardRecognitionResult>>(
-      context: context,
-      scannerFunction: () => ScanbotSdkUi.startEhicScanner(
-          HealthInsuranceCardScannerConfiguration(
-              topBarBackgroundColor: ScanbotRedColor,
-              topBarButtonsActiveColor: Colors.white
-          )
-      ),
-      handleResult: (result)  {
-        if (result.status == OperationStatus.OK) {
-          final resultString = result.data?.fields
-              .map((field) =>
-          "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}: ${field.value}")
-              .join("\n");
+    var configuration = HealthInsuranceCardScannerConfiguration();
+    // Configure parameters as needed.
 
-          showResultTextDialog(context, resultString);
+    await startDetector<
+        ResultWrapper<EuropeanHealthInsuranceCardRecognitionResult>>(
+      context: context,
+      scannerFunction: () => ScanbotSdkUi.startEhicScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    EuropeanHealthInsuranceCardResultPreview(result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
       },
     );
   }
 
   Future<void> startMRZScanner(BuildContext context) async {
+    var configuration = MrzScannerScreenConfiguration();
+    // Configure parameters as needed.
+
     await startDetector<ResultWrapper<MrzScannerUiResult>>(
-        context: context,
-        scannerFunction: () =>
-            ScanbotSdkUiV2.startMrzScanner(
-              MrzScannerScreenConfiguration(),
-            ),
-        handleResult: (result) =>  {
-          if (result.status == OperationStatus.OK) {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => MrzDocumentResultPreview(result.data!!)),
-            )
-          }
+      context: context,
+      scannerFunction: () => ScanbotSdkUiV2.startMrzScanner(configuration),
+      handleResult: (context, result) async {
+        if (result.status == OperationStatus.OK) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    MrzDocumentResultPreview(uiResult: result.data!)),
+          );
+        } else {
+          await showAlertDialog(
+              context, "Operation Status: ${result.status.name}");
         }
+      },
     );
   }
 }

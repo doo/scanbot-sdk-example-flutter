@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
-import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
 
 import '../../utility/utils.dart';
 import '../operations_page_widget.dart';
@@ -213,7 +212,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       pageDirection: PageDirection.PORTRAIT,
     );
 
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: pdfOptions, ocrConfiguration: scanbot_sdk.OcrOptions(engineMode: scanbot_sdk.OcrEngine.SCANBOT_OCR)));
+    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: pdfOptions, ocrConfiguration: OcrOptions(engineMode: OcrEngine.SCANBOT_OCR)));
     await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
   }
 

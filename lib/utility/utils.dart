@@ -5,9 +5,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-bool shouldInitWithEncryption = false;
+const bool shouldInitWithEncryption = false;
 
-final enableImagesInScannedBarcodesResults = false;
+const enableImagesInScannedBarcodesResults = false;
 final selectedFormatsNotifier = ValueNotifier<Set<BarcodeFormat>>(
     BarcodeFormats.all.toSet()
 );
@@ -119,10 +119,6 @@ Future<void> _launchScanbotSDKURL() async {
   } else {
     throw 'Could not launch $url';
   }
-}
-
-bool isOperationSuccessful(Result result) {
-  return result.operationResult == OperationStatus.OK;
 }
 
 Widget buildBottomNavigationBar(BuildContext context) {

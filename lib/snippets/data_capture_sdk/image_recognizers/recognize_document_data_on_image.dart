@@ -1,10 +1,28 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-Future<void> recognizeGenericDocumentOnImage(String uriPath) async {
-  DocumentDataExtractionResult result = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(uriPath, DocumentDataExtractorConfiguration(configurations: []));
-    if (result.status == DocumentDataExtractionStatus.SUCCESS) {
-      //  ...
-    }
+Future<void> extractDocumentData(String uriPath) async {
+  var commonConfig = DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
+      MRZ.DOCUMENT_TYPE,
+      DeIdCardFront.DOCUMENT_TYPE,
+      DeIdCardBack.DOCUMENT_TYPE,
+      DePassport.DOCUMENT_TYPE,
+      DeDriverLicenseFront.DOCUMENT_TYPE,
+      DeDriverLicenseBack.DOCUMENT_TYPE,
+      DeResidencePermitFront.DOCUMENT_TYPE,
+      DeResidencePermitBack.DOCUMENT_TYPE,
+      EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
+      DeHealthInsuranceCardFront.DOCUMENT_TYPE,
+    ]);
+
+    var configuration = DocumentDataExtractorConfiguration(
+      configurations: [commonConfig],
+    );
+    // Configure other parameters as needed.
+
+  DocumentDataExtractionResult result = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(uriPath, configuration);
+  if (result.status == DocumentDataExtractionStatus.SUCCESS) {
+    //  ...
+  }
 }
 
 String formatGenericDocumentResult(DocumentDataExtractionResult result) {
