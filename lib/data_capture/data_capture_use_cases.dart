@@ -77,8 +77,7 @@ class DataCaptureUseCases extends StatelessWidget {
   }) async {
     if (!await checkLicenseStatus(context)) return;
 
-    final dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: true);
+    final dialog = ProgressDialog(context);
     dialog.style(message: 'Please wait...');
 
     try {
@@ -88,9 +87,8 @@ class DataCaptureUseCases extends StatelessWidget {
         dialog.show();
 
         final result = await scannerFunction(response.path);
-
-        await dialog.hide();
         await handleResult(context, result);
+        await dialog.hide();
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -354,7 +352,9 @@ class DataCaptureUseCases extends StatelessWidget {
     return await autorelease(() async {
       var extractedData = await ScanbotSdkUi.startDocumentDataExtractor(configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
-      //  extractedData.encodeImages();
+      //  extractedData.data?.forEach((item) {
+      //    item.encodeImages();
+      //  });
       return extractedData;
     });
   }
