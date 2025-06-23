@@ -24,14 +24,16 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera Permission</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>NFC Scan Permission</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera Permission</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Photo Permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Permission</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -52,8 +54,6 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
 </plist>
