@@ -85,10 +85,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: "77f8e81d22d2a07d0dee2c62e1dda71dc1da73bf43bb2d45af09727406167964"
+      sha256: ef9908739bdd9c476353d6adff72e88fd00c625f5b959ae23f7567bd5137db0a
       url: "https://pub.dev"
     source: hosted
-    version: "10.1.9"
+    version: "10.2.0"
   file_selector_linux:
     dependency: transitive
     description:
@@ -436,10 +436,10 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_sdk
-      sha256: b1bf08b25de59c18f8307360705fc2dc3a2554bc2d525a17ea7c5e8ac9bf4b0e
+      sha256: "4f6b313809747f66e851237b9440b6d8762d618215ddf2ff5250bf36226ed04f"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0-alpha02"
+    version: "7.0.0-alpha03"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -216,7 +216,6 @@ limitations under the License.
 
 ------------------------------------------------------------------------------------------------------------------------
 
-
 Open Source libraries used in the Scanbot SDK for Android version 7.0.2
 
 CWAC-Camera
@@ -3261,7 +3260,7 @@ Version 1.1.0
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Open Source libraries used in ScanbotSDK for iOS version 7.0.2:
+Open Source libraries used in ScanbotSDK for iOS version 7.0.3:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 

@@ -26,7 +26,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   final resultStream = StreamController<sdk.Page>();
 
   /// Stream to monitor the document detection status.
-  final detectionStatusStream = StreamController<DetectionStatus>();
+  final detectionStatusStream = StreamController<DocumentDetectionStatus>();
 
   // Various states used within the widget.
   bool permissionGranted = false;
@@ -240,7 +240,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   /// Builds the StreamBuilder for the detection status.
   Widget _buildDetectionStatusStream() {
-    return StreamBuilder<DetectionStatus>(
+    return StreamBuilder<DocumentDetectionStatus>(
       stream: detectionStatusStream.stream,
       builder: (context, snapshot) {
         if (snapshot.data == null || !permissionGranted || !licenseIsActive) {
@@ -254,7 +254,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
               children: [
                 DetectionStatusWidget(
                   status:
-                      snapshot.data ?? DetectionStatus.ERROR_NOTHING_DETECTED,
+                      snapshot.data ?? DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
                 ),
               ],
             ),
@@ -324,7 +324,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
 /// A widget to display the document detection status.
 class DetectionStatusWidget extends StatelessWidget {
-  final DetectionStatus status;
+  final DocumentDetectionStatus status;
 
   const DetectionStatusWidget({Key? key, required this.status})
       : super(key: key);
