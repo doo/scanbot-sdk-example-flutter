@@ -10,7 +10,7 @@ Future<void> startScanning() async {
   /** Configure the title for the intro screen. */
   introductionConfiguration.title = StyledText(
     color: ScanbotColor('#000000'),
-    text: 'MRZ Scanner',
+    text: 'Credit Card Scanner',
   );
   /** Configure the image for the introduction screen. */
   introductionConfiguration.image = CreditCardIntroCustomImage(
