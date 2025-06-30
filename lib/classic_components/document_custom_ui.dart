@@ -7,10 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
-import '../../main.dart';
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/pages_widget.dart';
-import '../ui/preview/_legacy_document_preview.dart';
+import '../ui/preview/_custom_ui_document_preview.dart';
+import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
 class DocumentScannerWidget extends StatefulWidget {
@@ -26,7 +26,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   final resultStream = StreamController<sdk.Page>();
 
   /// Stream to monitor the document detection status.
-  final detectionStatusStream = StreamController<DetectionStatus>();
+  final detectionStatusStream = StreamController<DocumentDetectionStatus>();
 
   // Various states used within the widget.
   bool permissionGranted = false;
@@ -43,7 +43,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => LegacyDocumentPreview()),
+      MaterialPageRoute(builder: (context) => CustomUiDocumentPreview()),
     );
   }
 
@@ -85,21 +85,26 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(),
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
+      backgroundColor: ScanbotRedColor,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
         child: const Icon(
           Icons.arrow_back,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
-      backgroundColor: Colors.white,
       title: const Text(
         'Scan Documents',
         style: TextStyle(
-          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+          fontFamily: 'Roboto',
         ),
       ),
       actions: _buildAppBarActions(),
@@ -235,7 +240,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   /// Builds the StreamBuilder for the detection status.
   Widget _buildDetectionStatusStream() {
-    return StreamBuilder<DetectionStatus>(
+    return StreamBuilder<DocumentDetectionStatus>(
       stream: detectionStatusStream.stream,
       builder: (context, snapshot) {
         if (snapshot.data == null || !permissionGranted || !licenseIsActive) {
@@ -249,7 +254,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
               children: [
                 DetectionStatusWidget(
                   status:
-                      snapshot.data ?? DetectionStatus.ERROR_NOTHING_DETECTED,
+                      snapshot.data ?? DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
                 ),
               ],
             ),
@@ -319,7 +324,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
 /// A widget to display the document detection status.
 class DetectionStatusWidget extends StatelessWidget {
-  final DetectionStatus status;
+  final DocumentDetectionStatus status;
 
   const DetectionStatusWidget({Key? key, required this.status})
       : super(key: key);

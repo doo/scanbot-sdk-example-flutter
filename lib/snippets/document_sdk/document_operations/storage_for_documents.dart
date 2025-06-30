@@ -33,9 +33,9 @@ Future<void> reorderDocumentPages(String documentID) async {
   var document = await ScanbotSdk.document.loadDocument(documentID);
   /** Move the first page to the end of the document */
   var params = MovePageParams(
-    documentID: document.value!.uuid,
+    documentID: document.uuid,
     fromIndex: 0,
-    toIndex: document.value!.pages.length - 1
+    toIndex: document.pages.length - 1
   );
   var documentWithReorderedPages = await ScanbotSdk.document.movePage(params);
 }

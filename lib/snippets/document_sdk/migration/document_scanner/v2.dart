@@ -5,9 +5,6 @@ Future<void> documentScanner() async {
 
   var cameraScreenConfiguration = configuration.screens.camera;
 
-  // Equivalent to ignoreBadAspectRatio: true
-  cameraScreenConfiguration.cameraConfiguration.ignoreBadAspectRatio = true;
-
   // Equivalent to autoSnappingSensitivity: 0.67
   cameraScreenConfiguration.cameraConfiguration.autoSnappingSensitivity = 0.67;
 

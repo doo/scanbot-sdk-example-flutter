@@ -1,219 +1,76 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk_example_flutter/ui/pages_widget.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
-import '../../main.dart';
+import '../../utility/utils.dart';
 
 class MedicalCertificatePreviewWidget extends StatelessWidget {
-  final MedicalCertificateResult preview;
+  final MedicalCertificateScanningResult result;
 
-  MedicalCertificatePreviewWidget(this.preview);
+  const MedicalCertificatePreviewWidget(this.result, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    var widgets = <Widget>[];
-    for (var element in preview.checkboxes!) {
-      widgets.add(McInfoboxFieldItemWidget(element));
-    }
-    for (var element in preview.patientInfoBox!.fields) {
-      widgets.add(McPatientInfoFieldItemWidget(element));
-    }
-    for (var element in preview.dates!) {
-      widgets.add(McDateRecordFieldItemWidget(element));
-    }
-    widgets.add(getImageContainer(preview.croppedDocumentURI));
+    final checkBoxes = result.checkBoxes;
+    final patientFields = result.patientInfoBox.fields;
+    final dateFields = result.dates;
+
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(),
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        title: const Text(
-          'Scanned Certificate',
-          style: TextStyle(
-            inherit: true,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      body: ListView.builder(
-        itemBuilder: (context, position) {
-          return widgets[position];
-        },
-        itemCount: widgets.length,
+      appBar: ScanbotAppBar('Scanned Certificate', showBackButton: true, context: context),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _buildImagePreview(result.croppedImage),
+          const SizedBox(height: 24),
+          ..._buildFields(context, checkBoxes, patientFields, dateFields),
+        ],
       ),
     );
   }
 
-  Widget getImageContainer(Uri? imageUri) {
-    if (imageUri == null) {
-      return Container();
+  Widget _buildImagePreview(ImageRef? image) {
+    if (image?.buffer != null) {
+      return Image.memory(image!.buffer!, fit: BoxFit.contain);
+    } else {
+      return const Text('No image available');
     }
+  }
 
-    var file = File.fromUri(imageUri);
-    if (file.existsSync() == true) {
-      if (shouldInitWithEncryption) {
-        return SizedBox(
-          height: 200,
-          child: EncryptedPageWidget(imageUri),
-        );
-      } else {
-        return SizedBox(
-          height: 200,
-          child: PageWidget(imageUri),
-        );
+  List<Widget> _buildFields(
+    BuildContext context,
+    List<MedicalCertificateCheckBox> checkBoxes,
+    List<MedicalCertificatePatientInfoField> patientFields,
+    List<MedicalCertificateDateRecord> dateFields,
+  ) {
+    final List<Widget> children = [];
+
+    void add(String title, String? value, double? confidence,
+        {bool large = false}) {
+      children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
+      if (value != null && value.isNotEmpty) {
+        children
+            .add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
       }
+      if (confidence != null && confidence.isFinite) {
+        children.add(Text(
+          'Confidence: ${confidence.toStringAsFixed(2)}',
+          style: Theme.of(context).textTheme.labelSmall,
+        ));
+      }
+      children.add(SizedBox(height: large ? 16 : 12));
     }
-    return Container();
-  }
-}
 
-class McPatientInfoFieldItemWidget extends StatelessWidget {
-  final MedicalCertificatePatientInfoField field;
+    for (var cb in checkBoxes) {
+      add(cb.type.name, cb.checked.toString(), cb.checkedConfidence);
+    }
 
-  McPatientInfoFieldItemWidget(this.field);
+    for (var pf in patientFields) {
+      add(pf.type.name, pf.value, pf.recognitionConfidence);
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              field.patientInfoFieldType.name,
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (field.value).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (field.confidenceValue).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+    for (var df in dateFields) {
+      add(df.type.name, df.value, df.recognitionConfidence);
+    }
 
-class McInfoboxFieldItemWidget extends StatelessWidget {
-  final MedicalCertificateCheckBox checkbox;
-
-  McInfoboxFieldItemWidget(this.checkbox);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              checkbox.type.name,
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (checkbox.hasContents).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (checkbox.contentsValidationConfidenceValue).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class McDateRecordFieldItemWidget extends StatelessWidget {
-  final DateRecord field;
-
-  McDateRecordFieldItemWidget(this.field);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              field.type.name,
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (field.dateString).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              (field.recognitionConfidenceValue).toString(),
-              style: const TextStyle(
-                inherit: true,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return children;
   }
 }

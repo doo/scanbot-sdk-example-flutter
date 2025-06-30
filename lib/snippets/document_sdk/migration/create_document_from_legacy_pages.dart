@@ -1,5 +1,4 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 Future<void> createDocumentWithLegacyPages(List<Page> pages) async {
   /**

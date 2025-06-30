@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 Future<void> documentScanner() async {
-  var config = DocumentScannerConfiguration(
-    ignoreBadAspectRatio: true,
+  var config = DocumentScannerScreenConfiguration(
+    ignoreOrientationMismatch: true,
     autoSnappingSensitivity: 0.67,
     topBarBackgroundColor: Colors.white,
     bottomBarBackgroundColor: Colors.white,

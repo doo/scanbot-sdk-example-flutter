@@ -9,15 +9,11 @@ import 'package:path_provider/path_provider.dart';
 import 'storage/_legacy_pages_repository.dart';
 import 'ui/menu_item_widget.dart';
 import 'utility/utils.dart';
-import 'barcode/barcode_sdk_menu.dart';
 import 'data_capture/data_capture_sdk_menu.dart';
 import 'document/document_sdk_menu.dart';
 import 'classic_components/custom_ui_menu.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-
-/// true - if you need to enable encryption for example app
-bool shouldInitWithEncryption = false;
 
 void main() => runApp(MyApp());
 
@@ -41,7 +37,6 @@ Future<void> _initScanbotSdk() async {
       storageImageQuality: 80,
       // Uncomment to use custom storage directory
       // storageBaseDirectory: customStorageBaseDirectory,
-      documentDetectorMode: DocumentDetectorMode.ML_BASED,
   );
 
   if(shouldInitWithEncryption) {
@@ -126,16 +121,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         children: [
           const TitleItemWidget(title: 'Document SDK API'),
           MenuItemWidget(
-            title: 'Barcode SDK Menu',
-            startIcon: Icons.qr_code_scanner,
-            endIcon: Icons.arrow_forward,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const BarcodeSdkMenu()),
-              );
-            },
-          ),
-          MenuItemWidget(
             title: 'Document SDK Menu',
             startIcon: Icons.photo_camera,
             endIcon: Icons.arrow_forward,
@@ -209,12 +194,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _getLicenseStatus() async {
     try {
       final result = await ScanbotSdk.getLicenseStatus();
-      await showAlertDialog(context,
-          "${result.status} expirationDate: ${result.expirationDate}",
-          title: 'License Status');
+      var status = " Status: ${result.licenseStatus.name}";
+
+      if (result.licenseExpirationDate != null) {
+        status += "\n ExpirationDate: ${result.licenseExpirationDate}";
+      }
+
+      await showAlertDialog(context, status, title: 'License Status');
     } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting license status');
+      await showAlertDialog(context, "Error getting license status", title: "Info");
     }
   }
 }

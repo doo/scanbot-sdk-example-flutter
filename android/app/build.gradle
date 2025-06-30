@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.scanbot_sdk_example_flutter"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

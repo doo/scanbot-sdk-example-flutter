@@ -1,25 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' as picker;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
+const bool shouldInitWithEncryption = false;
+
+const enableImagesInScannedBarcodesResults = false;
+final selectedFormatsNotifier = ValueNotifier<Set<BarcodeFormat>>(
+    BarcodeFormats.all.toSet()
+);
+
 const Color ScanbotRedColor = Color(0xFFc8193c);
 
-AppBar ScanbotAppBar(String title) {
+const AppBarTitleTextStyle = TextStyle(
+  fontSize: 20,
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
+  fontFamily: 'Roboto',
+);
+
+AppBar ScanbotAppBar(
+    String title, {
+      bool showBackButton = false,
+      BuildContext? context,
+      VoidCallback? onBack,
+      List<Widget>? actions,
+    }) {
   return AppBar(
     iconTheme: const IconThemeData(
       color: Colors.white,
     ),
     backgroundColor: ScanbotRedColor,
+    leading: showBackButton && context != null
+        ? GestureDetector(
+      onTap: onBack ?? () => Navigator.of(context).pop(),
+      child: const Icon(Icons.arrow_back, color: Colors.white),
+    )
+        : null,
     title: Text(
       title,
-      style: const TextStyle(
-        inherit: true,
-        color: Colors.white,
-        fontSize: 20
-      ),
+      style: AppBarTitleTextStyle,
     ),
+    actions: actions,
   );
 }
 
@@ -85,6 +109,18 @@ Future<bool> checkLicenseStatus(BuildContext context) async {
   return false;
 }
 
+Future<void> _launchScanbotSDKURL() async {
+  var url = Uri.parse("https://scanbot.io/");
+  if (await canLaunchUrl(url)) {
+    await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    );
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
 Widget buildBottomNavigationBar(BuildContext context) {
   return Container(
     color: Colors.grey[200],
@@ -107,7 +143,7 @@ Widget buildBottomNavigationBar(BuildContext context) {
         ),
         const SizedBox(height: 4),
         const Text(
-          'Copyright 2024 Scanbot SDK GmbH. All rights reserved.',
+          'Copyright 2025 Scanbot SDK GmbH. All rights reserved.',
           style: TextStyle(
             fontSize: 10,
             color: Colors.black,
@@ -120,22 +156,7 @@ Widget buildBottomNavigationBar(BuildContext context) {
   );
 }
 
-Future<void> _launchScanbotSDKURL() async {
-  var url = Uri.parse("https://scanbot.io/");
-  if (await canLaunchUrl(url)) {
-    await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    );
-  } else {
-    throw 'Could not launch $url';
-  }
-}
-
-bool isOperationSuccessful(Result result) {
-  return result.operationResult == OperationResult.SUCCESS;
-}
-
 Future<XFile?> selectImageFromLibrary() async {
-  return await ImagePicker().pickImage(source: ImageSource.gallery);
+  return await ImagePicker().pickImage(source: picker.ImageSource.gallery);
 }
+

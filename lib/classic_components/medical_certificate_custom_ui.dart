@@ -4,8 +4,8 @@ import 'package:flutter/material.dart' as material;
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import 'package:scanbot_sdk_example_flutter/ui/preview/medical_certificate_preview.dart';
+import '../utility/utils.dart';
 
 class MedicalCertificateScannerWidget extends StatefulWidget {
   const MedicalCertificateScannerWidget({Key? key}) : super(key: key);
@@ -39,7 +39,7 @@ class _MedicalCertificateScannerWidgetState
   }
 
   // Handle the scanning result and navigate to the result screen
-  Future<void> _showResult(MedicalCertificateResult scanningResult) async {
+  Future<void> _showResult(MedicalCertificateScanningResult scanningResult) async {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MedicalCertificatePreviewWidget(scanningResult),
@@ -59,7 +59,7 @@ class _MedicalCertificateScannerWidgetState
   // Configuration for the Finder (area to scan)
   FinderConfiguration _buildFinderConfiguration() {
     return FinderConfiguration(
-      finderAspectRatio: sdk.AspectRatio(width: 3.0, height: 4.0),
+      // finderAspectRatio: sdk.AspectRatio(width: 3.0, height: 4.0),
       onFinderRectChange: (left, top, right, bottom) {
         // aligning some text view to the finder dynamically by calculating its position from finder changes
       },
@@ -116,22 +116,26 @@ class _MedicalCertificateScannerWidgetState
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(),
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+      ),
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
         child: const Icon(
           Icons.arrow_back,
-          color: Colors.black,
+          color: Colors.white,
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: ScanbotRedColor,
       title: const Text(
         'Scan Medical Certificate',
         style: TextStyle(
-          inherit: true,
-          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+          fontFamily: 'Roboto',
         ),
       ),
       actions: [
@@ -144,7 +148,10 @@ class _MedicalCertificateScannerWidgetState
                 });
               }
             },
-            icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off),
+            icon: Icon(
+              flashEnabled ? Icons.flash_on : Icons.flash_off,
+              color: Colors.white,
+            ),
           ),
       ],
     );
@@ -185,7 +192,7 @@ class _MedicalCertificateScannerWidgetState
                           }
                         },
                         mcListener: (scanningResult) {
-                          if (scanningResult.recognitionSuccessful!) {
+                          if (scanningResult.scanningSuccessful) {
                             _showResult(scanningResult);
                           }
                         },
