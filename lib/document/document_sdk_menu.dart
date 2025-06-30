@@ -4,7 +4,6 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../ui/menu_item_widget.dart';
 import '../utility/utils.dart';
-import '_legacy_document_use_cases.dart';
 import 'document_use_cases.dart';
 
 class DocumentSdkMenu extends StatelessWidget {
@@ -17,7 +16,6 @@ class DocumentSdkMenu extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           const DocumentUseCasesWidget(),
-          DocumentUseCasesLegacyWidget(),
           const TitleItemWidget(title: 'Other API'),
           MenuItemWidget(title: 'Analyze document quality ', onTap: () => _analyzeDocumentQuality(context)),
           MenuItemWidget(title: 'PerformOCR ', onTap: () => _performOCR(context)),

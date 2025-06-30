@@ -9,7 +9,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/pages_widget.dart';
-import '../ui/preview/_legacy_document_preview.dart';
+import '../ui/preview/_custom_ui_document_preview.dart';
 import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
@@ -43,7 +43,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => LegacyDocumentPreview()),
+      MaterialPageRoute(builder: (context) => CustomUiDocumentPreview()),
     );
   }
 

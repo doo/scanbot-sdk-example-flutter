@@ -6,9 +6,9 @@ import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/menu_item_widget.dart';
+import '../ui/preview/_custom_ui_document_preview.dart';
 import '../utility/utils.dart';
 
-import '../ui/preview/_legacy_document_preview.dart';
 import '../ui/preview/medical_certificate_preview.dart';
 
 import 'document_custom_ui.dart';
@@ -40,7 +40,7 @@ class CustomUiMenu extends StatelessWidget {
     if (result is List<scanbot_sdk.Page>) {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => LegacyDocumentPreview()),
+        MaterialPageRoute(builder: (context) => CustomUiDocumentPreview()),
       );
     }
   }

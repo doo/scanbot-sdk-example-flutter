@@ -13,12 +13,12 @@ import '../filter_page/filter_button_widget.dart';
 import '../_legacy_operations_page_widget.dart';
 import '../pages_widget.dart';
 
-class LegacyDocumentPreview extends StatefulWidget {
+class CustomUiDocumentPreview extends StatefulWidget {
   @override
-  _LegacyDocumentPreviewState createState() => _LegacyDocumentPreviewState();
+  _CustomUiDocumentPreviewState createState() => _CustomUiDocumentPreviewState();
 }
 
-class _LegacyDocumentPreviewState extends State<LegacyDocumentPreview> {
+class _CustomUiDocumentPreviewState extends State<CustomUiDocumentPreview> {
   final LegacyPageRepository _pageRepository = LegacyPageRepository();
   late List<sdk.Page> _pages;
 
