@@ -9,7 +9,6 @@ import 'package:path_provider/path_provider.dart';
 import 'storage/_legacy_pages_repository.dart';
 import 'ui/menu_item_widget.dart';
 import 'utility/utils.dart';
-import 'barcode/barcode_sdk_menu.dart';
 import 'data_capture/data_capture_sdk_menu.dart';
 import 'document/document_sdk_menu.dart';
 import 'classic_components/custom_ui_menu.dart';
@@ -121,16 +120,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       body: ListView(
         children: [
           const TitleItemWidget(title: 'Document SDK API'),
-          MenuItemWidget(
-            title: 'Barcode SDK Menu',
-            startIcon: Icons.qr_code_scanner,
-            endIcon: Icons.arrow_forward,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const BarcodeSdkMenu()),
-              );
-            },
-          ),
           MenuItemWidget(
             title: 'Document SDK Menu',
             startIcon: Icons.photo_camera,
