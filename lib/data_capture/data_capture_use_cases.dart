@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/check_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/credit_card_preview.dart';
@@ -51,18 +50,12 @@ class DataCaptureUseCases extends StatelessWidget {
             title: "Scan MRZ (Machine Readable Zone)",
             onTap: () => startMRZScanner(context)),
         MenuItemWidget(
-            title: "Scan EHIC (European Health Insurance Card)",
-            onTap: () => startEhicScanner(context)),
-        MenuItemWidget(
             title: "Scan VIN", onTap: () => startVINScanner(context)),
         MenuItemWidget(
             title: "Scan Check", onTap: () => startCheckScanner(context)),
         MenuItemWidget(
             title: "Scan Text Data",
             onTap: () => startTextDataScanner(context)),
-        MenuItemWidget(
-            title: "Scan Medical Certificate",
-            onTap: () => startMedicalCertificateScanner(context)),
         MenuItemWidget(
             title: "Scan Credit Scanner",
             onTap: () => startCreditCardScanner(context)),
@@ -192,8 +185,8 @@ class DataCaptureUseCases extends StatelessWidget {
       DeIdCardFront.DOCUMENT_TYPE,
       DeIdCardBack.DOCUMENT_TYPE,
       DePassport.DOCUMENT_TYPE,
-      DeDriverLicenseFront.DOCUMENT_TYPE,
-      DeDriverLicenseBack.DOCUMENT_TYPE,
+      EuropeanDriverLicenseFront.DOCUMENT_TYPE,
+      EuropeanDriverLicenseBack.DOCUMENT_TYPE,
       DeResidencePermitFront.DOCUMENT_TYPE,
       DeResidencePermitBack.DOCUMENT_TYPE,
       EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
@@ -213,7 +206,7 @@ class DataCaptureUseCases extends StatelessWidget {
           if (result.document != null) {
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) => ExtractedDocumentDataPreview([result])),
+                  builder: (context) => ExtractedDocumentDataPreview(scanningResult: result)),
             );
           } else {
             await showAlertDialog(
@@ -248,7 +241,7 @@ class DataCaptureUseCases extends StatelessWidget {
         if (result.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
           await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => CheckDocumentResultPreview(result)),
+                builder: (context) => CheckDocumentResultPreview(scanningResult: result)),
           );
         } else {
           await showAlertDialog(
@@ -296,19 +289,17 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<void> startVINScanner(BuildContext context) async {
-    var configuration = VinScannerConfiguration();
-    configuration.topBarBackgroundColor = ScanbotRedColor;
-    configuration.topBarButtonsActiveColor = Colors.white;
+    var configuration = VinScannerScreenConfiguration();
     // Configure other parameters as needed.
 
-    await startDetector<ResultWrapper<VinScannerResult>>(
+    await startDetector<ResultWrapper<VinScannerUiResult>>(
       context: context,
-      scannerFunction: () => ScanbotSdkUi.startVinScanner(configuration),
+      scannerFunction: () => ScanbotSdkUiV2.startVINScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => VinScannerResultPreview(result.data!)),
+                builder: (context) => VinScannerResultPreview(uiResult: result.data!)),
           );
         } else {
           await showAlertDialog(
@@ -320,12 +311,9 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
     var configuration = DocumentDataExtractorScreenConfiguration();
-    configuration.finderLineColor = ScanbotRedColor;
-    configuration.topBarBackgroundColor = ScanbotRedColor;
-    configuration.topBarButtonsActiveColor = Colors.white;
     // Configure other parameters as needed.
 
-    await startDetector<ResultWrapper<List<DocumentDataExtractionResult>>>(
+    await startDetector<ResultWrapper<DocumentDataExtractorUiResult>>(
       context: context,
       scannerFunction: () => _runDocumentDataExtractor(configuration),
       handleResult: (context, result) async {
@@ -333,7 +321,7 @@ class DataCaptureUseCases extends StatelessWidget {
           await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) =>
-                    ExtractedDocumentDataPreview(result.data!)),
+                    ExtractedDocumentDataPreview(uiResult: result.data!)),
           );
         } else {
           await showAlertDialog(
@@ -343,14 +331,14 @@ class DataCaptureUseCases extends StatelessWidget {
     );
   }
 
-  Future<ResultWrapper<List<DocumentDataExtractionResult>>>
+  Future<ResultWrapper<DocumentDataExtractorUiResult>>
       _runDocumentDataExtractor(
-          DocumentDataExtractorScreenConfiguration configuration) async {
+      DocumentDataExtractorScreenConfiguration configuration) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var extractedData = await ScanbotSdkUi.startDocumentDataExtractor(configuration);
+      var extractedData = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  extractedData.data?.forEach((item) {
       //    item.encodeImages();
@@ -361,18 +349,16 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startCheckScanner(BuildContext context) async {
     var configuration = CheckScannerScreenConfiguration();
-    configuration.topBarBackgroundColor = ScanbotRedColor;
-    configuration.topBarButtonsActiveColor = Colors.white;
     // Configure other parameters as needed.
 
-    await startDetector<ResultWrapper<CheckScanningResult>>(
+    await startDetector<ResultWrapper<CheckScannerUiResult>>(
       context: context,
       scannerFunction: () => _runCheckScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => CheckDocumentResultPreview(result.data!)),
+                builder: (context) => CheckDocumentResultPreview(uiResult: result.data!)),
           );
         } else {
           await showAlertDialog(
@@ -382,13 +368,13 @@ class DataCaptureUseCases extends StatelessWidget {
     );
   }
 
-  Future<ResultWrapper<CheckScanningResult>> _runCheckScanner(
+  Future<ResultWrapper<CheckScannerUiResult>> _runCheckScanner(
       CheckScannerScreenConfiguration configuration) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var checkScanningResult = await ScanbotSdkUi.startCheckScanner(configuration);
+      var checkScanningResult = await ScanbotSdkUiV2.startCheckScanner(configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  checkScanningResult.data?.encodeImages();
       return checkScanningResult;
@@ -418,32 +404,6 @@ class DataCaptureUseCases extends StatelessWidget {
     );
   }
 
-  Future<void> startMedicalCertificateScanner(BuildContext context) async {
-    var configuration = MedicalCertificateScannerConfiguration();
-    configuration.returnCroppedDocumentImage = false;
-    configuration.topBarBackgroundColor = ScanbotRedColor;
-    configuration.topBarButtonsActiveColor = Colors.white;
-    // Configure other parameters as needed.
-
-    await startDetector<ResultWrapper<MedicalCertificateScanningResult>>(
-      context: context,
-      scannerFunction: () =>
-          ScanbotSdkUi.startMedicalCertificateScanner(configuration),
-      handleResult: (context, result) async {
-        if (result.status == OperationStatus.OK) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    MedicalCertificatePreviewWidget(result.data!)),
-          );
-        } else {
-          await showAlertDialog(
-              context, "Operation Status: ${result.status.name}");
-        }
-      },
-    );
-  }
-
   Future<void> startCreditCardScanner(BuildContext context) async {
     var configuration = CreditCardScannerScreenConfiguration();
     // Configure parameters as needed.
@@ -458,29 +418,6 @@ class DataCaptureUseCases extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) =>
                     CreditCardResultPreview(uiResult: result.data!)),
-          );
-        } else {
-          await showAlertDialog(
-              context, "Operation Status: ${result.status.name}");
-        }
-      },
-    );
-  }
-
-  Future<void> startEhicScanner(BuildContext context) async {
-    var configuration = HealthInsuranceCardScannerConfiguration();
-    // Configure parameters as needed.
-
-    await startDetector<
-        ResultWrapper<EuropeanHealthInsuranceCardRecognitionResult>>(
-      context: context,
-      scannerFunction: () => ScanbotSdkUi.startEhicScanner(configuration),
-      handleResult: (context, result) async {
-        if (result.status == OperationStatus.OK) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    EuropeanHealthInsuranceCardResultPreview(result.data!)),
           );
         } else {
           await showAlertDialog(

@@ -4,14 +4,20 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import '../../utility/utils.dart';
 
 class CheckDocumentResultPreview extends StatelessWidget {
-  final CheckScanningResult result;
+  final CheckScannerUiResult? uiResult;
+  final CheckScanningResult? scanningResult;
 
-  const CheckDocumentResultPreview(this.result, {super.key});
+  const CheckDocumentResultPreview({
+    super.key,
+    this.uiResult,
+    this.scanningResult,
+  }) : assert(uiResult != null || scanningResult != null,
+  'At least one result must be provided');
 
   @override
   Widget build(BuildContext context) {
-    final genericDocument = result.check;
-    final croppedImage = result.croppedImage;
+    final genericDocument = uiResult?.check ?? scanningResult?.check;
+    final croppedImage = uiResult?.croppedImage ?? scanningResult?.croppedImage;
 
     return Scaffold(
       appBar: ScanbotAppBar('Check Document Preview', showBackButton: true, context: context),
