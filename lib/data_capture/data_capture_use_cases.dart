@@ -179,18 +179,17 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<void> _extractDocumentDataFromImage(BuildContext context) async {
-    var commonConfig =
-        DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
-      MRZ.DOCUMENT_TYPE,
+    // Starting from v7.1.0 all types are enabled by default
+    var commonConfig = DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
       DeIdCardFront.DOCUMENT_TYPE,
       DeIdCardBack.DOCUMENT_TYPE,
+      DeHealthInsuranceCardFront.DOCUMENT_TYPE,
       DePassport.DOCUMENT_TYPE,
-      EuropeanDriverLicenseFront.DOCUMENT_TYPE,
-      EuropeanDriverLicenseBack.DOCUMENT_TYPE,
       DeResidencePermitFront.DOCUMENT_TYPE,
       DeResidencePermitBack.DOCUMENT_TYPE,
+      EuropeanDriverLicenseFront.DOCUMENT_TYPE,
+      EuropeanDriverLicenseBack.DOCUMENT_TYPE,
       EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
-      DeHealthInsuranceCardFront.DOCUMENT_TYPE,
     ]);
 
     var configuration = DocumentDataExtractorConfiguration(
@@ -238,14 +237,13 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: (path) => _runCheckRecognize(configuration, path),
       handleResult: (context, result) async {
-        if (result.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
+        if (result.status == CheckMagneticInkStripScanningStatus.ERROR_NOTHING_FOUND) {
+          await showAlertDialog(context, "Operation Status: ${result.status.name}");
+        } else {
           await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => CheckDocumentResultPreview(scanningResult: result)),
           );
-        } else {
-          await showAlertDialog(
-              context, "Operation Status: ${result.status.name}");
         }
       },
     );
@@ -290,6 +288,13 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startVINScanner(BuildContext context) async {
     var configuration = VinScannerScreenConfiguration();
+    configuration.introScreen.explanation.text =
+        'Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode' +
+        '\\nThe scanner will guide you to the optimal scanning position.' +
+        'Once the scan is complete, your VIN details will automatically be extracted and processed.';
+    // Configure the done button. E.g., the text or the background color.
+    configuration.introScreen.doneButton.text = 'Start Scanning';
+    configuration.introScreen.doneButton.background.fillColor = ScanbotColor('#C8193C');
     // Configure other parameters as needed.
 
     await startDetector<ResultWrapper<VinScannerUiResult>>(
@@ -311,6 +316,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
     var configuration = DocumentDataExtractorScreenConfiguration();
+    configuration.viewFinder.overlayColor = ScanbotColor('#C8193C');
     // Configure other parameters as needed.
 
     await startDetector<ResultWrapper<DocumentDataExtractorUiResult>>(
@@ -349,6 +355,11 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startCheckScanner(BuildContext context) async {
     var configuration = CheckScannerScreenConfiguration();
+    //  Configure the strings.
+    configuration.localization.topUserGuidance = 'Localized topUserGuidance';
+    configuration.localization.cameraPermissionCloseButton = 'Localized cameraPermissionCloseButton';
+    configuration.localization.completionOverlaySuccessMessage = 'Localized completionOverlaySuccessMessage';
+    configuration.localization.introScreenText = 'Localized introScreenText';
     // Configure other parameters as needed.
 
     await startDetector<ResultWrapper<CheckScannerUiResult>>(
@@ -383,6 +394,10 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startTextDataScanner(BuildContext context) async {
     var configuration = TextPatternScannerScreenConfiguration();
+    // Show the top user guidance
+    configuration.topUserGuidance.visible = true;
+    // Customize the top user guidance
+    configuration.topUserGuidance.title.text = 'Customized title';
     // Configure parameters as needed.
 
     await startDetector<ResultWrapper<TextPatternScannerUiResult>>(
@@ -406,6 +421,12 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startCreditCardScanner(BuildContext context) async {
     var configuration = CreditCardScannerScreenConfiguration();
+    // Configure the top bar mode
+    configuration.topBar.mode = TopBarMode.GRADIENT;
+    // Configure the top bar status bar mode
+    configuration.topBar.statusBarMode = StatusBarMode.LIGHT;
+    // Configure the top bar background color
+    configuration.topBar.cancelButton.text = 'Cancel';
     // Configure parameters as needed.
 
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
@@ -429,6 +450,8 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startMRZScanner(BuildContext context) async {
     var configuration = MrzScannerScreenConfiguration();
+    // Show the introduction screen automatically when the screen appears.
+    configuration.introScreen.showAutomatically = true;
     // Configure parameters as needed.
 
     await startDetector<ResultWrapper<MrzScannerUiResult>>(

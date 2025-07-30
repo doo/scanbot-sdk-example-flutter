@@ -15,7 +15,7 @@ Future<void> startScanning() async {
   actionBar.zoomButton.foregroundColor = ScanbotColor('#FFFFFF');
   /** Hide the flip camera button */
   actionBar.flipCameraButton.visible = false;
-  /** Start the Credit Card Scanner **/
+  /** Start the Document Data Extractor **/
   var result = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
   if (result.status == OperationStatus.OK) {
     // ...

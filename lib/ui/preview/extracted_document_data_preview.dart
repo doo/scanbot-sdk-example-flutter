@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
+import '../../utility/utils.dart';
+
 class ExtractedDocumentDataPreview extends StatelessWidget {
   final DocumentDataExtractorUiResult? uiResult;
   final DocumentDataExtractionResult? scanningResult;
@@ -18,7 +20,7 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
     final croppedImage = uiResult?.croppedImage ?? scanningResult?.croppedImage;
 
     final children = <Widget>[
-      _buildImagePreview(croppedImage),
+      _buildImagePreview(context, croppedImage),
       const SizedBox(height: 16),
     ];
 
@@ -158,18 +160,24 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: children,
+    return Scaffold(
+      appBar: ScanbotAppBar('Extracted Documents Data', showBackButton: true, context: context),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: children,
+        ),
       ),
     );
   }
 
-  Widget _buildImagePreview(ImageRef? image) {
+  Widget _buildImagePreview(BuildContext context, ImageRef? image) {
     if (image?.buffer != null) {
-      return Image.memory(image!.buffer!, fit: BoxFit.contain);
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.25,
+        child: Image.memory(image!.buffer!, fit: BoxFit.contain),
+      );
     } else {
       return const Text('No image available');
     }
