@@ -9,6 +9,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <!-- required for mock camera functionality to allow full access to external storage.-->
+    <!-- <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
+
     <!-- If you are targeting Android 13 (API level 33) or higher, add the following permission -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
