@@ -1,4 +1,4 @@
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 7.0.0:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 7.0.1:
 
 //-------------------------------------------------------------
 collection 1.18.0
