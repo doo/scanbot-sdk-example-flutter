@@ -15,7 +15,7 @@ The Scanbot SDK is a set of high-level APIs that lets you integrate document sca
 
 With our Ready-To-Use UI (RTU UI) components, you can integrate the Scanbot SDK into your Flutter app in less than an hour.
 
-💡 For more details about the Scanbot Flutter Document Scanner SDK and Data Capture Modules, please check out our [documentation.](https://docs.scanbot.io/document-scanner-sdk/flutter/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites)
+💡 For more details about the Scanbot Flutter Document Scanner SDK and Data Capture Modules, please check out our [documentation](https://docs.scanbot.io/flutter/document-scanner-sdk/introduction/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites)
 
 ## How to run this example app?
 
@@ -115,7 +115,7 @@ As a customer, you also get access to a dedicated support Slack or Microsoft Tea
 
 The Scanbot SDK examples will run for one minute per session without a license. After that, all functionalities and UI components will stop working. 
 
-To try the Scanbot Flutter SDKs without the one-minute limit, you can request a free, no-strings-attached [7-day](https://scanbot.io/trial/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) trial license for your Flutter project.
+To try the Scanbot Flutter SDKs without the one-minute limit, you can request a free, no-strings-attached [7-day](https://docs.scanbot.io/trial/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) trial license for your Flutter project.
 
 Alternatively, check out our [demo apps](https://scanbot.io/demo-apps/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) to test the SDK.
 
