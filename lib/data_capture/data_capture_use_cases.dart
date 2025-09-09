@@ -179,7 +179,6 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<void> _extractDocumentDataFromImage(BuildContext context) async {
-    // Starting from v7.1.0 all types are enabled by default
     var commonConfig = DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
       DeIdCardFront.DOCUMENT_TYPE,
       DeIdCardBack.DOCUMENT_TYPE,
