@@ -11,6 +11,7 @@ import '../utility/utils.dart';
 
 import '../ui/preview/medical_certificate_preview.dart';
 
+import 'barcode_custom_ui.dart';
 import 'document_custom_ui.dart';
 import 'medical_certificate_custom_ui.dart';
 
@@ -25,9 +26,27 @@ class CustomUiMenu extends StatelessWidget {
       appBar: ScanbotAppBar('Scanbot Custom UI Menu'),
       body: ListView(
         children: <Widget>[
-          MenuItemWidget(title: 'Scan Documents', onTap: () => _startDocumentsCustomUIScanner(context)),
-          MenuItemWidget(title: 'Scan Medical Certificate', onTap: () => _startMedicalCertificateCustomUIScanner(context)),
+          MenuItemWidget(
+              title: 'Scan Documents',
+              onTap: () => _startDocumentsCustomUIScanner(context)),
+          MenuItemWidget(
+              title: 'Scan Medical Certificate',
+              onTap: () => _startMedicalCertificateCustomUIScanner(context)),
+          MenuItemWidget(
+            title: 'Scan Barcodes',
+            onTap: () => _startBarcodeScanner(context),
+          ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _startBarcodeScanner(BuildContext context) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BarcodeScanbotView(
+          onBarcodeDetected: (_) async {},
+        ),
       ),
     );
   }

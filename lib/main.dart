@@ -102,7 +102,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MainPageWidget(),
-      navigatorObservers: [ScanbotCamera.scanbotSdkRouteObserver],
+      // navigatorObservers: [ScanbotCamera.scanbotSdkRouteObserver],
     );
   }
 }
