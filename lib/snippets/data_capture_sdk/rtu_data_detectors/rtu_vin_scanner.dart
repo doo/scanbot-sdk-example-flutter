@@ -11,11 +11,11 @@ class RtuVinScannerFeature extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: const Text('Scan VIN'),
-      onTap: () => _startCheckScanner(context),
+      onTap: () => _startVINScanner(context),
     );
   }
 
-  Future<void> _startCheckScanner(BuildContext context) async {
+  Future<void> _startVINScanner(BuildContext context) async {
     // Always make sure you have a valid license on runtime via ScanbotSdk.getLicenseStatus()
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
