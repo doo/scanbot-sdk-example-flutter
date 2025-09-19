@@ -5,7 +5,7 @@ MedicalCertificateScannerConfiguration medicalCertificateScannerConfigurationSni
   return MedicalCertificateScannerConfiguration()
     // Behavior configuration:
     // e.g. disable recognition of patient's personal information.
-    // ..recognizePatientInfo = false
+    ..recognizePatientInfo = false
 
     // UI configuration:
     // e.g. configure various colors.
@@ -14,13 +14,13 @@ MedicalCertificateScannerConfiguration medicalCertificateScannerConfigurationSni
 
     // Configuration for the hint values:
     // If you do not set your own values, the default ones will be used.
-    // ..userGuidanceStrings = MedicalCertificateUserGuidanceStrings(
-    //     "Start scanning",
-    //     "Scanning",
-    //     "Energy saving",
-    //     "Capturing",
-    //     "Processing",
-    //     "Paused")
+    ..userGuidanceStrings = MedicalCertificateUserGuidanceStrings(
+        "Start scanning",
+        "Scanning",
+        "Energy saving",
+        "Capturing",
+        "Processing",
+        "Paused")
 
     // Text configuration:
     // e.g. customize UI element's text.

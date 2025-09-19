@@ -23,7 +23,7 @@ Value: ${wrappedGenericFieldValue?.value?.text ?? "N/A"}
   static TextFieldWrapper? _getGenericFieldValue(GenericDocument genericDocument) {
     switch (genericDocument.type.name) {
       case BoardingPass.DOCUMENT_TYPE:
-        return BoardingPass(genericDocument).electronicTicket;
+        return BoardingPass(genericDocument).electronicTicketIndicator;
       case SwissQR.DOCUMENT_TYPE:
         return SwissQR(genericDocument).iban;
       case DEMedicalPlan.DOCUMENT_TYPE:
@@ -37,7 +37,7 @@ Value: ${wrappedGenericFieldValue?.value?.text ?? "N/A"}
       case MedicalCertificate.DOCUMENT_TYPE:
         return MedicalCertificate(genericDocument).doctorNumber;
       case VCard.DOCUMENT_TYPE:
-        return VCard(genericDocument).firstName?.rawValue;
+        return VCard(genericDocument).name?.rawValue;
       case AAMVA.DOCUMENT_TYPE:
         return AAMVA(genericDocument).issuerIdentificationNumber;
       default:
