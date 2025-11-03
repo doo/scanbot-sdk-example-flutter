@@ -354,11 +354,11 @@ class DataCaptureUseCases extends StatelessWidget {
 
   Future<void> startCheckScanner(BuildContext context) async {
     var configuration = CheckScannerScreenConfiguration();
-    //  Configure the strings.
-    configuration.localization.topUserGuidance = 'Localized topUserGuidance';
-    configuration.localization.cameraPermissionCloseButton = 'Localized cameraPermissionCloseButton';
-    configuration.localization.completionOverlaySuccessMessage = 'Localized completionOverlaySuccessMessage';
-    configuration.localization.introScreenText = 'Localized introScreenText';
+    // Modify behaviors
+    configuration.exampleOverlayVisible = true;
+    // Set colors
+    configuration.palette.sbColorPrimary = ScanbotColor('#C8193C');
+    configuration.palette.sbColorOnPrimary = ScanbotColor('#FFFFFF');
     // Configure other parameters as needed.
 
     await startDetector<ResultWrapper<CheckScannerUiResult>>(
