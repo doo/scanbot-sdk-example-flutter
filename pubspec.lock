@@ -460,10 +460,10 @@ packages:
     dependency: "direct main"
     description:
       name: scanbot_sdk
-      sha256: b04e896ab99668dabe7724373e9063feef48d04b3f7e88355bd8248087f93f0f
+      sha256: dc47333ff66d72db1b00c20f8d6f919de98b361bec210b6ed7819765f26feb34
       url: "https://pub.dev"
     source: hosted
-    version: "7.1.1-beta04"
+    version: "7.1.1"
   shared_preferences:
     dependency: "direct main"
     description:
