@@ -29,11 +29,11 @@ Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
   final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
-  var config = ScanbotSdkConfig(
+  var config = SdkConfiguration(
       loggingEnabled: true,
       // Consider switching logging OFF in production. builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
-      storageImageFormat: ImageFormat.JPG,
+      storageImageFormat: StorageImageFormat.JPG,
       storageImageQuality: 80,
       // Uncomment to use custom storage directory
       // storageBaseDirectory: customStorageBaseDirectory,
@@ -45,7 +45,7 @@ Future<void> _initScanbotSdk() async {
   }
 
   try {
-    await ScanbotSdk.initScanbotSdk(config);
+    await ScanbotSdk.initialize(config);
     await LegacyPageRepository().loadPages();
   } catch (e) {
     Logger.root.severe(e);
@@ -193,12 +193,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _getLicenseStatus() async {
     try {
-      final result = await ScanbotSdk.getLicenseStatus();
-      var status = " Status: ${result.licenseStatus.name}";
+      final result = await ScanbotSdk.getLicenseInfo();
+      var status = " Status: ${result.status.name}";
 
-      if (result.licenseExpirationDate != null) {
-        status += "\n ExpirationDate: ${result.licenseExpirationDate}";
-      }
+      //TODO: Check it
+      // if (result.licenseExpirationDate != null) {
+      //   status += "\n ExpirationDate: ${result.licenseExpirationDate}";
+      // }
 
       await showAlertDialog(context, status, title: 'License Status');
     } catch (e) {

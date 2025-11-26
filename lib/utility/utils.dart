@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart' as picker;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' hide EdgeInsets;
 
 const bool shouldInitWithEncryption = false;
 
@@ -99,8 +99,8 @@ void showResultTextDialog(BuildContext context, result) {
 }
 
 Future<bool> checkLicenseStatus(BuildContext context) async {
-  final result = await ScanbotSdk.getLicenseStatus();
-  if (result.isLicenseValid) {
+  final result = await ScanbotSdk.getLicenseInfo();
+  if (result.isValid) {
     return true;
   }
   await showAlertDialog(

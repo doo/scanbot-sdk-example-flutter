@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/check_preview.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/credit_card_preview.dart';
 
 import '../ui/menu_item_widget.dart';
-import '../ui/preview/ehic_preview.dart';
 import '../ui/preview/extracted_document_data_preview.dart';
-import '../ui/preview/medical_certificate_preview.dart';
 import '../ui/preview/mrz_document_preview.dart';
 import '../ui/preview/text_pattern_preview.dart';
 import '../ui/preview/vin_preview.dart';
@@ -27,12 +24,6 @@ class DataCaptureUseCases extends StatelessWidget {
         MenuItemWidget(
             title: "Recognize MRZ from Still Image",
             onTap: () => _recognizeMrzOnImage(context)),
-        MenuItemWidget(
-            title: "Recognize Medical Certificate from Still Image",
-            onTap: () => _recognizeMedicalCertificateOnImage(context)),
-        MenuItemWidget(
-            title: "Recognize EHIC from Still Image",
-            onTap: () => _recognizeHealthInsuranceCardOnImage(context)),
         MenuItemWidget(
             title: "Extract Document Data from Still Image",
             onTap: () => _extractDocumentDataFromImage(context)),
@@ -112,8 +103,8 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await startRecognizer<MrzScannerResult>(
       context: context,
-      scannerFunction: (path) => ScanbotSdk.recognizeOperations
-          .recognizeMrzOnImage(path, configuration),
+      scannerFunction: (path) => ScanbotSdk.mrz
+          .scanFromImageFileUri(path, configuration),
       handleResult: (context, result) async {
         if (result.success) {
           await Navigator.of(context).push(
@@ -123,56 +114,6 @@ class DataCaptureUseCases extends StatelessWidget {
           );
         } else {
           await showAlertDialog(context, "Operation Status: ${result.success}");
-        }
-      },
-    );
-  }
-
-  Future<void> _recognizeMedicalCertificateOnImage(BuildContext context) async {
-    var configuration = MedicalCertificateScanningParameters();
-    configuration.recognizePatientInfoBox = true;
-    // Configure other parameters as needed.
-
-    await startRecognizer<MedicalCertificateScanningResult>(
-      context: context,
-      scannerFunction: (path) => ScanbotSdk.recognizeOperations
-          .recognizeMedicalCertificateOnImage(path, configuration),
-      handleResult: (context, result) async {
-        if (result.scanningSuccessful) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => MedicalCertificatePreviewWidget(result)),
-          );
-        } else {
-          await showAlertDialog(
-              context, "Operation Status: ${result.scanningSuccessful}");
-        }
-      },
-    );
-  }
-
-  Future<void> _recognizeHealthInsuranceCardOnImage(
-      BuildContext context) async {
-    var configuration = EuropeanHealthInsuranceCardRecognizerConfiguration();
-    configuration.maxExpirationYear = 2100;
-    // Configure other parameters as needed.
-
-    await startRecognizer<EuropeanHealthInsuranceCardRecognitionResult>(
-      context: context,
-      scannerFunction: (path) => ScanbotSdk.recognizeOperations
-          .recognizeHealthInsuranceCardOnImage(path, configuration),
-      handleResult: (context, result) async {
-        if (result.status ==
-            EuropeanHealthInsuranceCardRecognitionResultRecognitionStatus
-                .SUCCESS) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    EuropeanHealthInsuranceCardResultPreview(result)),
-          );
-        } else {
-          await showAlertDialog(
-              context, "Operation Status: ${result.status.name}");
         }
       },
     );
@@ -219,7 +160,7 @@ class DataCaptureUseCases extends StatelessWidget {
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var extractedData = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(path, configuration);
+      var extractedData = await ScanbotSdk.documentDataExtractor.extractFromImageFileUri(path, configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  extractedData.encodeImages();
       return extractedData;
@@ -254,7 +195,7 @@ class DataCaptureUseCases extends StatelessWidget {
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var checkScanningResult = await ScanbotSdk.recognizeOperations.recognizeCheckOnImage(path, configuration);
+      var checkScanningResult = await ScanbotSdk.check.scanFromImageFileUri(path, configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  checkScanningResult.encodeImages();
       return checkScanningResult;
@@ -268,8 +209,8 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await startRecognizer<CreditCardScanningResult>(
         context: context,
-        scannerFunction: (path) => ScanbotSdk.recognizeOperations
-            .recognizeCreditCardOnImage(path, configuration),
+        scannerFunction: (path) => ScanbotSdk.creditCard
+            .scanFromImageFileUri(path, configuration),
         handleResult: (context, result) async {
           if (result.scanningStatus !=
               CreditCardScanningStatus.ERROR_NOTHING_FOUND) {
@@ -298,7 +239,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await startDetector<ResultWrapper<VinScannerUiResult>>(
       context: context,
-      scannerFunction: () => ScanbotSdkUiV2.startVINScanner(configuration),
+      scannerFunction: () => ScanbotSdk.vin.startScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(
@@ -343,7 +284,7 @@ class DataCaptureUseCases extends StatelessWidget {
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var extractedData = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
+      var extractedData = await ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  extractedData.data?.forEach((item) {
       //    item.encodeImages();
@@ -384,7 +325,7 @@ class DataCaptureUseCases extends StatelessWidget {
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var checkScanningResult = await ScanbotSdkUiV2.startCheckScanner(configuration);
+      var checkScanningResult = await ScanbotSdk.check.startScanner(configuration);
       /// if you want to use image later, call encodeImages() to save in buffer
       //  checkScanningResult.data?.encodeImages();
       return checkScanningResult;
@@ -402,7 +343,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startDetector<ResultWrapper<TextPatternScannerUiResult>>(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startTextPatternScanner(configuration),
+          ScanbotSdk.textPattern.startScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(
@@ -431,7 +372,7 @@ class DataCaptureUseCases extends StatelessWidget {
     await startDetector<ResultWrapper<CreditCardScannerUiResult>>(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startCreditCardScanner(configuration),
+          ScanbotSdk.creditCard.startScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(
@@ -455,7 +396,7 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await startDetector<ResultWrapper<MrzScannerUiResult>>(
       context: context,
-      scannerFunction: () => ScanbotSdkUiV2.startMrzScanner(configuration),
+      scannerFunction: () => ScanbotSdk.mrz.startScanner(configuration),
       handleResult: (context, result) async {
         if (result.status == OperationStatus.OK) {
           await Navigator.of(context).push(

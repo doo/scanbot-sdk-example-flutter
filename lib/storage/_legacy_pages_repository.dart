@@ -67,9 +67,10 @@ class LegacyPageRepository {
         pagesJson.map((p) => Page.fromJson(p as Map<String, dynamic>)).toList();
     _pages.clear();
     if (loadedPages.isNotEmpty) {
-      var refreshPages = await ScanbotSdk.refreshImageUris(
-          loadedPages.map((e) => Page(e.pageId)).toList());
-      _pages.addAll(refreshPages);
+      //TODO: Check it
+      // var refreshPages = await ScanbotSdk.legacyPage.refreshImageUris(
+      //     loadedPages.map((e) => Page(e.pageId)).toList());
+      // _pages.addAll(refreshPages);
     }
   }
 

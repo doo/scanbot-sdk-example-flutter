@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> documentScanner() async {
   var configuration = DocumentScanningFlow();
@@ -44,5 +44,5 @@ Future<void> documentScanner() async {
   // Equivalent to multiPageEnabled: false
   configuration.outputSettings.pagesScanLimit = 1;
 
-  var documentData = await ScanbotSdkUiV2.startDocumentScanner(configuration);
+  var documentData = await ScanbotSdk.document.startScanner(configuration);
 }

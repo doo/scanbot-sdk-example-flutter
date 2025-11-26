@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' hide IconButton;
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 import '../storage/_legacy_pages_repository.dart';
 import '../utility/utils.dart';
@@ -155,14 +155,15 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
   }
 
-  Future<sdk.Page> proceedImage(
-      sdk.Page page, CroppingPolygon croppingResult) async {
-    return await ScanbotSdk.cropAndRotatePage(
-      page,
-      croppingResult.polygon,
-      croppingResult.rotationTimesCw,
-    );
-  }
+  //TODO: Check it
+  // Future<sdk.Page> proceedImage(
+  //     sdk.Page page, CroppingPolygon croppingResult) async {
+  //   return await ScanbotSdk.cropAndRotatePage(
+  //     page,
+  //     croppingResult.polygon,
+  //     croppingResult.rotationTimesCw,
+  //   );
+  // }
 
   Future<void> cropAndPop() async {
     setState(() {
@@ -176,8 +177,9 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
 
     if (croppingResult != null) {
-      var newPage = await proceedImage(currentPage, croppingResult);
-      Navigator.of(context).pop(newPage);
+      //TODO: Check it
+      // var newPage = await proceedImage(currentPage, croppingResult);
+      // Navigator.of(context).pop(newPage);
     }
   }
 }

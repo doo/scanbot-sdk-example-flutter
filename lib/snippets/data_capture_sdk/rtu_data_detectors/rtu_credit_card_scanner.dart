@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/credit_card_preview.dart';
 
 import '../../../utility/utils.dart';
@@ -32,7 +32,7 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
 
       // An autorelease pool is required only because the result object contains image references.
       await autorelease(() async {
-        var result = await ScanbotSdkUiV2.startCreditCardScanner(config);
+        var result = await ScanbotSdk.creditCard.startScanner(config);
 
         if (result.status == OperationStatus.OK && result.data?.creditCard != null) {
 

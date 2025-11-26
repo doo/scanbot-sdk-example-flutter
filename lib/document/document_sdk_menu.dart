@@ -28,7 +28,7 @@ class DocumentSdkMenu extends StatelessWidget {
     try {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.analyzeDocumentQuality(response!.path, DocumentQualityAnalyzerConfiguration());
+        var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(response!.path, DocumentQualityAnalyzerConfiguration());
         await showAlertDialog(context, title: 'Document Quality', result.quality?.name ?? 'Unknown');
       }
     } catch (e) {
@@ -40,8 +40,8 @@ class DocumentSdkMenu extends StatelessWidget {
     try {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
-        await showAlertDialog(context, title: 'OCR Result', result.plainText);
+        var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([response!.path]);
+        await showAlertDialog(context, title: 'OCR Result', result.recognizedText);
       }
     } catch (e) {
       Logger.root.severe(e);

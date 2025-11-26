@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -24,7 +24,7 @@ Future<void> startScanning() async {
   configuration.introScreen.doneButton.text = 'Start Scanning';
   configuration.introScreen.doneButton.background.fillColor = ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
+  var result = await ScanbotSdk.textPattern.startScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

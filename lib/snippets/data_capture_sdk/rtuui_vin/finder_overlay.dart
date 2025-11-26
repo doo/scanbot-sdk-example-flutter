@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -9,7 +9,7 @@ Future<void> startScanning() async {
     strokeWidth: 2,
   );
   /** Start the VIN Scanner **/
-  var result = await ScanbotSdkUiV2.startVINScanner(configuration);
+  var result = await ScanbotSdk.vin.startScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

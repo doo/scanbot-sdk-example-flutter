@@ -18,8 +18,8 @@ Future<void> extractDocumentData(String uriPath) async {
     );
     // Configure other parameters as needed.
 
-  DocumentDataExtractionResult result = await ScanbotSdk.recognizeOperations.extractDocumentDataFromImage(uriPath, configuration);
-  if (result.status == DocumentDataExtractionStatus.SUCCESS) {
+  DocumentDataExtractionResult result = await ScanbotSdk.documentDataExtractor.extractFromImageFileUri(uriPath, configuration);
+  if (result.status == DocumentDataExtractionStatus.OK) {
     //  ...
   }
 }

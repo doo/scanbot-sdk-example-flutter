@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart' hide IconButton, EdgeInsets;
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
 
 import '../storage/_legacy_pages_repository.dart';
@@ -362,13 +362,13 @@ class PagePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var documentPreviewFile = File.fromUri(page.documentPreviewImageFileUri!);
-    var originalPreviewFile = File.fromUri(page.originalPreviewImageFileUri!);
+    var originalPreviewFile = File.fromUri(page.originalPreviewImageFileUri);
     var file = documentPreviewFile.existsSync()
         ? documentPreviewFile
         : originalPreviewFile;
-    var imageUri = documentPreviewFile.existsSync()
+    var imageUri = Uri(path: documentPreviewFile.existsSync()
         ? page.documentPreviewImageFileUri!
-        : page.originalPreviewImageFileUri!;
+        : page.originalPreviewImageFileUri);
 
     if (file.existsSync()) {
       return SizedBox(

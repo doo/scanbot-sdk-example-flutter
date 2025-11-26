@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as scanbot_sdk;
-import 'package:scanbot_sdk/scanbot_sdk_ui.dart';
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/menu_item_widget.dart';
 import '../ui/preview/_custom_ui_document_preview.dart';
 import '../utility/utils.dart';
 
-import '../ui/preview/medical_certificate_preview.dart';
-
 import 'document_custom_ui.dart';
-import 'medical_certificate_custom_ui.dart';
 
 class CustomUiMenu extends StatelessWidget {
   CustomUiMenu({Key? key}) : super(key: key);
@@ -26,7 +21,6 @@ class CustomUiMenu extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           MenuItemWidget(title: 'Scan Documents', onTap: () => _startDocumentsCustomUIScanner(context)),
-          MenuItemWidget(title: 'Scan Medical Certificate', onTap: () => _startMedicalCertificateCustomUIScanner(context)),
         ],
       ),
     );
@@ -41,19 +35,6 @@ class CustomUiMenu extends StatelessWidget {
       _pageRepository.addPages(result);
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => CustomUiDocumentPreview()),
-      );
-    }
-  }
-
-  Future<void> _startMedicalCertificateCustomUIScanner(BuildContext context) async {
-    var result = await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const MedicalCertificateScannerWidget()),
-    );
-
-    if (result is MedicalCertificateScanningResult) {
-      await Navigator.of(context).push(
-      MaterialPageRoute(
-            builder: (context) => MedicalCertificatePreviewWidget(result)),
       );
     }
   }

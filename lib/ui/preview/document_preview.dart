@@ -6,7 +6,6 @@ import '../operations_page_widget.dart';
 import '../pages_widget.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 class DocumentPreview extends StatefulWidget {
   final DocumentData initialDocumentData;
@@ -167,7 +166,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startDocumentScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
+          ScanbotSdk.document.startScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
     );
   }
 
@@ -178,7 +177,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     final response = await selectImageFromLibrary();
 
     if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));
+      var result = await ScanbotSdk.document.addPagesFromImageFileUris(documentData.uuid, [response!.path]);
       setState(() {
         documentData = result;
       });
@@ -199,8 +198,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: PdfConfiguration()));
-    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(documentData.uuid, PdfConfiguration());
+    await showAlertDialog(context, 'Pdf File created: $result', title: 'Result');
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
@@ -212,8 +211,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       pageDirection: PageDirection.PORTRAIT,
     );
 
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: pdfOptions, ocrConfiguration: OcrOptions(engineMode: OcrEngine.SCANBOT_OCR)));
-    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(documentData.uuid, pdfOptions, ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR));
+    await showAlertDialog(context, 'Pdf File created: $result', title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
@@ -222,15 +221,15 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
 
     var options = TiffGeneratorParameters(binarizationFilter: ScanbotBinarizationFilter(), dpi: 300, compression: CompressionMode.CCITT_T6);
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: options));
-    await showAlertDialog(context, 'Tiff Binarized File created: ${result.tiffFileUri}', title: 'Result');
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(documentData.uuid, options);
+    await showAlertDialog(context, 'Tiff Binarized File created: $result', title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFF() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: TiffGeneratorParameters()));
-    await showAlertDialog(context, 'Tiff File created: ${result.tiffFileUri}', title: 'Result');
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(documentData.uuid, TiffGeneratorParameters());
+    await showAlertDialog(context, 'Tiff File created: $result', title: 'Result');
   }
 }

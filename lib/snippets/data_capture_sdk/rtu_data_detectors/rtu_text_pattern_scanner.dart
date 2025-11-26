@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../ui/preview/text_pattern_preview.dart';
 import '../../../utility/utils.dart';
@@ -28,7 +28,7 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
       config.topUserGuidance.title.text = 'Customized title';
       // Configure parameters as needed.
 
-      var result = await ScanbotSdkUiV2.startTextPatternScanner(config);
+      var result = await ScanbotSdk.textPattern.startScanner(config);
 
       if (result.status == OperationStatus.OK && result.data != null) {
         await Navigator.push(

@@ -1,10 +1,10 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
   var configuration = DocumentDataExtractorScreenConfiguration();
   // Start the Document Data Extractor
-  var result = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration);
   if (result.status == OperationStatus.OK) {
     // Cast the resulted generic document to the appropriate document model.
     // Available document types are defined in [DocumentsModelRootType] enum.

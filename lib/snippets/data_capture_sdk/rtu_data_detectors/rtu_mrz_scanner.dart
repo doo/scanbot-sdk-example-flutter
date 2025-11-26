@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../ui/preview/mrz_document_preview.dart';
 import '../../../utility/utils.dart';
@@ -44,7 +44,7 @@ class RtuMrzScannerFeature extends StatelessWidget {
           MrzIncompleteResultHandling.ACCEPT;
 
       // Configure other parameters as needed.
-      final result = await ScanbotSdkUiV2.startMrzScanner(config);
+      final result = await ScanbotSdk.mrz.startScanner(config);
 
       if (result.status == OperationStatus.OK && result.data?.mrzDocument != null) {
         // Always serialize the MRZ document before stringifying, and use the serialized result.

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/multi_page_scanning_snippet.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_finder_snippet.dart';
@@ -10,7 +9,6 @@ import '../ui/preview/document_preview.dart';
 import '../utility/utils.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 class DocumentUseCasesWidget extends StatelessWidget {
   const DocumentUseCasesWidget({Key? key}) : super(key: key);
@@ -56,7 +54,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startDocumentScanner(singlePageScanningFlow()),
+          ScanbotSdk.document.startScanner(singlePageScanningFlow()),
     );
   }
 
@@ -64,7 +62,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startDocumentScanner(singlePageWithFinderScanningFlow()),
+          ScanbotSdk.document.startScanner(singlePageWithFinderScanningFlow()),
     );
   }
 
@@ -72,7 +70,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     await startScan(
       context: context,
       scannerFunction: () =>
-          ScanbotSdkUiV2.startDocumentScanner(multiPageScanningFlow()),
+          ScanbotSdk.document.startScanner(multiPageScanningFlow()),
     );
   }
 
@@ -94,7 +92,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
 
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.document.createDocument(CreateDocumentParams(imageFileUris: [response!.path]));
+        var result = await ScanbotSdk.document.createDocumentFromImageFileUris(images: [response!.path]);
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => DocumentPreview(result),

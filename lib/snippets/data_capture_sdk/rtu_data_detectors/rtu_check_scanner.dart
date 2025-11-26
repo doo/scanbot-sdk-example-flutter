@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/check_preview.dart';
 
 import '../../../utility/utils.dart';
@@ -31,7 +31,7 @@ class RtuCheckScannerFeature extends StatelessWidget {
 
       // An autorelease pool is required only because the result object contains image references.
       await autorelease(() async {
-        var result = await ScanbotSdkUiV2.startCheckScanner(config);
+        var result = await ScanbotSdk.check.startScanner(config);
 
         if (result.status == OperationStatus.OK && result.data?.check != null) {
 

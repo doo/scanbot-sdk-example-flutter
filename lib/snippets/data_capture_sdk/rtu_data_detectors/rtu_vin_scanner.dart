@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../ui/preview/vin_preview.dart';
 import '../../../utility/utils.dart';
@@ -31,7 +31,7 @@ class RtuVinScannerFeature extends StatelessWidget {
       config.introScreen.doneButton.background.fillColor = ScanbotColor('#C8193C');
       // Configure other parameters as needed.
 
-      var result = await ScanbotSdkUiV2.startVINScanner(config);
+      var result = await ScanbotSdk.vin.startScanner(config);
 
       if (result.status == OperationStatus.OK && result.data != null) {
         await Navigator.push(

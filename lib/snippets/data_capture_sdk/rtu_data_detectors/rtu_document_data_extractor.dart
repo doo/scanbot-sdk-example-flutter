@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../ui/preview/extracted_document_data_preview.dart';
 import '../../../utility/utils.dart';
@@ -27,7 +27,7 @@ class RtuDocumentDataExtractorFeature extends StatelessWidget {
 
       // An autorelease pool is required only because the result object contains image references.
       await autorelease(() async {
-        var result = await ScanbotSdkUiV2.startDocumentDataExtractor(config);
+        var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(config);
 
         if (result.status == OperationStatus.OK && result.data?.document != null) {
 

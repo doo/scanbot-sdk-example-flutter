@@ -6,9 +6,5 @@ Future<void> createDocumentTIFF() async {
     'SOME_STORED_DOCUMENT_ID',
   );
   /** Create a TIFF file with the provided options */
-  var params = TIFFFromDocumentParams(
-    documentID: document.uuid,
-    configuration: TiffGeneratorParameters()
-  );
-  var tiffUriResult = await ScanbotSdk.document.createTIFFForDocument(params);
+  var tiffUriResult = await ScanbotSdk.tiffGenerator.generateFromDocument(document.uuid, TiffGeneratorParameters());
 }

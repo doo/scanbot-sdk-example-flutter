@@ -1,4 +1,3 @@
-import 'package:scanbot_sdk/core.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> createDocumentPDF() async {
@@ -7,15 +6,11 @@ Future<void> createDocumentPDF() async {
     'SOME_STORED_DOCUMENT_ID',
   );
   /** Create a PDF file with the provided options */
-  var params = PDFFromDocumentParams(
-    documentID: document.uuid,
-      pdfConfiguration: PdfConfiguration(
+  var pdfConfiguration = PdfConfiguration(
       pageSize: PageSize.A4,
-      pageDirection: PageDirection.PORTRAIT,
-    ),
-    ocrConfiguration: OcrOptions(
-        engineMode: OcrEngine.SCANBOT_OCR
-    )
-  );
-  var pdfUriResult = await ScanbotSdk.document.createPDFForDocument(params);
+      pageDirection: PageDirection.PORTRAIT);
+
+  var ocrConfiguration =  OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR);
+
+  var pdfUriResult = await ScanbotSdk.pdfGenerator.generateFromDocument(document.uuid, pdfConfiguration, ocrConfiguration: ocrConfiguration);
 }

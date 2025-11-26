@@ -1,9 +1,8 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> createDocument() async {
-  var params = CreateDocumentParams();
   /** Create a document with a UUID */
-  var document = await ScanbotSdk.document.createDocument(params);
+  var document = await ScanbotSdk.document.createDocumentFromImageFileUris();
 }
 
 Future<void> createDocumentWithPages(List<String> imageFileUris) async {
@@ -11,11 +10,7 @@ Future<void> createDocumentWithPages(List<String> imageFileUris) async {
    * Create a document with a UUID
    * Add images from `imageFileUris` as document pages
    * */
-  var params = CreateDocumentParams(
-    imageFileUris: imageFileUris,
-  );
-
-  var document = await ScanbotSdk.document.createDocument(params);
+  var document = await ScanbotSdk.document.createDocumentFromImageFileUris(images: imageFileUris);
 }
 
 Future<void> loadDocument(String documentID) async {
@@ -25,19 +20,14 @@ Future<void> loadDocument(String documentID) async {
 
 Future<void> storedDocumentUUIDs() async {
   /** Retrieve all the document IDs from the storage */
-  var documentIds = await ScanbotSdk.document.storedDocumentIDs();
+  var documentIds = await ScanbotSdk.document.getStoredDocumentIDs();
 }
 
 Future<void> reorderDocumentPages(String documentID) async {
   /** Load a document from storage by ID */
   var document = await ScanbotSdk.document.loadDocument(documentID);
   /** Move the first page to the end of the document */
-  var params = MovePageParams(
-    documentID: document.uuid,
-    fromIndex: 0,
-    toIndex: document.pages.length - 1
-  );
-  var documentWithReorderedPages = await ScanbotSdk.document.movePage(params);
+  var documentWithReorderedPages = await ScanbotSdk.document.movePage(document.uuid, 0, document.pages.length - 1);
 }
 
 Future<void> removeAllPagesFromDocument(String documentID) async {

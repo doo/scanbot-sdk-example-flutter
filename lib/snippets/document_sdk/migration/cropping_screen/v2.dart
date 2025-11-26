@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> croppingScreen(String documentID, String pageID) async {
   var configuration = CroppingConfiguration(
@@ -10,5 +10,5 @@ Future<void> croppingScreen(String documentID, String pageID) async {
   // Equivalent to doneButtonTitle: 'Apply',
   configuration.localization.croppingTopBarConfirmButtonTitle = 'Apply';
 
-  var documentData = await ScanbotSdkUiV2.startCroppingScreen(configuration);
+  var documentData = await ScanbotSdk.document.startCroppingScreen(configuration);
 }

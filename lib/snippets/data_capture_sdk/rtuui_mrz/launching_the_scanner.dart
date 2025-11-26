@@ -1,10 +1,10 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
   var configuration = MrzScannerScreenConfiguration();
   // Start the MRZ Scanner
-  var result = await ScanbotSdkUiV2.startMrzScanner(configuration);
+  var result = await ScanbotSdk.mrz.startScanner(configuration);
   if (result.status == OperationStatus.OK) {
     // Cast the resulted generic document to the MRZ model.
     var mrzModel = MRZ(result.data!.mrzDocument!);

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 import '../utility/utils.dart';
 import 'filter_page/filter_button_widget.dart';
@@ -164,7 +163,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      await ScanbotSdk.document.removePage(RemovePageParams(documentID: widget.documentID, pageID:  _page.uuid));
+      await ScanbotSdk.document.removePages(widget.documentID, [_page.uuid]);
       Navigator.of(context).pop();
     } catch (e) {
       print(e);
@@ -177,7 +176,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      var updatedDocument = await ScanbotSdk.document.modifyPage(ModifyPageParams(documentID: widget.documentID, pageID: _page.uuid, filters: list));
+      var updatedDocument = await ScanbotSdk.document.modifyPage(widget.documentID, _page.uuid, ModifyPageOptions(filters: list));
       setState(() {
         _page = updatedDocument.pages.firstWhere((x) => x.uuid == _page.uuid);
       });
@@ -204,7 +203,7 @@ class _PageOperationsState extends State<PageOperations> {
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
     try {
-      var result = await ScanbotSdkUiV2.startCroppingScreen(configuration);
+      var result = await ScanbotSdk.document.startCroppingScreen(configuration);
       if (result.status == OperationStatus.OK && result.data != null) {
         setState(() {
           _page = result.data!.pages.firstWhere((x) => x.uuid == _page.uuid);
