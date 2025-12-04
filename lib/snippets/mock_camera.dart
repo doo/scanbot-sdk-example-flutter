@@ -1,4 +1,3 @@
-
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future mockCamera() async {

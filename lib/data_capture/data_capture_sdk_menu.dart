@@ -18,4 +18,3 @@ class DataCaptureSdkMenu extends StatelessWidget {
     );
   }
 }
-

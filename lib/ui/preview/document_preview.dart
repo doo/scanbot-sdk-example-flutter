@@ -17,7 +17,6 @@ class DocumentPreview extends StatefulWidget {
 }
 
 class DocumentPreviewPreviewState extends State<DocumentPreview> {
-
   late DocumentData documentData;
 
   @override
@@ -41,14 +40,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
                   maxCrossAxisExtent: 200,
                 ),
                 itemBuilder: (context, position) {
-                  final imageUri = documentData.pages[position].documentImagePreviewURI!;
+                  final imageUri =
+                      documentData.pages[position].documentImagePreviewURI!;
                   final pageView = shouldInitWithEncryption
                       ? EncryptedPageWidget(imageUri)
                       : PageWidget(imageUri);
 
                   return GridTile(
                     child: GestureDetector(
-                      onTap: () => _showOperationsPage(documentData.pages[position]),
+                      onTap: () =>
+                          _showOperationsPage(documentData.pages[position]),
                       child: pageView,
                     ),
                   );
@@ -75,10 +76,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     );
   }
 
-  Widget _buildButton(
-    String label,
-    VoidCallback onPressed
-  ) {
+  Widget _buildButton(String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: onPressed,
       child: Text(
@@ -117,7 +115,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
             ListTile(
               leading: const Icon(Icons.cancel),
               title: const Text('Cancel'),
-              onTap: () => { Navigator.pop(context) },
+              onTap: () => {Navigator.pop(context)},
             ),
           ],
         );
@@ -134,8 +132,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     try {
       var result = await scannerFunction();
-      if (result.status == OperationStatus.OK &&
-          result.data != null) {
+      if (result.status == OperationStatus.OK && result.data != null) {
         setState(() {
           documentData = result.data!;
         });
@@ -147,7 +144,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
 
   Future<void> _showOperationsPage(PageData page) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PageOperations(documentData.uuid, page)),
+      MaterialPageRoute(
+          builder: (context) => PageOperations(documentData.uuid, page)),
     );
 
     if (!await checkLicenseStatus(context)) {
@@ -165,8 +163,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     await startScan(
       context: context,
-      scannerFunction: () =>
-          ScanbotSdk.document.startScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
+      scannerFunction: () => ScanbotSdk.document
+          .startScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
     );
   }
 
@@ -177,7 +175,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     final response = await selectImageFromLibrary();
 
     if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.addPagesFromImageFileUris(documentData.uuid, [response!.path]);
+      var result = await ScanbotSdk.document
+          .addPagesFromImageFileUris(documentData.uuid, [response!.path]);
       setState(() {
         documentData = result;
       });
@@ -198,8 +197,10 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(documentData.uuid, PdfConfiguration());
-    await showAlertDialog(context, 'Pdf File created: $result', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator
+        .generateFromDocument(documentData.uuid, PdfConfiguration());
+    await showAlertDialog(context, 'Pdf File created: $result',
+        title: 'Result');
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
@@ -211,8 +212,11 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       pageDirection: PageDirection.PORTRAIT,
     );
 
-    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(documentData.uuid, pdfOptions, ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR));
-    await showAlertDialog(context, 'Pdf File created: $result', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
+        documentData.uuid, pdfOptions,
+        ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR));
+    await showAlertDialog(context, 'Pdf File created: $result',
+        title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
@@ -220,16 +224,23 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       return;
     }
 
-    var options = TiffGeneratorParameters(binarizationFilter: ScanbotBinarizationFilter(), dpi: 300, compression: CompressionMode.CCITT_T6);
-    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(documentData.uuid, options);
-    await showAlertDialog(context, 'Tiff Binarized File created: $result', title: 'Result');
+    var options = TiffGeneratorParameters(
+        binarizationFilter: ScanbotBinarizationFilter(),
+        dpi: 300,
+        compression: CompressionMode.CCITT_T6);
+    var result = await ScanbotSdk.tiffGenerator
+        .generateFromDocument(documentData.uuid, options);
+    await showAlertDialog(context, 'Tiff Binarized File created: $result',
+        title: 'Result');
   }
 
   Future<void> _saveDocumentAsTIFF() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(documentData.uuid, TiffGeneratorParameters());
-    await showAlertDialog(context, 'Tiff File created: $result', title: 'Result');
+    var result = await ScanbotSdk.tiffGenerator
+        .generateFromDocument(documentData.uuid, TiffGeneratorParameters());
+    await showAlertDialog(context, 'Tiff File created: $result',
+        title: 'Result');
   }
 }

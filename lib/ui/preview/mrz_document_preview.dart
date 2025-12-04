@@ -12,7 +12,8 @@ class MrzDocumentResultPreview extends StatelessWidget {
     super.key,
     this.uiResult,
     this.scannerResult,
-  }) : assert(uiResult != null || scannerResult != null, 'At least one result must be provided');
+  }) : assert(uiResult != null || scannerResult != null,
+            'At least one result must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class MrzDocumentResultPreview extends StatelessWidget {
 
     if (document == null) {
       return Scaffold(
-        appBar: ScanbotAppBar('MRZ Document Preview', showBackButton: true, context: context),
+        appBar: ScanbotAppBar('MRZ Document Preview',
+            showBackButton: true, context: context),
         body: const Center(child: Text('No MRZ data available')),
       );
     }
@@ -32,7 +34,8 @@ class MrzDocumentResultPreview extends StatelessWidget {
 
     void addField(String title, String? value, {bool largeGap = false}) {
       children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
-      children.add(Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium));
+      children.add(
+          Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium));
       children.add(SizedBox(height: largeGap ? 16 : 12));
     }
 
@@ -46,7 +49,8 @@ class MrzDocumentResultPreview extends StatelessWidget {
     addField('Expiry Date', mrz.expiryDate?.value?.text);
 
     return Scaffold(
-      appBar: ScanbotAppBar('MRZ Document Preview', showBackButton: true, context: context),
+      appBar: ScanbotAppBar('MRZ Document Preview',
+          showBackButton: true, context: context),
       body: ListView(
         padding: const material.EdgeInsets.all(16),
         children: children,

@@ -13,10 +13,12 @@ class TextPatternScannerUiResultPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> children = [];
 
-    void addField(String title, String? value, double? confidence, {bool largeGap = false}) {
+    void addField(String title, String? value, double? confidence,
+        {bool largeGap = false}) {
       children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
       if (value != null && value.isNotEmpty) {
-        children.add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
+        children
+            .add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
       }
       if (confidence != null && confidence.isFinite) {
         children.add(Text('Confidence: ${confidence.toStringAsFixed(2)}',
@@ -34,7 +36,8 @@ class TextPatternScannerUiResultPreview extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar('Text Pattern Result', showBackButton: true, context: context),
+      appBar: ScanbotAppBar('Text Pattern Result',
+          showBackButton: true, context: context),
       body: ListView(
         padding: const material.EdgeInsets.all(16),
         children: children,

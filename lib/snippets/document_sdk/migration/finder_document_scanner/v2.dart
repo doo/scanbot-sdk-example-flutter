@@ -20,8 +20,10 @@ Future<void> finderDocumentScanner() async {
   bottomBar.autoSnappingModeButton.visible = false;
   bottomBar.importButton.visible = false;
 
-  cameraScreenConfiguration.acknowledgement.acknowledgementMode = AcknowledgementMode.NONE;
-  cameraScreenConfiguration.captureFeedback.snapFeedbackMode = PageSnapFunnelAnimation();
+  cameraScreenConfiguration.acknowledgement.acknowledgementMode =
+      AcknowledgementMode.NONE;
+  cameraScreenConfiguration.captureFeedback.snapFeedbackMode =
+      PageSnapFunnelAnimation();
 
   configuration.screens.review.enabled = false;
   configuration.outputSettings.pagesScanLimit = 1;

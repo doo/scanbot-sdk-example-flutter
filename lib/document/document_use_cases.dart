@@ -19,11 +19,21 @@ class DocumentUseCasesWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         const TitleItemWidget(title: 'Document Scanners (RTU v2.0)'),
-        MenuItemWidget(title: 'Single Page Scanning', onTap: () => _startSinglePageScanning(context)),
-        MenuItemWidget(title: 'Single Page Scanning with Finder', onTap: () => _startSinglePageWithFinderScanning(context)),
-        MenuItemWidget(title: 'Multi Page Scanning with Finder', onTap: () => _startMultiPageScanning(context)),
-        MenuItemWidget(title: 'Create Document from Image', onTap: () => _createDocumentFromImage(context)),
-        MenuItemWidget(title: 'Clean stored documents', onTap: () => _cleanStoredDocuments(context)),
+        MenuItemWidget(
+            title: 'Single Page Scanning',
+            onTap: () => _startSinglePageScanning(context)),
+        MenuItemWidget(
+            title: 'Single Page Scanning with Finder',
+            onTap: () => _startSinglePageWithFinderScanning(context)),
+        MenuItemWidget(
+            title: 'Multi Page Scanning with Finder',
+            onTap: () => _startMultiPageScanning(context)),
+        MenuItemWidget(
+            title: 'Create Document from Image',
+            onTap: () => _createDocumentFromImage(context)),
+        MenuItemWidget(
+            title: 'Clean stored documents',
+            onTap: () => _cleanStoredDocuments(context)),
       ],
     );
   }
@@ -37,8 +47,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     }
     try {
       var result = await scannerFunction();
-      if (result.status == OperationStatus.OK &&
-          result.data != null) {
+      if (result.status == OperationStatus.OK && result.data != null) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => DocumentPreview(result.data!),
@@ -80,7 +89,8 @@ class DocumentUseCasesWidget extends StatelessWidget {
       await showAlertDialog(context, "Operation status: Success");
     } catch (e) {
       Logger.root.severe(e);
-      await showAlertDialog(context, "Operation status: Error\n${e.toString()}");
+      await showAlertDialog(
+          context, "Operation status: Error\n${e.toString()}");
     }
   }
 
@@ -92,7 +102,8 @@ class DocumentUseCasesWidget extends StatelessWidget {
 
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.document.createDocumentFromImageFileUris(images: [response!.path]);
+        var result = await ScanbotSdk.document.createDocumentFromImageFileUris(
+            images: [response!.path], options: CreateDocumentOptions());
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => DocumentPreview(result),

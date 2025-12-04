@@ -20,7 +20,9 @@ class CustomUiMenu extends StatelessWidget {
       appBar: ScanbotAppBar('Scanbot Custom UI Menu'),
       body: ListView(
         children: <Widget>[
-          MenuItemWidget(title: 'Scan Documents', onTap: () => _startDocumentsCustomUIScanner(context)),
+          MenuItemWidget(
+              title: 'Scan Documents',
+              onTap: () => _startDocumentsCustomUIScanner(context)),
         ],
       ),
     );

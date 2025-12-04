@@ -11,5 +11,6 @@ Future<void> detectDocumentDetection() async {
     return;
   }
   /** Detect the document */
-  var documentDetectionResult = await ScanbotSdk.document.scanFromImageFileUri(imageFile.path, DocumentScannerConfiguration());
+  var documentDetectionResult = await ScanbotSdk.document
+      .scanFromImageFileUri(imageFile.path, DocumentScannerConfiguration());
 }

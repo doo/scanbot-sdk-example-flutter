@@ -8,9 +8,9 @@ Future<void> startScanning() async {
   /**  Configure the strings. */
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
   localization.finderViewUserGuidance = 'Localized finderViewUserGuidance';
   /** Start the MRZ Scanner UI */
   var result = await ScanbotSdk.mrz.startScanner(configuration);

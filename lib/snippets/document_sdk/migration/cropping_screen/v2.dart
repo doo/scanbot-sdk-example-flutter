@@ -10,5 +10,6 @@ Future<void> croppingScreen(String documentID, String pageID) async {
   // Equivalent to doneButtonTitle: 'Apply',
   configuration.localization.croppingTopBarConfirmButtonTitle = 'Apply';
 
-  var documentData = await ScanbotSdk.document.startCroppingScreen(configuration);
+  var documentData =
+      await ScanbotSdk.document.startCroppingScreen(configuration);
 }

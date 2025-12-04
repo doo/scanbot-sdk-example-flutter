@@ -37,10 +37,12 @@ Future<void> _initScanbotSdk() async {
       storageImageQuality: 80,
       // Uncomment to use custom storage directory
       // storageBaseDirectory: customStorageBaseDirectory,
-      fileEncryptionPassword: shouldInitWithEncryption ? 'SomeSecretPa\$\$w0rdForFileEncryption' : null,
-      fileEncryptionMode: shouldInitWithEncryption ? FileEncryptionMode.AES256 : null
-  );
-  
+      fileEncryptionPassword: shouldInitWithEncryption
+          ? 'SomeSecretPa\$\$w0rdForFileEncryption'
+          : null,
+      fileEncryptionMode:
+          shouldInitWithEncryption ? FileEncryptionMode.AES256 : null);
+
   try {
     await ScanbotSdk.initialize(config);
     await LegacyPageRepository().loadPages();
@@ -108,69 +110,70 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
-      body: ListView(
-        children: [
-          const TitleItemWidget(title: 'Document SDK API'),
-          MenuItemWidget(
-            title: 'Document SDK Menu',
-            startIcon: Icons.photo_camera,
-            endIcon: Icons.arrow_forward,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const DocumentSdkMenu()),
-              );
-            },
-          ),
-          MenuItemWidget(
-            title: 'Data Capture SDK Menu',
-            startIcon: Icons.data_array,
-            endIcon: Icons.arrow_forward,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const DataCaptureSdkMenu()),
-              );
-            },
-          ),
-          MenuItemWidget(
-            title: 'Custom UI Menu',
-            startIcon: Icons.edit,
-            endIcon: Icons.arrow_forward,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CustomUiMenu()),
-              );
-            },
-          ),
-          const TitleItemWidget(title: 'Other SDK API'),
-          MenuItemWidget(
-            title: 'getLicenseStatus()',
-            startIcon: Icons.phonelink_lock,
-            onTap: () {
-              _getLicenseStatus();
-            },
-          ),
-          MenuItemWidget(
-            title: 'getOcrConfigs()',
-            startIcon: Icons.settings,
-            onTap: () {
-              _getOcrConfigs();
-            },
-          ),
-          MenuItemWidget(
-            title: '3rd-party Libs & Licenses',
-            startIcon: Icons.developer_mode,
-            onTap: () {
-              showLicensePage(
-                context: context,
-                applicationName: 'Scanbot SDK Flutter Example',
-              );
-            },
-          ),
-        ],
-      ),
-      bottomNavigationBar: buildBottomNavigationBar(context)
-    );
+        appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
+        body: ListView(
+          children: [
+            const TitleItemWidget(title: 'Document SDK API'),
+            MenuItemWidget(
+              title: 'Document SDK Menu',
+              startIcon: Icons.photo_camera,
+              endIcon: Icons.arrow_forward,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const DocumentSdkMenu()),
+                );
+              },
+            ),
+            MenuItemWidget(
+              title: 'Data Capture SDK Menu',
+              startIcon: Icons.data_array,
+              endIcon: Icons.arrow_forward,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => const DataCaptureSdkMenu()),
+                );
+              },
+            ),
+            MenuItemWidget(
+              title: 'Custom UI Menu',
+              startIcon: Icons.edit,
+              endIcon: Icons.arrow_forward,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => CustomUiMenu()),
+                );
+              },
+            ),
+            const TitleItemWidget(title: 'Other SDK API'),
+            MenuItemWidget(
+              title: 'getLicenseStatus()',
+              startIcon: Icons.phonelink_lock,
+              onTap: () {
+                _getLicenseStatus();
+              },
+            ),
+            MenuItemWidget(
+              title: 'getOcrConfigs()',
+              startIcon: Icons.settings,
+              onTap: () {
+                _getOcrConfigs();
+              },
+            ),
+            MenuItemWidget(
+              title: '3rd-party Libs & Licenses',
+              startIcon: Icons.developer_mode,
+              onTap: () {
+                showLicensePage(
+                  context: context,
+                  applicationName: 'Scanbot SDK Flutter Example',
+                );
+              },
+            ),
+          ],
+        ),
+        bottomNavigationBar: buildBottomNavigationBar(context));
   }
 
   Future<void> _getOcrConfigs() async {
@@ -195,7 +198,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       await showAlertDialog(context, status, title: 'License Status');
     } catch (e) {
-      await showAlertDialog(context, "Error getting license status", title: "Info");
+      await showAlertDialog(context, "Error getting license status",
+          title: "Info");
     }
   }
 }

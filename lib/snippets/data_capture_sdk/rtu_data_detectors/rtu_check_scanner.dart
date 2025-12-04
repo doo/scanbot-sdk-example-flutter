@@ -24,8 +24,10 @@ class RtuCheckScannerFeature extends StatelessWidget {
       var config = CheckScannerScreenConfiguration();
       //  Configure the strings.
       config.localization.topUserGuidance = 'Localized topUserGuidance';
-      config.localization.cameraPermissionCloseButton = 'Localized cameraPermissionCloseButton';
-      config.localization.completionOverlaySuccessMessage = 'Localized completionOverlaySuccessMessage';
+      config.localization.cameraPermissionCloseButton =
+          'Localized cameraPermissionCloseButton';
+      config.localization.completionOverlaySuccessMessage =
+          'Localized completionOverlaySuccessMessage';
       config.localization.introScreenText = 'Localized introScreenText';
       // Configure other parameters as needed.
 
@@ -34,7 +36,6 @@ class RtuCheckScannerFeature extends StatelessWidget {
         var result = await ScanbotSdk.check.startScanner(config);
 
         if (result.status == OperationStatus.OK && result.data?.check != null) {
-
           /// if you want to use image later, call encodeImages() to save in buffer
           //  result.data?.encodeImages();
 

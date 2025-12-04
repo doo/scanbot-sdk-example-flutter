@@ -8,9 +8,9 @@ Future<void> startScanning() async {
   /**  Configure the strings. */
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
 
   /** Start the VIN Scanner **/
   var result = await ScanbotSdk.vin.startScanner(configuration);

@@ -4,7 +4,8 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LegacyPageRepository {
-  static final LegacyPageRepository _instance = LegacyPageRepository._internal();
+  static final LegacyPageRepository _instance =
+      LegacyPageRepository._internal();
 
   factory LegacyPageRepository() => _instance;
 

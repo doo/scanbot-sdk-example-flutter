@@ -2,7 +2,8 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../utility/utils.dart';
 
-Future<void> startDocumentDetectionWithCroppingScreen(String imageFilePath) async {
+Future<void> startDocumentDetectionWithCroppingScreen(
+    String imageFilePath) async {
   /**
    * Select an image from the Image Library
    * Return early if no image is selected or there is an issue selecting an image
@@ -13,7 +14,8 @@ Future<void> startDocumentDetectionWithCroppingScreen(String imageFilePath) asyn
   }
 
   /** Create a new document with the provided imageFileUri. */
-  var document = await ScanbotSdk.document.createDocumentFromImageFileUris(images: [imageFile.path]);
+  var document = await ScanbotSdk.document
+      .createDocumentFromImageFileUris(images: [imageFile.path]);
   /** Create a new configuration with the document and the document's first page. */
   var configuration = CroppingConfiguration(
     documentUuid: document.uuid,
@@ -22,11 +24,12 @@ Future<void> startDocumentDetectionWithCroppingScreen(String imageFilePath) asyn
   /* Customize the configuration. */
   configuration.cropping.bottomBar.rotateButton.visible = false;
   configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
-  configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor('#ffffff');
+  configuration.cropping.topBarConfirmButton.foreground.color =
+      ScanbotColor('#ffffff');
   configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
   /** Start the cropping UI Screen */
-  var documentResult = await ScanbotSdk.document.startCroppingScreen(configuration);
+  var documentResult =
+      await ScanbotSdk.document.startCroppingScreen(configuration);
   /** Handle the document if the status is 'OK' */
-  if (documentResult.status == OperationStatus.OK) {
-  }
+  if (documentResult.status == OperationStatus.OK) {}
 }

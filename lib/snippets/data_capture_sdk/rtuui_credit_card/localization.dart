@@ -8,11 +8,11 @@ Future<void> startScanning() async {
   /**  Configure the strings. */
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
   localization.creditCardUserGuidanceNoCardFound =
-  'Localized creditCardUserGuidanceNoCardFound';
+      'Localized creditCardUserGuidanceNoCardFound';
   /** Start the Credit Card Scanner **/
   var result = await ScanbotSdk.creditCard.startScanner(configuration);
   if (result.status == OperationStatus.OK) {

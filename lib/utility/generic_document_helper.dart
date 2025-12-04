@@ -20,7 +20,8 @@ Value: ${wrappedGenericFieldValue?.value?.text ?? "N/A"}
     );
   }
 
-  static TextFieldWrapper? _getGenericFieldValue(GenericDocument genericDocument) {
+  static TextFieldWrapper? _getGenericFieldValue(
+      GenericDocument genericDocument) {
     switch (genericDocument.type.name) {
       case BoardingPass.DOCUMENT_TYPE:
         return BoardingPass(genericDocument).electronicTicketIndicator;

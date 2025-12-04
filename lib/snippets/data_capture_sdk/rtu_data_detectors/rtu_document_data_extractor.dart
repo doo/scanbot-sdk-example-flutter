@@ -27,10 +27,11 @@ class RtuDocumentDataExtractorFeature extends StatelessWidget {
 
       // An autorelease pool is required only because the result object contains image references.
       await autorelease(() async {
-        var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(config);
+        var result =
+            await ScanbotSdk.documentDataExtractor.startExtractorScreen(config);
 
-        if (result.status == OperationStatus.OK && result.data?.document != null) {
-
+        if (result.status == OperationStatus.OK &&
+            result.data?.document != null) {
           /// if you want to use image later, call encodeImages() to save in buffer
           //  result.data?.encodeImages();
 

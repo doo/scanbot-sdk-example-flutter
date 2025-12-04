@@ -7,10 +7,11 @@ Future<void> createDocumentPDF() async {
   );
   /** Create a PDF file with the provided options */
   var pdfConfiguration = PdfConfiguration(
-      pageSize: PageSize.A4,
-      pageDirection: PageDirection.PORTRAIT);
+      pageSize: PageSize.A4, pageDirection: PageDirection.PORTRAIT);
 
-  var ocrConfiguration =  OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR);
+  var ocrConfiguration = OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR);
 
-  var pdfUriResult = await ScanbotSdk.pdfGenerator.generateFromDocument(document.uuid, pdfConfiguration, ocrConfiguration: ocrConfiguration);
+  var pdfUriResult = await ScanbotSdk.pdfGenerator.generateFromDocument(
+      document.uuid, pdfConfiguration,
+      ocrConfiguration: ocrConfiguration);
 }

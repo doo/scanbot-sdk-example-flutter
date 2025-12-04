@@ -119,16 +119,20 @@ class _PageOperationsState extends State<PageOperations> {
           children: <Widget>[
             FilterButton(
                 text: 'None',
-                onPressed: () => applyParametricFilters([LegacyFilter(filterType: ImageFilterType.NONE.index)])),
+                onPressed: () => applyParametricFilters(
+                    [LegacyFilter(filterType: ImageFilterType.NONE.index)])),
             FilterButton(
                 text: 'Color Document Filter',
-                onPressed: () => applyParametricFilters([ColorDocumentFilter()])),
+                onPressed: () =>
+                    applyParametricFilters([ColorDocumentFilter()])),
             FilterButton(
                 text: 'Scanbot Binarization Filter',
-                onPressed: () => applyParametricFilters([ScanbotBinarizationFilter()])),
+                onPressed: () =>
+                    applyParametricFilters([ScanbotBinarizationFilter()])),
             FilterButton(
                 text: 'Custom Binarization Filter',
-                onPressed: () => applyParametricFilters([CustomBinarizationFilter()])),
+                onPressed: () =>
+                    applyParametricFilters([CustomBinarizationFilter()])),
             FilterButton(
                 text: 'Brightness Filter',
                 onPressed: () {
@@ -176,7 +180,9 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      var updatedDocument = await ScanbotSdk.document.modifyPage(widget.documentID, _page.uuid, options: ModifyPageOptions(filters: list));
+      var updatedDocument = await ScanbotSdk.document.modifyPage(
+          widget.documentID, _page.uuid,
+          options: ModifyPageOptions(filters: list));
       setState(() {
         _page = updatedDocument.pages.firstWhere((x) => x.uuid == _page.uuid);
       });
@@ -199,7 +205,8 @@ class _PageOperationsState extends State<PageOperations> {
     /* Customize the configuration. */
     configuration.cropping.bottomBar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor("#C8193C");
-    configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor('#ffffff');
+    configuration.cropping.topBarConfirmButton.foreground.color =
+        ScanbotColor('#ffffff');
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
     try {

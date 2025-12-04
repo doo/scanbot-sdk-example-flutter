@@ -40,12 +40,12 @@ class EncryptedPageWidget extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
                 child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 10,
-                  ),
-                ));
+              width: 100,
+              height: 100,
+              child: CircularProgressIndicator(
+                strokeWidth: 10,
+              ),
+            ));
           }
           if (snapshot.data != null) {
             Uint8List bytes = base64Decode(snapshot.data!);

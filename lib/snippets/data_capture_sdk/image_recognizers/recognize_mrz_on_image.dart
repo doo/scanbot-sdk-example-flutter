@@ -1,20 +1,20 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> recognizeMrzDocumentOnImage(String uriPath) async {
-  var configuration = MrzScannerConfiguration(); 
+  var configuration = MrzScannerConfiguration();
   configuration.incompleteResultHandling = MrzIncompleteResultHandling.REJECT;
   // Configure other parameters as needed.
 
-  var result = await ScanbotSdk.mrz.scanFromImageFileUri(uriPath, configuration);
+  var result =
+      await ScanbotSdk.mrz.scanFromImageFileUri(uriPath, configuration);
   if (result.success) {
     //  ...
   }
 }
 
 String formatMrzResult(MrzScannerResult result) {
-    return '''
+  return '''
 Document: ${result.document?.type.name}
 rawMrz: ${result.rawMRZ}
 ''';
-
 }

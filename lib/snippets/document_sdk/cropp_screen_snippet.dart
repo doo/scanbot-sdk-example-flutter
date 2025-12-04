@@ -10,12 +10,12 @@ void startCropping() async {
   cropScreenConfiguration.bottomBar.rotateButton.visible = false;
   // Configure various colors.
   configuration.appearance.topBarBackgroundColor = ScanbotColor('#C8193C');
-  cropScreenConfiguration.topBarConfirmButton.foreground.color = ScanbotColor('#FFFFFF');
+  cropScreenConfiguration.topBarConfirmButton.foreground.color =
+      ScanbotColor('#FFFFFF');
   // Customize a UI element's text
   configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
   // Start the Document Scanner UI
   var documentResult = await ScanbotSdk.document.startScanner(configuration);
   // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
-  }
+  if (documentResult.status == OperationStatus.OK) {}
 }

@@ -11,11 +11,13 @@ Future<void> documentScanner() async {
   // Ready-to-Use UI v2 contains an acknowledgment screen to
   // verify the captured document with the built-in Document Quality Analyzer.
   // You can still disable this step:
-  cameraScreenConfiguration.acknowledgement.acknowledgementMode = AcknowledgementMode.NONE;
+  cameraScreenConfiguration.acknowledgement.acknowledgementMode =
+      AcknowledgementMode.NONE;
 
   // When you disable the acknowledgment screen, you can enable the capture feedback,
   // there are different options available, for example you can display a checkmark animation:
-  cameraScreenConfiguration.captureFeedback.snapFeedbackMode = PageSnapFunnelAnimation();
+  cameraScreenConfiguration.captureFeedback.snapFeedbackMode =
+      PageSnapFunnelAnimation();
 
   // You may hide the import button in the camera screen, if you don't need it:
   cameraScreenConfiguration.bottomBar.importButton.visible = false;
@@ -33,7 +35,7 @@ Future<void> documentScanner() async {
   var localization = configuration.localization;
   // Equivalent to textHintOK: "Don't move.\nCapturing document...",
   localization.cameraUserGuidanceReadyToCapture =
-  "Don't move. Capturing document...";
+      "Don't move. Capturing document...";
 
   // Ready-to-Use UI v2 contains a review screen, you can disable it:
   configuration.screens.review.enabled = false;

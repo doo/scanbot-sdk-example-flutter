@@ -17,8 +17,11 @@ class DocumentSdkMenu extends StatelessWidget {
         children: <Widget>[
           const DocumentUseCasesWidget(),
           const TitleItemWidget(title: 'Other API'),
-          MenuItemWidget(title: 'Analyze document quality ', onTap: () => _analyzeDocumentQuality(context)),
-          MenuItemWidget(title: 'PerformOCR ', onTap: () => _performOCR(context)),
+          MenuItemWidget(
+              title: 'Analyze document quality ',
+              onTap: () => _analyzeDocumentQuality(context)),
+          MenuItemWidget(
+              title: 'PerformOCR ', onTap: () => _performOCR(context)),
         ],
       ),
     );
@@ -28,8 +31,12 @@ class DocumentSdkMenu extends StatelessWidget {
     try {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(response!.path, DocumentQualityAnalyzerConfiguration());
-        await showAlertDialog(context, title: 'Document Quality', result.quality?.name ?? 'Unknown');
+        var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
+            response!.path, DocumentQualityAnalyzerConfiguration());
+        await showAlertDialog(
+            context,
+            title: 'Document Quality',
+            result.quality?.name ?? 'Unknown');
       }
     } catch (e) {
       Logger.root.severe(e);
@@ -40,12 +47,13 @@ class DocumentSdkMenu extends StatelessWidget {
     try {
       final response = await selectImageFromLibrary();
       if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([response!.path]);
-        await showAlertDialog(context, title: 'OCR Result', result.recognizedText);
+        var result = await ScanbotSdk.ocrEngine
+            .recognizeOnImageFileUris([response!.path]);
+        await showAlertDialog(
+            context, title: 'OCR Result', result.recognizedText);
       }
     } catch (e) {
       Logger.root.severe(e);
     }
   }
 }
-

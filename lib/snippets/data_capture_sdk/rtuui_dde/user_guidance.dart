@@ -24,7 +24,8 @@ Future<void> startScanning() async {
   // Configure the background.
   scanStatusUserGuidance.background.fillColor = ScanbotColor("#7A000000");
   // Start the DDE
-  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor
+      .startExtractorScreen(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

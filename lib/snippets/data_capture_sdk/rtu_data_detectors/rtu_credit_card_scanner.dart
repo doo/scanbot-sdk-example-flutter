@@ -34,8 +34,8 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
       await autorelease(() async {
         var result = await ScanbotSdk.creditCard.startScanner(config);
 
-        if (result.status == OperationStatus.OK && result.data?.creditCard != null) {
-
+        if (result.status == OperationStatus.OK &&
+            result.data?.creditCard != null) {
           /// if you want to use image later, call encodeImages() to save in buffer
           //  result.data?.encodeImages();
 
@@ -45,7 +45,6 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
               builder: (_) => CreditCardResultPreview(
                 uiResult: result.data,
               ),
-
             ),
           );
         }

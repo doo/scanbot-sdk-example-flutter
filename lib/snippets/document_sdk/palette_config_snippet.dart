@@ -25,6 +25,5 @@ void runDocumentScanner() async {
   var configuration = palleteConfigurationFlowSnippet();
   var documentResult = await ScanbotSdk.document.startScanner(configuration);
   // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
-  }
+  if (documentResult.status == OperationStatus.OK) {}
 }

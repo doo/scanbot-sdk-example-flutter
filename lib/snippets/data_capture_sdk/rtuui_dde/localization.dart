@@ -8,12 +8,13 @@ Future<void> startScanning() async {
   //  Configure the strings.
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
 
   // Start the DDE
-  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor
+      .startExtractorScreen(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }

@@ -8,9 +8,8 @@ import 'package:scanbot_sdk/scanbot_sdk.dart' hide EdgeInsets;
 const bool shouldInitWithEncryption = false;
 
 const enableImagesInScannedBarcodesResults = false;
-final selectedFormatsNotifier = ValueNotifier<Set<BarcodeFormat>>(
-    BarcodeFormats.all.toSet()
-);
+final selectedFormatsNotifier =
+    ValueNotifier<Set<BarcodeFormat>>(BarcodeFormats.all.toSet());
 
 const Color ScanbotRedColor = Color(0xFFc8193c);
 
@@ -22,12 +21,12 @@ const AppBarTitleTextStyle = TextStyle(
 );
 
 AppBar ScanbotAppBar(
-    String title, {
-      bool showBackButton = false,
-      BuildContext? context,
-      VoidCallback? onBack,
-      List<Widget>? actions,
-    }) {
+  String title, {
+  bool showBackButton = false,
+  BuildContext? context,
+  VoidCallback? onBack,
+  List<Widget>? actions,
+}) {
   return AppBar(
     iconTheme: const IconThemeData(
       color: Colors.white,
@@ -35,9 +34,9 @@ AppBar ScanbotAppBar(
     backgroundColor: ScanbotRedColor,
     leading: showBackButton && context != null
         ? GestureDetector(
-      onTap: onBack ?? () => Navigator.of(context).pop(),
-      child: const Icon(Icons.arrow_back, color: Colors.white),
-    )
+            onTap: onBack ?? () => Navigator.of(context).pop(),
+            child: const Icon(Icons.arrow_back, color: Colors.white),
+          )
         : null,
     title: Text(
       title,
@@ -159,4 +158,3 @@ Widget buildBottomNavigationBar(BuildContext context) {
 Future<XFile?> selectImageFromLibrary() async {
   return await ImagePicker().pickImage(source: picker.ImageSource.gallery);
 }
-

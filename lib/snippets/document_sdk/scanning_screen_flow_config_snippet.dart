@@ -48,7 +48,8 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
     ..userGuidance.statesTitles.capturing = "Capturing the document"
 
     // The title of the user guidance when the document is ready to be captured in manual mode.
-    ..userGuidance.statesTitles.captureManual = "The document is ready to be captured"
+    ..userGuidance.statesTitles.captureManual =
+        "The document is ready to be captured"
 
     // Import button is used to import an image from the gallery.
     ..bottomBar.importButton.visible = true
@@ -73,10 +74,12 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
 
     // Configure the animation mode. You can choose between a checkmark animation or a document funnel animation.
     // Configure the checkmark animation. You can use the default colors or set your own desired colors for the checkmark.
-    ..captureFeedback.snapFeedbackMode = PageSnapFeedbackMode.pageSnapCheckMarkAnimation()
+    ..captureFeedback.snapFeedbackMode =
+        PageSnapFeedbackMode.pageSnapCheckMarkAnimation()
 
     // Or you can choose the funnel animation.
-    ..captureFeedback.snapFeedbackMode = PageSnapFeedbackMode.pageSnapFunnelAnimation();
+    ..captureFeedback.snapFeedbackMode =
+        PageSnapFeedbackMode.pageSnapFunnelAnimation();
 
   return configuration;
 }
@@ -85,6 +88,5 @@ void runDocumentScanner() async {
   var configuration = scanningScreenConfigurationScanningFlow();
   var documentResult = await ScanbotSdk.document.startScanner(configuration);
   // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
-  }
+  if (documentResult.status == OperationStatus.OK) {}
 }

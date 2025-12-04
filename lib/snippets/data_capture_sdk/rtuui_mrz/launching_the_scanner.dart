@@ -10,7 +10,9 @@ Future<void> startScanning() async {
     var mrzModel = MRZ(result.data!.mrzDocument!);
     // Retrieve the values.
     // e.g
-    print('Birth date: ${mrzModel.birthDate.value?.text}, Confidence: ${mrzModel.birthDate.value?.confidence}');
-    print('Nationality: ${mrzModel.nationality.value?.text}, Confidence: ${mrzModel.nationality.value?.confidence}');
+    print(
+        'Birth date: ${mrzModel.birthDate.value?.text}, Confidence: ${mrzModel.birthDate.value?.confidence}');
+    print(
+        'Nationality: ${mrzModel.nationality.value?.text}, Confidence: ${mrzModel.nationality.value?.confidence}');
   }
 }

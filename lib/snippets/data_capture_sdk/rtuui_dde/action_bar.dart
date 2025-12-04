@@ -16,7 +16,8 @@ Future<void> startScanning() async {
   /** Hide the flip camera button */
   actionBar.flipCameraButton.visible = false;
   /** Start the Document Data Extractor **/
-  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor
+      .startExtractorScreen(configuration);
   if (result.status == OperationStatus.OK) {
     // ...
   }
