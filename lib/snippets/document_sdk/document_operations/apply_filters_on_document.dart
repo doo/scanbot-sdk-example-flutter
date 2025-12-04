@@ -12,10 +12,10 @@ Future<void> applyFiltersAndRotateScannedPage() async {
    * Apply ScanbotBinarizationFilter to the page
    * Rotate the page clockwise by 90 degrees
    */
-  var params = ModifyPageOptions(
+  var options = ModifyPageOptions(
     filters: [ScanbotBinarizationFilter()],
     rotation: ImageRotation.CLOCKWISE_90
   );
-  var documentResultWithModifiedPage = await ScanbotSdk.document.modifyPage(document.uuid, page.uuid, params);
+  var documentResultWithModifiedPage = await ScanbotSdk.document.modifyPage(document.uuid, page.uuid, options: options);
   /** Handle the document */
 }

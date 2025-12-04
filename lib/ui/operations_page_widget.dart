@@ -31,7 +31,7 @@ class _PageOperationsState extends State<PageOperations> {
   @override
   Widget build(BuildContext context) {
     // Determine which widget to display based on encryption requirement
-    final imageUri = Uri(path: _page.documentImagePreviewURI?.replaceFirst('file://', ''));
+    final imageUri = _page.documentImagePreviewURI!;
     final pageView = shouldInitWithEncryption
         ? EncryptedPageWidget(imageUri)
         : PageWidget(imageUri);
@@ -176,7 +176,7 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     try {
-      var updatedDocument = await ScanbotSdk.document.modifyPage(widget.documentID, _page.uuid, ModifyPageOptions(filters: list));
+      var updatedDocument = await ScanbotSdk.document.modifyPage(widget.documentID, _page.uuid, options: ModifyPageOptions(filters: list));
       setState(() {
         _page = updatedDocument.pages.firstWhere((x) => x.uuid == _page.uuid);
       });

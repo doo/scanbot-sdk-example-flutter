@@ -37,13 +37,10 @@ Future<void> _initScanbotSdk() async {
       storageImageQuality: 80,
       // Uncomment to use custom storage directory
       // storageBaseDirectory: customStorageBaseDirectory,
+      fileEncryptionPassword: shouldInitWithEncryption ? 'SomeSecretPa\$\$w0rdForFileEncryption' : null,
+      fileEncryptionMode: shouldInitWithEncryption ? FileEncryptionMode.AES256 : null
   );
-
-  if(shouldInitWithEncryption) {
-    config.fileEncryptionPassword = 'SomeSecretPa\$\$w0rdForFileEncryption';
-    config.fileEncryptionMode = FileEncryptionMode.AES256;
-  }
-
+  
   try {
     await ScanbotSdk.initialize(config);
     await LegacyPageRepository().loadPages();
@@ -93,11 +90,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

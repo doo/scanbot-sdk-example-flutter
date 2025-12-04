@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -5,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 class PageWidget extends StatelessWidget {
-  final Uri path;
+  final String path;
 
   PageWidget(this.path);
 
   @override
   Widget build(BuildContext context) {
-    var file = File.fromUri(path);
+    var file = File(Uri.parse(path).toFilePath());
     var bytes = file.readAsBytesSync();
     final image = Image.memory(bytes);
     return SizedBox(
@@ -23,19 +24,19 @@ class PageWidget extends StatelessWidget {
 }
 
 class EncryptedPageWidget extends StatelessWidget {
-  final Uri path;
+  final String path;
 
   EncryptedPageWidget(this.path);
 
   @override
   Widget build(BuildContext context) {
-    final imageData = ScanbotEncryptionHandler.getDecryptedDataFromFile(path);
+    final imageData = ScanbotSdk.imageProcessor.readImageData(path);
     return SizedBox(
       height: double.infinity,
       width: double.infinity,
-      child: FutureBuilder<Uint8List>(
+      child: FutureBuilder<String>(
         future: imageData,
-        builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
                 child: SizedBox(
@@ -47,7 +48,8 @@ class EncryptedPageWidget extends StatelessWidget {
                 ));
           }
           if (snapshot.data != null) {
-            final image = Image.memory(snapshot.data!);
+            Uint8List bytes = base64Decode(snapshot.data!);
+            final image = Image.memory(bytes);
             return Center(child: image);
           } else {
             return Container();

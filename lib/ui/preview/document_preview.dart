@@ -41,7 +41,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
                   maxCrossAxisExtent: 200,
                 ),
                 itemBuilder: (context, position) {
-                  final imageUri = Uri(path: documentData.pages[position].documentImagePreviewURI!.replaceFirst('file://', ''));
+                  final imageUri = documentData.pages[position].documentImagePreviewURI!;
                   final pageView = shouldInitWithEncryption
                       ? EncryptedPageWidget(imageUri)
                       : PageWidget(imageUri);
