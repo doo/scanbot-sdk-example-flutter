@@ -12,7 +12,8 @@ Future<void> startScanning() async {
   configuration.topBar.cancelButton.foreground.color = ScanbotColor('#C8193C');
   /** Start the VIN Scanner **/
   var result = await ScanbotSdk.vin.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<VinScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

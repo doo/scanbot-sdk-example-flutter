@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/multi_page_scanning_snippet.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_finder_snippet.dart';
 import 'package:scanbot_sdk_example_flutter/snippets/document_sdk/single_page_scanning_snippet.dart';
@@ -40,22 +39,19 @@ class DocumentUseCasesWidget extends StatelessWidget {
 
   Future<void> startScan({
     required BuildContext context,
-    required Future<ResultWrapper<DocumentData>> Function() scannerFunction,
+    required Future<Result<DocumentData>> Function() scannerFunction,
   }) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    try {
-      var result = await scannerFunction();
-      if (result.status == OperationStatus.OK && result.data != null) {
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => DocumentPreview(result.data!),
-          ),
-        );
-      }
-    } catch (e) {
-      print(e);
+
+    var result = await scannerFunction();
+    if (result is Ok<DocumentData>) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DocumentPreview(result.value),
+        ),
+      );
     }
   }
 
@@ -84,34 +80,26 @@ class DocumentUseCasesWidget extends StatelessWidget {
   }
 
   Future<void> _cleanStoredDocuments(BuildContext context) async {
-    try {
-      await ScanbotSdk.document.deleteAllDocuments();
-      await showAlertDialog(context, "Operation status: Success");
-    } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(
-          context, "Operation status: Error\n${e.toString()}");
-    }
+    await ScanbotSdk.document.deleteAllDocuments();
+    await showAlertDialog(context, "Operation status: Success");
   }
 
   Future<void> _createDocumentFromImage(BuildContext context) async {
-    try {
-      if (!await checkLicenseStatus(context)) {
-        return;
-      }
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
 
-      final response = await selectImageFromLibrary();
-      if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.document.createDocumentFromImageFileUris(
-            images: [response!.path], options: CreateDocumentOptions());
+    final response = await selectImageFromLibrary();
+    if (response?.path.isNotEmpty ?? false) {
+      var result = await ScanbotSdk.document.createDocumentFromImageFileUris(
+          images: [response!.path], options: CreateDocumentOptions());
+      if (result is Ok<DocumentData>) {
         await Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DocumentPreview(result),
+            builder: (context) => DocumentPreview(result.value),
           ),
         );
       }
-    } catch (e) {
-      Logger.root.severe(e);
     }
   }
 }

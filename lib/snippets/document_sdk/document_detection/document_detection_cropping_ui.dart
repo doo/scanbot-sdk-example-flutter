@@ -14,22 +14,25 @@ Future<void> startDocumentDetectionWithCroppingScreen(
   }
 
   /** Create a new document with the provided imageFileUri. */
-  var document = await ScanbotSdk.document
+  var documentResult = await ScanbotSdk.document
       .createDocumentFromImageFileUris(images: [imageFile.path]);
-  /** Create a new configuration with the document and the document's first page. */
-  var configuration = CroppingConfiguration(
-    documentUuid: document.uuid,
-    pageUuid: document.pages[0].uuid,
-  );
-  /* Customize the configuration. */
-  configuration.cropping.bottomBar.rotateButton.visible = false;
-  configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
-  configuration.cropping.topBarConfirmButton.foreground.color =
-      ScanbotColor('#ffffff');
-  configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
-  /** Start the cropping UI Screen */
-  var documentResult =
-      await ScanbotSdk.document.startCroppingScreen(configuration);
-  /** Handle the document if the status is 'OK' */
-  if (documentResult.status == OperationStatus.OK) {}
+  if (documentResult is Ok<DocumentData>) {
+    var document = documentResult.value;
+    /** Create a new configuration with the document and the document's first page. */
+    var configuration = CroppingConfiguration(
+      documentUuid: document.uuid,
+      pageUuid: document.pages[0].uuid,
+    );
+    /* Customize the configuration. */
+    configuration.cropping.bottomBar.rotateButton.visible = false;
+    configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
+    configuration.cropping.topBarConfirmButton.foreground.color =
+        ScanbotColor('#ffffff');
+    configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
+    /** Start the cropping UI Screen */
+    var documentCroppingResult =
+        await ScanbotSdk.document.startCroppingScreen(configuration);
+    /** Handle the document if the status is 'OK' */
+    if (documentCroppingResult is Ok<DocumentData>) {}
+  }
 }

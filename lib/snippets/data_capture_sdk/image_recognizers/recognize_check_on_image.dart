@@ -6,10 +6,11 @@ Future<void> recognizeCheckOnImage(String uriPath) async {
       CheckDocumentDetectionMode.DETECT_DOCUMENT;
   // Configure other parameters as needed.
 
-  CheckScanningResult result =
+  var result =
       await ScanbotSdk.check.scanFromImageFileUri(uriPath, configuration);
-  if (result.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
-    //  ...
+  if (result is Ok<CheckScanningResult> &&
+      result.value.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
+    /** Handle the result **/
   }
 }
 

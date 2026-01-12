@@ -20,46 +20,40 @@ class RtuMrzScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = MrzScannerScreenConfiguration();
+    var config = MrzScannerScreenConfiguration();
 
-      // Set colors
-      config.palette.sbColorPrimary = ScanbotColor('#C8193C');
-      config.palette.sbColorOnPrimary = ScanbotColor('#ffffff');
+    // Set colors
+    config.palette.sbColorPrimary = ScanbotColor('#C8193C');
+    config.palette.sbColorOnPrimary = ScanbotColor('#ffffff');
 
-      // Add a top guidance title
-      config.topUserGuidance.title = StyledText(
-        text: 'Scan MRZ',
-        color: ScanbotColor('#C8193C'),
-        useShadow: true,
-      );
+    // Add a top guidance title
+    config.topUserGuidance.title = StyledText(
+      text: 'Scan MRZ',
+      color: ScanbotColor('#C8193C'),
+      useShadow: true,
+    );
 
-      // Modify the action bar
-      config.actionBar.flipCameraButton.visible = false;
-      config.actionBar.flashButton.activeForegroundColor =
-          ScanbotColor('#C8193C');
+    // Modify the action bar
+    config.actionBar.flipCameraButton.visible = false;
+    config.actionBar.flashButton.activeForegroundColor =
+        ScanbotColor('#C8193C');
 
-      // Configure the scanner
-      config.scannerConfiguration.incompleteResultHandling =
-          MrzIncompleteResultHandling.ACCEPT;
+    // Configure the scanner
+    config.scannerConfiguration.incompleteResultHandling =
+        MrzIncompleteResultHandling.ACCEPT;
 
-      // Configure other parameters as needed.
-      final result = await ScanbotSdk.mrz.startScanner(config);
-
-      if (result.status == OperationStatus.OK &&
-          result.data?.mrzDocument != null) {
-        // Always serialize the MRZ document before stringifying, and use the serialized result.
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MrzDocumentResultPreview(
-              uiResult: result.data,
-            ),
+    // Configure other parameters as needed.
+    final result = await ScanbotSdk.mrz.startScanner(config);
+    if (result is Ok<MrzScannerUiResult>) {
+      // Always serialize the MRZ document before stringifying, and use the serialized result.
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MrzDocumentResultPreview(
+            uiResult: result.value,
           ),
-        );
-      }
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
+        ),
+      );
     }
   }
 }

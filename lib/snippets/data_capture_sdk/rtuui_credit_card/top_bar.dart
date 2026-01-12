@@ -12,7 +12,8 @@ Future<void> startScanning() async {
   configuration.topBar.cancelButton.foreground.color = ScanbotColor('#C8193C');
   /** Start the Credit Card Scanner **/
   var result = await ScanbotSdk.creditCard.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<CreditCardScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

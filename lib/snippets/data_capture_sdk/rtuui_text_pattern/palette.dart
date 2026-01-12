@@ -24,7 +24,8 @@ Future<void> startScanning() async {
   palette.sbColorModalOverlay = ScanbotColor('#A3000000');
   /** Start the Text Pattern Scanner **/
   var result = await ScanbotSdk.textPattern.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<TextPatternScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

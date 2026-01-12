@@ -20,26 +20,22 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = TextPatternScannerScreenConfiguration();
-      // Show the top user guidance
-      config.topUserGuidance.visible = true;
-      // Customize the top user guidance
-      config.topUserGuidance.title.text = 'Customized title';
-      // Configure parameters as needed.
+    var config = TextPatternScannerScreenConfiguration();
+    // Show the top user guidance
+    config.topUserGuidance.visible = true;
+    // Customize the top user guidance
+    config.topUserGuidance.title.text = 'Customized title';
+    // Configure parameters as needed.
 
-      var result = await ScanbotSdk.textPattern.startScanner(config);
+    var result = await ScanbotSdk.textPattern.startScanner(config);
 
-      if (result.status == OperationStatus.OK && result.data != null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TextPatternScannerUiResultPreview(result.data!),
-          ),
-        );
-      }
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
+    if (result is Ok<TextPatternScannerUiResult>) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => TextPatternScannerUiResultPreview(result.value),
+        ),
+      );
     }
   }
 }

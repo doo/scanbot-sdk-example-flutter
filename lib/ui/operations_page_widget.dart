@@ -166,12 +166,8 @@ class _PageOperationsState extends State<PageOperations> {
       return;
     }
 
-    try {
-      await ScanbotSdk.document.removePages(widget.documentID, [_page.uuid]);
-      Navigator.of(context).pop();
-    } catch (e) {
-      print(e);
-    }
+    await ScanbotSdk.document.removePages(widget.documentID, [_page.uuid]);
+    Navigator.of(context).pop();
   }
 
   Future<void> applyParametricFilters(List<ParametricFilter> list) async {
@@ -179,15 +175,13 @@ class _PageOperationsState extends State<PageOperations> {
       return;
     }
 
-    try {
-      var updatedDocument = await ScanbotSdk.document.modifyPage(
-          widget.documentID, _page.uuid,
-          options: ModifyPageOptions(filters: list));
+    var result = await ScanbotSdk.document.modifyPage(
+        widget.documentID, _page.uuid,
+        options: ModifyPageOptions(filters: list));
+    if (result is Ok<DocumentData>) {
       setState(() {
-        _page = updatedDocument.pages.firstWhere((x) => x.uuid == _page.uuid);
+        _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
       });
-    } catch (e) {
-      print(e);
     }
   }
 
@@ -209,15 +203,11 @@ class _PageOperationsState extends State<PageOperations> {
         ScanbotColor('#ffffff');
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
-    try {
-      var result = await ScanbotSdk.document.startCroppingScreen(configuration);
-      if (result.status == OperationStatus.OK && result.data != null) {
-        setState(() {
-          _page = result.data!.pages.firstWhere((x) => x.uuid == _page.uuid);
-        });
-      }
-    } catch (e) {
-      print(e);
+    var result = await ScanbotSdk.document.startCroppingScreen(configuration);
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
+      });
     }
   }
 }

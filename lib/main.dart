@@ -177,29 +177,20 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   }
 
   Future<void> _getOcrConfigs() async {
-    try {
-      final result = await ScanbotSdk.getOcrConfigs();
-      await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
-    } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting OCR configs');
+    final result = await ScanbotSdk.getOcrConfigs();
+    if (result is Ok<OcrConfigsResult>) {
+      await showAlertDialog(context, jsonEncode(result.value),
+          title: 'OCR Configs');
     }
   }
 
   Future<void> _getLicenseStatus() async {
-    try {
-      final result = await ScanbotSdk.getLicenseInfo();
-      var status = " Status: ${result.status.name}";
+    final result = await ScanbotSdk.getLicenseInfo();
+    if (result is Ok<LicenseInfo>) {
+      var licenseInfo =
+          "Status: ${result.value.status.name}\nExpiration Date: ${result.value.expirationDateString}";
 
-      //TODO: Check it
-      // if (result.licenseExpirationDate != null) {
-      //   status += "\n ExpirationDate: ${result.licenseExpirationDate}";
-      // }
-
-      await showAlertDialog(context, status, title: 'License Status');
-    } catch (e) {
-      await showAlertDialog(context, "Error getting license status",
-          title: "Info");
+      await showAlertDialog(context, licenseInfo, title: 'License Status');
     }
   }
 }

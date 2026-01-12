@@ -26,7 +26,8 @@ Future<void> startScanning() async {
       ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
   var result = await ScanbotSdk.textPattern.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<TextPatternScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

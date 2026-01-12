@@ -125,20 +125,17 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
 
   Future<void> startScan({
     required BuildContext context,
-    required Future<ResultWrapper<DocumentData>> Function() scannerFunction,
+    required Future<Result<DocumentData>> Function() scannerFunction,
   }) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    try {
-      var result = await scannerFunction();
-      if (result.status == OperationStatus.OK && result.data != null) {
-        setState(() {
-          documentData = result.data!;
-        });
-      }
-    } catch (e) {
-      print(e);
+
+    var result = await scannerFunction();
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
     }
   }
 
@@ -151,10 +148,12 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var loadedData = await ScanbotSdk.document.loadDocument(documentData.uuid);
-    setState(() {
-      documentData = loadedData;
-    });
+    var result = await ScanbotSdk.document.loadDocument(documentData.uuid);
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    }
   }
 
   Future<void> _continueScanning() async {
@@ -177,9 +176,11 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (response?.path.isNotEmpty ?? false) {
       var result = await ScanbotSdk.document
           .addPagesFromImageFileUris(documentData.uuid, [response!.path]);
-      setState(() {
-        documentData = result;
-      });
+      if (result is Ok<DocumentData>) {
+        setState(() {
+          documentData = result.value;
+        });
+      }
     }
   }
 
@@ -188,9 +189,11 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       return;
     }
     var result = await ScanbotSdk.document.removeAllPages(documentData.uuid);
-    setState(() {
-      documentData = result;
-    });
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    }
   }
 
   Future<void> _saveDocumentAsPDF() async {
@@ -199,8 +202,10 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     var result = await ScanbotSdk.pdfGenerator
         .generateFromDocument(documentData.uuid, PdfConfiguration());
-    await showAlertDialog(context, 'Pdf File created: $result',
-        title: 'Result');
+    if (result is Ok<String>) {
+      await showAlertDialog(context, 'Pdf File created: ${result.value}',
+          title: 'Result');
+    }
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
@@ -215,8 +220,10 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
         documentData.uuid, pdfOptions,
         ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR));
-    await showAlertDialog(context, 'Pdf File created: $result',
-        title: 'Result');
+    if (result is Ok<String>) {
+      await showAlertDialog(context, 'Pdf File created: ${result.value}',
+          title: 'Result');
+    }
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
@@ -230,8 +237,11 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
         compression: CompressionMode.CCITT_T6);
     var result = await ScanbotSdk.tiffGenerator
         .generateFromDocument(documentData.uuid, options);
-    await showAlertDialog(context, 'Tiff Binarized File created: $result',
-        title: 'Result');
+    if (result is Ok<String>) {
+      await showAlertDialog(
+          context, 'Tiff Binarized File created: ${result.value}',
+          title: 'Result');
+    }
   }
 
   Future<void> _saveDocumentAsTIFF() async {
@@ -240,7 +250,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     var result = await ScanbotSdk.tiffGenerator
         .generateFromDocument(documentData.uuid, TiffGeneratorParameters());
-    await showAlertDialog(context, 'Tiff File created: $result',
-        title: 'Result');
+    if (result is Ok<String>) {
+      await showAlertDialog(context, 'Tiff File created: ${result.value}',
+          title: 'Result');
+    }
   }
 }

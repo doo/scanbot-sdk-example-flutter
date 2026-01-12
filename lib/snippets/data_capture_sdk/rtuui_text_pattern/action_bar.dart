@@ -19,7 +19,8 @@ Future<void> startScanning() async {
   /** Start the MRZ Scanner UI */
 
   var result = await ScanbotSdk.textPattern.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<TextPatternScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

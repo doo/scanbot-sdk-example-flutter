@@ -30,13 +30,14 @@ class EncryptedPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final imageData = ScanbotSdk.imageProcessor.readImageData(path);
+    final imageDataFuture = ScanbotSdk.imageProcessor.readImageData(path);
     return SizedBox(
       height: double.infinity,
       width: double.infinity,
-      child: FutureBuilder<String>(
-        future: imageData,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+      child: FutureBuilder<Result<String>>(
+        future: imageDataFuture,
+        builder:
+            (BuildContext context, AsyncSnapshot<Result<String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
                 child: SizedBox(
@@ -47,8 +48,10 @@ class EncryptedPageWidget extends StatelessWidget {
               ),
             ));
           }
-          if (snapshot.data != null) {
-            Uint8List bytes = base64Decode(snapshot.data!);
+
+          var result = snapshot.data;
+          if (result is Ok<String>) {
+            Uint8List bytes = base64Decode(result.value);
             final image = Image.memory(bytes);
             return Center(child: image);
           } else {

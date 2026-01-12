@@ -2,7 +2,11 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> createDocument() async {
   /** Create a document with a UUID */
-  var document = await ScanbotSdk.document.createDocumentFromImageFileUris();
+  var documentResult =
+      await ScanbotSdk.document.createDocumentFromImageFileUris();
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  }
 }
 
 Future<void> createDocumentWithPages(List<String> imageFileUris) async {
@@ -10,31 +14,43 @@ Future<void> createDocumentWithPages(List<String> imageFileUris) async {
    * Create a document with a UUID
    * Add images from `imageFileUris` as document pages
    * */
-  var document = await ScanbotSdk.document
+  var documentResult = await ScanbotSdk.document
       .createDocumentFromImageFileUris(images: imageFileUris);
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  }
 }
 
 Future<void> loadDocument(String documentID) async {
   /** Load a document from storage by ID */
-  var document = await ScanbotSdk.document.loadDocument(documentID);
+  var documentResult = await ScanbotSdk.document.loadDocument(documentID);
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  }
 }
 
 Future<void> storedDocumentUUIDs() async {
   /** Retrieve all the document IDs from the storage */
-  var documentIds = await ScanbotSdk.document.getStoredDocumentIDs();
+  var documentIdsResult = await ScanbotSdk.document.getStoredDocumentIDs();
+  if (documentIdsResult is Ok<List<String>>) {
+    /** Handle the document IDs */
+  }
 }
 
 Future<void> reorderDocumentPages(String documentID) async {
   /** Load a document from storage by ID */
-  var document = await ScanbotSdk.document.loadDocument(documentID);
-  /** Move the first page to the end of the document */
-  var documentWithReorderedPages = await ScanbotSdk.document
-      .movePage(document.uuid, 0, document.pages.length - 1);
+  var documentResult = await ScanbotSdk.document.loadDocument(documentID);
+  if (documentResult is Ok<DocumentData>) {
+    var document = documentResult.value;
+    /** Move the first page to the end of the document */
+    var documentWithReorderedPageResult = await ScanbotSdk.document
+        .movePage(document.uuid, 0, document.pages.length - 1);
+  }
 }
 
 Future<void> removeAllPagesFromDocument(String documentID) async {
   /** Remove all the pages from a document */
-  var documentWithRemovedPages =
+  var documentWithRemovedPagesResult =
       await ScanbotSdk.document.removeAllPages(documentID);
 }
 

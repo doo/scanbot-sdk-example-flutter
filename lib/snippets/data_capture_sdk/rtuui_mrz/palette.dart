@@ -24,7 +24,8 @@ Future<void> startScanning() async {
   palette.sbColorModalOverlay = ScanbotColor('#A3000000');
   /** Start the MRZ Scanner UI */
   var result = await ScanbotSdk.mrz.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<MrzScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

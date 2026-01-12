@@ -5,10 +5,11 @@ Future<void> recognizeCreditCardOnImage(String uriPath) async {
   configuration.requireCardholderName = true;
   // Configure other parameters as needed.
 
-  CreditCardScanningResult result =
+  var result =
       await ScanbotSdk.creditCard.scanFromImageFileUri(uriPath, configuration);
-  if (result.scanningStatus == CreditCardScanningStatus.SUCCESS) {
-    //  ...
+  if (result is Ok<CreditCardScanningResult> &&
+      result.value.scanningStatus == CreditCardScanningStatus.SUCCESS) {
+    /** Handle the result **/
   }
 }
 

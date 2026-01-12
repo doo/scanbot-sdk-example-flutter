@@ -5,9 +5,9 @@ Future<void> startScanning() async {
   var configuration = MrzScannerScreenConfiguration();
   // Start the MRZ Scanner
   var result = await ScanbotSdk.mrz.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
+  if (result is Ok<MrzScannerUiResult>) {
     // Cast the resulted generic document to the MRZ model.
-    var mrzModel = MRZ(result.data!.mrzDocument!);
+    var mrzModel = MRZ(result.value.mrzDocument!);
     // Retrieve the values.
     // e.g
     print(

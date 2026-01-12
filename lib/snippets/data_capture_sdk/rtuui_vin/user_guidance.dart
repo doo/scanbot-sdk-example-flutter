@@ -21,7 +21,8 @@ Future<void> startScanning() async {
   finderUserGuidance.background.fillColor = ScanbotColor('#C8193C');
   /** Start the Credit Card Scanner **/
   var result = await ScanbotSdk.vin.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<VinScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

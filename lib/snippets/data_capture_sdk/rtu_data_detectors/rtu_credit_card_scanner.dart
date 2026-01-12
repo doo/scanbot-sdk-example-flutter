@@ -20,37 +20,32 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = CreditCardScannerScreenConfiguration();
-      // Configure the top bar mode
-      config.topBar.mode = TopBarMode.GRADIENT;
-      // Configure the top bar status bar mode
-      config.topBar.statusBarMode = StatusBarMode.LIGHT;
-      // Configure the top bar background color
-      config.topBar.cancelButton.text = 'Cancel';
-      // Configure parameters as needed.
+    var config = CreditCardScannerScreenConfiguration();
+    // Configure the top bar mode
+    config.topBar.mode = TopBarMode.GRADIENT;
+    // Configure the top bar status bar mode
+    config.topBar.statusBarMode = StatusBarMode.LIGHT;
+    // Configure the top bar background color
+    config.topBar.cancelButton.text = 'Cancel';
+    // Configure parameters as needed.
 
-      // An autorelease pool is required only because the result object contains image references.
-      await autorelease(() async {
-        var result = await ScanbotSdk.creditCard.startScanner(config);
+    // An autorelease pool is required only because the result object contains image references.
+    await autorelease(() async {
+      var result = await ScanbotSdk.creditCard.startScanner(config);
 
-        if (result.status == OperationStatus.OK &&
-            result.data?.creditCard != null) {
-          /// if you want to use image later, call encodeImages() to save in buffer
-          //  result.data?.encodeImages();
+      if (result is Ok<CreditCardScannerUiResult>) {
+        /// if you want to use image later, call encodeImages() to save in buffer
+        //  result.data?.encodeImages();
 
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => CreditCardResultPreview(
-                uiResult: result.data,
-              ),
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => CreditCardResultPreview(
+              uiResult: result.value,
             ),
-          );
-        }
-      });
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
-    }
+          ),
+        );
+      }
+    });
   }
 }

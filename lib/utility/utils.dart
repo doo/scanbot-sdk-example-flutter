@@ -99,7 +99,7 @@ void showResultTextDialog(BuildContext context, result) {
 
 Future<bool> checkLicenseStatus(BuildContext context) async {
   final result = await ScanbotSdk.getLicenseInfo();
-  if (result.isValid) {
+  if (result is Ok<LicenseInfo> && result.value.isValid) {
     return true;
   }
   await showAlertDialog(

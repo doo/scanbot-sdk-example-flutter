@@ -6,10 +6,11 @@ Future<void> startScanning() async {
   // Start the Document Data Extractor
   var result = await ScanbotSdk.documentDataExtractor
       .startExtractorScreen(configuration);
-  if (result.status == OperationStatus.OK) {
+
+  if (result is Ok<DocumentDataExtractorUiResult>) {
     // Cast the resulted generic document to the appropriate document model.
     // Available document types are defined in [DocumentsModelRootType] enum.
-    var documentModel = DeIdCardFront(result.data!.document!);
+    var documentModel = DeIdCardFront(result.value.document!);
 
     // Retrieve values from the German ID card front
     print(

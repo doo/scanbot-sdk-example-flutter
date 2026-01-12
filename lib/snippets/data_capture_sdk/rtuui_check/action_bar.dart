@@ -15,7 +15,8 @@ Future<void> startScanning() async {
   configuration.actionBar.flipCameraButton.visible = false;
   // Start the Check Scanner
   var result = await ScanbotSdk.check.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<CheckScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

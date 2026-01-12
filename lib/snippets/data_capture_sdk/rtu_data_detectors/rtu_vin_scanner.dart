@@ -20,32 +20,27 @@ class RtuVinScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = VinScannerScreenConfiguration();
-      config.introScreen.explanation.text =
-          'Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode' +
-              '\\nThe scanner will guide you to the optimal scanning position.' +
-              'Once the scan is complete, your VIN details will automatically be extracted and processed.';
-      // Configure the done button. E.g., the text or the background color.
-      config.introScreen.doneButton.text = 'Start Scanning';
-      config.introScreen.doneButton.background.fillColor =
-          ScanbotColor('#C8193C');
-      // Configure other parameters as needed.
+    var config = VinScannerScreenConfiguration();
+    config.introScreen.explanation.text =
+        'Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode' +
+            '\\nThe scanner will guide you to the optimal scanning position.' +
+            'Once the scan is complete, your VIN details will automatically be extracted and processed.';
+    // Configure the done button. E.g., the text or the background color.
+    config.introScreen.doneButton.text = 'Start Scanning';
+    config.introScreen.doneButton.background.fillColor =
+        ScanbotColor('#C8193C');
+    // Configure other parameters as needed.
 
-      var result = await ScanbotSdk.vin.startScanner(config);
-
-      if (result.status == OperationStatus.OK && result.data != null) {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => VinScannerResultPreview(
-              uiResult: result.data,
-            ),
+    var result = await ScanbotSdk.vin.startScanner(config);
+    if (result is Ok<VinScannerUiResult>) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => VinScannerResultPreview(
+            uiResult: result.value,
           ),
-        );
-      }
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
+        ),
+      );
     }
   }
 }

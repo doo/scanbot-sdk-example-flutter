@@ -17,7 +17,8 @@ Future<void> startScanning() async {
   actionBar.flipCameraButton.visible = false;
   /** Start the Credit Card Scanner **/
   var result = await ScanbotSdk.creditCard.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<CreditCardScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }

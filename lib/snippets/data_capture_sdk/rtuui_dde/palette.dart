@@ -25,7 +25,8 @@ Future<void> startScanning() async {
   /** Start the DDE **/
   var result = await ScanbotSdk.documentDataExtractor
       .startExtractorScreen(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<DocumentDataExtractorUiResult>) {
+    /** Handle the result **/
+    var documentDataExtractorUiResult = result.value;
   }
 }

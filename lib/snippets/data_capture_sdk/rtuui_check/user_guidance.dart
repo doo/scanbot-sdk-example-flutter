@@ -21,7 +21,8 @@ Future<void> startScanning() async {
   scanStatusUserGuidance.background.fillColor = ScanbotColor('#C8193C');
   // Start the Check Scanner UI
   var result = await ScanbotSdk.check.startScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  if (result is Ok<CheckScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
   }
 }
