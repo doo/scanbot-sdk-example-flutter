@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' hide EdgeInsets;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 class GenericDocumentHelper {
   static Widget wrappedGenericDocumentField(GenericDocument? genericDocument) {

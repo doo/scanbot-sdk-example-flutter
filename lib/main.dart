@@ -27,7 +27,7 @@ const SCANBOT_SDK_LICENSE_KEY = "";
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
-  final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
+  // final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
 
   var config = SdkConfiguration(
       loggingEnabled: true,

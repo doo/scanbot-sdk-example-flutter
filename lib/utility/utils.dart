@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart' as picker;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:scanbot_sdk/scanbot_sdk.dart' hide EdgeInsets;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 const bool shouldInitWithEncryption = false;
 
