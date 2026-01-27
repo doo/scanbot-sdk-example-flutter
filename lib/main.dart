@@ -148,14 +148,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             ),
             const TitleItemWidget(title: 'Other SDK API'),
             MenuItemWidget(
-              title: 'getLicenseStatus()',
+              title: 'License Info',
               startIcon: Icons.phonelink_lock,
               onTap: () {
                 _getLicenseStatus();
               },
             ),
             MenuItemWidget(
-              title: 'getOcrConfigs()',
+              title: 'Ocr Configs',
               startIcon: Icons.settings,
               onTap: () {
                 _getOcrConfigs();

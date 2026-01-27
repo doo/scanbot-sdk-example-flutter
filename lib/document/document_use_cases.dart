@@ -17,7 +17,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const TitleItemWidget(title: 'Document Scanners (RTU v2.0)'),
+        const TitleItemWidget(title: 'Document Scanners (RTU UI)'),
         MenuItemWidget(
             title: 'Single Page Scanning',
             onTap: () => _startSinglePageScanning(context)),
