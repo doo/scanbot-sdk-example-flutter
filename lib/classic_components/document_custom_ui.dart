@@ -27,7 +27,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool autoSnappingEnabled = true;
   bool flashAvailable = false;
   bool showProgressBar = false;
-  bool licenseIsActive = true;
+  SBException? licenseError = null;
 
   ScanbotCameraController controller = ScanbotCameraController();
 
@@ -96,7 +96,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   List<Widget> _buildAppBarActions() {
     return [
-      if (permissionGranted && licenseIsActive)
+      if (permissionGranted && licenseError == null)
         IconButton(
           onPressed: () {
             if (mounted) {
@@ -129,8 +129,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   /// Builds the view for the camera, handling different states.
   Widget _buildCameraView() {
-    if (!licenseIsActive) {
-      return _buildErrorMessage('License is no longer active');
+    if (licenseError != null) {
+      return _buildErrorMessage(licenseError!.message);
     }
 
     if (!permissionGranted) {
@@ -147,7 +147,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           errorListener: (error) {
             if (error is InvalidLicenseException) {
               setState(() {
-                licenseIsActive = false;
+                licenseError = error;
               });
             } else {
               Logger.root.severe(error.toString());
@@ -165,6 +165,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             }
           },
           onHeavyOperationProcessing: (show) {
+            if (showProgressBar == show) return;
+
             setState(() {
               showProgressBar = show;
             });
@@ -238,7 +240,9 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     return StreamBuilder<DocumentDetectionStatus>(
       stream: detectionStatusStream.stream,
       builder: (context, snapshot) {
-        if (snapshot.data == null || !permissionGranted || !licenseIsActive) {
+        if (snapshot.data == null ||
+            !permissionGranted ||
+            licenseError != null) {
           return Container();
         }
         return SizedBox(
