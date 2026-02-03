@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' hide IconButton, EdgeInsets;
-import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-import '../storage/_legacy_pages_repository.dart';
-import '../ui/pages_widget.dart';
-import '../ui/preview/_custom_ui_document_preview.dart';
 import '../utility/utils.dart';
+import 'cropping_custom_ui.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
 class DocumentScannerWidget extends StatefulWidget {
@@ -21,10 +18,6 @@ class DocumentScannerWidget extends StatefulWidget {
 }
 
 class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
-  /// Stream used to show live scanned results on top of the camera.
-  /// If not needed, scanning stops and returns the first result out of the screen.
-  final resultStream = StreamController<sdk.Page>();
-
   /// Stream to monitor the document detection status.
   final detectionStatusStream = StreamController<DocumentDetectionStatus>();
 
@@ -36,16 +29,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool showProgressBar = false;
   bool licenseIsActive = true;
 
-  late DocumentSnapTrigger generalSnapTrigger;
-  final LegacyPageRepository _pageRepository = LegacyPageRepository();
-
-  /// Adds scanned pages to the repository and navigates to the preview screen.
-  void showPageResult(List<sdk.Page> pages) {
-    _pageRepository.addPages(pages);
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => CustomUiDocumentPreview()),
-    );
-  }
+  ScanbotCameraController controller = ScanbotCameraController();
 
   /// Checks camera permission and updates the state accordingly.
   void checkPermission() async {
@@ -75,7 +59,6 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           children: <Widget>[
             _buildCameraView(),
             _buildDetectionStatusStream(),
-            _buildScannedPagePreview(),
             if (showProgressBar) _buildProgressIndicator(),
           ],
         ),
@@ -157,26 +140,26 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     return Stack(
       children: [
         DocumentScannerCamera(
-          snapListener: (page) {
-            resultStream.add(page);
-            showPageResult([page]);
+          controller: controller,
+          takePictureListener: (ImageRef documentImage) async {
+            await _startCustomCroppingScreen(documentImage);
           },
           errorListener: (error) {
-            if (mounted) {
+            if (error is InvalidLicenseException) {
               setState(() {
                 licenseIsActive = false;
               });
+            } else {
+              Logger.root.severe(error.toString());
             }
-            Logger.root.severe(error.toString());
           },
           documentContourListener: (result) {
             detectionStatusStream.add(result.detectionStatus);
           },
           configuration: _buildDocumentCameraConfiguration(),
-          onCameraPreviewStarted: (snapTrigger, isFlashAvailable) {
+          onCameraPreviewStarted: (isFlashAvailable) {
             if (mounted) {
               setState(() {
-                generalSnapTrigger = snapTrigger;
                 flashAvailable = isFlashAvailable;
               });
             }
@@ -194,9 +177,9 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
-              child: ShutterButton(
+              child: ShutterButtonView(
                 onPressed: () {
-                  generalSnapTrigger();
+                  controller.takePicture();
                 },
                 autosnappingMode: autoSnappingEnabled,
                 primaryColor: Colors.pink,
@@ -207,6 +190,18 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _startCustomCroppingScreen(ImageRef documentImage) async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) =>
+              CroppingScreenWidget(documentImage: documentImage)),
     );
   }
 
@@ -253,43 +248,13 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             child: Wrap(
               children: [
                 DetectionStatusWidget(
-                  status:
-                      snapshot.data ?? DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
+                  status: snapshot.data ??
+                      DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
                 ),
               ],
             ),
           ),
         );
-      },
-    );
-  }
-
-  /// Builds the StreamBuilder for displaying scanned pages.
-  Widget _buildScannedPagePreview() {
-    return StreamBuilder<sdk.Page>(
-      stream: resultStream.stream,
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Container();
-        }
-        return autoSnappingEnabled
-            ? SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: SizedBox(
-                    width: 100,
-                    height: 200,
-                    child: FadeOutView(
-                      key: Key(snapshot.data?.pageId ?? ""),
-                      fadeDelay: const Duration(milliseconds: 500),
-                      child: PagePreview(page: snapshot.data!),
-                    ),
-                  ),
-                ),
-              )
-            : Container();
       },
     );
   }
@@ -355,29 +320,19 @@ class DetectionStatusWidget extends StatelessWidget {
 
 /// A widget to preview the scanned page.
 class PagePreview extends StatelessWidget {
-  final sdk.Page page;
+  final Uint8List bytes;
 
-  const PagePreview({Key? key, required this.page}) : super(key: key);
+  const PagePreview({Key? key, required this.bytes}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var documentPreviewFile = File.fromUri(page.documentPreviewImageFileUri!);
-    var originalPreviewFile = File.fromUri(page.originalPreviewImageFileUri);
-    var file = documentPreviewFile.existsSync()
-        ? documentPreviewFile
-        : originalPreviewFile;
-    var imageUri = Uri(path: documentPreviewFile.existsSync()
-        ? page.documentPreviewImageFileUri!
-        : page.originalPreviewImageFileUri);
-
-    if (file.existsSync()) {
-      return SizedBox(
-        height: 200,
-        child: shouldInitWithEncryption
-            ? EncryptedPageWidget(imageUri)
-            : PageWidget(imageUri),
-      );
-    }
-    return Container();
+    return SizedBox(
+      height: 200,
+      child: SizedBox(
+        height: double.infinity,
+        width: double.infinity,
+        child: Center(child: Image.memory(bytes)),
+      ),
+    );
   }
 }

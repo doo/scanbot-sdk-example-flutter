@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_sdk_example_flutter/classic_components/document_custom_ui.dart';
 
-import 'storage/_legacy_pages_repository.dart';
 import 'ui/menu_item_widget.dart';
 import 'utility/utils.dart';
 import 'data_capture/data_capture_sdk_menu.dart';
 import 'document/document_sdk_menu.dart';
-import 'classic_components/custom_ui_menu.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
@@ -26,60 +23,27 @@ void main() => runApp(MyApp());
 const SCANBOT_SDK_LICENSE_KEY = "";
 
 Future<void> _initScanbotSdk() async {
-  // Consider adjusting this optional storageBaseDirectory - see the comments below.
-  // final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
-
   var config = SdkConfiguration(
       loggingEnabled: true,
       // Consider switching logging OFF in production. builds for security and performance reasons.
       licenseKey: SCANBOT_SDK_LICENSE_KEY,
-      storageImageFormat: StorageImageFormat.JPG,
-      storageImageQuality: 80,
       // Uncomment to use custom storage directory
-      // storageBaseDirectory: customStorageBaseDirectory,
+      // storageBaseDirectory: await getDemoStorageBaseDirectory(),
       fileEncryptionPassword: shouldInitWithEncryption
           ? 'SomeSecretPa\$\$w0rdForFileEncryption'
           : null,
       fileEncryptionMode:
           shouldInitWithEncryption ? FileEncryptionMode.AES256 : null);
 
-  try {
-    await ScanbotSdk.initialize(config);
-    await LegacyPageRepository().loadPages();
-  } catch (e) {
-    Logger.root.severe(e);
-  }
+  await ScanbotSdk.initialize(config);
 }
 
 Future<String> getDemoStorageBaseDirectory() async {
   // !! Please note !!
   // It is strongly recommended to use the default (secure) storage location of the Scanbot SDK.
   // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK by a custom storage directory.
-  //
-  // On Android we use the "ExternalStorageDirectory" which is a public(!) folder.
-  // All image files and export files (PDF, TIFF, etc) created by the Scanbot SDK in this demo app will be stored
-  // in this public storage directory and will be accessible for every(!) app having external storage permissions!
-  // Again, this is only for demo purposes, which allows us to easily fetch and check the generated files
-  // via Android "adb" CLI tools, Android File Transfer app, Android Studio, etc.
-  //
-  // On iOS we use the "ApplicationDocumentsDirectory" which is accessible via iTunes file sharing.
-  //
-  // For more details about the storage system of the Scanbot SDK Flutter Plugin please see our docs:
-  // - https://scanbotsdk.github.io/documentation/flutter/
-  //
-  // For more details about the file system on Android and iOS we also recommend to check out:
-  // - https://developer.android.com/guide/topics/data/data-storage
-  // - https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
 
-  Directory storageDirectory;
-  if (Platform.isAndroid) {
-    storageDirectory = (await getExternalStorageDirectory())!;
-  } else if (Platform.isIOS) {
-    storageDirectory = await getApplicationDocumentsDirectory();
-  } else {
-    throw ('Unsupported platform');
-  }
-
+  var storageDirectory = await getApplicationSupportDirectory();
   return '${storageDirectory.path}/my-custom-storage';
 }
 
@@ -137,12 +101,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
               },
             ),
             MenuItemWidget(
-              title: 'Custom UI Menu',
+              title: 'Custom UI',
               startIcon: Icons.edit,
               endIcon: Icons.arrow_forward,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => CustomUiMenu()),
+                  MaterialPageRoute(
+                      builder: (context) => const DocumentScannerWidget()),
                 );
               },
             ),

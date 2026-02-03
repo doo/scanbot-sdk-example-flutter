@@ -229,9 +229,9 @@ class DataCaptureUseCases extends StatelessWidget {
   Future<void> startVINScanner(BuildContext context) async {
     var configuration = VinScannerScreenConfiguration();
     configuration.introScreen.explanation.text =
-        'Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode' +
-            '\\nThe scanner will guide you to the optimal scanning position.' +
-            'Once the scan is complete, your VIN details will automatically be extracted and processed.';
+        'Quickly and securely scan the VIN by holding your device over the vehicle identification number or vehicle identification barcode'
+        '\\nThe scanner will guide you to the optimal scanning position.'
+        'Once the scan is complete, your VIN details will automatically be extracted and processed.';
     // Configure the done button. E.g., the text or the background color.
     configuration.introScreen.doneButton.text = 'Start Scanning';
     configuration.introScreen.doneButton.background.fillColor =

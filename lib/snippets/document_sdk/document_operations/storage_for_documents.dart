@@ -29,9 +29,9 @@ Future<void> loadDocument(String documentID) async {
   }
 }
 
-Future<void> storedDocumentUUIDs() async {
+Future<void> getStoredDocumentUuids() async {
   /** Retrieve all the document IDs from the storage */
-  var documentIdsResult = await ScanbotSdk.document.getStoredDocumentIDs();
+  var documentIdsResult = await ScanbotSdk.document.getStoredDocumentUuids();
   if (documentIdsResult is Ok<List<String>>) {
     /** Handle the document IDs */
   }

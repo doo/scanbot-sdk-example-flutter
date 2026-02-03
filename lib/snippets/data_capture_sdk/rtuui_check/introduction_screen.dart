@@ -17,9 +17,9 @@ Future<void> startScanning() async {
   // Configure the text.
   configuration.introScreen.explanation.color = ScanbotColor('#000000');
   configuration.introScreen.explanation.text =
-      'Quickly and securely scan your checks by holding your device over the check' +
-          '\\nThe scanner will guide you to the optimal scanning position.' +
-          'Once the scan is complete, your check details will automatically be extracted and processed.';
+      'Quickly and securely scan your checks by holding your device over the check'
+      '\\nThe scanner will guide you to the optimal scanning position.'
+      'Once the scan is complete, your check details will automatically be extracted and processed.';
   // Configure the done button. E.g., the text or the background color.
   configuration.introScreen.doneButton.text = 'Start Scanning';
   configuration.introScreen.doneButton.background.fillColor =

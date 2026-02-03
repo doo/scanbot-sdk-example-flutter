@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
-import '../storage/_legacy_pages_repository.dart';
 import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
-  const CroppingScreenWidget({Key? key, required this.page}) : super(key: key);
-  final sdk.Page page;
+  const CroppingScreenWidget({Key? key, required this.documentImage})
+      : super(key: key);
+  final ImageRef documentImage;
 
   @override
   _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
-  final LegacyPageRepository _pageRepository = LegacyPageRepository();
-  late sdk.Page currentPage;
+  late ImageRef currentPage;
   bool showProgressBar = false;
   bool doneButtonEnabled = true;
   CroppingController? croppingController;
@@ -23,7 +22,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   @override
   void initState() {
     super.initState();
-    currentPage = widget.page;
+    currentPage = widget.documentImage;
   }
 
   @override
@@ -36,29 +35,8 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
           if (showProgressBar) _buildProgressBar(),
         ],
       ),
-      floatingActionButton: _buildFloatingActionButton(),
       bottomNavigationBar: _buildBottomAppBar(),
     );
-  }
-
-  Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: _handleNextPage,
-      child: const Icon(Icons.navigate_next),
-    );
-  }
-
-  Future<void> _handleNextPage() async {
-    setState(() {
-      showProgressBar = true;
-    });
-
-    final nextPage = await _pageRepository.nextPage(currentPage);
-
-    setState(() {
-      showProgressBar = false;
-      currentPage = nextPage;
-    });
   }
 
   AppBar _buildAppBar() {
@@ -92,7 +70,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
 
   Widget _buildCroppingWidget() {
     return ScanbotCroppingWidget(
-      page: currentPage,
+      documentImage: currentPage,
       onViewReady: (controller) {
         croppingController = controller;
       },
@@ -101,10 +79,13 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
           showProgressBar = isProcessing;
         });
       },
+      errorListener: (error) {
+        Logger.root.severe(error.toString());
+      },
       edgeColor: Colors.red,
       edgeColorOnLine: Colors.blue,
       anchorPointsColor: Colors.amberAccent,
-      borderInsets: sdk.Insets.all(16),
+      borderInsets: Insets.all(16),
     );
   }
 
@@ -125,7 +106,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
         children: [
           _buildBottomBarButton('Reset', () => croppingController?.reset()),
           _buildBottomBarButton('Detect', () => croppingController?.detect()),
-          _buildBottomBarButton('Rotate Cw', _rotateImage),
+          _buildBottomBarButton('Rotate CW', _rotateImage),
         ],
       ),
     );
@@ -155,16 +136,6 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
   }
 
-  //TODO: Check it
-  // Future<sdk.Page> proceedImage(
-  //     sdk.Page page, CroppingPolygon croppingResult) async {
-  //   return await ScanbotSdk.cropAndRotatePage(
-  //     page,
-  //     croppingResult.polygon,
-  //     croppingResult.rotationTimesCw,
-  //   );
-  // }
-
   Future<void> cropAndPop() async {
     setState(() {
       showProgressBar = true;
@@ -177,9 +148,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     });
 
     if (croppingResult != null) {
-      //TODO: Check it
-      // var newPage = await proceedImage(currentPage, croppingResult);
-      // Navigator.of(context).pop(newPage);
+      Navigator.of(context).pop(croppingResult);
     }
   }
 }
