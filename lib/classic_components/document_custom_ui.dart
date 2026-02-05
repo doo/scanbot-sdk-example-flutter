@@ -29,7 +29,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool showProgressBar = false;
   SBException? licenseError;
 
-  ScanbotCameraController controller = ScanbotCameraController();
+  DocumentScannerCameraController controller = DocumentScannerCameraController();
 
   /// Checks camera permission and updates the state accordingly.
   void checkPermission() async {
