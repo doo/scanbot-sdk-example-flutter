@@ -32,7 +32,12 @@ Future<void> startDocumentDetectionWithCroppingScreen(
     /** Start the cropping UI Screen */
     var documentCroppingResult =
         await ScanbotSdk.document.startCroppingScreen(configuration);
-    /** Handle the document if the status is 'OK' */
-    if (documentCroppingResult is Ok<DocumentData>) {}
+    /** Handle the document if the result is 'Ok' */
+    if (documentCroppingResult is Ok<DocumentData>) {
+      var documentData = documentCroppingResult.value;
+      print(documentData);
+    } else {
+      print(documentCroppingResult.toString());
+    }
   }
 }

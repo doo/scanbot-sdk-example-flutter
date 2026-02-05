@@ -13,7 +13,7 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
     ..acknowledgementMode = AcknowledgementMode.ALWAYS
 
     // Set the minimum acceptable document quality.
-    // Options: EXCELLENT, GOOD, REASONABLE, POOR, VERY_POOR, or NO_DOCUMENT.
+    // Options: EXCELLENT, GOOD, REASONABLE, POOR, VERY_POOR.
     ..minimumQuality = DocumentQuality.REASONABLE
 
     // Set the background color for the acknowledgment screen.
@@ -37,6 +37,11 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
 void runDocumentScanner() async {
   var configuration = acknowledgementConfigurationScanningFlow();
   var documentResult = await ScanbotSdk.document.startScanner(configuration);
-  // Handle the document if the status is 'OK'
-  if (documentResult is Ok<DocumentData>) {}
+  // Handle the document if the result is 'Ok'
+  if (documentResult is Ok<DocumentData>) {
+    var documentData = documentResult.value;
+    print(documentData);
+  } else {
+    print(documentResult.toString());
+  }
 }

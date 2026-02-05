@@ -49,6 +49,11 @@ DocumentScanningFlow singlePageScanningFlow() {
 void runDocumentScanner() async {
   var configuration = singlePageScanningFlow();
   var documentResult = await ScanbotSdk.document.startScanner(configuration);
-  // Handle the document if the status is 'OK'
-  if (documentResult is Ok<DocumentData>) {}
+  // Handle the document if the result is 'Ok'
+  if (documentResult is Ok<DocumentData>) {
+    var documentData = documentResult.value;
+    print(documentData);
+  } else {
+    print(documentResult.toString());
+  }
 }

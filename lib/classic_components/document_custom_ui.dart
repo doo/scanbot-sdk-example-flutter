@@ -27,7 +27,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool autoSnappingEnabled = true;
   bool flashAvailable = false;
   bool showProgressBar = false;
-  SBException? licenseError = null;
+  SBException? licenseError;
 
   ScanbotCameraController controller = ScanbotCameraController();
 
