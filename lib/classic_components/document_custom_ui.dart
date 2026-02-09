@@ -29,7 +29,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   bool showProgressBar = false;
   SBException? licenseError;
 
-  DocumentScannerCameraController controller = DocumentScannerCameraController();
+  DocumentScannerCameraController controller =
+      DocumentScannerCameraController();
 
   /// Checks camera permission and updates the state accordingly.
   void checkPermission() async {
@@ -141,10 +142,14 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       children: [
         DocumentScannerCamera(
           controller: controller,
-          takePictureListener: (ImageRef documentImage) async {
-            await _startCustomCroppingScreen(documentImage);
+          onSnappedDocumentResult: (
+            ImageRef originalImage,
+            ImageRef? documentImage,
+            DocumentDetectionResult? detectionResult,
+          ) async {
+            await _startCustomCroppingScreen(originalImage);
           },
-          errorListener: (error) {
+          onError: (error) {
             if (error is InvalidLicenseException) {
               setState(() {
                 licenseError = error;
@@ -153,8 +158,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
               Logger.root.severe(error.toString());
             }
           },
-          documentContourListener: (result) {
-            detectionStatusStream.add(result.detectionStatus);
+          onFrameDetectionResult: (result) {
+            detectionStatusStream.add(result.status);
           },
           configuration: _buildDocumentCameraConfiguration(),
           onCameraPreviewStarted: (isFlashAvailable) {
@@ -181,7 +186,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
               padding: const EdgeInsets.all(24.0),
               child: ShutterButtonView(
                 onPressed: () {
-                  controller.takePicture();
+                  controller.snapDocument();
                 },
                 autosnappingMode: autoSnappingEnabled,
                 primaryColor: Colors.pink,
@@ -212,8 +217,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     var documentClassicScannerConfiguration =
         DocumentClassicScannerConfiguration(
       autoSnapEnabled: autoSnappingEnabled,
-      acceptedSizeScore: 75,
       detectDocumentAfterSnap: false,
+      acceptedSizeScore: 75,
       autoSnapSensitivity: 0.5,
     );
 

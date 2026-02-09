@@ -79,7 +79,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
           showProgressBar = isProcessing;
         });
       },
-      errorListener: (error) {
+      onError: (error) {
         Logger.root.severe(error.toString());
       },
       edgeColor: Colors.red,
