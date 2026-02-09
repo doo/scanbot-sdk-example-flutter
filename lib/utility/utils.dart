@@ -142,7 +142,7 @@ Widget buildBottomNavigationBar(BuildContext context) {
         ),
         const SizedBox(height: 4),
         const Text(
-          'Copyright 2025 Scanbot SDK GmbH. All rights reserved.',
+          'Copyright 2026 Scanbot SDK GmbH. All rights reserved.',
           style: TextStyle(
             fontSize: 10,
             color: Colors.black,
