@@ -6,6 +6,8 @@ Future<void> createDocument() async {
       await ScanbotSdk.document.createDocumentFromImageFileUris();
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
+  } else {
+    print(documentResult.toString());
   }
 }
 
@@ -18,6 +20,8 @@ Future<void> createDocumentWithPages(List<String> imageFileUris) async {
       .createDocumentFromImageFileUris(images: imageFileUris);
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
+  } else {
+    print(documentResult.toString());
   }
 }
 
@@ -26,6 +30,8 @@ Future<void> loadDocument(String documentID) async {
   var documentResult = await ScanbotSdk.document.loadDocument(documentID);
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
+  } else {
+    print(documentResult.toString());
   }
 }
 
@@ -34,6 +40,8 @@ Future<void> getStoredDocumentUuids() async {
   var documentIdsResult = await ScanbotSdk.document.getStoredDocumentUuids();
   if (documentIdsResult is Ok<List<String>>) {
     /** Handle the document IDs */
+  } else {
+    print(documentIdsResult.toString());
   }
 }
 
@@ -45,6 +53,13 @@ Future<void> reorderDocumentPages(String documentID) async {
     /** Move the first page to the end of the document */
     var documentWithReorderedPageResult = await ScanbotSdk.document
         .movePage(document.uuid, 0, document.pages.length - 1);
+    if (documentWithReorderedPageResult is Ok<DocumentData>) {
+      /** Handle the document */
+    } else {
+      print(documentWithReorderedPageResult.toString());
+    }
+  } else {
+    print(documentResult.toString());
   }
 }
 
@@ -52,6 +67,11 @@ Future<void> removeAllPagesFromDocument(String documentID) async {
   /** Remove all the pages from a document */
   var documentWithRemovedPagesResult =
       await ScanbotSdk.document.removeAllPages(documentID);
+  if (documentWithRemovedPagesResult is Ok<DocumentData>) {
+    /** Handle the document */
+  } else {
+    print(documentWithRemovedPagesResult.toString());
+  }
 }
 
 Future<void> deleteDocument(String documentID) async {

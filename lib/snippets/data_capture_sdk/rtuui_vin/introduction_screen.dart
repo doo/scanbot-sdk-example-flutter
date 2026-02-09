@@ -42,5 +42,8 @@ Future<void> startScanning() async {
   if (result is Ok<VinScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

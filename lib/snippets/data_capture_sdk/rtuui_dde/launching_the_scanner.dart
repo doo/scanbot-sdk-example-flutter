@@ -33,5 +33,7 @@ Future<void> startScanning() async {
         'Surname: ${documentModel.surname.value?.text}, Confidence: ${documentModel.surname.value?.confidence}');
     print(
         'Series: ${documentModel.series.value?.text}, Confidence: ${documentModel.series.value?.confidence}');
+  } else {
+    print(result.toString());
   }
 }

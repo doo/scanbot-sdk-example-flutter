@@ -26,5 +26,8 @@ Future<void> startScanning() async {
   if (result is Ok<TextPatternScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

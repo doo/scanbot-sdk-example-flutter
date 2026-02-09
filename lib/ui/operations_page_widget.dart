@@ -182,6 +182,8 @@ class _PageOperationsState extends State<PageOperations> {
       setState(() {
         _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
       });
+    } else {
+      print(result.toString());
     }
   }
 
@@ -208,6 +210,8 @@ class _PageOperationsState extends State<PageOperations> {
       setState(() {
         _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
       });
+    } else {
+      print(result.toString());
     }
   }
 }

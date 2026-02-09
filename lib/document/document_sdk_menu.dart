@@ -36,6 +36,8 @@ class DocumentSdkMenu extends StatelessWidget {
             context,
             title: 'Document Quality',
             result.value.quality?.name ?? 'Unknown');
+      } else {
+        print(result.toString());
       }
     }
   }
@@ -48,6 +50,8 @@ class DocumentSdkMenu extends StatelessWidget {
       if (result is Ok<PerformOcrResult>) {
         await showAlertDialog(
             context, title: 'OCR Result', result.value.recognizedText);
+      } else {
+        print(result.toString());
       }
     }
   }

@@ -9,6 +9,8 @@ Future<void> recognizeMrzDocumentOnImage(String uriPath) async {
       await ScanbotSdk.mrz.scanFromImageFileUri(uriPath, configuration);
   if (result is Ok<MrzScannerResult> && result.value.success) {
     /** Handle the result **/
+  } else {
+    print(result.toString());
   }
 }
 

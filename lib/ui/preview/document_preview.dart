@@ -136,6 +136,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       setState(() {
         documentData = result.value;
       });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -153,6 +155,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       setState(() {
         documentData = result.value;
       });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -180,6 +184,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
         setState(() {
           documentData = result.value;
         });
+      } else {
+        await showAlertDialog(context, result.toString());
       }
     }
   }
@@ -193,6 +199,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       setState(() {
         documentData = result.value;
       });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -205,6 +213,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (result is Ok<String>) {
       await showAlertDialog(context, 'Pdf File created: ${result.value}',
           title: 'Result');
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -223,6 +233,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (result is Ok<String>) {
       await showAlertDialog(context, 'Pdf File created: ${result.value}',
           title: 'Result');
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -241,6 +253,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       await showAlertDialog(
           context, 'Tiff Binarized File created: ${result.value}',
           title: 'Result');
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -253,6 +267,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (result is Ok<String>) {
       await showAlertDialog(context, 'Tiff File created: ${result.value}',
           title: 'Result');
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 }

@@ -39,5 +39,7 @@ Future<void> startDocumentDetectionWithCroppingScreen(
     } else {
       print(documentCroppingResult.toString());
     }
+  } else {
+    print(documentResult.toString());
   }
 }

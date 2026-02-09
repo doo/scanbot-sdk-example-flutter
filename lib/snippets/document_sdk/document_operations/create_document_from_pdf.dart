@@ -9,5 +9,7 @@ Future<void> createDocumentFromPDF(String pdfFilePath) async {
       await ScanbotSdk.document.createDocumentFromPdf(pdfFilePath);
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
+  } else {
+    print(documentResult.toString());
   }
 }

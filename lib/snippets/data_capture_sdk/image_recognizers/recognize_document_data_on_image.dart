@@ -24,6 +24,8 @@ Future<void> extractDocumentData(String uriPath) async {
   if (result is Ok<DocumentDataExtractionResult> &&
       result.value.status == DocumentDataExtractionStatus.OK) {
     /** Handle the result **/
+  } else {
+    print(result.toString());
   }
 }
 

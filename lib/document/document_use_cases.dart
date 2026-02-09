@@ -52,6 +52,8 @@ class DocumentUseCasesWidget extends StatelessWidget {
           builder: (context) => DocumentPreview(result.value),
         ),
       );
+    } else {
+      print(result.toString());
     }
   }
 
@@ -99,6 +101,8 @@ class DocumentUseCasesWidget extends StatelessWidget {
             builder: (context) => DocumentPreview(result.value),
           ),
         );
+      } else {
+        print(result.toString());
       }
     }
   }

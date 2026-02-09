@@ -44,16 +44,22 @@ class RtuMrzScannerFeature extends StatelessWidget {
 
     // Configure other parameters as needed.
     final result = await ScanbotSdk.mrz.startScanner(config);
-    if (result is Ok<MrzScannerUiResult>) {
-      // Always serialize the MRZ document before stringifying, and use the serialized result.
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MrzDocumentResultPreview(
-            uiResult: result.value,
+    switch (result) {
+      case Ok():
+
+        // Always serialize the MRZ document before stringifying, and use the serialized result.
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => MrzDocumentResultPreview(
+              uiResult: result.value,
+            ),
           ),
-        ),
-      );
+        );
+      case Error():
+        await showAlertDialog(context, title: "Error", result.error.message);
+      case Cancel():
+        print("Operation was canceled");
     }
   }
 }

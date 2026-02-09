@@ -33,18 +33,24 @@ class RtuCheckScannerFeature extends StatelessWidget {
     // An autorelease pool is required only because the result object contains image references.
     await autorelease(() async {
       var result = await ScanbotSdk.check.startScanner(config);
-      if (result is Ok<CheckScannerUiResult>) {
-        /// if you want to use image later, call encodeImages() to save in buffer
-        //  result.data?.encodeImages();
+      switch (result) {
+        case Ok():
 
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => CheckDocumentResultPreview(
-              uiResult: result.value,
+          /// if you want to use image later, call encodeImages() to save in buffer
+          //  result.data?.encodeImages();
+
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CheckDocumentResultPreview(
+                uiResult: result.value,
+              ),
             ),
-          ),
-        );
+          );
+        case Error():
+          await showAlertDialog(context, title: "Error", result.error.message);
+        case Cancel():
+          print("Operation was canceled");
       }
     });
   }

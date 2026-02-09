@@ -32,15 +32,20 @@ class RtuVinScannerFeature extends StatelessWidget {
     // Configure other parameters as needed.
 
     var result = await ScanbotSdk.vin.startScanner(config);
-    if (result is Ok<VinScannerUiResult>) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => VinScannerResultPreview(
-            uiResult: result.value,
+    switch (result) {
+      case Ok():
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => VinScannerResultPreview(
+              uiResult: result.value,
+            ),
           ),
-        ),
-      );
+        );
+      case Error():
+        await showAlertDialog(context, title: "Error", result.error.message);
+      case Cancel():
+        print("Operation was canceled");
     }
   }
 }

@@ -28,5 +28,8 @@ Future<void> startScanning() async {
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;
+    print(documentDataExtractorUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

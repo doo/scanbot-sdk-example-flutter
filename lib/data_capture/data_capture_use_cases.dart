@@ -71,6 +71,8 @@ class DataCaptureUseCases extends StatelessWidget {
       final result = await scannerFunction(response.path);
       if (result is Ok<T>) {
         await handleResult(context, result.value);
+      } else {
+        print(result.toString());
       }
       await dialog.hide();
     }
@@ -242,14 +244,19 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => ScanbotSdk.vin.startScanner(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<VinScannerUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
                 builder: (context) =>
-                    VinScannerResultPreview(uiResult: result.value)),
-          );
-        } else if (result is Error<VinScannerUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+                    VinScannerResultPreview(uiResult: result.value),
+              ),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );
@@ -264,14 +271,18 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => _runDocumentDataExtractor(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<DocumentDataExtractorUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    ExtractedDocumentDataPreview(uiResult: result.value)),
-          );
-        } else if (result is Error<DocumentDataExtractorUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ExtractedDocumentDataPreview(uiResult: result.value)),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );
@@ -307,14 +318,18 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => _runCheckScanner(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<CheckScannerUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    CheckDocumentResultPreview(uiResult: result.value)),
-          );
-        } else if (result is Error<CheckScannerUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CheckDocumentResultPreview(uiResult: result.value)),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );
@@ -347,14 +362,18 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => ScanbotSdk.textPattern.startScanner(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<TextPatternScannerUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    TextPatternScannerUiResultPreview(result.value)),
-          );
-        } else if (result is Error<TextPatternScannerUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      TextPatternScannerUiResultPreview(result.value)),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );
@@ -374,14 +393,18 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => ScanbotSdk.creditCard.startScanner(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<CreditCardScannerUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    CreditCardResultPreview(uiResult: result.value)),
-          );
-        } else if (result is Error<CreditCardScannerUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      CreditCardResultPreview(uiResult: result.value)),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );
@@ -397,14 +420,18 @@ class DataCaptureUseCases extends StatelessWidget {
       context: context,
       scannerFunction: () => ScanbotSdk.mrz.startScanner(configuration),
       handleResult: (context, result) async {
-        if (result is Ok<MrzScannerUiResult>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    MrzDocumentResultPreview(uiResult: result.value)),
-          );
-        } else if (result is Error<MrzScannerUiResult>) {
-          await showAlertDialog(context, "Error: ${result.error.message}");
+        switch (result) {
+          case Ok():
+            await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MrzDocumentResultPreview(uiResult: result.value)),
+            );
+          case Error():
+            await showAlertDialog(
+                context, title: "Error", result.error.message);
+          case Cancel():
+            print("Operation was canceled");
         }
       },
     );

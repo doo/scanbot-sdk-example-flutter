@@ -12,5 +12,7 @@ Future<void> createDocumentTIFF() async {
     if (tiffUriResult is Ok<String>) {
       /** Handle the document */
     }
+  } else {
+    print(documentResult.toString());
   }
 }

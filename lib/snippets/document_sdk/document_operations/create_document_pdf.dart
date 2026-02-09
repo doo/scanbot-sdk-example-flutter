@@ -17,5 +17,7 @@ Future<void> createDocumentPDF() async {
     if (pdfUriResult is Ok<String>) {
       /** Handle the pdf */
     }
+  } else {
+    print(documentResult.toString());
   }
 }

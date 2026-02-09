@@ -146,6 +146,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     if (result is Ok<OcrConfigsResult>) {
       await showAlertDialog(context, jsonEncode(result.value),
           title: 'OCR Configs');
+    } else {
+      print(result.toString());
     }
   }
 
@@ -156,6 +158,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           "Status: ${result.value.status.name}\nExpiration Date: ${result.value.expirationDateString}";
 
       await showAlertDialog(context, licenseInfo, title: 'License Status');
+    } else {
+      print(result.toString());
     }
   }
 }

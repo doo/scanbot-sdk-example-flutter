@@ -7,4 +7,10 @@ Future<void> extractImagesFromPDF(String pdfFileUri) async {
    */
   var imagesResult =
       await ScanbotSdk.pdfImageExtractor.extractImageFiles(pdfFileUri);
+  if (imagesResult is Ok<List<String>>) {
+    print(imagesResult.value);
+    /** Handle the images */
+  } else {
+    print(imagesResult.toString());
+  }
 }

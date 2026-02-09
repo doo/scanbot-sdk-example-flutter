@@ -14,5 +14,7 @@ Future<void> startScanning() async {
         'Birth date: ${mrzModel.birthDate.value?.text}, Confidence: ${mrzModel.birthDate.value?.confidence}');
     print(
         'Nationality: ${mrzModel.nationality.value?.text}, Confidence: ${mrzModel.nationality.value?.confidence}');
+  } else {
+    print(result.toString());
   }
 }

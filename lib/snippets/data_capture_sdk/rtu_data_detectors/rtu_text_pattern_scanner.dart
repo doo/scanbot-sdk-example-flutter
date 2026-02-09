@@ -28,14 +28,18 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
     // Configure parameters as needed.
 
     var result = await ScanbotSdk.textPattern.startScanner(config);
-
-    if (result is Ok<TextPatternScannerUiResult>) {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TextPatternScannerUiResultPreview(result.value),
-        ),
-      );
+    switch (result) {
+      case Ok():
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TextPatternScannerUiResultPreview(result.value),
+          ),
+        );
+      case Error():
+        await showAlertDialog(context, title: "Error", result.error.message);
+      case Cancel():
+        print("Operation was canceled");
     }
   }
 }

@@ -28,18 +28,24 @@ class RtuDocumentDataExtractorFeature extends StatelessWidget {
     await autorelease(() async {
       var result =
           await ScanbotSdk.documentDataExtractor.startExtractorScreen(config);
-      if (result is Ok<DocumentDataExtractorUiResult>) {
-        /// if you want to use image later, call encodeImages() to save in buffer
-        //  result.data?.encodeImages();
+      switch (result) {
+        case Ok():
 
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ExtractedDocumentDataPreview(
-              uiResult: result.value,
+          /// if you want to use image later, call encodeImages() to save in buffer
+          //  result.data?.encodeImages();
+
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ExtractedDocumentDataPreview(
+                uiResult: result.value,
+              ),
             ),
-          ),
-        );
+          );
+        case Error():
+          await showAlertDialog(context, title: "Error", result.error.message);
+        case Cancel():
+          print("Operation was canceled");
       }
     });
   }

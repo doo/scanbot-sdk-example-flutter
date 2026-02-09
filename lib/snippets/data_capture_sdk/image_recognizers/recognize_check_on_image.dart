@@ -11,6 +11,8 @@ Future<void> recognizeCheckOnImage(String uriPath) async {
   if (result is Ok<CheckScanningResult> &&
       result.value.status == CheckMagneticInkStripScanningStatus.SUCCESS) {
     /** Handle the result **/
+  } else {
+    print(result.toString());
   }
 }
 

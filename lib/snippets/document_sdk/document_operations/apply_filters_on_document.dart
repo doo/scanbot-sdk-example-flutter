@@ -22,6 +22,10 @@ Future<void> applyFiltersAndRotateScannedPage() async {
         .modifyPage(document.uuid, page.uuid, options: options);
     if (documentResultWithModifiedPage is Ok<DocumentData>) {
       /** Handle the document */
+    } else {
+      print(documentResultWithModifiedPage.toString());
     }
+  } else {
+    print(documentResult.toString());
   }
 }
