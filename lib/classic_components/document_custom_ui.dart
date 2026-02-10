@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -317,25 +316,6 @@ class DetectionStatusWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           style: const TextStyle(color: Colors.white),
         ),
-      ),
-    );
-  }
-}
-
-/// A widget to preview the scanned page.
-class PagePreview extends StatelessWidget {
-  final Uint8List bytes;
-
-  const PagePreview({Key? key, required this.bytes}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: SizedBox(
-        height: double.infinity,
-        width: double.infinity,
-        child: Center(child: Image.memory(bytes)),
       ),
     );
   }
