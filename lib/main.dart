@@ -29,12 +29,12 @@ Future<void> _initScanbotSdk() async {
     licenseKey: SCANBOT_SDK_LICENSE_KEY,
     // Uncomment to use custom storage directory
     // storageBaseDirectory: await getDemoStorageBaseDirectory(),
-    fileEncryptionPassword: shouldInitWithEncryption
-        ? 'SomeSecretPa\$\$w0rdForFileEncryption'
-        : null,
-    fileEncryptionMode:
-        shouldInitWithEncryption ? FileEncryptionMode.AES256 : null,
   );
+
+  if (shouldInitWithEncryption) {
+    config.fileEncryptionPassword = 'SomeSecretPa\$\$w0rdForFileEncryption';
+    config.fileEncryptionMode = FileEncryptionMode.AES256;
+  }
 
   await ScanbotSdk.initialize(config);
 }
