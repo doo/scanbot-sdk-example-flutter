@@ -8,12 +8,11 @@ class VinScannerResultPreview extends StatelessWidget {
   final VinScannerUiResult? uiResult;
   final VinScannerResult? scanningResult;
 
-  const VinScannerResultPreview({
-    super.key,
-    this.uiResult,
-    this.scanningResult,
-  }) : assert(uiResult != null || scanningResult != null,
-            'At least one result must be provided');
+  const VinScannerResultPreview({super.key, this.uiResult, this.scanningResult})
+      : assert(
+          uiResult != null || scanningResult != null,
+          'At least one result must be provided',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -23,23 +22,34 @@ class VinScannerResultPreview extends StatelessWidget {
 
     List<Widget> children = [];
 
-    void addField(String title, String? value,
-        [double? confidence, bool largeGap = false]) {
+    void addField(
+      String title,
+      String? value, [
+      double? confidence,
+      bool largeGap = false,
+    ]) {
       children.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
       if (value != null && value.isNotEmpty) {
-        children
-            .add(Text(value, style: Theme.of(context).textTheme.bodyMedium));
+        children.add(
+          Text(value, style: Theme.of(context).textTheme.bodyMedium),
+        );
       }
       if (confidence != null && confidence.isFinite) {
-        children.add(Text('Confidence: ${confidence.toStringAsFixed(2)}',
-            style: Theme.of(context).textTheme.labelSmall));
+        children.add(
+          Text(
+            'Confidence: ${confidence.toStringAsFixed(2)}',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        );
       }
       children.add(SizedBox(height: largeGap ? 16 : 12));
     }
 
     addField('Text VIN', textResult!.rawText, textResult.confidence, true);
     addField(
-        'Validation', textResult.validationSuccessful ? 'Valid' : 'Invalid');
+      'Validation',
+      textResult.validationSuccessful ? 'Valid' : 'Invalid',
+    );
 
     for (final word in textResult.wordBoxes) {
       addField('Word', word.text, word.recognitionConfidence);
@@ -55,8 +65,11 @@ class VinScannerResultPreview extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar('VIN Scanner Result',
-          showBackButton: true, context: context),
+      appBar: ScanbotAppBar(
+        'VIN Scanner Result',
+        showBackButton: true,
+        context: context,
+      ),
       body: ListView(
         padding: const material.EdgeInsets.all(16),
         children: children,

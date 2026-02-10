@@ -2,11 +2,8 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> applyFiltersOnImage(String imageFileUri) async {
   /** Apply ScanbotBinarizationFilter to the image */
-  var imageWithFiltersResult =
-      await ScanbotSdk.imageProcessor.applyFiltersOnImageFile(
-    imageFileUri,
-    [ScanbotBinarizationFilter()],
-  );
+  var imageWithFiltersResult = await ScanbotSdk.imageProcessor
+      .applyFiltersOnImageFile(imageFileUri, [ScanbotBinarizationFilter()]);
 
   if (imageWithFiltersResult is Ok<String>) {
     /** Rotate the page counterclockwise by 90 degrees */

@@ -52,10 +52,7 @@ class MenuItemWidget extends StatelessWidget {
 class TitleItemWidget extends StatelessWidget {
   final String title;
 
-  const TitleItemWidget({
-    required this.title,
-    Key? key,
-  }) : super(key: key);
+  const TitleItemWidget({required this.title, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

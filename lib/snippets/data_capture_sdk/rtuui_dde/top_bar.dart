@@ -11,8 +11,9 @@ Future<void> startScanning() async {
   configuration.topBar.cancelButton.text = 'Cancel';
   configuration.topBar.cancelButton.foreground.color = ScanbotColor('#C8193C');
   /** Start the DDE **/
-  var result = await ScanbotSdk.documentDataExtractor
-      .startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;

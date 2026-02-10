@@ -11,12 +11,13 @@ void createImageRefFromEncodedBuffer(Uint8List bytes) {
     var imageRefWithOptions = ImageRef.fromEncodedBuffer(
       bytes,
       options: BufferImageLoadOptions(
-          // Define crop rectangle
-          cropRect: const Rectangle<int>(0, 0, 200, 200),
-          // Convert image to grayscale
-          colorConversion: ColorConversion.GRAY,
-          // Use lazy loading mode, image would be loaded into memory only when first used
-          loadMode: BufferLoadMode.LAZY),
+        // Define crop rectangle
+        cropRect: const Rectangle<int>(0, 0, 200, 200),
+        // Convert image to grayscale
+        colorConversion: ColorConversion.GRAY,
+        // Use lazy loading mode, image would be loaded into memory only when first used
+        loadMode: BufferLoadMode.LAZY,
+      ),
     );
   });
 }

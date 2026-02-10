@@ -6,10 +6,7 @@ Future<void> startScanning() async {
   // Set the overlay color
   configuration.viewFinder.overlayColor = ScanbotColor('#C8193C');
   // Configure the aspect ratio of the view finder
-  configuration.viewFinder.aspectRatio = AspectRatio(
-    width: 8,
-    height: 6,
-  );
+  configuration.viewFinder.aspectRatio = AspectRatio(width: 8, height: 6);
   // Configure the view finder style
   configuration.viewFinder.style = FinderCorneredStyle(
     cornerRadius: 8,

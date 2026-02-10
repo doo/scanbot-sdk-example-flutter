@@ -27,8 +27,9 @@ class RtuVinScannerFeature extends StatelessWidget {
         'Once the scan is complete, your VIN details will automatically be extracted and processed.';
     // Configure the done button. E.g., the text or the background color.
     config.introScreen.doneButton.text = 'Start Scanning';
-    config.introScreen.doneButton.background.fillColor =
-        ScanbotColor('#C8193C');
+    config.introScreen.doneButton.background.fillColor = ScanbotColor(
+      '#C8193C',
+    );
     // Configure other parameters as needed.
 
     var result = await ScanbotSdk.vin.startScanner(config);
@@ -37,9 +38,7 @@ class RtuVinScannerFeature extends StatelessWidget {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => VinScannerResultPreview(
-              uiResult: result.value,
-            ),
+            builder: (_) => VinScannerResultPreview(uiResult: result.value),
           ),
         );
       case Error():

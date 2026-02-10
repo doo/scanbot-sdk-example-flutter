@@ -5,8 +5,10 @@ Future<void> recognizeMrzDocumentOnImage(String uriPath) async {
   configuration.incompleteResultHandling = MrzIncompleteResultHandling.REJECT;
   // Configure other parameters as needed.
 
-  var result =
-      await ScanbotSdk.mrz.scanFromImageFileUri(uriPath, configuration);
+  var result = await ScanbotSdk.mrz.scanFromImageFileUri(
+    uriPath,
+    configuration,
+  );
   if (result is Ok<MrzScannerResult> && result.value.success) {
     /** Handle the result **/
   } else {

@@ -35,8 +35,9 @@ class RtuMrzScannerFeature extends StatelessWidget {
 
     // Modify the action bar
     config.actionBar.flipCameraButton.visible = false;
-    config.actionBar.flashButton.activeForegroundColor =
-        ScanbotColor('#C8193C');
+    config.actionBar.flashButton.activeForegroundColor = ScanbotColor(
+      '#C8193C',
+    );
 
     // Configure the scanner
     config.scannerConfiguration.incompleteResultHandling =
@@ -51,9 +52,7 @@ class RtuMrzScannerFeature extends StatelessWidget {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => MrzDocumentResultPreview(
-              uiResult: result.value,
-            ),
+            builder: (_) => MrzDocumentResultPreview(uiResult: result.value),
           ),
         );
       case Error():

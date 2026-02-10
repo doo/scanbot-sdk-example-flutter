@@ -79,10 +79,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   Widget _buildButton(String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: onPressed,
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white),
-      ),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 
@@ -144,7 +141,8 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   Future<void> _showOperationsPage(PageData page) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => PageOperations(documentData.uuid, page)),
+        builder: (context) => PageOperations(documentData.uuid, page),
+      ),
     );
 
     if (!await checkLicenseStatus(context)) {
@@ -166,8 +164,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     await startScan(
       context: context,
-      scannerFunction: () => ScanbotSdk.document
-          .startScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
+      scannerFunction: () => ScanbotSdk.document.startScanner(
+        DocumentScanningFlow(documentUuid: documentData.uuid),
+      ),
     );
   }
 
@@ -178,8 +177,10 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     final response = await selectImageFromLibrary();
 
     if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document
-          .addPagesFromImageFileUris(documentData.uuid, [response!.path]);
+      var result = await ScanbotSdk.document.addPagesFromImageFileUris(
+        documentData.uuid,
+        [response!.path],
+      );
       if (result is Ok<DocumentData>) {
         setState(() {
           documentData = result.value;
@@ -208,11 +209,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.pdfGenerator
-        .generateFromDocument(documentData.uuid, PdfConfiguration());
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
+      documentData.uuid,
+      PdfConfiguration(),
+    );
     if (result is Ok<String>) {
-      await showAlertDialog(context, 'Pdf File created: ${result.value}',
-          title: 'Result');
+      await showAlertDialog(
+        context,
+        'Pdf File created: ${result.value}',
+        title: 'Result',
+      );
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -228,11 +234,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     );
 
     var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
-        documentData.uuid, pdfOptions,
-        ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR));
+      documentData.uuid,
+      pdfOptions,
+      ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR),
+    );
     if (result is Ok<String>) {
-      await showAlertDialog(context, 'Pdf File created: ${result.value}',
-          title: 'Result');
+      await showAlertDialog(
+        context,
+        'Pdf File created: ${result.value}',
+        title: 'Result',
+      );
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -244,15 +255,20 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
 
     var options = TiffGeneratorParameters(
-        binarizationFilter: ScanbotBinarizationFilter(),
-        dpi: 300,
-        compression: CompressionMode.CCITT_T6);
-    var result = await ScanbotSdk.tiffGenerator
-        .generateFromDocument(documentData.uuid, options);
+      binarizationFilter: ScanbotBinarizationFilter(),
+      dpi: 300,
+      compression: CompressionMode.CCITT_T6,
+    );
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(
+      documentData.uuid,
+      options,
+    );
     if (result is Ok<String>) {
       await showAlertDialog(
-          context, 'Tiff Binarized File created: ${result.value}',
-          title: 'Result');
+        context,
+        'Tiff Binarized File created: ${result.value}',
+        title: 'Result',
+      );
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -262,11 +278,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.tiffGenerator
-        .generateFromDocument(documentData.uuid, TiffGeneratorParameters());
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(
+      documentData.uuid,
+      TiffGeneratorParameters(),
+    );
     if (result is Ok<String>) {
-      await showAlertDialog(context, 'Tiff File created: ${result.value}',
-          title: 'Result');
+      await showAlertDialog(
+        context,
+        'Tiff File created: ${result.value}',
+        title: 'Result',
+      );
     } else {
       await showAlertDialog(context, result.toString());
     }

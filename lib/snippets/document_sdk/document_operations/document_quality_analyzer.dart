@@ -3,7 +3,9 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 Future<void> documentQualityAnalyzer(String imageFilePath) async {
   /** Detect the quality of the document on image **/
   var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
-      imageFilePath, DocumentQualityAnalyzerConfiguration());
+    imageFilePath,
+    DocumentQualityAnalyzerConfiguration(),
+  );
 
   if (result is Ok<DocumentQualityAnalyzerResult>) {
     /** Handle the DQA Result */

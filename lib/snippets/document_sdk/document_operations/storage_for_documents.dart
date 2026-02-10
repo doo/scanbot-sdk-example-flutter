@@ -51,8 +51,11 @@ Future<void> reorderDocumentPages(String documentID) async {
   if (documentResult is Ok<DocumentData>) {
     var document = documentResult.value;
     /** Move the first page to the end of the document */
-    var documentWithReorderedPageResult = await ScanbotSdk.document
-        .movePage(document.uuid, 0, document.pages.length - 1);
+    var documentWithReorderedPageResult = await ScanbotSdk.document.movePage(
+      document.uuid,
+      0,
+      document.pages.length - 1,
+    );
     if (documentWithReorderedPageResult is Ok<DocumentData>) {
       /** Handle the document */
     } else {
@@ -65,8 +68,9 @@ Future<void> reorderDocumentPages(String documentID) async {
 
 Future<void> removeAllPagesFromDocument(String documentID) async {
   /** Remove all the pages from a document */
-  var documentWithRemovedPagesResult =
-      await ScanbotSdk.document.removeAllPages(documentID);
+  var documentWithRemovedPagesResult = await ScanbotSdk.document.removeAllPages(
+    documentID,
+  );
   if (documentWithRemovedPagesResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {

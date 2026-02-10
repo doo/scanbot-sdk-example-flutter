@@ -55,9 +55,7 @@ class _PageOperationsState extends State<PageOperations> {
               child: SizedBox(
                 width: 100,
                 height: 100,
-                child: CircularProgressIndicator(
-                  strokeWidth: 10,
-                ),
+                child: CircularProgressIndicator(strokeWidth: 10),
               ),
             ),
         ],
@@ -101,10 +99,7 @@ class _PageOperationsState extends State<PageOperations> {
         children: <Widget>[
           Icon(icon, color: Colors.white),
           const SizedBox(height: 4),
-          Text(
-            label,
-            style: const TextStyle(color: Colors.white),
-          ),
+          Text(label, style: const TextStyle(color: Colors.white)),
         ],
       ),
     );
@@ -118,43 +113,51 @@ class _PageOperationsState extends State<PageOperations> {
           padding: const material.EdgeInsets.all(10.0),
           children: <Widget>[
             FilterButton(
-                text: 'None',
-                onPressed: () => applyParametricFilters(
-                    [LegacyFilter(filterType: ImageFilterType.NONE.index)])),
+              text: 'None',
+              onPressed: () => applyParametricFilters([
+                LegacyFilter(filterType: ImageFilterType.NONE.index),
+              ]),
+            ),
             FilterButton(
-                text: 'Color Document Filter',
-                onPressed: () =>
-                    applyParametricFilters([ColorDocumentFilter()])),
+              text: 'Color Document Filter',
+              onPressed: () => applyParametricFilters([ColorDocumentFilter()]),
+            ),
             FilterButton(
-                text: 'Scanbot Binarization Filter',
-                onPressed: () =>
-                    applyParametricFilters([ScanbotBinarizationFilter()])),
+              text: 'Scanbot Binarization Filter',
+              onPressed: () =>
+                  applyParametricFilters([ScanbotBinarizationFilter()]),
+            ),
             FilterButton(
-                text: 'Custom Binarization Filter',
-                onPressed: () =>
-                    applyParametricFilters([CustomBinarizationFilter()])),
+              text: 'Custom Binarization Filter',
+              onPressed: () =>
+                  applyParametricFilters([CustomBinarizationFilter()]),
+            ),
             FilterButton(
-                text: 'Brightness Filter',
-                onPressed: () {
-                  applyParametricFilters([BrightnessFilter(brightness: 0.5)]);
-                }),
+              text: 'Brightness Filter',
+              onPressed: () {
+                applyParametricFilters([BrightnessFilter(brightness: 0.5)]);
+              },
+            ),
             FilterButton(
-                text: 'Contrast Filter',
-                onPressed: () {
-                  applyParametricFilters([ContrastFilter(contrast: 125.0)]);
-                }),
+              text: 'Contrast Filter',
+              onPressed: () {
+                applyParametricFilters([ContrastFilter(contrast: 125.0)]);
+              },
+            ),
             FilterButton(
-                text: 'Grayscale Filter',
-                onPressed: () {
-                  applyParametricFilters([GrayscaleFilter()]);
-                }),
+              text: 'Grayscale Filter',
+              onPressed: () {
+                applyParametricFilters([GrayscaleFilter()]);
+              },
+            ),
             FilterButton(
-                text: 'White Black Point Filter',
-                onPressed: () {
-                  applyParametricFilters([
-                    WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5)
-                  ]);
-                }),
+              text: 'White Black Point Filter',
+              onPressed: () {
+                applyParametricFilters([
+                  WhiteBlackPointFilter(blackPoint: 0.5, whitePoint: 0.5),
+                ]);
+              },
+            ),
           ],
         );
       },
@@ -176,8 +179,10 @@ class _PageOperationsState extends State<PageOperations> {
     }
 
     var result = await ScanbotSdk.document.modifyPage(
-        widget.documentID, _page.uuid,
-        options: ModifyPageOptions(filters: list));
+      widget.documentID,
+      _page.uuid,
+      options: ModifyPageOptions(filters: list),
+    );
     if (result is Ok<DocumentData>) {
       setState(() {
         _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
@@ -201,8 +206,9 @@ class _PageOperationsState extends State<PageOperations> {
     /* Customize the configuration. */
     configuration.cropping.bottomBar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor("#C8193C");
-    configuration.cropping.topBarConfirmButton.foreground.color =
-        ScanbotColor('#ffffff');
+    configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
+      '#ffffff',
+    );
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
     var result = await ScanbotSdk.document.startCroppingScreen(configuration);

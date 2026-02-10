@@ -4,8 +4,9 @@ Future<void> startScanning() async {
   // Create an instance of the default configuration
   var configuration = DocumentDataExtractorScreenConfiguration();
   // Start the Document Data Extractor
-  var result = await ScanbotSdk.documentDataExtractor
-      .startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
 
   if (result is Ok<DocumentDataExtractorUiResult>) {
     // Cast the resulted generic document to the appropriate document model.
@@ -14,25 +15,35 @@ Future<void> startScanning() async {
 
     // Retrieve values from the German ID card front
     print(
-        'Birth date: ${documentModel.birthDate.value?.text}, Confidence: ${documentModel.birthDate.value?.confidence}');
+      'Birth date: ${documentModel.birthDate.value?.text}, Confidence: ${documentModel.birthDate.value?.confidence}',
+    );
     print(
-        'Birthplace: ${documentModel.birthplace.value?.text}, Confidence: ${documentModel.birthplace.value?.confidence}');
+      'Birthplace: ${documentModel.birthplace.value?.text}, Confidence: ${documentModel.birthplace.value?.confidence}',
+    );
     print(
-        'Card access number: ${documentModel.cardAccessNumber.value?.text}, Confidence: ${documentModel.cardAccessNumber.value?.confidence}');
+      'Card access number: ${documentModel.cardAccessNumber.value?.text}, Confidence: ${documentModel.cardAccessNumber.value?.confidence}',
+    );
     print(
-        'Expiry date: ${documentModel.expiryDate.value?.text}, Confidence: ${documentModel.expiryDate.value?.confidence}');
+      'Expiry date: ${documentModel.expiryDate.value?.text}, Confidence: ${documentModel.expiryDate.value?.confidence}',
+    );
     print(
-        'Given names: ${documentModel.givenNames.value?.text}, Confidence: ${documentModel.givenNames.value?.confidence}');
+      'Given names: ${documentModel.givenNames.value?.text}, Confidence: ${documentModel.givenNames.value?.confidence}',
+    );
     print(
-        'ID: ${documentModel.id.value?.text}, Confidence: ${documentModel.id.value?.confidence}');
+      'ID: ${documentModel.id.value?.text}, Confidence: ${documentModel.id.value?.confidence}',
+    );
     print(
-        'Maiden name: ${documentModel.maidenName?.value?.text}, Confidence: ${documentModel.maidenName?.value?.confidence}');
+      'Maiden name: ${documentModel.maidenName?.value?.text}, Confidence: ${documentModel.maidenName?.value?.confidence}',
+    );
     print(
-        'Nationality: ${documentModel.nationality.value?.text}, Confidence: ${documentModel.nationality.value?.confidence}');
+      'Nationality: ${documentModel.nationality.value?.text}, Confidence: ${documentModel.nationality.value?.confidence}',
+    );
     print(
-        'Surname: ${documentModel.surname.value?.text}, Confidence: ${documentModel.surname.value?.confidence}');
+      'Surname: ${documentModel.surname.value?.text}, Confidence: ${documentModel.surname.value?.confidence}',
+    );
     print(
-        'Series: ${documentModel.series.value?.text}, Confidence: ${documentModel.series.value?.confidence}');
+      'Series: ${documentModel.series.value?.text}, Confidence: ${documentModel.series.value?.confidence}',
+    );
   } else {
     print(result.toString());
   }

@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
+import '../ui/preview/document_preview.dart';
 import '../utility/utils.dart';
 import 'cropping_custom_ui.dart';
 
@@ -69,18 +70,13 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(
-        color: Colors.white,
-      ),
+      iconTheme: const IconThemeData(color: Colors.white),
       backgroundColor: ScanbotRedColor,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
-        child: const Icon(
-          Icons.arrow_back,
-          color: Colors.white,
-        ),
+        child: const Icon(Icons.arrow_back, color: Colors.white),
       ),
       title: const Text(
         'Scan Documents',
@@ -121,9 +117,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
               });
             }
           },
-          icon: Icon(
-            flashEnabled ? Icons.flash_on : Icons.flash_off,
-          ),
+          icon: Icon(flashEnabled ? Icons.flash_on : Icons.flash_off),
         ),
     ];
   }
@@ -205,11 +199,20 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       return;
     }
 
-    await Navigator.of(context).push(
+    var documentData = await Navigator.of(context).push<DocumentData?>(
       MaterialPageRoute(
-          builder: (context) =>
-              CroppingScreenWidget(documentImage: documentImage)),
+        builder: (context) =>
+            CroppingScreenWidget(documentImage: documentImage),
+      ),
     );
+
+    if (documentData != null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DocumentPreview(documentData),
+        ),
+      );
+    }
   }
 
   /// Builds the DocumentCameraConfiguration.
@@ -274,9 +277,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       child: SizedBox(
         width: 100,
         height: 100,
-        child: CircularProgressIndicator(
-          strokeWidth: 10,
-        ),
+        child: CircularProgressIndicator(strokeWidth: 10),
       ),
     );
   }
@@ -288,10 +289,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       width: double.infinity,
       height: double.infinity,
       alignment: Alignment.center,
-      child: Text(
-        message,
-        style: const TextStyle(fontSize: 16),
-      ),
+      child: Text(message, style: const TextStyle(fontSize: 16)),
     );
   }
 }
@@ -310,10 +308,7 @@ class DetectionStatusWidget extends StatelessWidget {
         color: Colors.green.withAlpha(150),
         borderRadius: const BorderRadiusDirectional.all(Radius.circular(5)),
         shape: BoxShape.rectangle,
-        border: Border.all(
-          color: Colors.green.withAlpha(150),
-          width: 1.0,
-        ),
+        border: Border.all(color: Colors.green.withAlpha(150), width: 1.0),
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),

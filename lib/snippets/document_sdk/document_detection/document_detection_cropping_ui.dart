@@ -3,7 +3,8 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 import '../../../utility/utils.dart';
 
 Future<void> startDocumentDetectionWithCroppingScreen(
-    String imageFilePath) async {
+  String imageFilePath,
+) async {
   /**
    * Select an image from the Image Library
    * Return early if no image is selected or there is an issue selecting an image
@@ -26,12 +27,14 @@ Future<void> startDocumentDetectionWithCroppingScreen(
     /* Customize the configuration. */
     configuration.cropping.bottomBar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
-    configuration.cropping.topBarConfirmButton.foreground.color =
-        ScanbotColor('#ffffff');
+    configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
+      '#ffffff',
+    );
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
     /** Start the cropping UI Screen */
-    var documentCroppingResult =
-        await ScanbotSdk.document.startCroppingScreen(configuration);
+    var documentCroppingResult = await ScanbotSdk.document.startCroppingScreen(
+      configuration,
+    );
     /** Handle the document if the result is 'Ok' */
     if (documentCroppingResult is Ok<DocumentData>) {
       var documentData = documentCroppingResult.value;

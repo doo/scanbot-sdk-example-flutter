@@ -9,19 +9,17 @@ class GenericDocumentHelper {
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Text(
-        '''
+      child: Text('''
 Document: ${genericDocument.type.name}
 Field: ${wrappedGenericFieldValue?.type.name ?? "N/A"}
 Value: ${wrappedGenericFieldValue?.value?.text ?? "N/A"}
-''',
-        style: const TextStyle(inherit: true, color: Colors.black),
-      ),
+''', style: const TextStyle(inherit: true, color: Colors.black)),
     );
   }
 
   static TextFieldWrapper? _getGenericFieldValue(
-      GenericDocument genericDocument) {
+    GenericDocument genericDocument,
+  ) {
     switch (genericDocument.type.name) {
       case BoardingPass.DOCUMENT_TYPE:
         return BoardingPass(genericDocument).electronicTicketIndicator;

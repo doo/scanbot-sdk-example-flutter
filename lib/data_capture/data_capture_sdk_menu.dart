@@ -10,11 +10,7 @@ class DataCaptureSdkMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ScanbotAppBar('Scanbot Data Capture SDK Menu'),
-      body: ListView(
-        children: const <Widget>[
-          DataCaptureUseCases(),
-        ],
-      ),
+      body: ListView(children: const <Widget>[DataCaptureUseCases()]),
     );
   }
 }

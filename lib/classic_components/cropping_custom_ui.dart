@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
@@ -41,9 +43,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
 
   AppBar _buildAppBar() {
     return AppBar(
-      iconTheme: const IconThemeData(
-        color: Colors.white,
-      ),
+      iconTheme: const IconThemeData(color: Colors.white),
       backgroundColor: ScanbotRedColor,
       title: const Text(
         'Crop document',
@@ -60,10 +60,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
       ),
       actions: [
         if (doneButtonEnabled)
-          IconButton(
-            icon: const Icon(Icons.done),
-            onPressed: cropAndPop,
-          ),
+          IconButton(icon: const Icon(Icons.done), onPressed: cropAndPop),
       ],
     );
   }
@@ -115,10 +112,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   Widget _buildBottomBarButton(String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: doneButtonEnabled ? onPressed : null,
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.black),
-      ),
+      child: Text(label, style: const TextStyle(color: Colors.black)),
     );
   }
 
@@ -147,8 +141,38 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
       showProgressBar = false;
     });
 
-    if (croppingResult != null) {
-      Navigator.of(context).pop(croppingResult);
+    if (croppingResult == null) {
+      Navigator.of(context).pop();
+      return;
     }
+
+    final documentResult = await ScanbotSdk.document
+        .createDocumentFromImageRefs(images: [currentPage]);
+
+    if (documentResult is! Ok<DocumentData>) {
+      print(documentResult.toString());
+      return;
+    }
+
+    final document = documentResult.value;
+
+    final modifiedDocumentResult = await ScanbotSdk.document.modifyPage(
+      document.uuid,
+      document.pages.first.uuid,
+      options: ModifyPageOptions(
+        rotation: ImageRotation.values[croppingResult.rotationTimesCw],
+        polygon: toPointList(croppingResult.polygon),
+      ),
+    );
+
+    if (modifiedDocumentResult is! Ok<DocumentData>) {
+      print(modifiedDocumentResult.toString());
+      return;
+    }
+
+    Navigator.of(context).pop(modifiedDocumentResult.value);
   }
 }
+
+List<Point<double>> toPointList(List<PolygonPoint> polygon) =>
+    polygon.map((p) => Point<double>(p.x, p.y)).toList();

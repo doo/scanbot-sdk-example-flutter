@@ -40,18 +40,19 @@ class EncryptedPageWidget extends StatelessWidget {
             (BuildContext context, AsyncSnapshot<Result<String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-                child: SizedBox(
-              width: 100,
-              height: 100,
-              child: CircularProgressIndicator(
-                strokeWidth: 10,
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircularProgressIndicator(strokeWidth: 10),
               ),
-            ));
+            );
           }
 
           var result = snapshot.data;
           if (result is Ok<String>) {
-            Uint8List bytes = base64Decode(result.value);
+            Uint8List bytes = base64Decode(
+              result.value.replaceAll(RegExp(r'\s+'), ''),
+            );
             final image = Image.memory(bytes);
             return Center(child: image);
           } else {

@@ -11,9 +11,7 @@ Future<void> startScanning() async {
     text: 'Check Scanner',
   );
   // Configure the image for the introduction screen.
-  configuration.introScreen.image = CheckIntroCustomImage(
-    uri: 'imageUri',
-  );
+  configuration.introScreen.image = CheckIntroCustomImage(uri: 'imageUri');
   // Configure the text.
   configuration.introScreen.explanation.color = ScanbotColor('#000000');
   configuration.introScreen.explanation.text =
@@ -22,8 +20,9 @@ Future<void> startScanning() async {
       'Once the scan is complete, your check details will automatically be extracted and processed.';
   // Configure the done button. E.g., the text or the background color.
   configuration.introScreen.doneButton.text = 'Start Scanning';
-  configuration.introScreen.doneButton.background.fillColor =
-      ScanbotColor('#C8193C');
+  configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+    '#C8193C',
+  );
   // Start the Check Scanner UI
   var result = await ScanbotSdk.check.startScanner(configuration);
   if (result is Ok<CheckScannerUiResult>) {

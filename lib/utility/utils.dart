@@ -8,8 +8,9 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 const bool shouldInitWithEncryption = false;
 
 const enableImagesInScannedBarcodesResults = false;
-final selectedFormatsNotifier =
-    ValueNotifier<Set<BarcodeFormat>>(BarcodeFormats.all.toSet());
+final selectedFormatsNotifier = ValueNotifier<Set<BarcodeFormat>>(
+  BarcodeFormats.all.toSet(),
+);
 
 const Color ScanbotRedColor = Color(0xFFc8193c);
 
@@ -28,9 +29,7 @@ AppBar ScanbotAppBar(
   List<Widget>? actions,
 }) {
   return AppBar(
-    iconTheme: const IconThemeData(
-      color: Colors.white,
-    ),
+    iconTheme: const IconThemeData(color: Colors.white),
     backgroundColor: ScanbotRedColor,
     leading: showBackButton && context != null
         ? GestureDetector(
@@ -38,19 +37,17 @@ AppBar ScanbotAppBar(
             child: const Icon(Icons.arrow_back, color: Colors.white),
           )
         : null,
-    title: Text(
-      title,
-      style: AppBarTitleTextStyle,
-    ),
+    title: Text(title, style: AppBarTitleTextStyle),
     actions: actions,
   );
 }
 
-Future<void> showAlertDialog(BuildContext context, String textToShow,
-    {String? title}) async {
-  Widget text = SimpleDialogOption(
-    child: Text(textToShow),
-  );
+Future<void> showAlertDialog(
+  BuildContext context,
+  String textToShow, {
+  String? title,
+}) async {
+  Widget text = SimpleDialogOption(child: Text(textToShow));
 
   final dialog = AlertDialog(
     title: title != null ? Text(title) : null,
@@ -84,9 +81,7 @@ void showResultTextDialog(BuildContext context, result) {
   var alert = AlertDialog(
     title: const Text('Result'),
     content: Text(result),
-    actions: [
-      okButton,
-    ],
+    actions: [okButton],
   );
 
   showDialog(
@@ -103,18 +98,17 @@ Future<bool> checkLicenseStatus(BuildContext context) async {
     return true;
   }
   await showAlertDialog(
-      context, 'Scanbot SDK (trial) period or license has expired.',
-      title: 'Info');
+    context,
+    'Scanbot SDK (trial) period or license has expired.',
+    title: 'Info',
+  );
   return false;
 }
 
 Future<void> _launchScanbotSDKURL() async {
   var url = Uri.parse("https://scanbot.io/");
   if (await canLaunchUrl(url)) {
-    await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    );
+    await launchUrl(url, mode: LaunchMode.externalApplication);
   } else {
     throw 'Could not launch $url';
   }
@@ -135,18 +129,13 @@ Widget buildBottomNavigationBar(BuildContext context) {
           ),
           child: const Text(
             'Learn More About Scanbot SDK',
-            style: TextStyle(
-              color: ScanbotRedColor,
-            ),
+            style: TextStyle(color: ScanbotRedColor),
           ),
         ),
         const SizedBox(height: 4),
         const Text(
           'Copyright 2026 Scanbot SDK GmbH. All rights reserved.',
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.black,
-          ),
+          style: TextStyle(fontSize: 10, color: Colors.black),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),

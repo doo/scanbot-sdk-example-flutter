@@ -13,8 +13,9 @@ Future<void> startScanning() async {
       'Localized completionOverlaySuccessMessage';
 
   // Start the DDE
-  var result = await ScanbotSdk.documentDataExtractor
-      .startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;

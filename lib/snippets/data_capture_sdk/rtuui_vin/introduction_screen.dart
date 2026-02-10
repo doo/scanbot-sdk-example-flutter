@@ -34,8 +34,9 @@ Future<void> startScanning() async {
   // Configure the done button.
   // e.g the text or the background color.
   configuration.introScreen.doneButton.text = "Start Scanning";
-  configuration.introScreen.doneButton.background.fillColor =
-      ScanbotColor("#C8193C");
+  configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+    "#C8193C",
+  );
 
   /** Start the VIN Scanner **/
   var result = await ScanbotSdk.vin.startScanner(configuration);

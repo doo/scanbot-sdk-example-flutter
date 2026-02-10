@@ -5,8 +5,9 @@ Future<void> createDocumentWithLegacyPages(List<Page> pages) async {
    * Create a document with a UUID
    * Add pages to the document from 'legacy' pages
    */
-  var documentResult =
-      await ScanbotSdk.document.createDocumentFromLegacyPages(pages);
+  var documentResult = await ScanbotSdk.document.createDocumentFromLegacyPages(
+    pages,
+  );
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
     print(documentData);

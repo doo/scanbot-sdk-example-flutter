@@ -8,7 +8,9 @@ Future<void> createDocumentTIFF() async {
   if (documentResult is Ok<DocumentData>) {
     /** Create a TIFF file with the provided options */
     var tiffUriResult = await ScanbotSdk.tiffGenerator.generateFromDocument(
-        documentResult.value.uuid, TiffGeneratorParameters());
+      documentResult.value.uuid,
+      TiffGeneratorParameters(),
+    );
     if (tiffUriResult is Ok<String>) {
       /** Handle the document */
     }

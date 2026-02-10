@@ -42,9 +42,7 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CreditCardResultPreview(
-                uiResult: result.value,
-              ),
+              builder: (_) => CreditCardResultPreview(uiResult: result.value),
             ),
           );
         case Error():

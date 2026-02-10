@@ -24,16 +24,17 @@ const SCANBOT_SDK_LICENSE_KEY = "";
 
 Future<void> _initScanbotSdk() async {
   var config = SdkConfiguration(
-      loggingEnabled: true,
-      // Consider switching logging OFF in production. builds for security and performance reasons.
-      licenseKey: SCANBOT_SDK_LICENSE_KEY,
-      // Uncomment to use custom storage directory
-      // storageBaseDirectory: await getDemoStorageBaseDirectory(),
-      fileEncryptionPassword: shouldInitWithEncryption
-          ? 'SomeSecretPa\$\$w0rdForFileEncryption'
-          : null,
-      fileEncryptionMode:
-          shouldInitWithEncryption ? FileEncryptionMode.AES256 : null);
+    loggingEnabled: true,
+    // Consider switching logging OFF in production. builds for security and performance reasons.
+    licenseKey: SCANBOT_SDK_LICENSE_KEY,
+    // Uncomment to use custom storage directory
+    // storageBaseDirectory: await getDemoStorageBaseDirectory(),
+    fileEncryptionPassword: shouldInitWithEncryption
+        ? 'SomeSecretPa\$\$w0rdForFileEncryption'
+        : null,
+    fileEncryptionMode:
+        shouldInitWithEncryption ? FileEncryptionMode.AES256 : null,
+  );
 
   await ScanbotSdk.initialize(config);
 }
@@ -74,78 +75,85 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
-        body: ListView(
-          children: [
-            const TitleItemWidget(title: 'Document SDK API'),
-            MenuItemWidget(
-              title: 'Document SDK Menu',
-              startIcon: Icons.photo_camera,
-              endIcon: Icons.arrow_forward,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const DocumentSdkMenu()),
-                );
-              },
-            ),
-            MenuItemWidget(
-              title: 'Data Capture SDK Menu',
-              startIcon: Icons.data_array,
-              endIcon: Icons.arrow_forward,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const DataCaptureSdkMenu()),
-                );
-              },
-            ),
-            MenuItemWidget(
-              title: 'Custom UI',
-              startIcon: Icons.edit,
-              endIcon: Icons.arrow_forward,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const DocumentScannerWidget()),
-                );
-              },
-            ),
-            const TitleItemWidget(title: 'Other SDK API'),
-            MenuItemWidget(
-              title: 'License Info',
-              startIcon: Icons.phonelink_lock,
-              onTap: () {
-                _getLicenseStatus();
-              },
-            ),
-            MenuItemWidget(
-              title: 'Ocr Configs',
-              startIcon: Icons.settings,
-              onTap: () {
-                _getOcrConfigs();
-              },
-            ),
-            MenuItemWidget(
-              title: '3rd-party Libs & Licenses',
-              startIcon: Icons.developer_mode,
-              onTap: () {
-                showLicensePage(
-                  context: context,
-                  applicationName: 'Scanbot SDK Flutter Example',
-                );
-              },
-            ),
-          ],
-        ),
-        bottomNavigationBar: buildBottomNavigationBar(context));
+      appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
+      body: ListView(
+        children: [
+          const TitleItemWidget(title: 'Document SDK API'),
+          MenuItemWidget(
+            title: 'Document SDK Menu',
+            startIcon: Icons.photo_camera,
+            endIcon: Icons.arrow_forward,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const DocumentSdkMenu(),
+                ),
+              );
+            },
+          ),
+          MenuItemWidget(
+            title: 'Data Capture SDK Menu',
+            startIcon: Icons.data_array,
+            endIcon: Icons.arrow_forward,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const DataCaptureSdkMenu(),
+                ),
+              );
+            },
+          ),
+          MenuItemWidget(
+            title: 'Custom UI',
+            startIcon: Icons.edit,
+            endIcon: Icons.arrow_forward,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const DocumentScannerWidget(),
+                ),
+              );
+            },
+          ),
+          const TitleItemWidget(title: 'Other SDK API'),
+          MenuItemWidget(
+            title: 'License Info',
+            startIcon: Icons.phonelink_lock,
+            onTap: () {
+              _getLicenseStatus();
+            },
+          ),
+          MenuItemWidget(
+            title: 'Ocr Configs',
+            startIcon: Icons.settings,
+            onTap: () {
+              _getOcrConfigs();
+            },
+          ),
+          MenuItemWidget(
+            title: '3rd-party Libs & Licenses',
+            startIcon: Icons.developer_mode,
+            onTap: () {
+              showLicensePage(
+                context: context,
+                applicationName: 'Scanbot SDK Flutter Example',
+              );
+            },
+          ),
+        ],
+      ),
+      bottomNavigationBar: buildBottomNavigationBar(context),
+    );
   }
 
   Future<void> _getOcrConfigs() async {
     final result = await ScanbotSdk.getOcrConfigs();
     if (result is Ok<OcrConfigsResult>) {
-      await showAlertDialog(context, jsonEncode(result.value),
-          title: 'OCR Configs');
+      await showAlertDialog(
+        context,
+        jsonEncode(result.value),
+        title: 'OCR Configs',
+      );
     } else {
       print(result.toString());
     }

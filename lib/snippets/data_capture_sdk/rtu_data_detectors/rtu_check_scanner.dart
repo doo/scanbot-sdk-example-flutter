@@ -42,9 +42,8 @@ class RtuCheckScannerFeature extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CheckDocumentResultPreview(
-                uiResult: result.value,
-              ),
+              builder: (_) =>
+                  CheckDocumentResultPreview(uiResult: result.value),
             ),
           );
         case Error():

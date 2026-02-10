@@ -11,9 +11,15 @@ ProgressDialogType? _progressDialogType;
 bool _barrierDismissible = true, _showLogs = false;
 
 TextStyle _progressTextStyle = const TextStyle(
-        color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      color: Colors.black,
+      fontSize: 13.0,
+      fontWeight: FontWeight.w400,
+    ),
     _messageStyle = const TextStyle(
-        color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600);
+      color: Colors.black,
+      fontSize: 19.0,
+      fontWeight: FontWeight.w600,
+    );
 
 double _dialogElevation = 8.0, _borderRadius = 8.0;
 Color _backgroundColor = Colors.white;
@@ -24,25 +30,30 @@ Widget _progressWidget = Container();
 class ProgressDialog {
   late _Body _dialog;
 
-  ProgressDialog(BuildContext context,
-      {ProgressDialogType? type, bool? isDismissible, bool? showLogs}) {
+  ProgressDialog(
+    BuildContext context, {
+    ProgressDialogType? type,
+    bool? isDismissible,
+    bool? showLogs,
+  }) {
     _context = context;
     _progressDialogType = type ?? ProgressDialogType.Normal;
     _barrierDismissible = isDismissible ?? true;
     _showLogs = showLogs ?? false;
   }
 
-  void style(
-      {double? progress,
-      double? maxProgress,
-      String? message,
-      Widget? progressWidget,
-      Color? backgroundColor,
-      TextStyle? progressTextStyle,
-      TextStyle? messageTextStyle,
-      double? elevation,
-      double? borderRadius,
-      Curve? insetAnimCurve}) {
+  void style({
+    double? progress,
+    double? maxProgress,
+    String? message,
+    Widget? progressWidget,
+    Color? backgroundColor,
+    TextStyle? progressTextStyle,
+    TextStyle? messageTextStyle,
+    double? elevation,
+    double? borderRadius,
+    Curve? insetAnimCurve,
+  }) {
     if (_isShowing) return;
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
@@ -59,13 +70,14 @@ class ProgressDialog {
     _insetAnimCurve = insetAnimCurve ?? _insetAnimCurve;
   }
 
-  void update(
-      {double? progress,
-      double? maxProgress,
-      String? message,
-      Widget? progressWidget,
-      TextStyle? progressTextStyle,
-      TextStyle? messageTextStyle}) {
+  void update({
+    double? progress,
+    double? maxProgress,
+    String? message,
+    Widget? progressWidget,
+    TextStyle? progressTextStyle,
+    TextStyle? messageTextStyle,
+  }) {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
     }
@@ -132,16 +144,15 @@ class ProgressDialog {
               return Future.value(_barrierDismissible);
             },
             child: Dialog(
-                backgroundColor: _backgroundColor,
-                insetAnimationCurve: _insetAnimCurve,
-                insetAnimationDuration: const Duration(milliseconds: 100),
-                elevation: _dialogElevation,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(_borderRadius),
-                  ),
-                ),
-                child: _dialog),
+              backgroundColor: _backgroundColor,
+              insetAnimationCurve: _insetAnimCurve,
+              insetAnimationDuration: const Duration(milliseconds: 100),
+              elevation: _dialogElevation,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(_borderRadius)),
+              ),
+              child: _dialog,
+            ),
           );
         },
       );
@@ -181,35 +192,38 @@ class _BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 100.0,
-      child: Row(children: <Widget>[
-        const SizedBox(width: 10.0),
-        SizedBox(
-          width: 60.0,
-          height: 60.0,
-          child: _progressWidget,
-        ),
-        const SizedBox(width: 15.0),
-        Expanded(
-          child: _progressDialogType == ProgressDialogType.Normal
-              ? Text(_dialogMessage,
-                  textAlign: TextAlign.justify, style: _messageStyle)
-              : Stack(
-                  children: <Widget>[
-                    Positioned(
-                      top: 30.0,
-                      child: Text(_dialogMessage, style: _messageStyle),
-                    ),
-                    Positioned(
-                      bottom: 10.0,
-                      right: 10.0,
-                      child: Text('$_progress/$_maxProgress',
-                          style: _progressTextStyle),
-                    ),
-                  ],
-                ),
-        ),
-        const SizedBox(width: 10.0)
-      ]),
+      child: Row(
+        children: <Widget>[
+          const SizedBox(width: 10.0),
+          SizedBox(width: 60.0, height: 60.0, child: _progressWidget),
+          const SizedBox(width: 15.0),
+          Expanded(
+            child: _progressDialogType == ProgressDialogType.Normal
+                ? Text(
+                    _dialogMessage,
+                    textAlign: TextAlign.justify,
+                    style: _messageStyle,
+                  )
+                : Stack(
+                    children: <Widget>[
+                      Positioned(
+                        top: 30.0,
+                        child: Text(_dialogMessage, style: _messageStyle),
+                      ),
+                      Positioned(
+                        bottom: 10.0,
+                        right: 10.0,
+                        child: Text(
+                          '$_progress/$_maxProgress',
+                          style: _progressTextStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+          const SizedBox(width: 10.0),
+        ],
+      ),
     );
   }
 }

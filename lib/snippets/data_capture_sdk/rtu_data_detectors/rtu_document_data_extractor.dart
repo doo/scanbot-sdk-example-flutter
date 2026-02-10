@@ -26,8 +26,9 @@ class RtuDocumentDataExtractorFeature extends StatelessWidget {
 
     // An autorelease pool is required only because the result object contains image references.
     await autorelease(() async {
-      var result =
-          await ScanbotSdk.documentDataExtractor.startExtractorScreen(config);
+      var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+        config,
+      );
       switch (result) {
         case Ok():
 
@@ -37,9 +38,8 @@ class RtuDocumentDataExtractorFeature extends StatelessWidget {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ExtractedDocumentDataPreview(
-                uiResult: result.value,
-              ),
+              builder: (_) =>
+                  ExtractedDocumentDataPreview(uiResult: result.value),
             ),
           );
         case Error():

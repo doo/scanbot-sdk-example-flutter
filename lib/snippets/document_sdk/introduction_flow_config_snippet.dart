@@ -23,10 +23,7 @@ DocumentScanningFlow introductionConfigurationScanningFlow() {
           color: ScanbotColor("#000000"),
         ),
     ]
-    ..title = StyledText(
-      text: "Introduction",
-      color: ScanbotColor("#000000"),
-    );
+    ..title = StyledText(text: "Introduction", color: ScanbotColor("#000000"));
 
   return configuration;
 }

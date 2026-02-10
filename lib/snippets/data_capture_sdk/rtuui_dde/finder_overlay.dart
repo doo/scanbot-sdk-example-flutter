@@ -15,8 +15,9 @@ Future<void> startScanning() async {
   configuration.viewFinder.style = FinderCorneredStyle(strokeWidth: 3.0);
 
   // Start the DDE
-  var result = await ScanbotSdk.documentDataExtractor
-      .startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;

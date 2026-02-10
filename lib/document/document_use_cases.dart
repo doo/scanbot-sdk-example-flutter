@@ -19,20 +19,25 @@ class DocumentUseCasesWidget extends StatelessWidget {
       children: <Widget>[
         const TitleItemWidget(title: 'Document Scanners (RTU UI)'),
         MenuItemWidget(
-            title: 'Single Page Scanning',
-            onTap: () => _startSinglePageScanning(context)),
+          title: 'Single Page Scanning',
+          onTap: () => _startSinglePageScanning(context),
+        ),
         MenuItemWidget(
-            title: 'Single Page Scanning with Finder',
-            onTap: () => _startSinglePageWithFinderScanning(context)),
+          title: 'Single Page Scanning with Finder',
+          onTap: () => _startSinglePageWithFinderScanning(context),
+        ),
         MenuItemWidget(
-            title: 'Multi Page Scanning with Finder',
-            onTap: () => _startMultiPageScanning(context)),
+          title: 'Multi Page Scanning with Finder',
+          onTap: () => _startMultiPageScanning(context),
+        ),
         MenuItemWidget(
-            title: 'Create Document from Image',
-            onTap: () => _createDocumentFromImage(context)),
+          title: 'Create Document from Image',
+          onTap: () => _createDocumentFromImage(context),
+        ),
         MenuItemWidget(
-            title: 'Clean stored documents',
-            onTap: () => _cleanStoredDocuments(context)),
+          title: 'Clean stored documents',
+          onTap: () => _cleanStoredDocuments(context),
+        ),
       ],
     );
   }
@@ -48,9 +53,7 @@ class DocumentUseCasesWidget extends StatelessWidget {
     var result = await scannerFunction();
     if (result is Ok<DocumentData>) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DocumentPreview(result.value),
-        ),
+        MaterialPageRoute(builder: (context) => DocumentPreview(result.value)),
       );
     } else {
       print(result.toString());
@@ -93,17 +96,21 @@ class DocumentUseCasesWidget extends StatelessWidget {
 
     final response = await selectImageFromLibrary();
     if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.createDocumentFromImageFileUris(
-          images: [response!.path], options: CreateDocumentOptions());
-      if (result is Ok<DocumentData>) {
-        await Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => DocumentPreview(result.value),
-          ),
+      await autorelease(() async {
+        var ref = ImageRef.fromPath(response!.path);
+        var result = await ScanbotSdk.document.createDocumentFromImageRefs(
+          images: [ref],
         );
-      } else {
-        print(result.toString());
-      }
+        if (result is Ok<DocumentData>) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DocumentPreview(result.value),
+            ),
+          );
+        } else {
+          print(result.toString());
+        }
+      });
     }
   }
 }

@@ -17,10 +17,13 @@ class DocumentSdkMenu extends StatelessWidget {
           const DocumentUseCasesWidget(),
           const TitleItemWidget(title: 'Other API'),
           MenuItemWidget(
-              title: 'Analyze document quality',
-              onTap: () => _analyzeDocumentQuality(context)),
+            title: 'Analyze document quality',
+            onTap: () => _analyzeDocumentQuality(context),
+          ),
           MenuItemWidget(
-              title: 'Perform OCR', onTap: () => _performOCR(context)),
+            title: 'Perform OCR',
+            onTap: () => _performOCR(context),
+          ),
         ],
       ),
     );
@@ -30,12 +33,15 @@ class DocumentSdkMenu extends StatelessWidget {
     final response = await selectImageFromLibrary();
     if (response?.path.isNotEmpty ?? false) {
       var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
-          response!.path, DocumentQualityAnalyzerConfiguration());
+        response!.path,
+        DocumentQualityAnalyzerConfiguration(),
+      );
       if (result is Ok<DocumentQualityAnalyzerResult>) {
         await showAlertDialog(
-            context,
-            title: 'Document Quality',
-            result.value.quality?.name ?? 'Unknown');
+          context,
+          title: 'Document Quality',
+          result.value.quality?.name ?? 'Unknown',
+        );
       } else {
         print(result.toString());
       }
@@ -45,11 +51,15 @@ class DocumentSdkMenu extends StatelessWidget {
   Future<void> _performOCR(BuildContext context) async {
     final response = await selectImageFromLibrary();
     if (response?.path.isNotEmpty ?? false) {
-      var result =
-          await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([response!.path]);
+      var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
+        response!.path,
+      ]);
       if (result is Ok<PerformOcrResult>) {
         await showAlertDialog(
-            context, title: 'OCR Result', result.value.recognizedText);
+          context,
+          title: 'OCR Result',
+          result.value.recognizedText,
+        );
       } else {
         print(result.toString());
       }

@@ -21,34 +21,46 @@ class DataCaptureUseCases extends StatelessWidget {
       children: <Widget>[
         const TitleItemWidget(title: 'Recognizers'),
         MenuItemWidget(
-            title: "Recognize MRZ from Still Image",
-            onTap: () => _recognizeMrzOnImage(context)),
+          title: "Recognize MRZ from Still Image",
+          onTap: () => _recognizeMrzOnImage(context),
+        ),
         MenuItemWidget(
-            title: "Extract Document Data from Still Image",
-            onTap: () => _extractDocumentDataFromImage(context)),
+          title: "Extract Document Data from Still Image",
+          onTap: () => _extractDocumentDataFromImage(context),
+        ),
         MenuItemWidget(
-            title: "Recognize Check from Still Image",
-            onTap: () => _recognizeCheckOnImage(context)),
+          title: "Recognize Check from Still Image",
+          onTap: () => _recognizeCheckOnImage(context),
+        ),
         MenuItemWidget(
-            title: "Recognize Credit Card from Still Image",
-            onTap: () => _recognizeCreditCardOnImage(context)),
+          title: "Recognize Credit Card from Still Image",
+          onTap: () => _recognizeCreditCardOnImage(context),
+        ),
         const TitleItemWidget(title: 'Data Detectors'),
         MenuItemWidget(
-            title: "Extract Document Data",
-            onTap: () => _startDocumentDataExtractorScanner(context)),
+          title: "Extract Document Data",
+          onTap: () => _startDocumentDataExtractorScanner(context),
+        ),
         MenuItemWidget(
-            title: "Scan MRZ (Machine Readable Zone)",
-            onTap: () => startMRZScanner(context)),
+          title: "Scan MRZ (Machine Readable Zone)",
+          onTap: () => startMRZScanner(context),
+        ),
         MenuItemWidget(
-            title: "Scan VIN", onTap: () => startVINScanner(context)),
+          title: "Scan VIN",
+          onTap: () => startVINScanner(context),
+        ),
         MenuItemWidget(
-            title: "Scan Check", onTap: () => startCheckScanner(context)),
+          title: "Scan Check",
+          onTap: () => startCheckScanner(context),
+        ),
         MenuItemWidget(
-            title: "Scan Text Data",
-            onTap: () => startTextDataScanner(context)),
+          title: "Scan Text Data",
+          onTap: () => startTextDataScanner(context),
+        ),
         MenuItemWidget(
-            title: "Scan Credit Scanner",
-            onTap: () => startCreditCardScanner(context)),
+          title: "Scan Credit Scanner",
+          onTap: () => startCreditCardScanner(context),
+        ),
       ],
     );
   }
@@ -102,8 +114,9 @@ class DataCaptureUseCases extends StatelessWidget {
         if (result.success) {
           await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) =>
-                    MrzDocumentResultPreview(scannerResult: result)),
+              builder: (context) =>
+                  MrzDocumentResultPreview(scannerResult: result),
+            ),
           );
         } else {
           await showAlertDialog(context, "Operation Status: ${result.success}");
@@ -113,18 +126,19 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<void> _extractDocumentDataFromImage(BuildContext context) async {
-    var commonConfig =
-        DocumentDataExtractorCommonConfiguration(acceptedDocumentTypes: [
-      DeIdCardFront.DOCUMENT_TYPE,
-      DeIdCardBack.DOCUMENT_TYPE,
-      DeHealthInsuranceCardFront.DOCUMENT_TYPE,
-      DePassport.DOCUMENT_TYPE,
-      DeResidencePermitFront.DOCUMENT_TYPE,
-      DeResidencePermitBack.DOCUMENT_TYPE,
-      EuropeanDriverLicenseFront.DOCUMENT_TYPE,
-      EuropeanDriverLicenseBack.DOCUMENT_TYPE,
-      EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
-    ]);
+    var commonConfig = DocumentDataExtractorCommonConfiguration(
+      acceptedDocumentTypes: [
+        DeIdCardFront.DOCUMENT_TYPE,
+        DeIdCardBack.DOCUMENT_TYPE,
+        DeHealthInsuranceCardFront.DOCUMENT_TYPE,
+        DePassport.DOCUMENT_TYPE,
+        DeResidencePermitFront.DOCUMENT_TYPE,
+        DeResidencePermitBack.DOCUMENT_TYPE,
+        EuropeanDriverLicenseFront.DOCUMENT_TYPE,
+        EuropeanDriverLicenseBack.DOCUMENT_TYPE,
+        EuropeanHealthInsuranceCard.DOCUMENT_TYPE,
+      ],
+    );
 
     var configuration = DocumentDataExtractorConfiguration(
       configurations: [commonConfig],
@@ -132,25 +146,31 @@ class DataCaptureUseCases extends StatelessWidget {
     // Configure other parameters as needed.
 
     await startRecognizer<DocumentDataExtractionResult>(
-        context: context,
-        scannerFunction: (path) =>
-            _runDocumentDataRecognizer(configuration, path),
-        handleResult: (context, result) async {
-          if (result.document != null) {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ExtractedDocumentDataPreview(scanningResult: result)),
-            );
-          } else {
-            await showAlertDialog(
-                context, "Operation Status: ${result.status.name}");
-          }
-        });
+      context: context,
+      scannerFunction: (path) =>
+          _runDocumentDataRecognizer(configuration, path),
+      handleResult: (context, result) async {
+        if (result.document != null) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  ExtractedDocumentDataPreview(scanningResult: result),
+            ),
+          );
+        } else {
+          await showAlertDialog(
+            context,
+            "Operation Status: ${result.status.name}",
+          );
+        }
+      },
+    );
   }
 
   Future<Result<DocumentDataExtractionResult>> _runDocumentDataRecognizer(
-      DocumentDataExtractorConfiguration configuration, String path) async {
+    DocumentDataExtractorConfiguration configuration,
+    String path,
+  ) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
@@ -177,12 +197,15 @@ class DataCaptureUseCases extends StatelessWidget {
         if (result.status ==
             CheckMagneticInkStripScanningStatus.ERROR_NOTHING_FOUND) {
           await showAlertDialog(
-              context, "Operation Status: ${result.status.name}");
+            context,
+            "Operation Status: ${result.status.name}",
+          );
         } else {
           await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) =>
-                    CheckDocumentResultPreview(scanningResult: result)),
+              builder: (context) =>
+                  CheckDocumentResultPreview(scanningResult: result),
+            ),
           );
         }
       },
@@ -190,13 +213,17 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<Result<CheckScanningResult>> _runCheckRecognize(
-      CheckScannerConfiguration configuration, String path) async {
+    CheckScannerConfiguration configuration,
+    String path,
+  ) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var checkScanningResult =
-          await ScanbotSdk.check.scanFromImageFileUri(path, configuration);
+      var checkScanningResult = await ScanbotSdk.check.scanFromImageFileUri(
+        path,
+        configuration,
+      );
 
       /// if you want to use image later, call encodeImages() to save in buffer
       //  checkScanningResult.encodeImages();
@@ -210,22 +237,26 @@ class DataCaptureUseCases extends StatelessWidget {
     // Configure other parameters as needed.
 
     await startRecognizer<CreditCardScanningResult>(
-        context: context,
-        scannerFunction: (path) =>
-            ScanbotSdk.creditCard.scanFromImageFileUri(path, configuration),
-        handleResult: (context, result) async {
-          if (result.scanningStatus !=
-              CreditCardScanningStatus.ERROR_NOTHING_FOUND) {
-            await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      CreditCardResultPreview(scanningResult: result)),
-            );
-          } else {
-            await showAlertDialog(
-                context, "Operation Status: ${result.scanningStatus.name}");
-          }
-        });
+      context: context,
+      scannerFunction: (path) =>
+          ScanbotSdk.creditCard.scanFromImageFileUri(path, configuration),
+      handleResult: (context, result) async {
+        if (result.scanningStatus !=
+            CreditCardScanningStatus.ERROR_NOTHING_FOUND) {
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  CreditCardResultPreview(scanningResult: result),
+            ),
+          );
+        } else {
+          await showAlertDialog(
+            context,
+            "Operation Status: ${result.scanningStatus.name}",
+          );
+        }
+      },
+    );
   }
 
   Future<void> startVINScanner(BuildContext context) async {
@@ -236,8 +267,9 @@ class DataCaptureUseCases extends StatelessWidget {
         'Once the scan is complete, your VIN details will automatically be extracted and processed.';
     // Configure the done button. E.g., the text or the background color.
     configuration.introScreen.doneButton.text = 'Start Scanning';
-    configuration.introScreen.doneButton.background.fillColor =
-        ScanbotColor('#C8193C');
+    configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+      '#C8193C',
+    );
     // Configure other parameters as needed.
 
     await startDetector<Result<VinScannerUiResult>>(
@@ -254,7 +286,10 @@ class DataCaptureUseCases extends StatelessWidget {
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }
@@ -275,12 +310,16 @@ class DataCaptureUseCases extends StatelessWidget {
           case Ok():
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) =>
-                      ExtractedDocumentDataPreview(uiResult: result.value)),
+                builder: (context) =>
+                    ExtractedDocumentDataPreview(uiResult: result.value),
+              ),
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }
@@ -289,7 +328,8 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<Result<DocumentDataExtractorUiResult>> _runDocumentDataExtractor(
-      DocumentDataExtractorScreenConfiguration configuration) async {
+    DocumentDataExtractorScreenConfiguration configuration,
+  ) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
@@ -322,12 +362,16 @@ class DataCaptureUseCases extends StatelessWidget {
           case Ok():
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) =>
-                      CheckDocumentResultPreview(uiResult: result.value)),
+                builder: (context) =>
+                    CheckDocumentResultPreview(uiResult: result.value),
+              ),
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }
@@ -336,13 +380,15 @@ class DataCaptureUseCases extends StatelessWidget {
   }
 
   Future<Result<CheckScannerUiResult>> _runCheckScanner(
-      CheckScannerScreenConfiguration configuration) async {
+    CheckScannerScreenConfiguration configuration,
+  ) async {
     /// You must use autorelease for result object
     /// otherwise you'll get exception "AutoReleasable objects must be created within autorelease"
 
     return await autorelease(() async {
-      var checkScanningResult =
-          await ScanbotSdk.check.startScanner(configuration);
+      var checkScanningResult = await ScanbotSdk.check.startScanner(
+        configuration,
+      );
 
       /// if you want to use image later, call encodeImages() to save in buffer
       //  checkScanningResult.data?.encodeImages();
@@ -366,12 +412,16 @@ class DataCaptureUseCases extends StatelessWidget {
           case Ok():
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) =>
-                      TextPatternScannerUiResultPreview(result.value)),
+                builder: (context) =>
+                    TextPatternScannerUiResultPreview(result.value),
+              ),
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }
@@ -397,12 +447,16 @@ class DataCaptureUseCases extends StatelessWidget {
           case Ok():
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) =>
-                      CreditCardResultPreview(uiResult: result.value)),
+                builder: (context) =>
+                    CreditCardResultPreview(uiResult: result.value),
+              ),
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }
@@ -424,12 +478,16 @@ class DataCaptureUseCases extends StatelessWidget {
           case Ok():
             await Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (context) =>
-                      MrzDocumentResultPreview(uiResult: result.value)),
+                builder: (context) =>
+                    MrzDocumentResultPreview(uiResult: result.value),
+              ),
             );
           case Error():
             await showAlertDialog(
-                context, title: "Error", result.error.message);
+              context,
+              title: "Error",
+              result.error.message,
+            );
           case Cancel():
             print("Operation was canceled");
         }

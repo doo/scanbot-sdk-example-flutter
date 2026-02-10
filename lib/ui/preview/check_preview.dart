@@ -11,8 +11,10 @@ class CheckDocumentResultPreview extends StatelessWidget {
     super.key,
     this.uiResult,
     this.scanningResult,
-  }) : assert(uiResult != null || scanningResult != null,
-            'At least one result must be provided');
+  }) : assert(
+          uiResult != null || scanningResult != null,
+          'At least one result must be provided',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,11 @@ class CheckDocumentResultPreview extends StatelessWidget {
     final croppedImage = uiResult?.croppedImage ?? scanningResult?.croppedImage;
 
     return Scaffold(
-      appBar: ScanbotAppBar('Check Document Preview',
-          showBackButton: true, context: context),
+      appBar: ScanbotAppBar(
+        'Check Document Preview',
+        showBackButton: true,
+        context: context,
+      ),
       body: genericDocument == null
           ? const Center(child: Text('No check data available'))
           : ListView(
@@ -49,7 +54,8 @@ class CheckDocumentResultPreview extends StatelessWidget {
     void add(String title, String? value, {bool large = false}) {
       fields.add(Text(title, style: Theme.of(context).textTheme.titleMedium));
       fields.add(
-          Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium));
+        Text(value ?? '', style: Theme.of(context).textTheme.bodyMedium),
+      );
       fields.add(SizedBox(height: large ? 16 : 12));
     }
 

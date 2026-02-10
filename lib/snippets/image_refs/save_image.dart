@@ -4,7 +4,8 @@ void saveImage(ImageRef imageRef, String destinationPath) {
   imageRef.saveImage(
     destinationPath,
     options: SaveImageOptions(
-      quality: 100, encryptionMode: EncryptionMode.AUTO,
+      quality: 100,
+      encryptionMode: EncryptionMode.AUTO,
       // to disable decryption while saving this specific file, use
       // encryptionMode: EncryptionMode.DISABLED,
     ),

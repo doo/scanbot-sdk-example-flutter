@@ -23,8 +23,9 @@ Future<void> startScanning() async {
   palette.sbColorSurfaceHigh = ScanbotColor('#7A000000');
   palette.sbColorModalOverlay = ScanbotColor('#A3000000');
   /** Start the DDE **/
-  var result = await ScanbotSdk.documentDataExtractor
-      .startExtractorScreen(configuration);
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;
