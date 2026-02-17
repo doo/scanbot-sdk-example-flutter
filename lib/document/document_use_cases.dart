@@ -94,23 +94,23 @@ class DocumentUseCasesWidget extends StatelessWidget {
       return;
     }
 
-    final response = await selectImageFromLibrary();
-    if (response?.path.isNotEmpty ?? false) {
-      await autorelease(() async {
-        var ref = ImageRef.fromPath(response!.path);
-        var result = await ScanbotSdk.document.createDocumentFromImageRefs(
-          images: [ref],
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    await autorelease(() async {
+      var imageRef = ImageRef.fromPath(file.path);
+      var result = await ScanbotSdk.document.createDocumentFromImageRefs(
+        images: [imageRef],
+      );
+      if (result is Ok<DocumentData>) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => DocumentPreview(result.value),
+          ),
         );
-        if (result is Ok<DocumentData>) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DocumentPreview(result.value),
-            ),
-          );
-        } else {
-          print(result.toString());
-        }
-      });
-    }
+      } else {
+        print(result.toString());
+      }
+    });
   }
 }

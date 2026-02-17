@@ -25,9 +25,9 @@ const SCANBOT_SDK_LICENSE_KEY = "";
 Future<void> _initScanbotSdk() async {
   var config = SdkConfiguration(
     loggingEnabled: true,
-    // Consider switching logging OFF in production. builds for security and performance reasons.
+    // Consider disabling logging in production builds for security and performance reasons
     licenseKey: SCANBOT_SDK_LICENSE_KEY,
-    // Uncomment to use custom storage directory
+    // Uncomment to use the custom storage directory
     // storageBaseDirectory: await getDemoStorageBaseDirectory(),
   );
 
@@ -42,7 +42,7 @@ Future<void> _initScanbotSdk() async {
 Future<String> getDemoStorageBaseDirectory() async {
   // !! Please note !!
   // It is strongly recommended to use the default (secure) storage location of the Scanbot SDK.
-  // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK by a custom storage directory.
+  // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK with a custom storage directory.
 
   var storageDirectory = await getApplicationSupportDirectory();
   return '${storageDirectory.path}/my-custom-storage';
@@ -81,7 +81,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           const TitleItemWidget(title: 'Document SDK API'),
           MenuItemWidget(
             title: 'Document SDK Menu',
-            startIcon: Icons.photo_camera,
+            startIcon: Icons.document_scanner,
             endIcon: Icons.arrow_forward,
             onTap: () {
               Navigator.of(context).push(
@@ -162,8 +162,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _getLicenseStatus() async {
     final result = await ScanbotSdk.getLicenseInfo();
     if (result is Ok<LicenseInfo>) {
-      var licenseInfo =
-          "Status: ${result.value.status.name}\nExpiration Date: ${result.value.expirationDateString}";
+      var licenseInfo = "Status: ${result.value.licenseStatusMessage}\n"
+          "Expiration Date: ${result.value.expirationDateString}";
 
       await showAlertDialog(context, licenseInfo, title: 'License Status');
     } else {

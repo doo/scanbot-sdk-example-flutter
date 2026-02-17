@@ -19,7 +19,7 @@ Future<void> scanDocumentFromImageRef() async {
       imageRef,
       DocumentScannerConfiguration(),
     );
-    
+
     if (result is Ok<DocumentScanningResult>) {
       /** Handle the result **/
       var documentDetectionResult = result.value;

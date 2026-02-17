@@ -36,7 +36,7 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
       switch (result) {
         case Ok():
 
-          /// if you want to use image later, call encodeImages() to save in buffer
+          /// if the image needs to be used later, call encodeImages() to save in buffer
           //  result.data?.encodeImages();
 
           await Navigator.push(

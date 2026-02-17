@@ -103,7 +103,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
         children: [
           _buildBottomBarButton('Reset', () => croppingController?.reset()),
           _buildBottomBarButton('Detect', () => croppingController?.detect()),
-          _buildBottomBarButton('Rotate CW', _rotateImage),
+          _buildBottomBarButton('Rotate \u21BB', _rotateImage),
         ],
       ),
     );

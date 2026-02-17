@@ -105,12 +105,6 @@ Through this feature, our SDK offers document detection and data capture capabil
 
 ## Additional information
 
-### Free integration support
-
-Need help integrating or testing our Document Scanner SDK? We offer [free developer support](https://docs.scanbot.io/support/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) via Slack, MS Teams, or email.
-
-As a customer, you also get access to a dedicated support Slack or Microsoft Teams channel to talk directly to your Customer Success Manager and our engineers.
-
 ### Trial license and pricing 
 
 The Scanbot SDK examples will run for one minute per session without a license. After that, all functionalities and UI components will stop working. 

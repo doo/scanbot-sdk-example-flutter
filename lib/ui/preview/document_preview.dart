@@ -174,20 +174,20 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    final response = await selectImageFromLibrary();
 
-    if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.addPagesFromImageFileUris(
-        documentData.uuid,
-        [response!.path],
-      );
-      if (result is Ok<DocumentData>) {
-        setState(() {
-          documentData = result.value;
-        });
-      } else {
-        await showAlertDialog(context, result.toString());
-      }
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.document.addPagesFromImageFileUris(
+      documentData.uuid,
+      [file.path],
+    );
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 

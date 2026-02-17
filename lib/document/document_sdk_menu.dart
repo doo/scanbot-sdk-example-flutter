@@ -30,39 +30,40 @@ class DocumentSdkMenu extends StatelessWidget {
   }
 
   Future<void> _analyzeDocumentQuality(BuildContext context) async {
-    final response = await selectImageFromLibrary();
-    if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
-        response!.path,
-        DocumentQualityAnalyzerConfiguration(),
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
+      file.path,
+      DocumentQualityAnalyzerConfiguration(),
+    );
+    if (result is Ok<DocumentQualityAnalyzerResult>) {
+      await showAlertDialog(
+        context,
+        title: 'Document Quality',
+        result.value.quality?.name ?? 'Unknown',
       );
-      if (result is Ok<DocumentQualityAnalyzerResult>) {
-        await showAlertDialog(
-          context,
-          title: 'Document Quality',
-          result.value.quality?.name ?? 'Unknown',
-        );
-      } else {
-        print(result.toString());
-      }
+    } else {
+      print(result.toString());
     }
   }
 
   Future<void> _performOCR(BuildContext context) async {
-    final response = await selectImageFromLibrary();
-    if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
-        response!.path,
-      ]);
-      if (result is Ok<PerformOcrResult>) {
-        await showAlertDialog(
-          context,
-          title: 'OCR Result',
-          result.value.recognizedText,
-        );
-      } else {
-        print(result.toString());
-      }
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
+      file.path,
+    ]);
+    
+    if (result is Ok<PerformOcrResult>) {
+      await showAlertDialog(
+        context,
+        title: 'OCR Result',
+        result.value.recognizedText,
+      );
+    } else {
+      print(result.toString());
     }
   }
 }
