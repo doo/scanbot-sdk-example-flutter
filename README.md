@@ -52,8 +52,7 @@ You can get the IDs of all connected devices via `Flutter devices`.
 Install Pods dependencies:
 
 ```
-chmod +x clean-ios.sh
-./clean-ios.sh
+cd ios && rm -f Podfile.lock && rm -rf Pods/ && pod install --repo-update && cd ..
 ```
 
 Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. Then build and run the app in Xcode.
