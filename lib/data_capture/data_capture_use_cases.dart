@@ -147,8 +147,8 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await scanOnImage<DocumentDataExtractionResult>(
       context: context,
-      scannerFunction: (path) => ScanbotSdk.documentDataExtractor
-          .extractFromImageFileUri(path, configuration),
+      scannerFunction: (path) =>
+          _extractDataFromImageFileUri(configuration, path),
       handleResult: (context, result) async {
         if (result.document != null) {
           await Navigator.of(context).push(
@@ -167,6 +167,26 @@ class DataCaptureUseCases extends StatelessWidget {
     );
   }
 
+  Future<Result<DocumentDataExtractionResult>> _extractDataFromImageFileUri(
+    DocumentDataExtractorConfiguration configuration,
+    String path,
+  ) async {
+    /// An autorelease block must be used for the result object
+    /// otherwise an exception, "AutoReleasable objects must be created within autorelease" will be thrown.
+
+    return await autorelease(() async {
+      var extractedDataResult = await ScanbotSdk.documentDataExtractor
+          .extractFromImageFileUri(path, configuration);
+
+      /// if the image needs to be used later, call encodeImages() to save in buffer
+      if (extractedDataResult is Ok<DocumentDataExtractionResult>) {
+        extractedDataResult.value.encodeImages();
+      }
+
+      return extractedDataResult;
+    });
+  }
+
   Future<void> _scanCheckOnImage(BuildContext context) async {
     var configuration = CheckScannerConfiguration();
     configuration.documentDetectionMode =
@@ -175,10 +195,8 @@ class DataCaptureUseCases extends StatelessWidget {
 
     await scanOnImage<CheckScanningResult>(
       context: context,
-      scannerFunction: (path) => ScanbotSdk.check.scanFromImageFileUri(
-        path,
-        configuration,
-      ),
+      scannerFunction: (path) =>
+          _scanCheckFromImageFileUri(configuration, path),
       handleResult: (context, result) async {
         if (result.status ==
             CheckMagneticInkStripScanningStatus.ERROR_NOTHING_FOUND) {
@@ -196,6 +214,28 @@ class DataCaptureUseCases extends StatelessWidget {
         }
       },
     );
+  }
+
+  Future<Result<CheckScanningResult>> _scanCheckFromImageFileUri(
+    CheckScannerConfiguration configuration,
+    String path,
+  ) async {
+    /// An autorelease block must be used for the result object
+    /// otherwise an exception, "AutoReleasable objects must be created within autorelease" will be thrown.
+
+    return await autorelease(() async {
+      var checkScanningResult = await ScanbotSdk.check.scanFromImageFileUri(
+        path,
+        configuration,
+      );
+
+      /// if the image needs to be used later, call encodeImages() to save in buffer
+      if (checkScanningResult is Ok<CheckScanningResult>) {
+        checkScanningResult.value.encodeImages();
+      }
+
+      return checkScanningResult;
+    });
   }
 
   Future<void> _scanCreditCardOnImage(BuildContext context) async {
@@ -267,12 +307,12 @@ class DataCaptureUseCases extends StatelessWidget {
   Future<void> _startDocumentDataExtractorScanner(BuildContext context) async {
     var configuration = DocumentDataExtractorScreenConfiguration();
     configuration.viewFinder.overlayColor = ScanbotColor('#C8193C');
+    configuration.scannerConfiguration.returnCrops = true;
     // Configure other parameters as needed.
 
     await startScanner<Result<DocumentDataExtractorUiResult>>(
       context: context,
-      scannerFunction: () =>
-          ScanbotSdk.documentDataExtractor.startExtractorScreen(configuration),
+      scannerFunction: () => _startExtractorScreen(configuration),
       handleResult: (context, result) async {
         switch (result) {
           case Ok():
@@ -295,6 +335,25 @@ class DataCaptureUseCases extends StatelessWidget {
     );
   }
 
+  Future<Result<DocumentDataExtractorUiResult>> _startExtractorScreen(
+    DocumentDataExtractorScreenConfiguration configuration,
+  ) async {
+    /// An autorelease block must be used for the result object
+    /// otherwise an exception, "AutoReleasable objects must be created within autorelease" will be thrown.
+
+    return await autorelease(() async {
+      var extractedDataResult = await ScanbotSdk.documentDataExtractor
+          .startExtractorScreen(configuration);
+
+      /// if the image needs to be used later, call encodeImages() to save in buffer
+      if (extractedDataResult is Ok<DocumentDataExtractorUiResult>) {
+        extractedDataResult.value.encodeImages();
+      }
+      
+      return extractedDataResult;
+    });
+  }
+
   Future<void> startCheckScanner(BuildContext context) async {
     var configuration = CheckScannerScreenConfiguration();
     // Modify behaviors
@@ -302,11 +361,13 @@ class DataCaptureUseCases extends StatelessWidget {
     // Set colors
     configuration.palette.sbColorPrimary = ScanbotColor('#C8193C');
     configuration.palette.sbColorOnPrimary = ScanbotColor('#FFFFFF');
+    // Capture image
+    configuration.captureHighResolutionImage = true;
     // Configure other parameters as needed.
 
     await startScanner<Result<CheckScannerUiResult>>(
       context: context,
-      scannerFunction: () => ScanbotSdk.check.startScanner(configuration),
+      scannerFunction: () => _startCheckScanner(configuration),
       handleResult: (context, result) async {
         switch (result) {
           case Ok():
@@ -327,6 +388,26 @@ class DataCaptureUseCases extends StatelessWidget {
         }
       },
     );
+  }
+
+  Future<Result<CheckScannerUiResult>> _startCheckScanner(
+    CheckScannerScreenConfiguration configuration,
+  ) async {
+    /// An autorelease block must be used for the result object
+    /// otherwise an exception, "AutoReleasable objects must be created within autorelease" will be thrown.
+
+    return await autorelease(() async {
+      var checkScanningResult = await ScanbotSdk.check.startScanner(
+        configuration,
+      );
+
+      /// if the image needs to be used later, call encodeImages() to save in buffer
+      if (checkScanningResult is Ok<CheckScannerUiResult>) {
+        checkScanningResult.value.encodeImages();
+      }
+      
+      return checkScanningResult;
+    });
   }
 
   Future<void> startTextDataScanner(BuildContext context) async {
