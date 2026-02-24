@@ -467,10 +467,11 @@ packages:
   scanbot_sdk:
     dependency: "direct main"
     description:
-      path: "/Users/oleksiiastaturian/Projects/scanbot-sdk-flutter/bundle_sdk"
-      relative: false
-    source: path
-    version: "8.0.0"
+      name: scanbot_sdk
+      sha256: "83bf65dfdabf86ded8ca0077d37bc37676bddb69eb27c06debe5cf4ec895ab81"
+      url: "https://pub.dev"
+    source: hosted
+    version: "8.0.0-beta01"
   share_plus:
     dependency: "direct main"
     description:
