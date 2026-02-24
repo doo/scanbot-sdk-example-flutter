@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart' as picker;
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
@@ -146,4 +147,15 @@ Widget buildBottomNavigationBar(BuildContext context) {
 
 Future<XFile?> selectImageFromLibrary() async {
   return await ImagePicker().pickImage(source: picker.ImageSource.gallery);
+}
+
+Future shareFile(String fileUrl) async {
+  final uri = Uri.parse(fileUrl);
+  final path = uri.toFilePath();
+
+  final params = ShareParams(
+    files: [XFile(path)],
+  );
+
+  await SharePlus.instance.share(params);
 }

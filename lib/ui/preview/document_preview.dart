@@ -214,11 +214,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       PdfConfiguration(),
     );
     if (result is Ok<String>) {
-      await showAlertDialog(
-        context,
-        'Pdf File created: ${result.value}',
-        title: 'Result',
-      );
+      await shareFile(result.value);
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -239,11 +235,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR),
     );
     if (result is Ok<String>) {
-      await showAlertDialog(
-        context,
-        'Pdf File created: ${result.value}',
-        title: 'Result',
-      );
+      await shareFile(result.value);
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -264,11 +256,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       options,
     );
     if (result is Ok<String>) {
-      await showAlertDialog(
-        context,
-        'Tiff Binarized File created: ${result.value}',
-        title: 'Result',
-      );
+      await shareFile(result.value);
     } else {
       await showAlertDialog(context, result.toString());
     }
@@ -283,11 +271,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       TiffGeneratorParameters(),
     );
     if (result is Ok<String>) {
-      await showAlertDialog(
-        context,
-        'Tiff File created: ${result.value}',
-        title: 'Result',
-      );
+      await shareFile(result.value);
     } else {
       await showAlertDialog(context, result.toString());
     }
