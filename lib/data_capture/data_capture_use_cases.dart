@@ -349,7 +349,7 @@ class DataCaptureUseCases extends StatelessWidget {
       if (extractedDataResult is Ok<DocumentDataExtractorUiResult>) {
         extractedDataResult.value.encodeImages();
       }
-      
+
       return extractedDataResult;
     });
   }
@@ -405,7 +405,7 @@ class DataCaptureUseCases extends StatelessWidget {
       if (checkScanningResult is Ok<CheckScannerUiResult>) {
         checkScanningResult.value.encodeImages();
       }
-      
+
       return checkScanningResult;
     });
   }

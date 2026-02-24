@@ -55,7 +55,7 @@ class DocumentSdkMenu extends StatelessWidget {
     var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
       file.path,
     ]);
-    
+
     if (result is Ok<PerformOcrResult>) {
       await showAlertDialog(
         context,

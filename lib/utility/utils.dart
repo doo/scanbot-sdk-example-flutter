@@ -48,11 +48,13 @@ Future<void> showAlertDialog(
   String textToShow, {
   String? title,
 }) async {
-  Widget text = SimpleDialogOption(child: Text(textToShow));
-
   final dialog = AlertDialog(
     title: title != null ? Text(title) : null,
-    content: text,
+    content: SimpleDialogOption(
+      child: SingleChildScrollView(
+        child: Text(textToShow),
+      ),
+    ),
     contentPadding: const EdgeInsets.all(0),
     actions: <Widget>[
       TextButton(
