@@ -167,11 +167,6 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
             doc.birthDate?.value?.confidence,
           );
           addField(
-            'Birth Place',
-            doc.birthDate?.value?.text,
-            doc.birthDate?.value?.confidence,
-          );
-          addField(
             'Expiry Date',
             doc.expiryDate.value?.text,
             doc.expiryDate.value?.confidence,
@@ -357,8 +352,8 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
           );
           addField(
             'BirthDate',
-            doc.expiryDate.value?.text,
-            doc.expiryDate.value?.confidence,
+            doc.birthDate.value?.text,
+            doc.birthDate.value?.confidence,
           );
           addField(
             'CardNumber',
@@ -410,8 +405,8 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
           final doc = EuropeanDriverLicenseFront(document);
           addField(
             'BirthDate',
-            doc.expiryDate.value?.text,
-            doc.expiryDate.value?.confidence,
+            doc.birthDate.value?.text,
+            doc.birthDate.value?.confidence,
           );
           addField(
             'Issue Date',
