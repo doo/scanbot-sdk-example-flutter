@@ -201,6 +201,11 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
             doc.birthDate?.value?.confidence,
           );
           addField(
+            'Birth Place',
+            doc.birthplace.value?.text,
+            doc.birthplace.value?.confidence,
+          );
+          addField(
             'Eye Color',
             doc.eyeColor.value?.text,
             doc.eyeColor.value?.confidence,
