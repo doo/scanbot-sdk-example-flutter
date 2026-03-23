@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
