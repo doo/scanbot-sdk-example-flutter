@@ -160,7 +160,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
       document.uuid,
       document.pages.first.uuid,
       options: ModifyPageOptions(
-        rotation: ImageRotation.values[croppingResult.rotationTimesCw],
+        rotation: croppingResult.imageRotation,
         polygon: toPointList(croppingResult.polygon),
       ),
     );
