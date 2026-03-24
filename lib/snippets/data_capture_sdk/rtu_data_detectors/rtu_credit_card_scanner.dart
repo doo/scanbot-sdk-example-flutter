@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk_example_flutter/ui/preview/credit_card_preview.dart';
 
 import '../../../utility/utils.dart';
@@ -20,38 +20,36 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = CreditCardScannerScreenConfiguration();
-      // Configure the top bar mode
-      config.topBar.mode = TopBarMode.GRADIENT;
-      // Configure the top bar status bar mode
-      config.topBar.statusBarMode = StatusBarMode.LIGHT;
-      // Configure the top bar background color
-      config.topBar.cancelButton.text = 'Cancel';
-      // Configure parameters as needed.
+    var config = CreditCardScannerScreenConfiguration();
+    // Configure the top bar mode
+    config.topBar.mode = TopBarMode.GRADIENT;
+    // Configure the top bar status bar mode
+    config.topBar.statusBarMode = StatusBarMode.LIGHT;
+    // Configure the top bar background color
+    config.topBar.cancelButton.text = 'Cancel';
+    // Configure parameters as needed.
 
-      // An autorelease pool is required only because the result object contains image references.
-      await autorelease(() async {
-        var result = await ScanbotSdkUiV2.startCreditCardScanner(config);
+    // An autorelease pool is required only because the result object contains image references.
+    await autorelease(() async {
+      var result = await ScanbotSdk.creditCard.startScanner(config);
 
-        if (result.status == OperationStatus.OK && result.data?.creditCard != null) {
+      switch (result) {
+        case Ok():
 
-          /// if you want to use image later, call encodeImages() to save in buffer
+          /// if the image needs to be used later, call encodeImages() to save in buffer
           //  result.data?.encodeImages();
 
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => CreditCardResultPreview(
-                uiResult: result.data,
-              ),
-
+              builder: (_) => CreditCardResultPreview(uiResult: result.value),
             ),
           );
-        }
-      });
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
-    }
+        case Error():
+          await showAlertDialog(context, title: "Error", result.error.message);
+        case Cancel():
+          print("Operation was canceled");
+      }
+    });
   }
 }

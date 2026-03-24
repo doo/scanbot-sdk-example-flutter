@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 void reorderScreen() async {
   // Create the default configuration object.
@@ -16,8 +16,12 @@ void reorderScreen() async {
   reorderScreenConfiguration.pageTextStyle.color = ScanbotColor('#000000');
 
   // Start the Document Scanner UI
-  var documentResult = await ScanbotSdkUiV2.startDocumentScanner(configuration);
-  // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
+  var documentResult = await ScanbotSdk.document.startScanner(configuration);
+  // Handle the document if the result is 'Ok'
+  if (documentResult is Ok<DocumentData>) {
+    var documentData = documentResult.value;
+    print(documentData);
+  } else {
+    print(documentResult.toString());
   }
 }

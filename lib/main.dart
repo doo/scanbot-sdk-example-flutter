@@ -1,17 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:scanbot_sdk_example_flutter/classic_components/document_custom_ui.dart';
 
-import 'storage/_legacy_pages_repository.dart';
 import 'ui/menu_item_widget.dart';
 import 'utility/utils.dart';
 import 'data_capture/data_capture_sdk_menu.dart';
 import 'document/document_sdk_menu.dart';
-import 'classic_components/custom_ui_menu.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
@@ -26,61 +23,28 @@ void main() => runApp(MyApp());
 const SCANBOT_SDK_LICENSE_KEY = "";
 
 Future<void> _initScanbotSdk() async {
-  // Consider adjusting this optional storageBaseDirectory - see the comments below.
-  final customStorageBaseDirectory = await getDemoStorageBaseDirectory();
-
-  var config = ScanbotSdkConfig(
-      loggingEnabled: true,
-      // Consider switching logging OFF in production. builds for security and performance reasons.
-      licenseKey: SCANBOT_SDK_LICENSE_KEY,
-      storageImageFormat: ImageFormat.JPG,
-      storageImageQuality: 80,
-      // Uncomment to use custom storage directory
-      // storageBaseDirectory: customStorageBaseDirectory,
+  var config = SdkConfiguration(
+    loggingEnabled: true,
+    // Consider disabling logging in production builds for security and performance reasons
+    licenseKey: SCANBOT_SDK_LICENSE_KEY,
+    // Uncomment to use the custom storage directory
+    // storageBaseDirectory: await getDemoStorageBaseDirectory(),
   );
 
-  if(shouldInitWithEncryption) {
+  if (shouldInitWithEncryption) {
     config.fileEncryptionPassword = 'SomeSecretPa\$\$w0rdForFileEncryption';
     config.fileEncryptionMode = FileEncryptionMode.AES256;
   }
 
-  try {
-    await ScanbotSdk.initScanbotSdk(config);
-    await LegacyPageRepository().loadPages();
-  } catch (e) {
-    Logger.root.severe(e);
-  }
+  await ScanbotSdk.initialize(config);
 }
 
 Future<String> getDemoStorageBaseDirectory() async {
   // !! Please note !!
   // It is strongly recommended to use the default (secure) storage location of the Scanbot SDK.
-  // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK by a custom storage directory.
-  //
-  // On Android we use the "ExternalStorageDirectory" which is a public(!) folder.
-  // All image files and export files (PDF, TIFF, etc) created by the Scanbot SDK in this demo app will be stored
-  // in this public storage directory and will be accessible for every(!) app having external storage permissions!
-  // Again, this is only for demo purposes, which allows us to easily fetch and check the generated files
-  // via Android "adb" CLI tools, Android File Transfer app, Android Studio, etc.
-  //
-  // On iOS we use the "ApplicationDocumentsDirectory" which is accessible via iTunes file sharing.
-  //
-  // For more details about the storage system of the Scanbot SDK Flutter Plugin please see our docs:
-  // - https://scanbotsdk.github.io/documentation/flutter/
-  //
-  // For more details about the file system on Android and iOS we also recommend to check out:
-  // - https://developer.android.com/guide/topics/data/data-storage
-  // - https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html
+  // However, for demo purposes we overwrite the "storageBaseDirectory" of the Scanbot SDK with a custom storage directory.
 
-  Directory storageDirectory;
-  if (Platform.isAndroid) {
-    storageDirectory = (await getExternalStorageDirectory())!;
-  } else if (Platform.isIOS) {
-    storageDirectory = await getApplicationDocumentsDirectory();
-  } else {
-    throw ('Unsupported platform');
-  }
-
+  var storageDirectory = await getApplicationSupportDirectory();
   return '${storageDirectory.path}/my-custom-storage';
 }
 
@@ -93,11 +57,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -122,11 +81,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           const TitleItemWidget(title: 'Document SDK API'),
           MenuItemWidget(
             title: 'Document SDK Menu',
-            startIcon: Icons.photo_camera,
+            startIcon: Icons.document_scanner,
             endIcon: Icons.arrow_forward,
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const DocumentSdkMenu()),
+                MaterialPageRoute(
+                  builder: (context) => const DocumentSdkMenu(),
+                ),
               );
             },
           ),
@@ -136,30 +97,34 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             endIcon: Icons.arrow_forward,
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const DataCaptureSdkMenu()),
+                MaterialPageRoute(
+                  builder: (context) => const DataCaptureSdkMenu(),
+                ),
               );
             },
           ),
           MenuItemWidget(
-            title: 'Custom UI Menu',
+            title: 'Custom UI',
             startIcon: Icons.edit,
             endIcon: Icons.arrow_forward,
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => CustomUiMenu()),
+                MaterialPageRoute(
+                  builder: (context) => const DocumentScannerWidget(),
+                ),
               );
             },
           ),
           const TitleItemWidget(title: 'Other SDK API'),
           MenuItemWidget(
-            title: 'getLicenseStatus()',
+            title: 'License Info',
             startIcon: Icons.phonelink_lock,
             onTap: () {
               _getLicenseStatus();
             },
           ),
           MenuItemWidget(
-            title: 'getOcrConfigs()',
+            title: 'Ocr Configs',
             startIcon: Icons.settings,
             onTap: () {
               _getOcrConfigs();
@@ -177,32 +142,32 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           ),
         ],
       ),
-      bottomNavigationBar: buildBottomNavigationBar(context)
+      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
   Future<void> _getOcrConfigs() async {
-    try {
-      final result = await ScanbotSdk.getOcrConfigs();
-      await showAlertDialog(context, jsonEncode(result), title: 'OCR Configs');
-    } catch (e) {
-      Logger.root.severe(e);
-      await showAlertDialog(context, 'Error getting OCR configs');
+    final result = await ScanbotSdk.getOcrConfigs();
+    if (result is Ok<OcrConfigsResult>) {
+      await showAlertDialog(
+        context,
+        jsonEncode(result.value),
+        title: 'OCR Configs',
+      );
+    } else {
+      print(result.toString());
     }
   }
 
   Future<void> _getLicenseStatus() async {
-    try {
-      final result = await ScanbotSdk.getLicenseStatus();
-      var status = " Status: ${result.licenseStatus.name}";
+    final result = await ScanbotSdk.getLicenseInfo();
+    if (result is Ok<LicenseInfo>) {
+      var licenseInfo = "Status: ${result.value.licenseStatusMessage}\n"
+          "Expiration Date: ${result.value.expirationDateString}";
 
-      if (result.licenseExpirationDate != null) {
-        status += "\n ExpirationDate: ${result.licenseExpirationDate}";
-      }
-
-      await showAlertDialog(context, status, title: 'License Status');
-    } catch (e) {
-      await showAlertDialog(context, "Error getting license status", title: "Info");
+      await showAlertDialog(context, licenseInfo, title: 'License Status');
+    } else {
+      print(result.toString());
     }
   }
 }

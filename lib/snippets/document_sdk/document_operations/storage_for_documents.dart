@@ -1,9 +1,14 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> createDocument() async {
-  var params = CreateDocumentParams();
   /** Create a document with a UUID */
-  var document = await ScanbotSdk.document.createDocument(params);
+  var documentResult =
+      await ScanbotSdk.document.createDocumentFromImageFileUris();
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  } else {
+    print(documentResult.toString());
+  }
 }
 
 Future<void> createDocumentWithPages(List<String> imageFileUris) async {
@@ -11,38 +16,66 @@ Future<void> createDocumentWithPages(List<String> imageFileUris) async {
    * Create a document with a UUID
    * Add images from `imageFileUris` as document pages
    * */
-  var params = CreateDocumentParams(
-    imageFileUris: imageFileUris,
-  );
-
-  var document = await ScanbotSdk.document.createDocument(params);
+  var documentResult = await ScanbotSdk.document
+      .createDocumentFromImageFileUris(images: imageFileUris);
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  } else {
+    print(documentResult.toString());
+  }
 }
 
 Future<void> loadDocument(String documentID) async {
   /** Load a document from storage by ID */
-  var document = await ScanbotSdk.document.loadDocument(documentID);
+  var documentResult = await ScanbotSdk.document.loadDocument(documentID);
+  if (documentResult is Ok<DocumentData>) {
+    /** Handle the document */
+  } else {
+    print(documentResult.toString());
+  }
 }
 
-Future<void> storedDocumentUUIDs() async {
+Future<void> getStoredDocumentUuids() async {
   /** Retrieve all the document IDs from the storage */
-  var documentIds = await ScanbotSdk.document.storedDocumentIDs();
+  var documentIdsResult = await ScanbotSdk.document.getStoredDocumentUuids();
+  if (documentIdsResult is Ok<List<String>>) {
+    /** Handle the document IDs */
+  } else {
+    print(documentIdsResult.toString());
+  }
 }
 
 Future<void> reorderDocumentPages(String documentID) async {
   /** Load a document from storage by ID */
-  var document = await ScanbotSdk.document.loadDocument(documentID);
-  /** Move the first page to the end of the document */
-  var params = MovePageParams(
-    documentID: document.uuid,
-    fromIndex: 0,
-    toIndex: document.pages.length - 1
-  );
-  var documentWithReorderedPages = await ScanbotSdk.document.movePage(params);
+  var documentResult = await ScanbotSdk.document.loadDocument(documentID);
+  if (documentResult is Ok<DocumentData>) {
+    var document = documentResult.value;
+    /** Move the first page to the end of the document */
+    var documentWithReorderedPageResult = await ScanbotSdk.document.movePage(
+      document.uuid,
+      0,
+      document.pages.length - 1,
+    );
+    if (documentWithReorderedPageResult is Ok<DocumentData>) {
+      /** Handle the document */
+    } else {
+      print(documentWithReorderedPageResult.toString());
+    }
+  } else {
+    print(documentResult.toString());
+  }
 }
 
 Future<void> removeAllPagesFromDocument(String documentID) async {
   /** Remove all the pages from a document */
-  var documentWithRemovedPages = await ScanbotSdk.document.removeAllPages(documentID);
+  var documentWithRemovedPagesResult = await ScanbotSdk.document.removeAllPages(
+    documentID,
+  );
+  if (documentWithRemovedPagesResult is Ok<DocumentData>) {
+    /** Handle the document */
+  } else {
+    print(documentWithRemovedPagesResult.toString());
+  }
 }
 
 Future<void> deleteDocument(String documentID) async {

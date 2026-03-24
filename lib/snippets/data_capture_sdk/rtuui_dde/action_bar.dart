@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -16,8 +16,14 @@ Future<void> startScanning() async {
   /** Hide the flip camera button */
   actionBar.flipCameraButton.visible = false;
   /** Start the Document Data Extractor **/
-  var result = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
+  if (result is Ok<DocumentDataExtractorUiResult>) {
+    /** Handle the result **/
+    var documentDataExtractorUiResult = result.value;
+    print(documentDataExtractorUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

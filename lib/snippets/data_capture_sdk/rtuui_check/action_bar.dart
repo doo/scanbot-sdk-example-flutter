@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
@@ -14,8 +14,13 @@ Future<void> startScanning() async {
   // Hide the flip camera button
   configuration.actionBar.flipCameraButton.visible = false;
   // Start the Check Scanner
-  var result = await ScanbotSdkUiV2.startCheckScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.check.startScanner(configuration);
+
+  if (result is Ok<CheckScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

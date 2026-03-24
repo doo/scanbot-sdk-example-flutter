@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -19,13 +19,19 @@ Future<void> startScanning() async {
   /** Configure the text. **/
   configuration.introScreen.explanation.color = ScanbotColor('#000000');
   configuration.introScreen.explanation.text =
-  "To scan a single line of text, please hold your device so that the camera viewfinder clearly captures the text you want to scan. Please ensure the text is properly aligned. Once the scan is complete, the text will be automatically extracted.\n\nPress 'Start Scanning' to begin.";
+      "To scan a single line of text, please hold your device so that the camera viewfinder clearly captures the text you want to scan. Please ensure the text is properly aligned. Once the scan is complete, the text will be automatically extracted.\n\nPress 'Start Scanning' to begin.";
   /** Configure the done button. E.g., the text or the background color. **/
   configuration.introScreen.doneButton.text = 'Start Scanning';
-  configuration.introScreen.doneButton.background.fillColor = ScanbotColor('#C8193C');
+  configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+    '#C8193C',
+  );
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.textPattern.startScanner(configuration);
+  if (result is Ok<TextPatternScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

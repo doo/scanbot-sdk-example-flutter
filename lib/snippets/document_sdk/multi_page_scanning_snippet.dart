@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 DocumentScanningFlow multiPageScanningFlow() {
   // Create the default configuration object.
@@ -12,16 +12,20 @@ DocumentScanningFlow multiPageScanningFlow() {
 
   // Hide/Reveal the auto snapping enable/disable button
   configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = true;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible = true;
+  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
+      true;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");
   configuration.palette.sbColorOnPrimary = ScanbotColor('#ffffff');
 
   // Configure the hint texts for different scenarios
-  configuration.screens.camera.userGuidance.statesTitles.tooDark = 'Need more lighting to detect a document';
-  configuration.screens.camera.userGuidance.statesTitles.tooSmall = 'Document too small';
-  configuration.screens.camera.userGuidance.statesTitles.noDocumentFound = 'Could not detect a document';
+  configuration.screens.camera.userGuidance.statesTitles.tooDark =
+      'Need more lighting to detect a document';
+  configuration.screens.camera.userGuidance.statesTitles.tooSmall =
+      'Document too small';
+  configuration.screens.camera.userGuidance.statesTitles.noDocumentFound =
+      'Could not detect a document';
 
   // Enable/Disable the review screen.
   configuration.screens.review.enabled = true;
@@ -36,7 +40,8 @@ DocumentScanningFlow multiPageScanningFlow() {
   // Configure `more` popup on review screen
   configuration.screens.review.morePopup.reorderPages.icon.visible = true;
   configuration.screens.review.morePopup.deleteAll.icon.visible = true;
-  configuration.screens.review.morePopup.deleteAll.title.text = 'Delete all pages';
+  configuration.screens.review.morePopup.deleteAll.title.text =
+      'Delete all pages';
 
   // Configure reorder pages screen
   configuration.screens.reorderPages.topBarTitle.text = 'Reorder Pages';
@@ -53,8 +58,12 @@ DocumentScanningFlow multiPageScanningFlow() {
 
 void runDocumentScanner() async {
   var configuration = multiPageScanningFlow();
-  var documentResult = await ScanbotSdkUiV2.startDocumentScanner(configuration);
-  // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
+  var documentResult = await ScanbotSdk.document.startScanner(configuration);
+  // Handle the document if the result is 'Ok'
+  if (documentResult is Ok<DocumentData>) {
+    var documentData = documentResult.value;
+    print(documentData);
+  } else {
+    print(documentResult.toString());
   }
 }

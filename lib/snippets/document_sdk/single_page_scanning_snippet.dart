@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 DocumentScanningFlow singlePageScanningFlow() {
   // Create the default configuration object.
@@ -17,13 +17,16 @@ DocumentScanningFlow singlePageScanningFlow() {
    * Note: Both modes can be further configured to your liking
    * E.g., for genie animation
    */
-  configuration.screens.camera.captureFeedback.snapFeedbackMode = PageSnapFunnelAnimation();
+  configuration.screens.camera.captureFeedback.snapFeedbackMode =
+      PageSnapFunnelAnimation();
   // or for checkmark animation
-  configuration.screens.camera.captureFeedback.snapFeedbackMode = PageSnapCheckMarkAnimation();
+  configuration.screens.camera.captureFeedback.snapFeedbackMode =
+      PageSnapCheckMarkAnimation();
 
   // Hide the auto snapping enable/disable button
   configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible = false;
+  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
+      false;
   configuration.screens.camera.bottomBar.importButton.title.visible = true;
   configuration.screens.camera.bottomBar.torchOnButton.title.visible = true;
   configuration.screens.camera.bottomBar.torchOffButton.title.visible = true;
@@ -33,17 +36,24 @@ DocumentScanningFlow singlePageScanningFlow() {
   configuration.palette.sbColorOnPrimary = ScanbotColor('#ffffff');
 
   // Configure the hint texts for different scenarios
-  configuration.screens.camera.userGuidance.statesTitles.tooDark = 'Need more lighting to detect a document';
-  configuration.screens.camera.userGuidance.statesTitles.tooSmall = 'Document too small';
-  configuration.screens.camera.userGuidance.statesTitles.noDocumentFound = 'Could not detect a document';
+  configuration.screens.camera.userGuidance.statesTitles.tooDark =
+      'Need more lighting to detect a document';
+  configuration.screens.camera.userGuidance.statesTitles.tooSmall =
+      'Document too small';
+  configuration.screens.camera.userGuidance.statesTitles.noDocumentFound =
+      'Could not detect a document';
 
   return configuration;
 }
 
 void runDocumentScanner() async {
   var configuration = singlePageScanningFlow();
-  var documentResult = await ScanbotSdkUiV2.startDocumentScanner(configuration);
-  // Handle the document if the status is 'OK'
-  if(documentResult.status == OperationStatus.OK) {
+  var documentResult = await ScanbotSdk.document.startScanner(configuration);
+  // Handle the document if the result is 'Ok'
+  if (documentResult is Ok<DocumentData>) {
+    var documentData = documentResult.value;
+    print(documentData);
+  } else {
+    print(documentResult.toString());
   }
 }

@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -8,13 +8,17 @@ Future<void> startScanning() async {
   /**  Configure the strings. */
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
 
   /** Start the VIN Scanner **/
-  var result = await ScanbotSdkUiV2.startVINScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.vin.startScanner(configuration);
+  if (result is Ok<VinScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

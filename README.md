@@ -52,8 +52,7 @@ You can get the IDs of all connected devices via `Flutter devices`.
 Install Pods dependencies:
 
 ```
-chmod +x clean-ios.sh
-./clean-ios.sh
+cd ios && rm -f Podfile.lock && rm -rf Pods/ && pod install --repo-update && cd ..
 ```
 
 Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. Then build and run the app in Xcode.
@@ -104,12 +103,6 @@ Through this feature, our SDK offers document detection and data capture capabil
 | :-- | :-- | :-- |
 
 ## Additional information
-
-### Free integration support
-
-Need help integrating or testing our Document Scanner SDK? We offer [free developer support](https://docs.scanbot.io/support/?utm_source=github.com&utm_medium=referral&utm_campaign=dev_sites) via Slack, MS Teams, or email.
-
-As a customer, you also get access to a dedicated support Slack or Microsoft Teams channel to talk directly to your Customer Success Manager and our engineers.
 
 ### Trial license and pricing 
 

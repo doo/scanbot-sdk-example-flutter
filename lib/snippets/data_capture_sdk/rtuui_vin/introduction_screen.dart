@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
@@ -28,16 +28,23 @@ Future<void> startScanning() async {
 
   // Configure the text.
   configuration.introScreen.explanation.color = ScanbotColor("#000000");
-  configuration.introScreen.explanation.text = "To scan a VIN (Vehicle Identification Number), please hold your device so that the camera viewfinder clearly captures the VIN code. Please ensure the VIN is properly aligned. Once the scan is complete, the VIN will be automatically extracted.\n\nPress 'Start Scanning' to begin.";
+  configuration.introScreen.explanation.text =
+      "To scan a VIN (Vehicle Identification Number), please hold your device so that the camera viewfinder clearly captures the VIN code. Please ensure the VIN is properly aligned. Once the scan is complete, the VIN will be automatically extracted.\n\nPress 'Start Scanning' to begin.";
 
   // Configure the done button.
   // e.g the text or the background color.
   configuration.introScreen.doneButton.text = "Start Scanning";
-  configuration.introScreen.doneButton.background.fillColor = ScanbotColor("#C8193C");
+  configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+    "#C8193C",
+  );
 
   /** Start the VIN Scanner **/
-  var result = await ScanbotSdkUiV2.startVINScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.vin.startScanner(configuration);
+  if (result is Ok<VinScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

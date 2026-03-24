@@ -6,7 +6,6 @@ import '../operations_page_widget.dart';
 import '../pages_widget.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
 
 class DocumentPreview extends StatefulWidget {
   final DocumentData initialDocumentData;
@@ -18,7 +17,6 @@ class DocumentPreview extends StatefulWidget {
 }
 
 class DocumentPreviewPreviewState extends State<DocumentPreview> {
-
   late DocumentData documentData;
 
   @override
@@ -42,14 +40,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
                   maxCrossAxisExtent: 200,
                 ),
                 itemBuilder: (context, position) {
-                  final imageUri = Uri(path: documentData.pages[position].documentImagePreviewURI!.replaceFirst('file://', ''));
+                  final imageUri =
+                      documentData.pages[position].documentImagePreviewURI!;
                   final pageView = shouldInitWithEncryption
                       ? EncryptedPageWidget(imageUri)
                       : PageWidget(imageUri);
 
                   return GridTile(
                     child: GestureDetector(
-                      onTap: () => _showOperationsPage(documentData.pages[position]),
+                      onTap: () =>
+                          _showOperationsPage(documentData.pages[position]),
                       child: pageView,
                     ),
                   );
@@ -76,16 +76,10 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     );
   }
 
-  Widget _buildButton(
-    String label,
-    VoidCallback onPressed
-  ) {
+  Widget _buildButton(String label, VoidCallback onPressed) {
     return TextButton(
       onPressed: onPressed,
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white),
-      ),
+      child: Text(label, style: const TextStyle(color: Colors.white)),
     );
   }
 
@@ -118,7 +112,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
             ListTile(
               leading: const Icon(Icons.cancel),
               title: const Text('Cancel'),
-              onTap: () => { Navigator.pop(context) },
+              onTap: () => {Navigator.pop(context)},
             ),
           ],
         );
@@ -128,36 +122,40 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
 
   Future<void> startScan({
     required BuildContext context,
-    required Future<ResultWrapper<DocumentData>> Function() scannerFunction,
+    required Future<Result<DocumentData>> Function() scannerFunction,
   }) async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    try {
-      var result = await scannerFunction();
-      if (result.status == OperationStatus.OK &&
-          result.data != null) {
-        setState(() {
-          documentData = result.data!;
-        });
-      }
-    } catch (e) {
-      print(e);
+
+    var result = await scannerFunction();
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
   Future<void> _showOperationsPage(PageData page) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => PageOperations(documentData.uuid, page)),
+      MaterialPageRoute(
+        builder: (context) => PageOperations(documentData.uuid, page),
+      ),
     );
 
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var loadedData = await ScanbotSdk.document.loadDocument(documentData.uuid);
-    setState(() {
-      documentData = loadedData;
-    });
+    var result = await ScanbotSdk.document.loadDocument(documentData.uuid);
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 
   Future<void> _continueScanning() async {
@@ -166,8 +164,9 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     }
     await startScan(
       context: context,
-      scannerFunction: () =>
-          ScanbotSdkUiV2.startDocumentScanner(DocumentScanningFlow(documentUuid: documentData.uuid)),
+      scannerFunction: () => ScanbotSdk.document.startScanner(
+        DocumentScanningFlow(documentUuid: documentData.uuid),
+      ),
     );
   }
 
@@ -175,13 +174,20 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    final response = await selectImageFromLibrary();
 
-    if (response?.path.isNotEmpty ?? false) {
-      var result = await ScanbotSdk.document.addPage(AddPageParams(documentID: documentData.uuid, imageFileUri: response!.path));
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.document.addPagesFromImageFileUris(
+      documentData.uuid,
+      [file.path],
+    );
+    if (result is Ok<DocumentData>) {
       setState(() {
-        documentData = result;
+        documentData = result.value;
       });
+    } else {
+      await showAlertDialog(context, result.toString());
     }
   }
 
@@ -190,17 +196,28 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       return;
     }
     var result = await ScanbotSdk.document.removeAllPages(documentData.uuid);
-    setState(() {
-      documentData = result;
-    });
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        documentData = result.value;
+      });
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 
   Future<void> _saveDocumentAsPDF() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: PdfConfiguration()));
-    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
+      documentData.uuid,
+      PdfConfiguration(),
+    );
+    if (result is Ok<String>) {
+      await shareFile(result.value);
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 
   Future<void> _saveDocumentAsPDFWithOCR() async {
@@ -212,8 +229,16 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       pageDirection: PageDirection.PORTRAIT,
     );
 
-    var result = await ScanbotSdk.document.createPDFForDocument(PDFFromDocumentParams(documentID: documentData.uuid, pdfConfiguration: pdfOptions, ocrConfiguration: OcrOptions(engineMode: OcrEngine.SCANBOT_OCR)));
-    await showAlertDialog(context, 'Pdf File created: ${result.pdfFileUri}', title: 'Result');
+    var result = await ScanbotSdk.pdfGenerator.generateFromDocument(
+      documentData.uuid,
+      pdfOptions,
+      ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR),
+    );
+    if (result is Ok<String>) {
+      await shareFile(result.value);
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 
   Future<void> _saveDocumentAsTIFFBinarized() async {
@@ -221,16 +246,34 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
       return;
     }
 
-    var options = TiffGeneratorParameters(binarizationFilter: ScanbotBinarizationFilter(), dpi: 300, compression: CompressionMode.CCITT_T6);
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: options));
-    await showAlertDialog(context, 'Tiff Binarized File created: ${result.tiffFileUri}', title: 'Result');
+    var options = TiffGeneratorParameters(
+      binarizationFilter: ScanbotBinarizationFilter(),
+      dpi: 300,
+      compression: CompressionMode.CCITT_T6,
+    );
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(
+      documentData.uuid,
+      options,
+    );
+    if (result is Ok<String>) {
+      await shareFile(result.value);
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 
   Future<void> _saveDocumentAsTIFF() async {
     if (!await checkLicenseStatus(context)) {
       return;
     }
-    var result = await ScanbotSdk.document.createTIFFForDocument(TIFFFromDocumentParams(documentID: documentData.uuid, configuration: TiffGeneratorParameters()));
-    await showAlertDialog(context, 'Tiff File created: ${result.tiffFileUri}', title: 'Result');
+    var result = await ScanbotSdk.tiffGenerator.generateFromDocument(
+      documentData.uuid,
+      TiffGeneratorParameters(),
+    );
+    if (result is Ok<String>) {
+      await shareFile(result.value);
+    } else {
+      await showAlertDialog(context, result.toString());
+    }
   }
 }

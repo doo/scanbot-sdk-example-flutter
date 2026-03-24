@@ -20,11 +20,9 @@ class MenuItemWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
-          leading: startIcon != null
-              ? Icon(startIcon, color: Colors.black)
-              : null,
-          trailing:
-          endIcon != null ? Icon(endIcon, color: Colors.black) : null,
+          leading:
+              startIcon != null ? Icon(startIcon, color: Colors.black) : null,
+          trailing: endIcon != null ? Icon(endIcon, color: Colors.black) : null,
           title: Text(
             title,
             style: const TextStyle(
@@ -54,10 +52,7 @@ class MenuItemWidget extends StatelessWidget {
 class TitleItemWidget extends StatelessWidget {
   final String title;
 
-  const TitleItemWidget({
-    required this.title,
-    Key? key,
-  }) : super(key: key);
+  const TitleItemWidget({required this.title, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,4 +74,3 @@ class TitleItemWidget extends StatelessWidget {
     );
   }
 }
-

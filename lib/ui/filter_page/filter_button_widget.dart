@@ -4,11 +4,8 @@ class FilterButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const FilterButton({
-    Key? key,
-    required this.text,
-    required this.onPressed,
-  }) : super(key: key);
+  const FilterButton({Key? key, required this.text, required this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +22,7 @@ class FilterButton extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(text),
-        ),
+        child: Align(alignment: Alignment.centerLeft, child: Text(text)),
       ),
     );
   }

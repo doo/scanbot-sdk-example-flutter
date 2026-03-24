@@ -24,8 +24,6 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NFCReaderUsageDescription</key>
-	<string>NFC Scan Permission</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Permission</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

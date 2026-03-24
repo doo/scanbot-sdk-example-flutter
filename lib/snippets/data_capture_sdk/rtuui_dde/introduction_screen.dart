@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
@@ -14,11 +14,13 @@ Future<void> startScanning() async {
 
   // Configure the image for the introduction screen.
   // If you want to have no image...
-  configuration.introScreen.image = DocumentDataExtractorIntroImage.documentDataIntroNoImage();
+  configuration.introScreen.image =
+      DocumentDataExtractorIntroImage.documentDataIntroNoImage();
   // For a custom image...
   // configuration.introScreen.image = DocumentDataExtractorIntroImage.documentDataIntroCustomImage(uri: "PathToImage")
   // Or you can also use our default image.
-  configuration.introScreen.image = DocumentDataExtractorIntroImage.documentDataIntroDefaultImage();
+  configuration.introScreen.image =
+      DocumentDataExtractorIntroImage.documentDataIntroDefaultImage();
 
   // Configure the color of the handler on top.
   configuration.introScreen.handlerColor = ScanbotColor("#EFEFEF");
@@ -28,16 +30,25 @@ Future<void> startScanning() async {
 
   // Configure the text.
   configuration.introScreen.explanation.color = ScanbotColor("#000000");
-  configuration.introScreen.explanation.text = "To quickly and securely scan your document details, please hold your device over the document, so that the camera aligns with all the information on the document.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your document details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
+  configuration.introScreen.explanation.text =
+      "To quickly and securely scan your document details, please hold your device over the document, so that the camera aligns with all the information on the document.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your document details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
 
   // Configure the done button.
   // e.g the text or the background color.
   configuration.introScreen.doneButton.text = "Start Scanning";
-  configuration.introScreen.doneButton.background.fillColor = ScanbotColor("#C8193C");
+  configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
+    "#C8193C",
+  );
 
   // Start the DDE
-  var result = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
+  if (result is Ok<DocumentDataExtractorUiResult>) {
+    /** Handle the result **/
+    var documentDataExtractorUiResult = result.value;
+    print(documentDataExtractorUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

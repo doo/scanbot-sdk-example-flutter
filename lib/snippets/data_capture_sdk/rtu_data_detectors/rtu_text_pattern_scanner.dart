@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../../../ui/preview/text_pattern_preview.dart';
 import '../../../utility/utils.dart';
@@ -20,26 +20,26 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
-    try {
-      var config = TextPatternScannerScreenConfiguration();
-      // Show the top user guidance
-      config.topUserGuidance.visible = true;
-      // Customize the top user guidance
-      config.topUserGuidance.title.text = 'Customized title';
-      // Configure parameters as needed.
+    var config = TextPatternScannerScreenConfiguration();
+    // Show the top user guidance
+    config.topUserGuidance.visible = true;
+    // Customize the top user guidance
+    config.topUserGuidance.title.text = 'Customized title';
+    // Configure parameters as needed.
 
-      var result = await ScanbotSdkUiV2.startTextPatternScanner(config);
-
-      if (result.status == OperationStatus.OK && result.data != null) {
+    var result = await ScanbotSdk.textPattern.startScanner(config);
+    switch (result) {
+      case Ok():
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => TextPatternScannerUiResultPreview(result.data!),
+            builder: (_) => TextPatternScannerUiResultPreview(result.value),
           ),
         );
-      }
-    } catch (e) {
-      showAlertDialog(context, 'Error: ${e.toString()}');
+      case Error():
+        await showAlertDialog(context, title: "Error", result.error.message);
+      case Cancel():
+        print("Operation was canceled");
     }
   }
 }

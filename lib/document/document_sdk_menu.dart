@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 import '../ui/menu_item_widget.dart';
@@ -17,35 +16,54 @@ class DocumentSdkMenu extends StatelessWidget {
         children: <Widget>[
           const DocumentUseCasesWidget(),
           const TitleItemWidget(title: 'Other API'),
-          MenuItemWidget(title: 'Analyze document quality ', onTap: () => _analyzeDocumentQuality(context)),
-          MenuItemWidget(title: 'PerformOCR ', onTap: () => _performOCR(context)),
+          MenuItemWidget(
+            title: 'Analyze document quality',
+            onTap: () => _analyzeDocumentQuality(context),
+          ),
+          MenuItemWidget(
+            title: 'Perform OCR',
+            onTap: () => _performOCR(context),
+          ),
         ],
       ),
     );
   }
 
   Future<void> _analyzeDocumentQuality(BuildContext context) async {
-    try {
-      final response = await selectImageFromLibrary();
-      if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.analyzeDocumentQuality(response!.path, DocumentQualityAnalyzerConfiguration());
-        await showAlertDialog(context, title: 'Document Quality', result.quality?.name ?? 'Unknown');
-      }
-    } catch (e) {
-      Logger.root.severe(e);
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.document.analyzeQualityOnImageFileUri(
+      file.path,
+      DocumentQualityAnalyzerConfiguration(),
+    );
+    if (result is Ok<DocumentQualityAnalyzerResult>) {
+      await showAlertDialog(
+        context,
+        title: 'Document Quality',
+        result.value.quality?.name ?? 'Unknown',
+      );
+    } else {
+      print(result.toString());
     }
   }
 
   Future<void> _performOCR(BuildContext context) async {
-    try {
-      final response = await selectImageFromLibrary();
-      if (response?.path.isNotEmpty ?? false) {
-        var result = await ScanbotSdk.performOCR(PerformOCRArguments(imageFileUris: [response!.path]));
-        await showAlertDialog(context, title: 'OCR Result', result.plainText);
-      }
-    } catch (e) {
-      Logger.root.severe(e);
+    final file = await selectImageFromLibrary();
+    if (file == null || file.path.isEmpty) return;
+
+    var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
+      file.path,
+    ]);
+
+    if (result is Ok<PerformOcrResult>) {
+      await showAlertDialog(
+        context,
+        title: 'OCR Result',
+        result.value.recognizedText,
+      );
+    } else {
+      print(result.toString());
     }
   }
 }
-

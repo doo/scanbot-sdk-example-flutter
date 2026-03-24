@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
@@ -22,8 +22,12 @@ Future<void> startScanning() async {
   /** Customize the finder user guidance background */
   finderUserGuidance.background.fillColor = ScanbotColor('#C8193C');
   /** Start the Text Pattern Scanner **/
-  var result = await ScanbotSdkUiV2.startTextPatternScanner(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.textPattern.startScanner(configuration);
+  if (result is Ok<TextPatternScannerUiResult>) {
+    /** Handle the result **/
+    var scannerUiResult = result.value;
+    print(scannerUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }

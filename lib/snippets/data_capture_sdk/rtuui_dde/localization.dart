@@ -1,4 +1,4 @@
-import 'package:scanbot_sdk/scanbot_sdk_ui_v2.dart';
+import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> startScanning() async {
   // Create an instance of the default configuration
@@ -8,13 +8,19 @@ Future<void> startScanning() async {
   //  Configure the strings.
   localization.topUserGuidance = 'Localized topUserGuidance';
   localization.cameraPermissionCloseButton =
-  'Localized cameraPermissionCloseButton';
+      'Localized cameraPermissionCloseButton';
   localization.completionOverlaySuccessMessage =
-  'Localized completionOverlaySuccessMessage';
+      'Localized completionOverlaySuccessMessage';
 
   // Start the DDE
-  var result = await ScanbotSdkUiV2.startDocumentDataExtractor(configuration);
-  if (result.status == OperationStatus.OK) {
-    // ...
+  var result = await ScanbotSdk.documentDataExtractor.startExtractorScreen(
+    configuration,
+  );
+  if (result is Ok<DocumentDataExtractorUiResult>) {
+    /** Handle the result **/
+    var documentDataExtractorUiResult = result.value;
+    print(documentDataExtractorUiResult.toString());
+  } else {
+    print(result.toString());
   }
 }
