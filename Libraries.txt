@@ -3617,7 +3617,7 @@ Version 1.1.0
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Open Source libraries used in ScanbotSDK for iOS version 8.0.1:
+Open Source libraries used in ScanbotSDK for iOS version 8.0.4:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
