@@ -54,14 +54,16 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: Container(
-        color: Colors.black,
-        child: Stack(
-          children: <Widget>[
-            _buildCameraView(),
-            _buildDetectionStatusStream(),
-            if (showProgressBar) _buildProgressIndicator(),
-          ],
+      body: SafeArea(
+        child: Container(
+          color: Colors.black,
+          child: Stack(
+            children: <Widget>[
+              _buildCameraView(),
+              _buildDetectionStatusStream(),
+              if (showProgressBar) _buildProgressIndicator(),
+            ],
+          ),
         ),
       ),
     );

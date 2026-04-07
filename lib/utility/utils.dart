@@ -118,31 +118,33 @@ Future<void> _launchScanbotSDKURL() async {
 }
 
 Widget buildBottomNavigationBar(BuildContext context) {
-  return Container(
-    color: Colors.grey[200],
-    padding: const EdgeInsets.all(10.0),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextButton(
-          onPressed: _launchScanbotSDKURL,
-          style: TextButton.styleFrom(
-            padding: EdgeInsets.zero,
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  return SafeArea(
+    child: Container(
+      color: Colors.grey[200],
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextButton(
+            onPressed: _launchScanbotSDKURL,
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: const Text(
+              'Learn More About Scanbot SDK',
+              style: TextStyle(color: ScanbotRedColor),
+            ),
           ),
-          child: const Text(
-            'Learn More About Scanbot SDK',
-            style: TextStyle(color: ScanbotRedColor),
+          const SizedBox(height: 4),
+          const Text(
+            'Copyright 2026 Scanbot SDK GmbH. All rights reserved.',
+            style: TextStyle(fontSize: 10, color: Colors.black),
+            textAlign: TextAlign.center,
           ),
-        ),
-        const SizedBox(height: 4),
-        const Text(
-          'Copyright 2026 Scanbot SDK GmbH. All rights reserved.',
-          style: TextStyle(fontSize: 10, color: Colors.black),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 16),
-      ],
+          const SizedBox(height: 16),
+        ],
+      ),
     ),
   );
 }
