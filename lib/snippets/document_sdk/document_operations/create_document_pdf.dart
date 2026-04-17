@@ -11,8 +11,8 @@ Future<void> createDocumentPDF() async {
     pageDirection: PageDirection.PORTRAIT,
   );
 
-  var ocrConfiguration = OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR);
   if (documentResult is Ok<DocumentData>) {
+    var ocrConfiguration = OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR);
     var pdfUriResult = await ScanbotSdk.pdfGenerator.generateFromDocument(
       documentResult.value.uuid,
       pdfConfiguration,

@@ -5,6 +5,7 @@ Future<void> createPdfFromImages(List<String> imageFileUris) async {
   var result = await ScanbotSdk.pdfGenerator.generateFromImageFileUris(
     imageFileUris,
     PdfConfiguration(),
+    ocrConfiguration: OcrConfiguration(engineMode: OcrEngine.SCANBOT_OCR),
   );
   if (result is Ok<String>) {
     /** Handle the pdf */
