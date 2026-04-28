@@ -3,7 +3,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 Future<void> startScanning() async {
   /** Create an instance of the default configuration */
   var configuration = VinScannerScreenConfiguration();
-  //** Configure the view finder style */
+  /** Configure the view finder style */
   configuration.viewFinder.style = FinderCorneredStyle(
     cornerRadius: 8,
     strokeWidth: 2,
