@@ -41,7 +41,7 @@ class DocumentSdkMenu extends StatelessWidget {
       await showAlertDialog(
         context,
         title: 'Document Quality',
-        result.value.quality?.name ?? 'Unknown',
+        result.value.quality.name,
       );
     } else {
       print(result.toString());
