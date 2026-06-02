@@ -25,7 +25,7 @@ dependencies:
   image_picker: ^1.1.2
   cupertino_icons: ^1.0.2
   url_launcher: ^6.1.8
-  permission_handler: ^11.4.0
+  permission_handler: ^12.0.3
   logging: ^1.1.1
   shared_preferences: ^2.5.3
   path_provider: ^2.1.5
