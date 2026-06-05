@@ -7,9 +7,9 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
   configuration.screens.camera.acknowledgement
     // Set the acknowledgment mode
     // Modes:
-    // - `ALWAYS`: Runs the quality analyzer on the captured document and always displays the acknowledgment screen.
-    // - `BAD_QUALITY`: Runs the quality analyzer and displays the acknowledgment screen only if the quality is poor.
-    // - `NONE`: Skips the quality check entirely.
+    // - UNACCEPTABLE_QUALITY: The acknowledgment screen will only be shown when the quality of a scanned page is unacceptable. The quality threshold is determined by the document quality analyzer parameters.
+    // - ALWAYS: The acknowledgment screen will always be shown after each snap, regardless of the scanned page's quality.
+    // - NONE: The acknowledgment screen will be disabled, in effect never shown.
     ..acknowledgementMode = AcknowledgementMode.ALWAYS
     // Set the background color for the acknowledgment screen.
     ..backgroundColor = ScanbotColor("#EFEFEF")

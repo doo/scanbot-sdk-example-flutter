@@ -127,6 +127,8 @@ Besides Flutter, the Scanbot Document Scanner SDK is also available on:
 * [Cordova & Ionic](https://github.com/doo/scanbot-sdk-example-ionic)
 * [.NET MAUI](https://github.com/doo/scanbot-sdk-maui-example)
 * [React Native](https://github.com/doo/scanbot-sdk-example-react-native)
+* [KMP](https://github.com/doo/scanbot-sdk-example-kmp)
+* [Linux](https://github.com/doo/scanbot-sdk-example-linux)
 * [Xamarin](https://github.com/doo/scanbot-sdk-example-xamarin) & [Xamarin.Forms](https://github.com/doo/scanbot-sdk-example-xamarin-forms)
 
-Our Barcode Scanner SDK additionally also supports [Compose Multiplatform / KMP](https://github.com/doo/scanbot-barcode-scanner-sdk-example-kmp), [UWP](https://github.com/doo/scanbot-barcode-scanner-sdk-example-windows) (Windows), and [Linux](https://github.com/doo/scanbot-sdk-example-linux).
+Our Barcode Scanner SDK additionally also supports [UWP](https://github.com/doo/scanbot-barcode-scanner-sdk-example-windows) (Windows).
