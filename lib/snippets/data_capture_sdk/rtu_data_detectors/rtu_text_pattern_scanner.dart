@@ -25,6 +25,13 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
     config.topUserGuidance.visible = true;
     // Customize the top user guidance
     config.topUserGuidance.title.text = 'Customized title';
+    // Set the validator
+    config.scannerConfiguration.validator = PatternContentValidator(
+      // Set a text pattern (e.g., 4 digits)
+      pattern: r'^[0-9]{4}$',
+      patternGrammar: PatternGrammar.REGEX,
+      matchSubstring: true,
+    );
     // Configure parameters as needed.
 
     var result = await ScanbotSdk.textPattern.startScanner(config);
