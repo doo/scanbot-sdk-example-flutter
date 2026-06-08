@@ -39,6 +39,10 @@ android {
     }
 }
 
+dependencies {
+    implementation("io.scanbot:sdk-ocr-tesseract:9.0.0.1199-SNAPSHOT")
+}
+
 flutter {
     source '../..'
 }
