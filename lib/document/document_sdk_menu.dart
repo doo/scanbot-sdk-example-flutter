@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide AspectRatio;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+import 'package:scanbot_sdk_example_flutter/ui/preview/document_preview.dart';
 
 import '../ui/menu_item_widget.dart';
 import '../utility/utils.dart';
@@ -16,6 +17,10 @@ class DocumentSdkMenu extends StatelessWidget {
         children: <Widget>[
           const DocumentUseCasesWidget(),
           const TitleItemWidget(title: 'Other API'),
+          MenuItemWidget(
+            title: 'Straighten document',
+            onTap: () => _straightenDocument(context),
+          ),
           MenuItemWidget(
             title: 'Analyze document quality',
             onTap: () => _analyzeDocumentQuality(context),
@@ -65,5 +70,43 @@ class DocumentSdkMenu extends StatelessWidget {
     } else {
       print(result.toString());
     }
+  }
+
+  Future<void> _straightenDocument(BuildContext context) async {
+    final selectedImage = await selectImageFromLibrary();
+    if (selectedImage == null || selectedImage.path.isEmpty) return;
+
+    await autorelease(() async {
+      // Configure the straightening parameters as needed
+      final straighteningParameters = DocumentStraighteningParameters(
+        straighteningMode: DocumentStraighteningMode.STRAIGHTEN,
+      );
+
+      final documentStraighteningResult =
+          await ScanbotSdk.documentEnhancer.straightenImageFileUri(
+        selectedImage.path,
+        straighteningParameters,
+      );
+
+      if (documentStraighteningResult is! Ok<DocumentStraighteningResult>) {
+        print(documentStraighteningResult.toString());
+        return;
+      }
+
+      final documentResult = await ScanbotSdk.document
+          .createDocumentFromImageRefs(
+              images: [documentStraighteningResult.value.straightenedImage!]);
+
+      if (documentResult is! Ok<DocumentData>) {
+        print(documentResult.toString());
+        return;
+      }
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DocumentPreview(documentResult.value),
+        ),
+      );
+    });
   }
 }
