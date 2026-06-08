@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide AspectRatio;
 import 'package:scanbot_sdk/scanbot_sdk.dart';
-import 'package:scanbot_sdk_example_flutter/ui/preview/document_preview.dart';
+import 'package:scanbot_sdk_example_flutter/ui/preview/image_preview.dart';
 
 import '../ui/menu_item_widget.dart';
 import '../utility/utils.dart';
@@ -93,18 +93,17 @@ class DocumentSdkMenu extends StatelessWidget {
         return;
       }
 
-      final documentResult = await ScanbotSdk.document
-          .createDocumentFromImageRefs(
-              images: [documentStraighteningResult.value.straightenedImage!]);
+      final encodedImage =
+          documentStraighteningResult.value.straightenedImage?.encodeImage();
 
-      if (documentResult is! Ok<DocumentData>) {
-        print(documentResult.toString());
+      if (encodedImage == null) {
+        print("Straightened image is null");
         return;
       }
 
       await Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => DocumentPreview(documentResult.value),
+          builder: (context) => ImagePreview(imageBytes: encodedImage),
         ),
       );
     });
