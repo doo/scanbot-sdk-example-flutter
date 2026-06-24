@@ -4,6 +4,11 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0] as int
+if (agpMajor < 9) {
+   apply plugin: 'kotlin-android'
+}
+
 android {
     namespace = "com.example.scanbot_sdk_example_flutter"
     compileSdk = 36
