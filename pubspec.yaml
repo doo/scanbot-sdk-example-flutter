@@ -29,7 +29,7 @@ dependencies:
   logging: ^1.1.1
   shared_preferences: ^2.5.3
   path_provider: ^2.1.5
-  file_picker: ^10.1.2
+  file_picker: ^11.0.2
   share_plus: ^12.0.1
 
 dev_dependencies:
