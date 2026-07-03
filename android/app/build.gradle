@@ -42,7 +42,7 @@ kotlin {
 }
 
 dependencies {
-    implementation("io.scanbot:sdk-ocr-tesseract:9.0.0.1199-SNAPSHOT")
+    implementation("io.scanbot:sdk-ocr-tesseract:9.0.0")
 }
 
 flutter {
