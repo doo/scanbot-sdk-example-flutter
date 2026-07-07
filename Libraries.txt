@@ -132,7 +132,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ------------------------------------------------------------------------------------------------------------------------
 
-Open Source libraries used in the Scanbot SDK for Android version 9.0.0
+Open Source libraries used in the Scanbot SDK for Android version 9.0.1
 
 CWAC-Camera
 
@@ -3617,7 +3617,7 @@ Version 1.1.0
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Open Source libraries used in ScanbotSDK for iOS version 9.0.0:
+Open Source libraries used in ScanbotSDK for iOS version 9.0.1:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
