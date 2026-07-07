@@ -1,7 +1,7 @@
-Open Source libraries used in the Scanbot SDK Flutter Plugin version 8.0.0:
+Open Source libraries used in the Scanbot SDK Flutter Plugin version 9.0.0:
 
 //-------------------------------------------------------------
-collection 1.19.1
+collection 1.19.0
 
 Copyright 2015, the Dart project authors. 
 
@@ -67,7 +67,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-------------------------------------------------------------
 lints
 
-version 6.0.0
+version 5.1.1
 
 Copyright 2021, the Dart project authors.
 
@@ -100,7 +100,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //-------------------------------------------------------------
 ffi
 
-version 2.1.4
+version 2.1.3
 
 Copyright 2019, the Dart project authors. 
 
@@ -132,7 +132,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ------------------------------------------------------------------------------------------------------------------------
 
-Open Source libraries used in the Scanbot SDK for Android version 8.0.1
+Open Source libraries used in the Scanbot SDK for Android version 9.0.1
 
 CWAC-Camera
 
@@ -2105,12 +2105,12 @@ defined by AIM ITS/04-023 International Technical Standard - Extended Channel In
 
 magic-enum
 
-Version v0.8.1
+Version v0.9.7
 (https://github.com/Neargye/magic_enum)
 
 MIT License
 
-Copyright (c) 2019 - 2022 Daniil Goncharov
+Copyright (c) 2019 - 2024 Daniil Goncharov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -3617,7 +3617,7 @@ Version 1.1.0
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-Open Source libraries used in ScanbotSDK for iOS version 8.0.4:
+Open Source libraries used in ScanbotSDK for iOS version 9.0.1:
 
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
@@ -5403,12 +5403,12 @@ defined by AIM ITS/04-023 International Technical Standard - Extended Channel In
 
 magic-enum
 
-Version v0.8.1
+Version v0.9.7
 (https://github.com/Neargye/magic_enum)
 
 MIT License
 
-Copyright (c) 2019 - 2022 Daniil Goncharov
+Copyright (c) 2019 - 2024 Daniil Goncharov
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
