@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart' as sdk;
+import 'package:device_info_plus/device_info_plus.dart';
 
 import '../storage/_legacy_pages_repository.dart';
 import '../ui/pages_widget.dart';
@@ -39,6 +40,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   late DocumentSnapTrigger generalSnapTrigger;
   final LegacyPageRepository _pageRepository = LegacyPageRepository();
 
+  late final Future<bool> _isIphone16FamilyFuture;
+
   /// Adds scanned pages to the repository and navigates to the preview screen.
   void showPageResult(List<sdk.Page> pages) {
     _pageRepository.addPages(pages);
@@ -63,23 +66,31 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   void initState() {
     checkPermission();
     super.initState();
+    _isIphone16FamilyFuture = isIphone16Or16Pro();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: Container(
-        color: Colors.black,
-        child: Stack(
-          children: <Widget>[
-            _buildCameraView(),
-            _buildDetectionStatusStream(),
-            _buildScannedPagePreview(),
-            if (showProgressBar) _buildProgressIndicator(),
-          ],
-        ),
-      ),
+    return FutureBuilder<bool>(
+      future: _isIphone16FamilyFuture,
+      builder: (context, snapshot) {
+        final isIphone16Family = snapshot.data ?? false;
+
+        return Scaffold(
+          appBar: _buildAppBar(),
+          body: Container(
+            color: Colors.black,
+            child: Stack(
+              children: <Widget>[
+                _buildCameraView(isIphone16Family),
+                _buildDetectionStatusStream(),
+                _buildScannedPagePreview(),
+                if (showProgressBar) _buildProgressIndicator(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -145,7 +156,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   }
 
   /// Builds the view for the camera, handling different states.
-  Widget _buildCameraView() {
+  Widget _buildCameraView(bool isIphone16Family) {
     if (!licenseIsActive) {
       return _buildErrorMessage('License is no longer active');
     }
@@ -172,7 +183,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
           documentContourListener: (result) {
             detectionStatusStream.add(result.detectionStatus);
           },
-          configuration: _buildDocumentCameraConfiguration(),
+          configuration:
+              _buildDocumentCameraConfiguration(isIphone16Family),
           onCameraPreviewStarted: (snapTrigger, isFlashAvailable) {
             if (mounted) {
               setState(() {
@@ -210,8 +222,26 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
     );
   }
 
+  Future<bool> isIphone16Or16Pro() async {
+    if (!Platform.isIOS) {
+      return false;
+    }
+
+    final iosInfo = await DeviceInfoPlugin().iosInfo;
+    final modelName = iosInfo.utsname.machine.toLowerCase();
+
+    const iphone16FamilyModels = {
+      'iphone17,1', // iPhone 16 Pro
+      'iphone17,2', // iPhone 16 Pro Max
+    };
+
+    return iphone16FamilyModels.contains(modelName);
+  }
+
   /// Builds the DocumentCameraConfiguration.
-  DocumentCameraConfiguration _buildDocumentCameraConfiguration() {
+  DocumentCameraConfiguration _buildDocumentCameraConfiguration(
+    bool isIphone16Family,
+  ) {
     var documentClassicScannerConfiguration =
         DocumentClassicScannerConfiguration(
       autoSnapEnabled: autoSnappingEnabled,
@@ -219,6 +249,26 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       detectDocumentAfterSnap: false,
       autoSnapSensitivity: 0.5,
     );
+
+    if (isIphone16Family) {
+      return DocumentCameraConfiguration(
+        flashEnabled: flashEnabled,
+        cameraZoomFactor: 0.02,
+        scannerConfiguration: documentClassicScannerConfiguration,
+        contourConfiguration: ContourConfiguration(
+          showPolygonInManualMode: false,
+          strokeOkColor: Colors.red,
+          fillOkColor: Colors.red.withAlpha(150),
+          strokeColor: Colors.blue,
+          fillColor: Colors.blue.withAlpha(150),
+          cornerRadius: 35,
+          strokeWidth: 10,
+          autoSnapProgressStrokeColor: Colors.greenAccent,
+          autoSnapProgressEnabled: true,
+          autoSnapProgressStrokeWidth: 5,
+        ),
+      );
+    }
 
     return DocumentCameraConfiguration(
       flashEnabled: flashEnabled,
@@ -253,8 +303,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             child: Wrap(
               children: [
                 DetectionStatusWidget(
-                  status:
-                      snapshot.data ?? DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
+                  status: snapshot.data ??
+                      DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
                 ),
               ],
             ),
