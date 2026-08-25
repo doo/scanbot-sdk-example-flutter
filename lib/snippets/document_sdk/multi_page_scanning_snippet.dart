@@ -11,8 +11,8 @@ DocumentScanningFlow multiPageScanningFlow() {
   configuration.screens.camera.cameraConfiguration.autoSnappingEnabled = true;
 
   // Hide/Reveal the auto snapping enable/disable button
-  configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = true;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
+  configuration.screens.camera.toolBar.autoSnappingModeButton.visible = true;
+  configuration.screens.camera.toolBar.manualSnappingModeButton.visible =
       true;
 
   // Set colors
@@ -31,14 +31,13 @@ DocumentScanningFlow multiPageScanningFlow() {
   configuration.screens.review.enabled = true;
 
   // Configure bottom bar (further properties like title, icon and  background can also be set for these buttons)
-  configuration.screens.review.bottomBar.addButton.visible = true;
-  configuration.screens.review.bottomBar.retakeButton.visible = true;
-  configuration.screens.review.bottomBar.cropButton.visible = true;
-  configuration.screens.review.bottomBar.rotateButton.visible = true;
-  configuration.screens.review.bottomBar.deleteButton.visible = true;
+  configuration.screens.review.toolBar.addButton.barButton.visible = true;
+  configuration.screens.review.toolBar.retakeButton.barButton.visible = true;
+  configuration.screens.review.toolBar.cropButton.barButton.visible = true;
+  configuration.screens.review.toolBar.rotateButton.barButton.visible = true;
+  configuration.screens.review.toolBar.deleteButton.barButton.visible = true;
 
   // Configure `more` popup on review screen
-  configuration.screens.review.morePopup.reorderPages.icon.visible = true;
   configuration.screens.review.morePopup.deleteAll.icon.visible = true;
   configuration.screens.review.morePopup.deleteAll.title.text =
       'Delete all pages';
@@ -49,9 +48,9 @@ DocumentScanningFlow multiPageScanningFlow() {
 
   // Configure cropping screen
   configuration.screens.cropping.topBarTitle.text = 'Cropping Screen';
-  configuration.screens.cropping.bottomBar.resetButton.visible = true;
-  configuration.screens.cropping.bottomBar.rotateButton.visible = true;
-  configuration.screens.cropping.bottomBar.detectButton.visible = true;
+  configuration.screens.cropping.toolBar.resetButton.visible = true;
+  configuration.screens.cropping.toolBar.rotateButton.visible = true;
+  configuration.screens.cropping.toolBar.detectButton.visible = true;
 
   return configuration;
 }

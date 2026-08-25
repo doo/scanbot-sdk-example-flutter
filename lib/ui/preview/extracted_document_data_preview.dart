@@ -82,8 +82,8 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
           );
           addField(
             'Nationality',
-            mrz.nationality.value?.text,
-            mrz.nationality.value?.confidence,
+            mrz.nationality?.value?.text,
+            mrz.nationality?.value?.confidence,
           );
           addField(
             'Pin',

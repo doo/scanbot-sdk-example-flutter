@@ -7,7 +7,7 @@ Future<void> analytics() async {
    * any analytics event triggered in the RTU UI flows
    */
 
-  ScanbotSdk.setAnalyticsSubscriber((analyticsEvent) {
+  await ScanbotSdk.setAnalyticsSubscriber((analyticsEvent) {
     Logger.root.log(Level.INFO, analyticsEvent.name);
   });
 }

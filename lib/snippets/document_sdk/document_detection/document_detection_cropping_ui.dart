@@ -20,12 +20,12 @@ Future<void> startDocumentDetectionWithCroppingScreen(
   if (documentResult is Ok<DocumentData>) {
     var document = documentResult.value;
     /** Create a new configuration with the document and the document's first page. */
-    var configuration = CroppingConfiguration(
+    var configuration = CroppingStandaloneConfiguration(
       documentUuid: document.uuid,
       pageUuid: document.pages[0].uuid,
     );
     /* Customize the configuration. */
-    configuration.cropping.bottomBar.rotateButton.visible = false;
+    configuration.cropping.toolBar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
     configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
       '#ffffff',

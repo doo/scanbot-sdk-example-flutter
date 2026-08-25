@@ -15,7 +15,7 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
     ..backgroundColor = ScanbotColor("#EFEFEF")
     // You can also configure the buttons in the bottom bar of the acknowledgment screen.
     // E.g., to force the user to retake, if the captured document is not OK.
-    ..bottomBar.proceedAnywayButton.visible = false
+    ..toolBar.proceedAnywayButton.visible = false
     // Hide the titles of the buttons.
     ..documentNotFoundWarning.title.visible = false
     ..unacceptableQualityWarning.title.visible = false

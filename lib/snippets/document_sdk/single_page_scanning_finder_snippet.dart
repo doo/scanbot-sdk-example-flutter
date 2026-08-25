@@ -18,8 +18,8 @@ DocumentScanningFlow singlePageWithFinderScanningFlow() {
   configuration.screens.camera.cameraConfiguration.autoSnappingEnabled = true;
 
   // Hide the auto snapping enable/disable button
-  configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
+  configuration.screens.camera.toolBar.autoSnappingModeButton.visible = false;
+  configuration.screens.camera.toolBar.manualSnappingModeButton.visible =
       false;
 
   // Set colors
