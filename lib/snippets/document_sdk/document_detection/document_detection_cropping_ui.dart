@@ -25,7 +25,7 @@ Future<void> startDocumentDetectionWithCroppingScreen(
       pageUuid: document.pages[0].uuid,
     );
     /* Customize the configuration. */
-    configuration.cropping.toolBar.rotateButton.visible = false;
+    configuration.cropping.toolbar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
     configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
       '#ffffff',

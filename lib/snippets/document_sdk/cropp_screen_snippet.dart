@@ -7,7 +7,7 @@ void startCropping() async {
   // Retrieve the instance of the crop configuration from the main configuration object.
   var cropScreenConfiguration = configuration.screens.cropping;
   // Disable the rotation feature.
-  cropScreenConfiguration.toolBar.rotateButton.visible = false;
+  cropScreenConfiguration.toolbar.rotateButton.visible = false;
   // Configure various colors.
   configuration.appearance.topBarBackgroundColor = ScanbotColor('#C8193C');
   cropScreenConfiguration.topBarConfirmButton.foreground.color = ScanbotColor(

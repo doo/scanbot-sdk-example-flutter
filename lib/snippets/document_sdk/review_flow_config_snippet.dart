@@ -9,9 +9,9 @@ DocumentScanningFlow createDocumentScanningFlowConfiguration() {
   reviewScreen
     ..enabled = true
     ..zoomButton.visible = false
-    ..toolBar.addButton.barButton.visible = false
-    ..toolBar.retakeButton.barButton.visible = true
-    ..toolBar.retakeButton.barButton.title.color = ScanbotColor("000000");
+    ..toolbar.addButton.barButton.visible = false
+    ..toolbar.retakeButton.barButton.visible = true
+    ..toolbar.retakeButton.barButton.title.color = ScanbotColor("000000");
 
   // Configure the reorder pages screen.
   var reorderPagesScreen = configuration.screens.reorderPages;
@@ -20,7 +20,7 @@ DocumentScanningFlow createDocumentScanningFlowConfiguration() {
     ..topBarTitle.text = "Reorder Pages Screen";
 
   // Configure the cropping screen.
-  configuration.screens.cropping.toolBar.resetButton.visible = false;
+  configuration.screens.cropping.toolbar.resetButton.visible = false;
 
   return configuration;
 }

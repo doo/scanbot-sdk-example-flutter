@@ -24,12 +24,12 @@ DocumentScanningFlow singlePageScanningFlow() {
       PageSnapCheckMarkAnimation();
 
   // Hide the auto snapping enable/disable button
-  configuration.screens.camera.toolBar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.toolBar.manualSnappingModeButton.visible =
+  configuration.screens.camera.toolbar.autoSnappingModeButton.visible = false;
+  configuration.screens.camera.toolbar.manualSnappingModeButton.visible =
       false;
-  configuration.screens.camera.toolBar.importButton.title.visible = true;
-  configuration.screens.camera.toolBar.torchOnButton.title.visible = true;
-  configuration.screens.camera.toolBar.torchOffButton.title.visible = true;
+  configuration.screens.camera.toolbar.importButton.title.visible = true;
+  configuration.screens.camera.toolbar.torchOnButton.title.visible = true;
+  configuration.screens.camera.toolbar.torchOffButton.title.visible = true;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");

@@ -204,7 +204,7 @@ class _PageOperationsState extends State<PageOperations> {
     );
 
     /* Customize the configuration. */
-    configuration.cropping.toolBar.rotateButton.visible = false;
+    configuration.cropping.toolbar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor("#C8193C");
     configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
       '#ffffff',

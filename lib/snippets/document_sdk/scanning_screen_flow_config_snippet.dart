@@ -15,7 +15,7 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
 
   // MARK: Configure the bottom bar and the bottom bar buttons.
   // Set the background color of the bottom bar.
-  configuration.appearance.toolBarBackgroundColor = ScanbotColor("#C8193C");
+  configuration.appearance.toolbarBackgroundColor = ScanbotColor("#C8193C");
 
   // Retrieve the camera screen configuration.
   configuration.screens.camera
@@ -47,19 +47,19 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
     ..userGuidance.statesTitles.captureManual =
         "The document is ready to be captured"
     // Import button is used to import an image from the gallery.
-    ..toolBar.importButton.visible = true
-    ..toolBar.importButton.title.visible = true
-    ..toolBar.importButton.title.text = "Import"
+    ..toolbar.importButton.visible = true
+    ..toolbar.importButton.title.visible = true
+    ..toolbar.importButton.title.text = "Import"
     // Configure the auto/manual snap button.
-    ..toolBar.autoSnappingModeButton.title.visible = true
-    ..toolBar.autoSnappingModeButton.title.text = "Auto"
-    ..toolBar.manualSnappingModeButton.title.visible = true
-    ..toolBar.manualSnappingModeButton.title.text = "Manual"
+    ..toolbar.autoSnappingModeButton.title.visible = true
+    ..toolbar.autoSnappingModeButton.title.text = "Auto"
+    ..toolbar.manualSnappingModeButton.title.visible = true
+    ..toolbar.manualSnappingModeButton.title.text = "Manual"
     // Configure the torch off/on button.
-    ..toolBar.torchOnButton.title.visible = true
-    ..toolBar.torchOnButton.title.text = "On"
-    ..toolBar.torchOffButton.title.visible = true
-    ..toolBar.torchOffButton.title.text = "Off"
+    ..toolbar.torchOnButton.title.visible = true
+    ..toolbar.torchOnButton.title.text = "On"
+    ..toolbar.torchOffButton.title.visible = true
+    ..toolbar.torchOffButton.title.text = "Off"
     // MARK: Configure the document capture feedback.
     // Configure the camera blink behavior when an image is captured.
     ..captureFeedback.cameraBlinkEnabled = true
