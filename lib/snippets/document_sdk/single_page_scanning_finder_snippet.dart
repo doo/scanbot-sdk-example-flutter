@@ -19,8 +19,7 @@ DocumentScanningFlow singlePageWithFinderScanningFlow() {
 
   // Hide the auto snapping enable/disable button
   configuration.screens.camera.toolbar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.toolbar.manualSnappingModeButton.visible =
-      false;
+  configuration.screens.camera.toolbar.manualSnappingModeButton.visible = false;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");

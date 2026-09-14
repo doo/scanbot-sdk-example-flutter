@@ -12,8 +12,7 @@ DocumentScanningFlow multiPageScanningFlow() {
 
   // Hide/Reveal the auto snapping enable/disable button
   configuration.screens.camera.toolbar.autoSnappingModeButton.visible = true;
-  configuration.screens.camera.toolbar.manualSnappingModeButton.visible =
-      true;
+  configuration.screens.camera.toolbar.manualSnappingModeButton.visible = true;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");
