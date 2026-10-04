@@ -9,10 +9,10 @@ class MrzDocumentResultPreview extends StatelessWidget {
   final MrzScannerResult? scannerResult;
 
   const MrzDocumentResultPreview({super.key, this.uiResult, this.scannerResult})
-      : assert(
-          uiResult != null || scannerResult != null,
-          'At least one result must be provided',
-        );
+    : assert(
+        uiResult != null || scannerResult != null,
+        'At least one result must be provided',
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class MrzDocumentResultPreview extends StatelessWidget {
 
     if (document == null) {
       return Scaffold(
-        appBar: ScanbotAppBar(
+        appBar: scanbotAppBar(
           'MRZ Document Preview',
           showBackButton: true,
           context: context,
@@ -52,7 +52,7 @@ class MrzDocumentResultPreview extends StatelessWidget {
     addField('Expiry Date', mrz.expiryDate?.value?.text);
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'MRZ Document Preview',
         showBackButton: true,
         context: context,

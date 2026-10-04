@@ -49,13 +49,14 @@ You can get the IDs of all connected devices via `Flutter devices`.
 
 #### iOS:
 
-Install Pods dependencies:
+The iOS project uses Swift Package Manager (no CocoaPods). Fetch the Flutter dependencies and run the app:
 
 ```
-cd ios && rm -f Podfile.lock && rm -rf Pods/ && pod install --repo-update && cd ..
+flutter pub get
+flutter run -d <DEVICE_ID>
 ```
 
-Open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. Then build and run the app in Xcode.
+Alternatively, open the **workspace**(!) `ios/Runner.xcworkspace` in Xcode and adjust the *Signing / Developer Account* settings. Then build and run the app in Xcode.
 
 **Note**: please make sure that you configured the camera access accordingly.
 

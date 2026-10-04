@@ -10,6 +10,6 @@ Future<void> documentQualityAnalyzer(String imageFilePath) async {
   if (result is Ok<DocumentQualityAnalyzerResult>) {
     /** Handle the DQA Result */
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

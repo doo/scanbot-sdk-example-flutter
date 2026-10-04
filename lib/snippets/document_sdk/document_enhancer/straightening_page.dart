@@ -1,13 +1,9 @@
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-Future<void> straightenDocument(
-  String pageUuid,
-  String documentUuid,
-) async {
+Future<void> straightenDocument(String pageUuid, String documentUuid) async {
   final straighteningParameters = DocumentStraighteningParameters()
     // Configure the straightening mode as needed
     ..straighteningMode = DocumentStraighteningMode.STRAIGHTEN
-
     // The straightening parameters can be customized to fit the expected aspect ratio of the document to be straightened.
     // This can help the straightening algorithm to achieve better results.
     ..aspectRatios = [
@@ -30,8 +26,8 @@ Future<void> straightenDocument(
     final modifiedPage = documentResult.value.pages
         .where((page) => page.uuid == pageUuid)
         .firstOrNull;
-    print(modifiedPage);
+    // Display the straightened page to the user.
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

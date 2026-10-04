@@ -1,4 +1,3 @@
-// ignore_for_file: unused_local_variable
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 

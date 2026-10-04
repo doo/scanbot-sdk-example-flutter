@@ -14,12 +14,14 @@ DocumentScannerCamera buildDocumentScannerCamera() {
         showPolygonInManualMode: false, // Hide contour polygon in manual mode
         strokeOkColor:
             Colors.red, // Color for contour strokes when detection is OK
-        fillOkColor: Colors.red
-            .withAlpha(150), // Fill color for contours when detection is OK
+        fillOkColor: Colors.red.withAlpha(
+          150,
+        ), // Fill color for contours when detection is OK
         strokeColor: Colors
             .blue, // Color for contour strokes when detection is in progress
         fillColor: Colors.blue.withAlpha(
-            150), // Fill color for contours when detection is in progress
+          150,
+        ), // Fill color for contours when detection is in progress
         cornerRadius: 35, // Radius for contour corners
         strokeWidth: 10, // Width of contour strokes
         autoSnapProgressStrokeColor:
@@ -29,13 +31,14 @@ DocumentScannerCamera buildDocumentScannerCamera() {
             5, // Width of the auto-snap progress stroke
       ),
     ),
-    onSnappedDocumentResult: (
-      ImageRef originalImage,
-      ImageRef? documentImage,
-      DocumentDetectionResult? detectionResult,
-    ) async {
-      // Handle the original image and, if detectDocumentAfterSnap is enabled, the cropped image of the detected document along with the document detection result.
-    },
+    onSnappedDocumentResult:
+        (
+          ImageRef originalImage,
+          ImageRef? documentImage,
+          DocumentDetectionResult? detectionResult,
+        ) async {
+          // Handle the original image and, if detectDocumentAfterSnap is enabled, the cropped image of the detected document along with the document detection result.
+        },
     onError: (error) {
       // Handle errors such as licensing issues or camera errors
     },

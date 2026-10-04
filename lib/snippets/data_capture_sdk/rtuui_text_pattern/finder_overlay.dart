@@ -23,14 +23,15 @@ Future<void> startScanning() async {
   );
 
   /** Start the Text Pattern Scanner **/
-  final textPatternResult =
-      await ScanbotSdk.textPattern.startScanner(configuration);
+  final textPatternResult = await ScanbotSdk.textPattern.startScanner(
+    configuration,
+  );
 
   if (textPatternResult is Ok<TextPatternScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = textPatternResult.value;
-    print(scannerUiResult.toString());
+    // Use the recognized text, e.g. display it or fill in a form field.
   } else {
-    print(textPatternResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

@@ -12,7 +12,7 @@ import '../ui/progress_dialog.dart';
 import '../utility/utils.dart';
 
 class DataCaptureUseCases extends StatelessWidget {
-  const DataCaptureUseCases({Key? key}) : super(key: key);
+  const DataCaptureUseCases({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -446,10 +446,12 @@ class DataCaptureUseCases extends StatelessWidget {
   Future<void> startCreditCardScanner(BuildContext context) async {
     var configuration = CreditCardScannerScreenConfiguration();
     // Configure the top bar mode
-    configuration.topBar.mode = TopBarMode.GRADIENT;
+    configuration.topBar.mode = TopBarMode.SOLID;
+    // Configure the top bar background color
+    configuration.topBar.backgroundColor = ScanbotColor('#C8193C');
     // Configure the top bar status bar mode
     configuration.topBar.statusBarMode = StatusBarMode.LIGHT;
-    // Configure the top bar background color
+    // Configure the cancel button
     configuration.topBar.cancelButton.text = 'Cancel';
     // Configure parameters as needed.
 

@@ -8,7 +8,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 class PageWidget extends StatelessWidget {
   final String path;
 
-  PageWidget(this.path);
+  const PageWidget(this.path, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class PageWidget extends StatelessWidget {
 class EncryptedPageWidget extends StatelessWidget {
   final String path;
 
-  EncryptedPageWidget(this.path);
+  const EncryptedPageWidget(this.path, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,27 +38,27 @@ class EncryptedPageWidget extends StatelessWidget {
         future: imageDataFuture,
         builder:
             (BuildContext context, AsyncSnapshot<Result<String>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: SizedBox(
-                width: 100,
-                height: 100,
-                child: CircularProgressIndicator(strokeWidth: 10),
-              ),
-            );
-          }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: CircularProgressIndicator(strokeWidth: 10),
+                  ),
+                );
+              }
 
-          var result = snapshot.data;
-          if (result is Ok<String>) {
-            Uint8List bytes = base64Decode(
-              result.value.replaceAll(RegExp(r'\s+'), ''),
-            );
-            final image = Image.memory(bytes);
-            return Center(child: image);
-          } else {
-            return Container();
-          }
-        },
+              var result = snapshot.data;
+              if (result is Ok<String>) {
+                Uint8List bytes = base64Decode(
+                  result.value.replaceAll(RegExp(r'\s+'), ''),
+                );
+                final image = Image.memory(bytes);
+                return Center(child: image);
+              } else {
+                return Container();
+              }
+            },
       ),
     );
   }

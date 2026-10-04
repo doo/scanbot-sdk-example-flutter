@@ -9,10 +9,10 @@ class VinScannerResultPreview extends StatelessWidget {
   final VinScannerResult? scanningResult;
 
   const VinScannerResultPreview({super.key, this.uiResult, this.scanningResult})
-      : assert(
-          uiResult != null || scanningResult != null,
-          'At least one result must be provided',
-        );
+    : assert(
+        uiResult != null || scanningResult != null,
+        'At least one result must be provided',
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +59,14 @@ class VinScannerResultPreview extends StatelessWidget {
     addField('Barcode Extraction Status', barcodeResult.status.name);
 
     if (barcodeResult.rectangle.isNotEmpty) {
-      final rectText =
-          barcodeResult.rectangle.map((p) => '(${p.x}, ${p.y})').join(', ');
+      final rectText = barcodeResult.rectangle
+          .map((p) => '(${p.x}, ${p.y})')
+          .join(', ');
       addField('Barcode Rectangle', rectText);
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'VIN Scanner Result',
         showBackButton: true,
         context: context,

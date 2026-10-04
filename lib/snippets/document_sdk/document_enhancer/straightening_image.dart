@@ -9,7 +9,6 @@ Future<void> straightenImage() async {
     final straighteningParameters = DocumentStraighteningParameters()
       // Configure the straightening mode as needed
       ..straighteningMode = DocumentStraighteningMode.STRAIGHTEN
-
       // The straightening parameters can be customized to fit the expected aspect ratio of the document to be straightened.
       // This can help the straightening algorithm to achieve better results.
       ..aspectRatios = [
@@ -28,7 +27,7 @@ Future<void> straightenImage() async {
       // Handle the document straightening result
       final encodedImage = result.value.straightenedImage?.encodeImage();
     } else {
-      print(result.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   });
 }

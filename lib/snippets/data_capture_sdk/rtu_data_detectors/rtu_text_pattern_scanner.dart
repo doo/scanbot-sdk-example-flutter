@@ -16,7 +16,7 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
   }
 
   Future<void> _startTextPatternScanner(BuildContext context) async {
-    // Always make sure you have a valid license on runtime via ScanbotSdk.getLicenseStatus()
+    // Always make sure you have a valid license on runtime via ScanbotSdk.getLicenseInfo()
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
@@ -46,7 +46,8 @@ class RtuTextPatternScannerFeature extends StatelessWidget {
       case Error():
         await showAlertDialog(context, title: "Error", result.error.message);
       case Cancel():
-        print("Operation was canceled");
+        // The user canceled the scanner, no further action is needed.
+        break;
     }
   }
 }

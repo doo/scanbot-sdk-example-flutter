@@ -2,12 +2,12 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> createDocument() async {
   /** Create a document with a UUID */
-  var documentResult =
-      await ScanbotSdk.document.createDocumentFromImageFileUris();
+  var documentResult = await ScanbotSdk.document
+      .createDocumentFromImageFileUris();
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 
@@ -21,7 +21,7 @@ Future<void> createDocumentWithPages(List<String> imageFileUris) async {
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 
@@ -31,7 +31,7 @@ Future<void> loadDocument(String documentID) async {
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 
@@ -41,7 +41,7 @@ Future<void> getStoredDocumentUuids() async {
   if (documentIdsResult is Ok<List<String>>) {
     /** Handle the document IDs */
   } else {
-    print(documentIdsResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 
@@ -59,10 +59,10 @@ Future<void> reorderDocumentPages(String documentID) async {
     if (documentWithReorderedPageResult is Ok<DocumentData>) {
       /** Handle the document */
     } else {
-      print(documentWithReorderedPageResult.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 
@@ -74,7 +74,7 @@ Future<void> removeAllPagesFromDocument(String documentID) async {
   if (documentWithRemovedPagesResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {
-    print(documentWithRemovedPagesResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 

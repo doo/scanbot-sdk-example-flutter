@@ -9,9 +9,8 @@ Future<void> extractImagesFromPDF(String pdfFileUri) async {
     pdfFileUri,
   );
   if (imagesResult is Ok<List<String>>) {
-    print(imagesResult.value);
-    /** Handle the images */
+    /** Handle the images, e.g. display them or create a document from them */
   } else {
-    print(imagesResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

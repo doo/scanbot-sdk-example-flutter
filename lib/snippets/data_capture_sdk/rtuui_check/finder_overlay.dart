@@ -17,8 +17,8 @@ Future<void> startScanning() async {
   if (result is Ok<CheckScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
-    print(scannerUiResult.toString());
+    // Display the extracted check data, e.g. account and routing numbers.
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

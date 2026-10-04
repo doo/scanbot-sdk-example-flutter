@@ -26,8 +26,8 @@ Future<void> startScanning() async {
   if (result is Ok<MrzScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
-    print(scannerUiResult.toString());
+    // Display the parsed MRZ fields, e.g. document number and birth date.
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }
