@@ -15,6 +15,6 @@ Future<void> createDocumentTIFF() async {
       /** Handle the document */
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

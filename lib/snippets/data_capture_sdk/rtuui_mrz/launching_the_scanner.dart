@@ -8,15 +8,11 @@ Future<void> startScanning() async {
   if (result is Ok<MrzScannerUiResult>) {
     // Cast the resulted generic document to the MRZ model.
     var mrzModel = MRZ(result.value.mrzDocument!);
-    // Retrieve the values.
-    // e.g
-    print(
-      'Birth date: ${mrzModel.birthDate.value?.text}, Confidence: ${mrzModel.birthDate.value?.confidence}',
-    );
-    print(
-      'Nationality: ${mrzModel.nationality?.value?.text}, Confidence: ${mrzModel.nationality?.value?.confidence}',
-    );
+    // Retrieve the values, e.g. to fill in a form.
+    // Each field also provides a `confidence` value.
+    var birthDate = mrzModel.birthDate.value?.text;
+    var nationality = mrzModel.nationality?.value?.text;
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

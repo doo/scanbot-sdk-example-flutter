@@ -12,7 +12,7 @@ import 'document/document_sdk_menu.dart';
 
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 // TODO add the Scanbot SDK license key here.
 // Please note: The Scanbot SDK will run without a license key for one minute per session!
@@ -20,13 +20,13 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY = "";
+const scanbotSdkLicenseKey = "";
 
 Future<void> _initScanbotSdk() async {
   var config = SdkConfiguration(
     loggingEnabled: true,
     // Consider disabling logging in production builds for security and performance reasons
-    licenseKey: SCANBOT_SDK_LICENSE_KEY,
+    licenseKey: scanbotSdkLicenseKey,
     // Uncomment to use the custom storage directory
     // storageBaseDirectory: await getDemoStorageBaseDirectory(),
   );
@@ -49,14 +49,19 @@ Future<String> getDemoStorageBaseDirectory() async {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() {
-    _initScanbotSdk();
-    return _MyAppState();
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    _initScanbotSdk();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -67,15 +72,17 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MainPageWidget extends StatefulWidget {
+  const MainPageWidget({super.key});
+
   @override
-  _MainPageWidgetState createState() => _MainPageWidgetState();
+  State<MainPageWidget> createState() => _MainPageWidgetState();
 }
 
 class _MainPageWidgetState extends State<MainPageWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Scanbot SDK Flutter Example'),
+      appBar: scanbotAppBar('Scanbot SDK Flutter Example'),
       body: ListView(
         children: [
           const TitleItemWidget(title: 'Document SDK API'),
@@ -162,7 +169,8 @@ class _MainPageWidgetState extends State<MainPageWidget> {
   Future<void> _getLicenseStatus() async {
     final result = await ScanbotSdk.getLicenseInfo();
     if (result is Ok<LicenseInfo>) {
-      var licenseInfo = "Status: ${result.value.licenseStatusMessage}\n"
+      var licenseInfo =
+          "Status: ${result.value.licenseStatusMessage}\n"
           "Expiration Date: ${result.value.expirationDateString}";
 
       await showAlertDialog(context, licenseInfo, title: 'License Status');

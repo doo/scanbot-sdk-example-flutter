@@ -38,11 +38,11 @@ Future<void> startDocumentDetectionWithCroppingScreen(
     /** Handle the document if the result is 'Ok' */
     if (documentCroppingResult is Ok<DocumentData>) {
       var documentData = documentCroppingResult.value;
-      print(documentData);
+      // Display the scanned pages, or export the document as PDF/TIFF.
     } else {
-      print(documentCroppingResult.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

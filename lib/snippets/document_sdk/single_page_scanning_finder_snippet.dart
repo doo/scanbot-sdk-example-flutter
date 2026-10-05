@@ -42,7 +42,7 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    print(documentData.toString());
   } else {
     print(documentResult.toString());
   }

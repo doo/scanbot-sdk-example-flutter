@@ -22,8 +22,8 @@ Future<void> startScanning() async {
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;
-    print(documentDataExtractorUiResult.toString());
+    // Display the extracted document fields, e.g. name and birth date.
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

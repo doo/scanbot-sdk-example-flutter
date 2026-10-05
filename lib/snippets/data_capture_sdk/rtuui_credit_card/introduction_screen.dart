@@ -16,8 +16,7 @@ Future<void> startScanning() async {
   introductionConfiguration.image = CreditCardIntroCustomImage(uri: 'imageUri');
   /** Configure the text. **/
   configuration.introScreen.explanation.color = ScanbotColor('#000000');
-  configuration.introScreen.explanation.text =
-      "To quickly and securely input your credit card details, please hold your device over the credit card, so that the camera aligns with the numbers on the front of the card.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your card details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
+  configuration.introScreen.explanation.text = "To quickly and securely input your credit card details, please hold your device over the credit card, so that the camera aligns with the numbers on the front of the card.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your card details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
   /** Configure the done button. E.g., the text or the background color. **/
   configuration.introScreen.doneButton.text = 'Start Scanning';
   configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
@@ -28,8 +27,8 @@ Future<void> startScanning() async {
   if (result is Ok<CreditCardScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
-    print(scannerUiResult.toString());
+    // Display the extracted card data, e.g. card number and expiry date.
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

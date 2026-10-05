@@ -11,10 +11,10 @@ import 'cropping_custom_ui.dart';
 
 /// This screen demonstrates how to integrate the classical barcode scanner component.
 class DocumentScannerWidget extends StatefulWidget {
-  const DocumentScannerWidget({Key? key}) : super(key: key);
+  const DocumentScannerWidget({super.key});
 
   @override
-  _DocumentScannerWidgetState createState() => _DocumentScannerWidgetState();
+  State<DocumentScannerWidget> createState() => _DocumentScannerWidgetState();
 }
 
 class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
@@ -72,7 +72,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   AppBar _buildAppBar() {
     return AppBar(
       iconTheme: const IconThemeData(color: Colors.white),
-      backgroundColor: ScanbotRedColor,
+      backgroundColor: scanbotRedColor,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
@@ -137,13 +137,14 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       children: [
         DocumentScannerCamera(
           controller: controller,
-          onSnappedDocumentResult: (
-            ImageRef originalImage,
-            ImageRef? documentImage,
-            DocumentDetectionResult? detectionResult,
-          ) async {
-            await _startCustomCroppingScreen(originalImage);
-          },
+          onSnappedDocumentResult:
+              (
+                ImageRef originalImage,
+                ImageRef? documentImage,
+                DocumentDetectionResult? detectionResult,
+              ) async {
+                await _startCustomCroppingScreen(originalImage);
+              },
           onError: (error) {
             if (error is InvalidLicenseException) {
               setState(() {
@@ -209,9 +210,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 
     if (documentData != null) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => DocumentPreview(documentData),
-        ),
+        MaterialPageRoute(builder: (context) => DocumentPreview(documentData)),
       );
     }
   }
@@ -220,11 +219,11 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
   DocumentCameraConfiguration _buildDocumentCameraConfiguration() {
     var documentClassicScannerConfiguration =
         DocumentClassicScannerConfiguration(
-      autoSnapEnabled: autoSnappingEnabled,
-      detectDocumentAfterSnap: false,
-      acceptedSizeScore: 75,
-      autoSnapSensitivity: 0.5,
-    );
+          autoSnapEnabled: autoSnappingEnabled,
+          detectDocumentAfterSnap: false,
+          acceptedSizeScore: 75,
+          autoSnapSensitivity: 0.5,
+        );
 
     return DocumentCameraConfiguration(
       flashEnabled: flashEnabled,
@@ -261,7 +260,8 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
             child: Wrap(
               children: [
                 DetectionStatusWidget(
-                  status: snapshot.data ??
+                  status:
+                      snapshot.data ??
                       DocumentDetectionStatus.ERROR_NOTHING_DETECTED,
                 ),
               ],
@@ -299,8 +299,7 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
 class DetectionStatusWidget extends StatelessWidget {
   final DocumentDetectionStatus status;
 
-  const DetectionStatusWidget({Key? key, required this.status})
-      : super(key: key);
+  const DetectionStatusWidget({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {

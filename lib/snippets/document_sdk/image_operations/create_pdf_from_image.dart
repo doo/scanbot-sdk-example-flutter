@@ -10,6 +10,6 @@ Future<void> createPdfFromImages(List<String> imageFileUris) async {
   if (result is Ok<String>) {
     /** Handle the pdf */
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

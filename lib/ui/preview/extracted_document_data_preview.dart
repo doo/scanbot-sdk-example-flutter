@@ -12,9 +12,9 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
     this.uiResult,
     this.scanningResult,
   }) : assert(
-          uiResult != null || scanningResult != null,
-          'At least one result must be provided',
-        );
+         uiResult != null || scanningResult != null,
+         'At least one result must be provided',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -495,7 +495,7 @@ class ExtractedDocumentDataPreview extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'Extracted Documents Data',
         showBackButton: true,
         context: context,

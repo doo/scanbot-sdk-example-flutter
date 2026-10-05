@@ -16,8 +16,7 @@ Future<void> startScanning() async {
   introductionConfiguration.image = MrzIntroCustomImage(uri: 'imageUri');
   /** Configure the text. **/
   configuration.introScreen.explanation.color = ScanbotColor('#000000');
-  configuration.introScreen.explanation.text =
-      "The Machine Readable Zone (MRZ) is a special code on your ID document (such as a passport or ID card) that contains your personal information in a machine-readable format.\n\nTo scan it, simply hold your camera over the document, so that it aligns with the MRZ section. Once scanned, the data will be automatically processed, and you will be directed to the results screen.\n\nPress 'Start Scanning' to begin.";
+  configuration.introScreen.explanation.text = "The Machine Readable Zone (MRZ) is a special code on your ID document (such as a passport or ID card) that contains your personal information in a machine-readable format.\n\nTo scan it, simply hold your camera over the document, so that it aligns with the MRZ section. Once scanned, the data will be automatically processed, and you will be directed to the results screen.\n\nPress 'Start Scanning' to begin.";
   /** Configure the done button. E.g., the text or the background color. **/
   configuration.introScreen.doneButton.text = 'Start Scanning';
   configuration.introScreen.doneButton.background.fillColor = ScanbotColor(
@@ -28,8 +27,8 @@ Future<void> startScanning() async {
   if (result is Ok<MrzScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
-    print(scannerUiResult.toString());
+    // Display the parsed MRZ fields, e.g. document number and birth date.
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

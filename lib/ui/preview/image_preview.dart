@@ -1,19 +1,17 @@
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:scanbot_sdk_example_flutter/utility/utils.dart';
 
 class ImagePreview extends StatelessWidget {
   final Uint8List imageBytes;
 
-  const ImagePreview({
-    super.key,
-    required this.imageBytes,
-  });
+  const ImagePreview({super.key, required this.imageBytes});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Image Preview'),
+      appBar: scanbotAppBar('Image Preview'),
       body: Center(
         child: Image.memory(
           imageBytes,

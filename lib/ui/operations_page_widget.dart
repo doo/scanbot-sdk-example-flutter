@@ -12,10 +12,10 @@ class PageOperations extends StatefulWidget {
   final PageData initialPage;
   final String documentID;
 
-  PageOperations(this.documentID, this.initialPage);
+  const PageOperations(this.documentID, this.initialPage, {super.key});
 
   @override
-  _PageOperationsState createState() => _PageOperationsState();
+  State<PageOperations> createState() => _PageOperationsState();
 }
 
 class _PageOperationsState extends State<PageOperations> {
@@ -37,7 +37,7 @@ class _PageOperationsState extends State<PageOperations> {
         : PageWidget(imageUri);
 
     return Scaffold(
-      appBar: ScanbotAppBar('Page Preview'),
+      appBar: scanbotAppBar('Page Preview'),
       body: Stack(
         children: <Widget>[
           Column(
@@ -61,7 +61,7 @@ class _PageOperationsState extends State<PageOperations> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ScanbotRedColor,
+        color: scanbotRedColor,
         padding: const material.EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -70,6 +70,11 @@ class _PageOperationsState extends State<PageOperations> {
               icon: Icons.crop,
               label: 'Crop',
               onPressed: () => _cropPage(),
+            ),
+            _buildOptionButton(
+              icon: Icons.cleaning_services,
+              label: 'Clean Up',
+              onPressed: () => _cleanupPage(),
             ),
             _buildOptionButton(
               icon: Icons.filter,
@@ -212,6 +217,33 @@ class _PageOperationsState extends State<PageOperations> {
     configuration.localization.croppingTopBarCancelButtonTitle = 'Cancel';
 
     var result = await ScanbotSdk.document.startCroppingScreen(configuration);
+    if (result is Ok<DocumentData>) {
+      setState(() {
+        _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);
+      });
+    } else {
+      print(result.toString());
+    }
+  }
+
+  Future<void> _cleanupPage() async {
+    if (!await checkLicenseStatus(context)) {
+      return;
+    }
+
+    /** Create a new configuration with the document and the selected page. */
+    var configuration = DocumentCleanupStandaloneConfiguration(
+      documentUuid: widget.documentID,
+      pageUuid: _page.uuid,
+    );
+
+    /* Customize the configuration. */
+    configuration.cleanup.topBarBackButton.text = 'Cancel';
+    configuration.cleanup.topBarConfirmButton.text = 'Done';
+
+    var result = await ScanbotSdk.documentEnhancer.startDocumentCleanupScreen(
+      configuration,
+    );
     if (result is Ok<DocumentData>) {
       setState(() {
         _page = result.value.pages.firstWhere((x) => x.uuid == _page.uuid);

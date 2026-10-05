@@ -8,10 +8,10 @@ class CreditCardResultPreview extends StatelessWidget {
   final CreditCardScanningResult? scanningResult;
 
   const CreditCardResultPreview({super.key, this.uiResult, this.scanningResult})
-      : assert(
-          uiResult != null || scanningResult != null,
-          'At least one result must be provided',
-        );
+    : assert(
+        uiResult != null || scanningResult != null,
+        'At least one result must be provided',
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class CreditCardResultPreview extends StatelessWidget {
 
     if (doc == null) {
       return Scaffold(
-        appBar: ScanbotAppBar(
+        appBar: scanbotAppBar(
           'Credit Card Result',
           showBackButton: true,
           context: context,
@@ -75,7 +75,7 @@ class CreditCardResultPreview extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'Credit Card Result',
         showBackButton: true,
         context: context,

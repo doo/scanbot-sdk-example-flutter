@@ -7,12 +7,12 @@ import '../utility/utils.dart';
 import 'document_use_cases.dart';
 
 class DocumentSdkMenu extends StatelessWidget {
-  const DocumentSdkMenu({Key? key}) : super(key: key);
+  const DocumentSdkMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Scanbot Document SDK Menu'),
+      appBar: scanbotAppBar('Scanbot Document SDK Menu'),
       body: ListView(
         children: <Widget>[
           const DocumentUseCasesWidget(),
@@ -82,19 +82,16 @@ class DocumentSdkMenu extends StatelessWidget {
         straighteningMode: DocumentStraighteningMode.STRAIGHTEN,
       );
 
-      final documentStraighteningResult =
-          await ScanbotSdk.documentEnhancer.straightenImageFileUri(
-        selectedImage.path,
-        straighteningParameters,
-      );
+      final documentStraighteningResult = await ScanbotSdk.documentEnhancer
+          .straightenImageFileUri(selectedImage.path, straighteningParameters);
 
       if (documentStraighteningResult is! Ok<DocumentStraighteningResult>) {
         print(documentStraighteningResult.toString());
         return;
       }
 
-      final encodedImage =
-          documentStraighteningResult.value.straightenedImage?.encodeImage();
+      final encodedImage = documentStraighteningResult.value.straightenedImage
+          ?.encodeImage();
 
       if (encodedImage == null) {
         print("Straightened image is null");
