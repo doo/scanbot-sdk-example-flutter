@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -131,13 +130,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
             },
           ),
           MenuItemWidget(
-            title: 'Ocr Configs',
-            startIcon: Icons.settings,
-            onTap: () {
-              _getOcrConfigs();
-            },
-          ),
-          MenuItemWidget(
             title: '3rd-party Libs & Licenses',
             startIcon: Icons.developer_mode,
             onTap: () {
@@ -151,19 +143,6 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       ),
       bottomNavigationBar: buildBottomNavigationBar(context),
     );
-  }
-
-  Future<void> _getOcrConfigs() async {
-    final result = await ScanbotSdk.getOcrConfigs();
-    if (result is Ok<OcrConfigsResult>) {
-      await showAlertDialog(
-        context,
-        jsonEncode(result.value),
-        title: 'OCR Configs',
-      );
-    } else {
-      print(result.toString());
-    }
   }
 
   Future<void> _getLicenseStatus() async {

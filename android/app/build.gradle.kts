@@ -42,10 +42,6 @@ kotlin {
     }
 }
 
-dependencies {
-    implementation("io.scanbot:sdk-ocr-tesseract:10.0.0")
-}
-
 flutter {
     source = "../.."
 }

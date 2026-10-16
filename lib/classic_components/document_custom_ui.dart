@@ -231,9 +231,9 @@ class _DocumentScannerWidgetState extends State<DocumentScannerWidget> {
       contourConfiguration: ContourConfiguration(
         showPolygonInManualMode: false,
         strokeOkColor: Colors.red,
-        fillOkColor: Colors.red.withAlpha(150),
+        fillOkColor: Colors.transparent,
         strokeColor: Colors.blue,
-        fillColor: Colors.blue.withAlpha(150),
+        fillColor: Colors.transparent,
         cornerRadius: 35,
         strokeWidth: 10,
         autoSnapProgressStrokeColor: Colors.greenAccent,

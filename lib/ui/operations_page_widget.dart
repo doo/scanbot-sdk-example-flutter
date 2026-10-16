@@ -118,12 +118,6 @@ class _PageOperationsState extends State<PageOperations> {
           padding: const material.EdgeInsets.all(10.0),
           children: <Widget>[
             FilterButton(
-              text: 'None',
-              onPressed: () => applyParametricFilters([
-                LegacyFilter(filterType: ImageFilterType.NONE.index),
-              ]),
-            ),
-            FilterButton(
               text: 'Color Document Filter',
               onPressed: () => applyParametricFilters([ColorDocumentFilter()]),
             ),
