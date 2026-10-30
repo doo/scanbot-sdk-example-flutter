@@ -45,7 +45,7 @@ class TextPatternScannerUiResultPreview extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'Text Pattern Result',
         showBackButton: true,
         context: context,

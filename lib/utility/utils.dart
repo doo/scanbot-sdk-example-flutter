@@ -13,16 +13,16 @@ final selectedFormatsNotifier = ValueNotifier<Set<BarcodeFormat>>(
   BarcodeFormats.all.toSet(),
 );
 
-const Color ScanbotRedColor = Color(0xFFc8193c);
+const Color scanbotRedColor = Color(0xFFc8193c);
 
-const AppBarTitleTextStyle = TextStyle(
+const appBarTitleTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.w400,
   color: Colors.white,
   fontFamily: 'Roboto',
 );
 
-AppBar ScanbotAppBar(
+AppBar scanbotAppBar(
   String title, {
   bool showBackButton = false,
   BuildContext? context,
@@ -31,14 +31,14 @@ AppBar ScanbotAppBar(
 }) {
   return AppBar(
     iconTheme: const IconThemeData(color: Colors.white),
-    backgroundColor: ScanbotRedColor,
+    backgroundColor: scanbotRedColor,
     leading: showBackButton && context != null
         ? GestureDetector(
             onTap: onBack ?? () => Navigator.of(context).pop(),
             child: const Icon(Icons.arrow_back, color: Colors.white),
           )
         : null,
-    title: Text(title, style: AppBarTitleTextStyle),
+    title: Text(title, style: appBarTitleTextStyle),
     actions: actions,
   );
 }
@@ -51,9 +51,7 @@ Future<void> showAlertDialog(
   final dialog = AlertDialog(
     title: title != null ? Text(title) : null,
     content: SimpleDialogOption(
-      child: SingleChildScrollView(
-        child: Text(textToShow),
-      ),
+      child: SingleChildScrollView(child: Text(textToShow)),
     ),
     contentPadding: const EdgeInsets.all(0),
     actions: <Widget>[
@@ -133,7 +131,7 @@ Widget buildBottomNavigationBar(BuildContext context) {
             ),
             child: const Text(
               'Learn More About Scanbot SDK',
-              style: TextStyle(color: ScanbotRedColor),
+              style: TextStyle(color: scanbotRedColor),
             ),
           ),
           const SizedBox(height: 4),
@@ -157,9 +155,7 @@ Future shareFile(String fileUrl) async {
   final uri = Uri.parse(fileUrl);
   final path = uri.toFilePath();
 
-  final params = ShareParams(
-    files: [XFile(path)],
-  );
+  final params = ShareParams(files: [XFile(path)]);
 
   await SharePlus.instance.share(params);
 }

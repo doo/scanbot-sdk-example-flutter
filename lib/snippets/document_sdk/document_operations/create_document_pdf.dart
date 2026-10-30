@@ -22,6 +22,6 @@ Future<void> createDocumentPDF() async {
       /** Handle the pdf */
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

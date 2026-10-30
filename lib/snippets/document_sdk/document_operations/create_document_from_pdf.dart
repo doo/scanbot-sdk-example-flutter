@@ -11,6 +11,6 @@ Future<void> createDocumentFromPDF(String pdfFilePath) async {
   if (documentResult is Ok<DocumentData>) {
     /** Handle the document */
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

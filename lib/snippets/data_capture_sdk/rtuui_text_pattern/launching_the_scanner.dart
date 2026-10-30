@@ -8,8 +8,8 @@ Future<void> startScanning() async {
   if (result is Ok<TextPatternScannerUiResult>) {
     /** Handle the result **/
     var scannerUiResult = result.value;
-    print(scannerUiResult.toString());
+    // Use the recognized text, e.g. display it or fill in a form field.
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

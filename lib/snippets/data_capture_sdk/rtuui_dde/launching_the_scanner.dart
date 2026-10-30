@@ -13,38 +13,19 @@ Future<void> startScanning() async {
     // Available document types are defined in [DocumentsModelRootType] enum.
     var documentModel = DeIdCardFront(result.value.document!);
 
-    // Retrieve values from the German ID card front
-    print(
-      'Birth date: ${documentModel.birthDate.value?.text}, Confidence: ${documentModel.birthDate.value?.confidence}',
-    );
-    print(
-      'Birthplace: ${documentModel.birthplace.value?.text}, Confidence: ${documentModel.birthplace.value?.confidence}',
-    );
-    print(
-      'Card access number: ${documentModel.cardAccessNumber.value?.text}, Confidence: ${documentModel.cardAccessNumber.value?.confidence}',
-    );
-    print(
-      'Expiry date: ${documentModel.expiryDate.value?.text}, Confidence: ${documentModel.expiryDate.value?.confidence}',
-    );
-    print(
-      'Given names: ${documentModel.givenNames.value?.text}, Confidence: ${documentModel.givenNames.value?.confidence}',
-    );
-    print(
-      'ID: ${documentModel.id.value?.text}, Confidence: ${documentModel.id.value?.confidence}',
-    );
-    print(
-      'Maiden name: ${documentModel.maidenName?.value?.text}, Confidence: ${documentModel.maidenName?.value?.confidence}',
-    );
-    print(
-      'Nationality: ${documentModel.nationality.value?.text}, Confidence: ${documentModel.nationality.value?.confidence}',
-    );
-    print(
-      'Surname: ${documentModel.surname.value?.text}, Confidence: ${documentModel.surname.value?.confidence}',
-    );
-    print(
-      'Series: ${documentModel.series.value?.text}, Confidence: ${documentModel.series.value?.confidence}',
-    );
+    // Retrieve values from the German ID card front, e.g. to fill in a form.
+    // Each field also provides a `confidence` value.
+    var birthDate = documentModel.birthDate.value?.text;
+    var birthplace = documentModel.birthplace.value?.text;
+    var cardAccessNumber = documentModel.cardAccessNumber.value?.text;
+    var expiryDate = documentModel.expiryDate.value?.text;
+    var givenNames = documentModel.givenNames.value?.text;
+    var id = documentModel.id.value?.text;
+    var maidenName = documentModel.maidenName?.value?.text;
+    var nationality = documentModel.nationality.value?.text;
+    var surname = documentModel.surname.value?.text;
+    var series = documentModel.series.value?.text;
   } else {
-    print(result.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

@@ -9,9 +9,9 @@ DocumentScanningFlow createDocumentScanningFlowConfiguration() {
   reviewScreen
     ..enabled = true
     ..zoomButton.visible = false
-    ..bottomBar.addButton.visible = false
-    ..bottomBar.retakeButton.visible = true
-    ..bottomBar.retakeButton.title.color = ScanbotColor("000000");
+    ..toolbar.addButton.barButton.visible = false
+    ..toolbar.retakeButton.barButton.visible = true
+    ..toolbar.retakeButton.barButton.title.color = ScanbotColor("000000");
 
   // Configure the reorder pages screen.
   var reorderPagesScreen = configuration.screens.reorderPages;
@@ -20,7 +20,7 @@ DocumentScanningFlow createDocumentScanningFlowConfiguration() {
     ..topBarTitle.text = "Reorder Pages Screen";
 
   // Configure the cropping screen.
-  configuration.screens.cropping.bottomBar.resetButton.visible = false;
+  configuration.screens.cropping.toolbar.resetButton.visible = false;
 
   return configuration;
 }
@@ -31,8 +31,8 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

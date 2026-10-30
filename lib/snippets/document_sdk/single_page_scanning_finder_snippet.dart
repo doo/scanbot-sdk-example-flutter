@@ -18,9 +18,8 @@ DocumentScanningFlow singlePageWithFinderScanningFlow() {
   configuration.screens.camera.cameraConfiguration.autoSnappingEnabled = true;
 
   // Hide the auto snapping enable/disable button
-  configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
-      false;
+  configuration.screens.camera.toolbar.autoSnappingModeButton.visible = false;
+  configuration.screens.camera.toolbar.manualSnappingModeButton.visible = false;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");
@@ -43,7 +42,7 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    print(documentData.toString());
   } else {
     print(documentResult.toString());
   }

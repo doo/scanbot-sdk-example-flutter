@@ -20,12 +20,12 @@ Future<void> startDocumentDetectionWithCroppingScreen(
   if (documentResult is Ok<DocumentData>) {
     var document = documentResult.value;
     /** Create a new configuration with the document and the document's first page. */
-    var configuration = CroppingConfiguration(
+    var configuration = CroppingStandaloneConfiguration(
       documentUuid: document.uuid,
       pageUuid: document.pages[0].uuid,
     );
     /* Customize the configuration. */
-    configuration.cropping.bottomBar.rotateButton.visible = false;
+    configuration.cropping.toolbar.rotateButton.visible = false;
     configuration.appearance.topBarBackgroundColor = ScanbotColor('#c8193c');
     configuration.cropping.topBarConfirmButton.foreground.color = ScanbotColor(
       '#ffffff',
@@ -38,11 +38,11 @@ Future<void> startDocumentDetectionWithCroppingScreen(
     /** Handle the document if the result is 'Ok' */
     if (documentCroppingResult is Ok<DocumentData>) {
       var documentData = documentCroppingResult.value;
-      print(documentData);
+      // Display the scanned pages, or export the document as PDF/TIFF.
     } else {
-      print(documentCroppingResult.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

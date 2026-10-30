@@ -1,18 +1,16 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
+
 import '../utility/utils.dart';
 
 /// This screen demonstrates how to integrate the classical cropping component
 class CroppingScreenWidget extends StatefulWidget {
-  const CroppingScreenWidget({Key? key, required this.documentImage})
-      : super(key: key);
+  const CroppingScreenWidget({super.key, required this.documentImage});
   final ImageRef documentImage;
 
   @override
-  _CroppingScreenWidgetState createState() => _CroppingScreenWidgetState();
+  State<CroppingScreenWidget> createState() => _CroppingScreenWidgetState();
 }
 
 class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
@@ -44,7 +42,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
   AppBar _buildAppBar() {
     return AppBar(
       iconTheme: const IconThemeData(color: Colors.white),
-      backgroundColor: ScanbotRedColor,
+      backgroundColor: scanbotRedColor,
       title: const Text(
         'Crop document',
         style: TextStyle(
@@ -166,7 +164,7 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
       document.pages.first.uuid,
       options: ModifyPageOptions(
         rotation: croppingResult.imageRotation,
-        polygon: toPointList(croppingResult.polygon),
+        polygon: croppingResult.polygon,
       ),
     );
 
@@ -178,6 +176,3 @@ class _CroppingScreenWidgetState extends State<CroppingScreenWidget> {
     Navigator.of(context).pop(modifiedDocumentResult.value);
   }
 }
-
-List<Point<double>> toPointList(List<PolygonPoint> polygon) =>
-    polygon.map((p) => Point<double>(p.x, p.y)).toList();

@@ -30,8 +30,7 @@ Future<void> startScanning() async {
 
   // Configure the text.
   configuration.introScreen.explanation.color = ScanbotColor("#000000");
-  configuration.introScreen.explanation.text =
-      "To quickly and securely scan your document details, please hold your device over the document, so that the camera aligns with all the information on the document.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your document details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
+  configuration.introScreen.explanation.text = "To quickly and securely scan your document details, please hold your device over the document, so that the camera aligns with all the information on the document.\n\nThe scanner will guide you to the optimal scanning position. Once the scan is complete, your document details will automatically be extracted and processed.\n\nPress 'Start Scanning' to begin.";
 
   // Configure the done button.
   // e.g the text or the background color.
@@ -47,8 +46,8 @@ Future<void> startScanning() async {
   if (result is Ok<DocumentDataExtractorUiResult>) {
     /** Handle the result **/
     var documentDataExtractorUiResult = result.value;
-    print(documentDataExtractorUiResult.toString());
+    // Display the extracted document fields, e.g. name and birth date.
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

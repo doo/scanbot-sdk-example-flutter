@@ -12,9 +12,9 @@ class CheckDocumentResultPreview extends StatelessWidget {
     this.uiResult,
     this.scanningResult,
   }) : assert(
-          uiResult != null || scanningResult != null,
-          'At least one result must be provided',
-        );
+         uiResult != null || scanningResult != null,
+         'At least one result must be provided',
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CheckDocumentResultPreview extends StatelessWidget {
     final croppedImage = uiResult?.croppedImage ?? scanningResult?.croppedImage;
 
     return Scaffold(
-      appBar: ScanbotAppBar(
+      appBar: scanbotAppBar(
         'Check Document Preview',
         showBackButton: true,
         context: context,

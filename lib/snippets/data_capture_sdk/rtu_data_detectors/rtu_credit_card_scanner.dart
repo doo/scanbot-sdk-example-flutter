@@ -16,16 +16,18 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
   }
 
   Future<void> _startCreditCardScanner(BuildContext context) async {
-    // Always make sure you have a valid license on runtime via ScanbotSdk.getLicenseStatus()
+    // Always make sure you have a valid license on runtime via ScanbotSdk.getLicenseInfo()
     final isLicenseValid = await checkLicenseStatus(context);
     if (!isLicenseValid) return;
 
     var config = CreditCardScannerScreenConfiguration();
     // Configure the top bar mode
-    config.topBar.mode = TopBarMode.GRADIENT;
+    config.topBar.mode = TopBarMode.SOLID;
+    // Configure the top bar background color
+    config.topBar.backgroundColor = ScanbotColor('#C8193C');
     // Configure the top bar status bar mode
     config.topBar.statusBarMode = StatusBarMode.LIGHT;
-    // Configure the top bar background color
+    // Configure the cancel button
     config.topBar.cancelButton.text = 'Cancel';
     // Configure parameters as needed.
 
@@ -48,7 +50,8 @@ class RtuCreditCardScannerFeature extends StatelessWidget {
         case Error():
           await showAlertDialog(context, title: "Error", result.error.message);
         case Cancel():
-          print("Operation was canceled");
+          // The user canceled the scanner, no further action is needed.
+          break;
       }
     });
   }

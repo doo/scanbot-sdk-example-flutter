@@ -7,7 +7,7 @@ void startCropping() async {
   // Retrieve the instance of the crop configuration from the main configuration object.
   var cropScreenConfiguration = configuration.screens.cropping;
   // Disable the rotation feature.
-  cropScreenConfiguration.bottomBar.rotateButton.visible = false;
+  cropScreenConfiguration.toolbar.rotateButton.visible = false;
   // Configure various colors.
   configuration.appearance.topBarBackgroundColor = ScanbotColor('#C8193C');
   cropScreenConfiguration.topBarConfirmButton.foreground.color = ScanbotColor(
@@ -20,8 +20,8 @@ void startCropping() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

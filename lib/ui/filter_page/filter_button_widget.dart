@@ -4,8 +4,7 @@ class FilterButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const FilterButton({Key? key, required this.text, required this.onPressed})
-      : super(key: key);
+  const FilterButton({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

@@ -23,8 +23,8 @@ Future<void> straightenDocument() async {
   if (documentResult is Ok<DocumentData>) {
     // Handle the document result
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

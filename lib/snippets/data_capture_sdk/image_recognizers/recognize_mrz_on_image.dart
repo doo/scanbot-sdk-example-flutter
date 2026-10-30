@@ -12,7 +12,7 @@ Future<void> recognizeMrzDocumentOnImage(String uriPath) async {
   if (result is Ok<MrzScannerResult> && result.value.success) {
     /** Handle the result **/
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 

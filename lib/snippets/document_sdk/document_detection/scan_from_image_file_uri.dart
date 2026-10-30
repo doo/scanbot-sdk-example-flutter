@@ -1,4 +1,5 @@
 import '../../../utility/utils.dart' show selectImageFromLibrary;
+
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 Future<void> scanDocumentFromImageFileUri() async {
@@ -18,8 +19,8 @@ Future<void> scanDocumentFromImageFileUri() async {
   if (result is Ok<DocumentScanningResult>) {
     /** Handle the result **/
     var documentDetectionResult = result.value;
-    print(documentDetectionResult.toString());
+    // Use the detected polygon, e.g. to crop the image to the document.
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

@@ -9,14 +9,11 @@ Future<void> performOCR() async {
   final file = await selectImageFromLibrary();
   if (file == null || file.path.isEmpty) return;
 
-  var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([
-    file.path,
-  ]);
+  var result = await ScanbotSdk.ocrEngine.recognizeOnImageFileUris([file.path]);
 
   if (result is Ok<PerformOcrResult>) {
-    // Handle the result
-    print(result.value.recognizedText);
+    // Handle the result, e.g. display result.value.recognizedText to the user.
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

@@ -10,7 +10,7 @@ import 'package:scanbot_sdk/scanbot_sdk.dart';
 class DocumentPreview extends StatefulWidget {
   final DocumentData initialDocumentData;
 
-  DocumentPreview(this.initialDocumentData);
+  const DocumentPreview(this.initialDocumentData, {super.key});
 
   @override
   DocumentPreviewPreviewState createState() => DocumentPreviewPreviewState();
@@ -28,7 +28,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ScanbotAppBar('Document Result'),
+      appBar: scanbotAppBar('Document Result'),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -59,7 +59,7 @@ class DocumentPreviewPreviewState extends State<DocumentPreview> {
             ),
           ),
           BottomAppBar(
-            color: ScanbotRedColor,
+            color: scanbotRedColor,
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

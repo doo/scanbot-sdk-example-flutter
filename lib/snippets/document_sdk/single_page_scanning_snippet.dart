@@ -24,12 +24,11 @@ DocumentScanningFlow singlePageScanningFlow() {
       PageSnapCheckMarkAnimation();
 
   // Hide the auto snapping enable/disable button
-  configuration.screens.camera.bottomBar.autoSnappingModeButton.visible = false;
-  configuration.screens.camera.bottomBar.manualSnappingModeButton.visible =
-      false;
-  configuration.screens.camera.bottomBar.importButton.title.visible = true;
-  configuration.screens.camera.bottomBar.torchOnButton.title.visible = true;
-  configuration.screens.camera.bottomBar.torchOffButton.title.visible = true;
+  configuration.screens.camera.toolbar.autoSnappingModeButton.visible = false;
+  configuration.screens.camera.toolbar.manualSnappingModeButton.visible = false;
+  configuration.screens.camera.toolbar.importButton.title.visible = true;
+  configuration.screens.camera.toolbar.torchOnButton.title.visible = true;
+  configuration.screens.camera.toolbar.torchOffButton.title.visible = true;
 
   // Set colors
   configuration.palette.sbColorPrimary = ScanbotColor("#C8193CFF");
@@ -52,7 +51,7 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    print(documentData.toString());
   } else {
     print(documentResult.toString());
   }

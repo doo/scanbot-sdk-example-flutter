@@ -9,6 +9,6 @@ Future<void> createTiffFromImages(List<String> imageFileUris) async {
   if (result is Ok<String>) {
     /** Handle the tiff */
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

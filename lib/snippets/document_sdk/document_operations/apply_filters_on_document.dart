@@ -27,9 +27,9 @@ Future<void> applyFiltersAndRotateScannedPage() async {
     if (documentResultWithModifiedPage is Ok<DocumentData>) {
       /** Handle the document */
     } else {
-      print(documentResultWithModifiedPage.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }

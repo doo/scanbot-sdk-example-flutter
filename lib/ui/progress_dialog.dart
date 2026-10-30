@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ProgressDialogType { Normal, Download }
+enum ProgressDialogType { normal, download }
 
 String _dialogMessage = 'Loading...';
 double _progress = 0.0, _maxProgress = 100.0;
@@ -37,7 +37,7 @@ class ProgressDialog {
     bool? showLogs,
   }) {
     _context = context;
-    _progressDialogType = type ?? ProgressDialogType.Normal;
+    _progressDialogType = type ?? ProgressDialogType.normal;
     _barrierDismissible = isDismissible ?? true;
     _showLogs = showLogs ?? false;
   }
@@ -55,7 +55,7 @@ class ProgressDialog {
     Curve? insetAnimCurve,
   }) {
     if (_isShowing) return;
-    if (_progressDialogType == ProgressDialogType.Download) {
+    if (_progressDialogType == ProgressDialogType.download) {
       _progress = progress ?? _progress;
     }
 
@@ -78,7 +78,7 @@ class ProgressDialog {
     TextStyle? progressTextStyle,
     TextStyle? messageTextStyle,
   }) {
-    if (_progressDialogType == ProgressDialogType.Download) {
+    if (_progressDialogType == ProgressDialogType.download) {
       _progress = progress ?? _progress;
     }
 
@@ -139,10 +139,8 @@ class ProgressDialog {
         barrierDismissible: false,
         builder: (BuildContext context) {
           _dismissingContext = context;
-          return WillPopScope(
-            onWillPop: () {
-              return Future.value(_barrierDismissible);
-            },
+          return PopScope(
+            canPop: _barrierDismissible,
             child: Dialog(
               backgroundColor: _backgroundColor,
               insetAnimationCurve: _insetAnimCurve,
@@ -198,7 +196,7 @@ class _BodyState extends State<_Body> {
           SizedBox(width: 60.0, height: 60.0, child: _progressWidget),
           const SizedBox(width: 15.0),
           Expanded(
-            child: _progressDialogType == ProgressDialogType.Normal
+            child: _progressDialogType == ProgressDialogType.normal
                 ? Text(
                     _dialogMessage,
                     textAlign: TextAlign.justify,

@@ -13,7 +13,7 @@ Future<void> recognizeCreditCardOnImage(String uriPath) async {
       result.value.scanningStatus == CreditCardScanningStatus.SUCCESS) {
     /** Handle the result **/
   } else {
-    print(result.toString());
+    // Handle the error, e.g. show a message to the user.
   }
 }
 

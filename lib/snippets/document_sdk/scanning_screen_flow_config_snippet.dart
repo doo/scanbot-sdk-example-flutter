@@ -15,7 +15,7 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
 
   // MARK: Configure the bottom bar and the bottom bar buttons.
   // Set the background color of the bottom bar.
-  configuration.appearance.bottomBarBackgroundColor = ScanbotColor("#C8193C");
+  configuration.appearance.toolbarBackgroundColor = ScanbotColor("#C8193C");
 
   // Retrieve the camera screen configuration.
   configuration.screens.camera
@@ -47,19 +47,19 @@ DocumentScanningFlow scanningScreenConfigurationScanningFlow() {
     ..userGuidance.statesTitles.captureManual =
         "The document is ready to be captured"
     // Import button is used to import an image from the gallery.
-    ..bottomBar.importButton.visible = true
-    ..bottomBar.importButton.title.visible = true
-    ..bottomBar.importButton.title.text = "Import"
+    ..toolbar.importButton.visible = true
+    ..toolbar.importButton.title.visible = true
+    ..toolbar.importButton.title.text = "Import"
     // Configure the auto/manual snap button.
-    ..bottomBar.autoSnappingModeButton.title.visible = true
-    ..bottomBar.autoSnappingModeButton.title.text = "Auto"
-    ..bottomBar.manualSnappingModeButton.title.visible = true
-    ..bottomBar.manualSnappingModeButton.title.text = "Manual"
+    ..toolbar.autoSnappingModeButton.title.visible = true
+    ..toolbar.autoSnappingModeButton.title.text = "Auto"
+    ..toolbar.manualSnappingModeButton.title.visible = true
+    ..toolbar.manualSnappingModeButton.title.text = "Manual"
     // Configure the torch off/on button.
-    ..bottomBar.torchOnButton.title.visible = true
-    ..bottomBar.torchOnButton.title.text = "On"
-    ..bottomBar.torchOffButton.title.visible = true
-    ..bottomBar.torchOffButton.title.text = "Off"
+    ..toolbar.torchOnButton.title.visible = true
+    ..toolbar.torchOnButton.title.text = "On"
+    ..toolbar.torchOffButton.title.visible = true
+    ..toolbar.torchOffButton.title.text = "Off"
     // MARK: Configure the document capture feedback.
     // Configure the camera blink behavior when an image is captured.
     ..captureFeedback.cameraBlinkEnabled = true
@@ -80,8 +80,8 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }

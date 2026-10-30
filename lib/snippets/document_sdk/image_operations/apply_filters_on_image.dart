@@ -13,10 +13,9 @@ Future<void> applyFiltersOnImage(String imageFileUri) async {
     );
 
     if (rotatedImageResult is Ok<String>) {
-      print(rotatedImageResult.value);
-      /** Handle the rotated image */
+      /** Handle the rotated image, e.g. display it or save it to the gallery */
     } else {
-      print(rotatedImageResult.toString());
+      // Handle the error, e.g. show a message to the user.
     }
   }
 }

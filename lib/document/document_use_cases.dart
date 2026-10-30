@@ -10,7 +10,7 @@ import '../utility/utils.dart';
 import 'package:scanbot_sdk/scanbot_sdk.dart';
 
 class DocumentUseCasesWidget extends StatelessWidget {
-  const DocumentUseCasesWidget({Key? key}) : super(key: key);
+  const DocumentUseCasesWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

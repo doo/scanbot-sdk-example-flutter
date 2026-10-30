@@ -10,9 +10,9 @@ Future<void> createDocumentWithLegacyPages(List<Page> pages) async {
   );
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error, e.g. show a message to the user.
   }
   /**
    * Now you may delete the files corresponding to the Page to free up storage.

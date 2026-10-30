@@ -15,7 +15,7 @@ DocumentScanningFlow acknowledgementConfigurationScanningFlow() {
     ..backgroundColor = ScanbotColor("#EFEFEF")
     // You can also configure the buttons in the bottom bar of the acknowledgment screen.
     // E.g., to force the user to retake, if the captured document is not OK.
-    ..bottomBar.proceedAnywayButton.visible = false
+    ..toolbar.proceedAnywayButton.visible = false
     // Hide the titles of the buttons.
     ..documentNotFoundWarning.title.visible = false
     ..unacceptableQualityWarning.title.visible = false
@@ -30,8 +30,8 @@ void runDocumentScanner() async {
   // Handle the document if the result is 'Ok'
   if (documentResult is Ok<DocumentData>) {
     var documentData = documentResult.value;
-    print(documentData);
+    // Display the scanned pages, or export the document as PDF/TIFF.
   } else {
-    print(documentResult.toString());
+    // Handle the error or cancellation, e.g. show a message to the user.
   }
 }
